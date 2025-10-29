@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Drill AI - Complete Training</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .screen { display: none; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: fadeIn 0.6s; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { font-size: 48px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; letter-spacing: 3px; }
+        .tagline { font-size: 20px; color: #666; font-weight: 500; }
+        .industry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0; }
+        .industry-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.4s; border: 4px solid transparent; }
+        .industry-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); border-color: #667eea; }
+        .industry-card.selected { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #f5576c; }
+        .industry-icon { font-size: 56px; margin-bottom: 15px; }
+        .industry-name { font-size: 18px; font-weight: 700; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; color: #667eea; font-size: 16px; }
+        .form-group input { width: 100%; padding: 15px; border: 3px solid #e0e0e0; border-radius: 10px; font-size: 18px; }
+        .form-group input:focus { outline: none; border-color: #667eea; }
+        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px 45px; border: none; border-radius: 50px; font-size: 20px; font-weight: 700; cursor: pointer; transition: all 0.4s; width: 100%; margin-top: 15px; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-secondary { background: linear-gradient(135deg, #868f96 0%, #596164 100%); }
+        .alert { padding: 20px; border-radius: 15px; margin-bottom: 25px; font-weight: 600; }
+        .alert-success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #155724; }
+        .alert-info { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #0c5460; }
+        .email-container { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
+        .email-header { background: white; padding: 20px; border-bottom: 2px solid #dee2e6; }
+        .email-field { margin-bottom: 12px; font-size: 15px; }
+        .email-field-label { font-weight: 700; color: #495057; display: inline-block; width: 80px; }
+        .email-field-value { color: #212529; }
+        .email-subject { font-size: 18px; font-weight: 700; color: #212529; margin-top: 15px; }
+        .email-body { padding: 25px; background: white; font-size: 16px; line-height: 1.8; color: #212529; }
+        .answer-options { display: flex; gap: 20px; margin-top: 30px; }
+        .answer-btn { flex: 1; padding: 25px; font-size: 19px; font-weight: 700; border: 4px solid #ddd; background: white; border-radius: 15px; cursor: pointer; transition: all 0.4s; }
+        .answer-btn.phishing { border-color: #dc3545; color: #dc3545; }
+        .answer-btn.legitimate { border-color: #28a745; color: #28a745; }
+        .answer-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .feedback { margin-top: 25px; padding: 25px; border-radius: 15px; display: none; }
+        .feedback.show { display: block; animation: slideDown 0.5s; }
+        @keyframes slideDown { from { opacity: 0; } to { opacity: 1; } }
+        .feedback.correct { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); border: 4px solid #28a745; }
+        .feedback.incorrect { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border: 4px solid #dc3545; }
+        .feedback-title { font-size: 28px; font-weight: 900; margin-bottom: 15px; }
+        .progress-bar { height: 12px; background: #e9ecef; border-radius: 20px; margin-bottom: 30px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); transition: width 0.6s; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 35px 0; }
+        .stat-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 20px; text-align: center; }
+        .stat-value { font-size: 56px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .certificate { background: white; border: 15px double #667eea; padding: 50px; text-align: center; margin: 35px 0; }
+        .certificate-name { font-size: 42px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .training-module { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 40px; border-radius: 20px; margin: 30px 0; }
+        .training-section { background: white; padding: 30px; border-radius: 15px; margin-bottom: 25px; }
+        .training-title { font-size: 28px; font-weight: 900; color: #667eea; margin-bottom: 20px; }
+        .training-subtitle { font-size: 22px; font-weight: 700; color: #667eea; margin: 25px 0 15px 0; }
+        .training-list { margin-left: 25px; line-height: 2; }
+        .training-list li { margin-bottom: 15px; }
+        .tip-box { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 20px; border-radius: 10px; margin: 20px 0; }
+        @media (max-width: 768px) { 
+            .answer-options { flex-direction: column; }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="welcomeScreen" class="screen active">
+            <div class="header">
+                <div class="logo">🛡️ CYBER DRILL AI 🛡️</div>
+                <div class="tagline">Complete Phishing Detection Training</div>
+            </div>
+            <div class="alert alert-info"><strong>🎯 Complete Training Program!</strong><br>10 realistic email scenarios per industry + comprehensive education module</div>
+            <h2 style="text-align: center; margin: 30px 0; color: #667eea;">Select Your Industry</h2>
+            <div class="industry-grid">
+                <div class="industry-card" onclick="selectIndustry('financial')"><div class="industry-icon">🏦</div><div class="industry-name">Financial Services</div></div>
+                <div class="industry-card" onclick="selectIndustry('healthcare')"><div class="industry-icon">🏥</div><div class="industry-name">Healthcare</div></div>
+                <div class="industry-card" onclick="selectIndustry('technology')"><div class="industry-icon">💻</div><div class="industry-name">Technology</div></div>
+                <div class="industry-card" onclick="selectIndustry('manufacturing')"><div class="industry-icon">🏭</div><div class="industry-name">Manufacturing</div></div>
+                <div class="industry-card" onclick="selectIndustry('retail')"><div class="industry-icon">🛒</div><div class="industry-name">Retail</div></div>
+                <div class="industry-card" onclick="selectIndustry('education')"><div class="industry-icon">🎓</div><div class="industry-name">Education</div></div>
+                <div class="industry-card" onclick="selectIndustry('government')"><div class="industry-icon">🏛️</div><div class="industry-name">Government</div></div>
+                <div class="industry-card" onclick="selectIndustry('legal')"><div class="industry-icon">⚖️</div><div class="industry-name">Legal</div></div>
+            </div>
+            <button class="btn" id="continueBtn" onclick="goToNameEntry()" disabled>🚀 Begin Training →</button>
+        </div>
+
+        <div id="nameEntryScreen" class="screen">
+            <div class="header"><div class="logo">🛡️ CYBER DRILL AI 🛡️</div></div>
+            <div class="alert alert-info"><strong>🎖️ Certificate Awaits!</strong><br>Enter your name for your certificate.</div>
+            <form onsubmit="startTraining(event)">
+                <div class="form-group">
+                    <label>👤 Your Full Name</label>
+                    <input type="text" id="userName" required placeholder="John Doe">
+                </div>
+                <button type="submit" class="btn">🎯 Start 10-Question Challenge →</button>
+            </form>
+        </div>
+
+        <div id="trainingScreen" class="screen">
+            <div class="header"><div class="logo">🛡️ CYBER DRILL AI 🛡️</div><div class="tagline" id="industryTitle"></div></div>
+            <div style="text-align: center; margin-bottom: 15px; font-weight: 700; color: #667eea; font-size: 18px;" id="progressText"></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+            <div id="questionContainer"></div>
+            <div style="display: flex; gap: 20px; margin-top: 30px;">
+                <button class="btn" id="nextBtn" onclick="nextQuestion()" style="display: none;">Next Question →</button>
+                <button class="btn" id="finishBtn" onclick="finishTraining()" style="display: none;">View Results →</button>
+            </div>
+        </div>
+
+        <div id="resultsScreen" class="screen">
+            <div class="header"><div class="logo">🛡️ CYBER DRILL AI 🛡️</div><div class="tagline">Training Complete!</div></div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-value" id="scoreValue">0%</div><div style="font-size: 18px; color: #666; font-weight: 700;">Score</div></div>
+                <div class="stat-card"><div class="stat-value" id="correctValue">0/10</div><div style="font-size: 18px; color: #666; font-weight: 700;">Correct</div></div>
+                <div class="stat-card"><div class="stat-value" id="gradeValue">-</div><div style="font-size: 18px; color: #666; font-weight: 700;">Grade</div></div>
+            </div>
+            <div id="resultMessage" class="alert"></div>
+            <div class="certificate">
+                <div style="font-size: 40px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px;">🛡️ CERTIFICATE 🛡️</div>
+                <p style="font-size: 20px; margin: 25px 0; font-weight: 600;">This certifies that</p>
+                <div class="certificate-name" id="certName">Champion</div>
+                <p style="font-size: 20px; margin: 25px 0; font-weight: 600;">completed Phishing Detection Training</p>
+                <div style="margin: 35px 0; line-height: 2.2; font-size: 18px; font-weight: 600;">
+                    <strong>Industry:</strong> <span id="certIndustry">-</span><br>
+                    <strong>Score:</strong> <span id="certScore">0%</span><br>
+                    <strong>Date:</strong> <span id="certDate">-</span><br>
+                    <strong>ID:</strong> <span id="certId">-</span>
+                </div>
+            </div>
+
+<div class="training-module">
+                <div class="training-title">📚 PHISHING EDUCATION MODULE</div>
+                
+                <div class="training-section">
+                    <div class="training-subtitle">🎯 What is Phishing?</div>
+                    <p style="line-height: 1.8;">Phishing is a cyber attack where criminals impersonate legitimate organizations to trick you into revealing sensitive information, clicking malicious links, or downloading malware. 91% of data breaches start with a phishing email.</p>
+                </div>
+
+                <div class="training-section">
+                    <div class="training-subtitle">🚩 Top 10 Red Flags</div>
+                    <ul class="training-list">
+                        <li><strong>Urgency & Pressure:</strong> "Act now!" "Within 24 hours!"</li>
+                        <li><strong>Suspicious Sender:</strong> Check email address for typos</li>
+                        <li><strong>Generic Greetings:</strong> "Dear Customer" vs your name</li>
+                        <li><strong>Spelling Errors:</strong> Professional orgs proofread</li>
+                        <li><strong>Requests for Sensitive Info:</strong> No legit company asks for passwords via email</li>
+                        <li><strong>Suspicious Links:</strong> Hover to see real URL</li>
+                        <li><strong>Unexpected Attachments:</strong> Especially .exe, .zip files</li>
+                        <li><strong>Too Good to Be True:</strong> "You've won $10,000!"</li>
+                        <li><strong>Threatening Language:</strong> "Account will be closed!"</li>
+                        <li><strong>Mismatched Domains:</strong> Email from @amaz0n-security.net</li>
+                    </ul>
+                </div>
+
+                <div class="training-section">
+                    <div class="training-subtitle">✅ Best Practices</div>
+                    <ul class="training-list">
+                        <li><strong>Verify Before You Click:</strong> Go directly to websites by typing URL</li>
+                        <li><strong>Use Multi-Factor Authentication:</strong> Extra protection layer</li>
+                        <li><strong>Keep Software Updated:</strong> Security patches are critical</li>
+                        <li><strong>Use Password Managers:</strong> Unique passwords for every account</li>
+                        <li><strong>Report Suspicious Emails:</strong> Forward to IT security team</li>
+                        <li><strong>Trust Your Instincts:</strong> If it feels off, it probably is</li>
+                    </ul>
+                </div>
+
+                <div class="training-section">
+                    <div class="training-subtitle">🎭 Common Techniques</div>
+                    <ul class="training-list">
+                        <li><strong>Email Phishing:</strong> Mass emails to thousands</li>
+                        <li><strong>Spear Phishing:</strong> Targeted attacks using personal info</li>
+                        <li><strong>Whaling:</strong> Attacks against executives</li>
+                        <li><strong>Smishing:</strong> Phishing via SMS text messages</li>
+                        <li><strong>Vishing:</strong> Phone calls impersonating organizations</li>
+                        <li><strong>BEC:</strong> Business Email Compromise attacks</li>
+                    </ul>
+                </div>
+
+                <div class="training-section">
+                    <div class="training-subtitle">🛡️ If You Click a Phishing Link</div>
+                    <ul class="training-list">
+                        <li><strong>Don't Panic:</strong> Quick action minimizes damage</li>
+                        <li><strong>Disconnect Internet:</strong> Prevent malware spread</li>
+                        <li><strong>Don't Enter Credentials:</strong> Close browser immediately</li>
+                        <li><strong>Change Passwords:</strong> On a different clean device</li>
+                        <li><strong>Run Antivirus Scan:</strong> Check for malware</li>
+                        <li><strong>Report to IT Security:</strong> Notify immediately</li>
+                        <li><strong>Monitor Accounts:</strong> Watch for unusual activity</li>
+                        <li><strong>Enable MFA:</strong> Add extra security layer</li>
+                    </ul>
+                </div>
+
+                <div class="training-section">
+                    <div class="training-subtitle">📞 Important Resources</div>
+                    <ul class="training-list">
+                        <li><strong>FTC:</strong> ReportFraud.ftc.gov</li>
+                        <li><strong>IRS Phishing:</strong> phishing@irs.gov</li>
+                        <li><strong>Anti-Phishing Group:</strong> reportphishing@apwg.org</li>
+                        <li><strong>Check Compromises:</strong> haveibeenpwned.com</li>
+                        <li><strong>Your IT Team:</strong> First line of defense!</li>
+                    </ul>
+                    <div class="tip-box"><strong>🎓 Remember:</strong> Cybersecurity is a journey. Stay vigilant and keep learning!</div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="window.print()">🖨️ Print Certificate</button>
+            <button class="btn btn-secondary" onclick="restartTraining()">🔄 Train Again</button>
+        </div>
+    </div>
+    <script>
+        let appState = {selectedIndustry: null, userName: '', currentQuestion: 0, answers: [], score: 0};
+
+        const questionDatabase = {
+            financial: {name: "Financial Services", icon: "🏦", questions: [
+                {from: "CEO@company-finance.com", to: "finance.manager@company.com", subject: "URGENT: Wire Transfer Required", date: "Wed, 29 Oct 2025 14:32:18", body: "I'm in a critical meeting with potential investors and unable to take calls. We need to wire $50,000 immediately to secure this acquisition deal.\n\nThe vendor's banking details are below:\nBank: First National Bank\nAccount: 847291038475\n\nThis is time-sensitive and highly confidential - please handle this personally and do not discuss with anyone until after the transfer is complete.\n\nThanks,\nMichael Chen, CEO", redFlags: ["Domain typo: company-finance.com vs company.com", "Extreme urgency", "Confidentiality prevents verification", "Large wire transfer"], isPhishing: true, explanation: "Business Email Compromise (BEC) attack. The CEO's email domain has a tiny typo. Attackers use urgency and confidentiality to prevent verification. ALWAYS verify large wire transfers via phone to a known number."},
+                {from: "no-reply@irs-compliance.gov", to: "taxpayer@email.com", subject: "IRS FINAL NOTICE - Tax Compliance Required", date: "Sun, 27 Oct 2025 19:15:43", body: "Dear Taxpayer,\n\nOur records indicate you have an outstanding tax liability of $2,847 from fiscal year 2023.\n\nYou must remit payment immediately via wire transfer to avoid:\n• Arrest warrant within 24 hours\n• Bank account seizure\n• Criminal prosecution\n\nClick here to make immediate payment.\n\nInternal Revenue Service", redFlags: ["IRS never initiates contact via email", "Threats of arrest", "Wire transfer demand", "24-hour ultimatum"], isPhishing: true, explanation: "The IRS NEVER initiates contact via email about unpaid taxes and never threatens arrest. They communicate via postal mail. Report to phishing@irs.gov."},
+                {from: "alerts@bankofamerica.com", to: "customer@email.com", subject: "Suspicious Activity Alert", date: "Wed, 29 Oct 2025 12:47:22", body: "ALERT: Unusual activity detected on your account ending in 4892.\n\nA purchase of $487.23 at Best Buy in Miami was attempted.\n\nIf this wasn't you, click here immediately to secure your account.\n\nBank of America Fraud Detection", redFlags: ["Contains clickable link in fraud alert", "Creates urgency"], isPhishing: true, explanation: "While banks send fraud alerts, legitimate ones tell you to CALL the number on your card, not click links. Always use your banking app or call the number on your physical card."},
+                {from: "sjohnson@yourcompany.com", to: "all-employees@yourcompany.com", subject: "Important: New 401(k) Provider Enrollment", date: "Mon, 27 Oct 2025 09:15:32", body: "Team,\n\nAs announced in last month's all-hands, we're transitioning to Fidelity for 401(k) management.\n\nPlease enroll by Friday: https://benefits.yourcompany.com/401k\n\nQuestions? Contact me at ext. 4012.\n\nSarah Johnson\nDirector of HR", redFlags: [], isPhishing: false, explanation: "This appears legitimate: verified company email, references previous announcement, links to actual company domain, provides contact methods. However, always verify with HR if you have doubts."},
+                {from: "jmitchell@company.com", to: "accounting@company.com", subject: "Quick Favor Needed", date: "Wed, 29 Oct 2025 15:42:11", body: "Hi,\n\nI'm in back-to-back meetings. Can you purchase $500 in Amazon gift cards for our client event?\n\nJust forward me the codes - I'll handle distribution.\n\nThanks!\n- John Mitchell, CFO", redFlags: ["Gift card purchase request", "Via email only", "Requests gift card codes"], isPhishing: true, explanation: "Gift card scams are extremely common. Even with correct email address, this could be a compromised account. ALWAYS verify unusual requests via phone call."},
+                {from: "business-loans@federal-reserve-lending.org", to: "business@company.com", subject: "Pre-Approved Business Loan - $150,000", date: "Tue, 28 Oct 2025 11:23:45", body: "Congratulations! Pre-approved for $150,000 loan at 2.9% APR.\n\nTo process:\n• Business EIN\n• Social Security Number\n• Bank account information\n\nOffer expires in 72 hours.\n\nFederal Reserve Business Lending", redFlags: ["Federal Reserve doesn't offer direct loans", "Requests SSN via email", "Too good to be true terms"], isPhishing: true, explanation: "The Federal Reserve does NOT offer loans directly to businesses. This is identity theft. No legitimate lender asks for full SSN via email."},
+                {from: "fraud-alert@bankofamerica.com", to: "mobile@email.com", subject: "Transaction Alert", date: "Wed, 29 Oct 2025 16:08:19", body: "Bank of America Mobile Alert\n\nYour card ending in 4892:\n$487.23 at Best Buy, Miami\nOct 29, 4:05 PM\n\nIf unauthorized:\n• Open BofA Mobile App\n• Report Fraud\n• Or call 1-800-432-1000\n\nBank of America", redFlags: [], isPhishing: false, explanation: "Legitimate fraud alert. Directs you to use official app or known bank number, not clicking links. From verified domain. However, always verify by opening banking app directly."},
+                {from: "investment-opportunity@crypto-returns.net", to: "investor@email.com", subject: "40% Returns in 90 Days - Bitcoin", date: "Mon, 27 Oct 2025 08:45:33", body: "EXCLUSIVE INVESTMENT OPPORTUNITY\n\nGuaranteed 40% ROI in 90 days!\n\nMinimum: $5,000\nBitcoin Wallet: 1A2B3C4D5E6F7G8H\n\nLimited spots available!\n\nBitcoin Investment Group", redFlags: ["Guaranteed high returns", "Cryptocurrency request", "Too good to be true", "Pressure tactics"], isPhishing: true, explanation: "NO legitimate investment can guarantee returns, especially 40% in 90 days. Bitcoin transactions are irreversible. Never wire money or send cryptocurrency based on unsolicited offers."},
+                {from: "card-services@creditcard-company.com", to: "cardholder@email.com", subject: "Fraud Alert - Verify Identity", date: "Tue, 28 Oct 2025 14:22:16", body: "Security Alert\n\nFraudulent activity detected.\n\nTo verify, reply with:\n• Full Card Number\n• CVV Code\n• Date of Birth\n• Mother's Maiden Name\n\nCard Services Security", redFlags: ["Requests full card number and CVV via email", "Asks for security answers"], isPhishing: true, explanation: "NO legitimate financial institution EVER asks for CVV code, full card number, or security answers via email. Always call the number on your physical card."},
+                {from: "advisor@investmentfirm.com", to: "client@email.com", subject: "Your October Portfolio Statement", date: "Mon, 27 Oct 2025 09:30:42", body: "Dear Valued Client,\n\nYour October portfolio statement is available.\n\nTotal Value: $487,392.18\nMonthly Change: +2.3%\n\nView at: https://www.investmentfirm.com/client-portal\n\nQuestions? Call (555) 123-4567\n\nJennifer Adams, CFP\nSenior Financial Advisor", redFlags: [], isPhishing: false, explanation: "Legitimate monthly statement from your advisor. From known email, specific portfolio info, links to firm's actual website, provides direct contact. However, type URLs directly rather than clicking links."}
+            ]},
+
+healthcare: {name: "Healthcare", icon: "🏥", questions: [
+                {from: "medicare-services@cms-verification.org", to: "beneficiary@email.com", subject: "Medicare Benefits Update Required", date: "Sun, 27 Oct 2025 18:22:15", body: "Dear Beneficiary,\n\nYour Medicare benefits will be suspended in 48 hours due to incomplete verification.\n\nVerify immediately:\n• Medicare Number\n• Social Security Number\n• Date of Birth\n\nClick here to verify.\n\nCenters for Medicare Services", redFlags: ["Not from .gov domain", "Requests SSN", "48-hour threat"], isPhishing: true, explanation: "Medicare NEVER emails requesting personal information. All official communications come via postal mail using .gov domains. Report to 1-800-MEDICARE."},
+                {from: "itsecurity@hospitalsystem.org", to: "staff@hospitalsystem.org", subject: "HIPAA Training Renewal", date: "Mon, 27 Oct 2025 08:30:11", body: "Annual HIPAA training due by Friday.\n\nComplete at: https://training.hospitalsystem.org\n\nQuestions? IT x4357\n\nHospital IT Security", redFlags: [], isPhishing: false, explanation: "Appears legitimate: hospital's domain, HIPAA training is mandatory, links to hospital system. Verify with IT if unsure."},
+                {from: "cdc-emergency@cdc-response.org", to: "admin@hospital.com", subject: "URGENT: New Pandemic Variant", date: "Tue, 28 Oct 2025 06:15:43", body: "ALERT: New variant detected. Implement protocols within 24 hours.\n\nDownload: Emergency_Protocol.doc\n\nCDC Emergency Response", redFlags: ["Not from cdc.gov", "Suspicious .doc attachment", "24-hour pressure"], isPhishing: true, explanation: "CDC publishes alerts on cdc.gov, NOT via unsolicited emails with attachments. The .doc file likely contains malware. Visit CDC.gov directly."},
+                {from: "unknown@darkweb", to: "admin@hospital.com", subject: "YOUR SYSTEMS ENCRYPTED", date: "Wed, 29 Oct 2025 03:47:22", body: "Your patient database is encrypted.\n\nPay $50,000 Bitcoin in 48 hours or we publish all patient records.\n\nDo NOT contact FBI.\n\nBitcoin: 1A2B3C4D", redFlags: ["Ransomware attack", "Bitcoin demand", "Threatens patient data"], isPhishing: true, explanation: "RANSOMWARE - serious cyber incident. DO NOT PAY! Contact IT security, FBI IC3.gov, cyber insurance immediately. This requires professional incident response."},
+                {from: "pharmacy@cvs.com", to: "patient@email.com", subject: "Prescription Ready", date: "Tue, 28 Oct 2025 14:30:22", body: "Your prescription is ready at CVS #8472\n\nRx: Lisinopril 10mg\nReady: Oct 28, 2025\n\nCall (555) 123-4567\n\nCVS Pharmacy", redFlags: [], isPhishing: false, explanation: "Legitimate prescription notification from CVS. From actual domain, specific prescription info, provides phone number. Verify by calling pharmacy directly."},
+                {from: "portal@hospital-support.net", to: "patient@email.com", subject: "Patient Portal Migration", date: "Mon, 27 Oct 2025 11:45:18", body: "We're migrating your medical records.\n\nVerify credentials at: patientportal-verify.net\n\nProvide:\n• Username/Password\n• Date of Birth\n• Last 4 SSN\n\nPatient Portal Support", redFlags: ["External verification site", "Requests credentials", "Suspicious domain"], isPhishing: true, explanation: "Legitimate system migrations NEVER ask users to verify credentials on external sites. Contact your healthcare provider directly."},
+                {from: "wellness@healthinsurance.com", to: "member@email.com", subject: "2025 Open Enrollment", date: "Mon, 27 Oct 2025 09:15:44", body: "Open Enrollment: Oct 27 - Nov 15\n\nLog in: www.healthinsurance.com/members\n\nNeed help? 1-800-555-4325\n\nHealthInsurance Company", redFlags: [], isPhishing: false, explanation: "Legitimate open enrollment notice. Links to actual insurer website, provides known phone numbers. Navigate to insurance website directly."},
+                {from: "grants@grant-services.org", to: "researcher@university.edu", subject: "Research Grant - $50,000", date: "Tue, 28 Oct 2025 10:22:33", body: "Selected for $50,000 health research grant!\n\nApplication fee: $500\nProvide university banking info\n\nApply within 48 hours.\n\nNational Research Foundation", redFlags: ["Upfront application fee", "Requests banking info", "Advance-fee scam"], isPhishing: true, explanation: "Legitimate research grants go through university research offices and NEVER require upfront fees. Contact your university's Office of Research."},
+                {from: "equipment-recall@fda.gov", to: "admin@hospital.com", subject: "Medical Device Recall", date: "Wed, 29 Oct 2025 13:10:27", body: "FDA Class I Recall: MediTech Infusion Pumps\n\nCease use immediately.\n\nFull info: www.fda.gov/recalls\n\nFDA MedWatch: 1-800-FDA-1088\n\nU.S. FDA", redFlags: [], isPhishing: false, explanation: "Legitimate FDA recall from fda.gov domain. Includes recall details, links to official FDA site. Verify recall number on FDA.gov."},
+                {from: "supplies@supplies-discount.com", to: "hospital@email.com", subject: "PPE Supply Shortage", date: "Mon, 27 Oct 2025 07:45:19", body: "Critical PPE available now!\n\nN95: $2.99 (70% off!)\nMinimum: $10,000\nPayment: Wire/Bitcoin only\n24 hours only!\n\nMedical Supply Distribution", redFlags: ["Too good to be true pricing", "Wire/Bitcoin only", "24-hour pressure"], isPhishing: true, explanation: "Counterfeit medical supplies scam. Legitimate suppliers don't require untraceable payments. You may receive fake products or nothing."}
+            ]},
+            technology: {name: "Technology", icon: "💻", questions: [
+                {from: "security@github-services.com", to: "dev@email.com", subject: "GitHub Security Alert", date: "Tue, 28 Oct 2025 03:47:18", body: "Suspicious login from Russia detected.\n\nVerify at: github-security-portal.com\n\nIf not verified in 24 hours, repositories will be deleted.\n\nGitHub Security", redFlags: ["Wrong domain", "External verification site", "Deletion threat"], isPhishing: true, explanation: "GitHub's domain is github.com. They would NEVER threaten to delete repositories. Type github.com directly to check your account."},
+                {from: "billing@aws.amazon.com", to: "customer@company.com", subject: "AWS Monthly Statement", date: "Mon, 27 Oct 2025 09:00:15", body: "October AWS Statement available.\n\nTotal: $1,716.85\n\nView at: aws.amazon.com/billing\n\nQuestions? 1-888-280-2375\n\nAmazon Web Services", redFlags: [], isPhishing: false, explanation: "Legitimate AWS billing notification. From AWS domain, standard billing info. However, type aws.amazon.com directly rather than clicking links."},
+                {from: "events@awsreinvent-official.com", to: "dev@company.com", subject: "AWS re:Invent VIP Pass FREE", date: "Sun, 27 Oct 2025 14:22:33", body: "Selected for FREE $1,799 VIP pass!\n\nTo claim, verify AWS credentials:\n• AWS Account ID\n• Access Key\n• Secret Key\n\nClaim at: awsreinvent-registration.com\n\nAWS Events", redFlags: ["Requests AWS Access Keys!", "Wrong domain", "Too good to be true"], isPhishing: true, explanation: "EXTREMELY DANGEROUS! AWS would NEVER ask for Access Keys. These provide FULL CONTROL of your account. If provided, immediately rotate credentials and contact AWS Support."},
+                {from: "npm-security@npmjs.com", to: "dev@company.com", subject: "Security Advisory", date: "Tue, 28 Oct 2025 11:15:42", body: "High-severity vulnerability in your package.\n\nPackage: your-package\nCVE: CVE-2025-12345\nPatched: 2.1.4\n\nView: npmjs.com/advisories/12345\n\nnpm Security", redFlags: [], isPhishing: false, explanation: "Legitimate npm security advisory. From npmjs.com, includes CVE number. Log into npmjs.com directly to verify."},
+                {from: "noreply@docker-alerts.com", to: "devops@company.com", subject: "Docker Hub Security", date: "Wed, 29 Oct 2025 16:30:22", body: "Suspicious activity on Docker Hub account.\n\nUnlock at: dockerhub-secure-login.com\n\nAccount suspended in 24 hours if not verified.\n\nDocker Security", redFlags: ["Wrong domain", "External login site", "Suspension threat"], isPhishing: true, explanation: "Docker Hub's domain is docker.com. Never click login links in security emails. Navigate directly to docker.com."},
+                {from: "support@slack.com", to: "team@company.com", subject: "Password Reset Required", date: "Mon, 27 Oct 2025 08:45:11", body: "Security incident requires password reset.\n\nReset at: company.slack.com/reset\n\n72 hours to complete.\n\nSlack Security", redFlags: [], isPhishing: false, explanation: "Legitimate Slack security notification. From slack.com, links to your Slack workspace, reasonable deadline. Contact workspace admin if unsure."},
+                {from: "npm-alerts@npm-security.org", to: "dev@company.com", subject: "CRITICAL Vulnerability", date: "Tue, 28 Oct 2025 15:22:44", body: "Critical RCE vulnerability!\n\nVerify at: npm-security-verify.org\nLogin with npm credentials\n\n12 hours to verify.\n\nnpm Security Response", redFlags: ["Wrong domain", "Requests npm credentials", "External verification"], isPhishing: true, explanation: "npm's domain is npmjs.com. They never ask for credentials via email. Legitimate vulnerabilities appear on npmjs.com and GitHub security advisories."},
+                {from: "vscode@microsoft.com", to: "dev@company.com", subject: "Extension Update", date: "Mon, 27 Oct 2025 10:15:33", body: "Python extension update available.\n\nCurrent: 2024.10.0\nNew: 2024.11.0\n\nUpdate in VS Code Extensions tab.\n\nVS Code Team", redFlags: [], isPhishing: false, explanation: "Legitimate VS Code update notification. From microsoft.com, instructs updating through VS Code itself. Always update extensions through VS Code."},
+                {from: "api@stripe.com", to: "dev@startup.com", subject: "API Key Exposed", date: "Wed, 29 Oct 2025 11:30:18", body: "Stripe API key exposed in GitHub repo.\n\nRepo: github.com/company/app\nKey rolled automatically.\n\nGenerate new key at: dashboard.stripe.com/settings/keys\n\nStripe Security", redFlags: [], isPhishing: false, explanation: "Legitimate Stripe security alert. Stripe monitors for exposed keys, from stripe.com domain. Log into Stripe dashboard directly to verify."},
+                {from: "jetbrains@jetbrains-services.com", to: "dev@email.com", subject: "License Renewal", date: "Sun, 27 Oct 2025 09:45:22", body: "IntelliJ license expires in 7 days.\n\nRenew at: jetbrains-renewal.com ($149/year)\n\nJetBrains Account", redFlags: ["Wrong domain", "External renewal site"], isPhishing: true, explanation: "JetBrains' domain is jetbrains.com. License renewals happen through jetbrains.com/store. Always navigate directly to jetbrains.com."}
+            ]},
+            manufacturing: {name: "Manufacturing", icon: "🏭", questions: [
+                {from: "accounts@acmeparts.com", to: "ap@manufacturer.com", subject: "Updated Banking Information", date: "Wed, 29 Oct 2025 14:15:33", body: "Please update banking for all payments:\n\nNew Account: 847291038475\nRouting: 091000022\n\nEffective immediately. Old account closes Nov 1.\n\nAccounts Receivable", redFlags: ["Banking change via email only", "Immediate implementation"], isPhishing: true, explanation: "Vendor email compromise - billion-dollar scam. ALWAYS verify banking changes via phone to known, verified number from your original vendor records."},
+                {from: "safety@company.com", to: "staff@company.com", subject: "OSHA Training Required", date: "Mon, 27 Oct 2025 08:30:44", body: "All staff must complete OSHA Hazmat training by Friday.\n\nAccess: training.company.com/osha\n\nQuestions? Safety Dept x5678\n\nSafety Manager", redFlags: [], isPhishing: false, explanation: "Legitimate internal training. From company domain, OSHA training is routine, links to company portal. Verify with Safety if unsure."},
+                {from: "shipping@freightforwarder.net", to: "logistics@manufacturer.com", subject: "Shipment Held at Customs", date: "Tue, 28 Oct 2025 11:45:19", body: "$85,000 equipment held at LA Port.\n\nCustoms fees: $3,500\nWire immediately or storage fees accumulate.\n\nFreight Forwarder Services", redFlags: ["Unexpected customs fees", "Wire transfer pressure", "Storage fee threats"], isPhishing: true, explanation: "Shipping/customs fraud. Legitimate customs issues follow official procedures with proper documentation. Contact your actual freight forwarder directly."},
+                {from: "sales@industrialsupplier.com", to: "procurement@manufacturer.com", subject: "Quote - Raw Materials", date: "Mon, 27 Oct 2025 15:30:22", body: "Quote for raw materials:\n\nAluminum: $34,500\nSteel: $14,450\nTotal: $52,300\n\nPayment Terms: Net 30\nDelivery: 10-12 days\n\nPhone: (555) 234-5678\n\nIndustrial Supplier Inc.", redFlags: [], isPhishing: false, explanation: "Legitimate quote from supplier. Includes standard terms, verifiable contact info. Verify supplier is legitimate before large orders."},
+                {from: "invoice@unknown-supplier.com", to: "ap@manufacturer.com", subject: "PAST DUE INVOICE", date: "Wed, 29 Oct 2025 09:15:44", body: "Invoice 45 days overdue: $12,450\n\nPay immediately to avoid legal action.\n\nAttached: Invoice_FINAL.pdf.exe\n\nCollections Department", redFlags: ["Unknown supplier", ".exe file!", "Past due pressure"], isPhishing: true, explanation: "The .exe extension reveals MALWARE disguised as PDF! Never open unexpected executable files. Delete immediately."},
+                {from: "support@equipmentvendor.com", to: "maintenance@manufacturer.com", subject: "CNC Firmware Update", date: "Tue, 28 Oct 2025 13:20:15", body: "Critical firmware update for CNC machines.\n\nSecurity vulnerability: Remote access\n\nDownload: support.equipmentvendor.com/firmware\n\nSupport: (555) 456-7890\n\nEquipment Vendor", redFlags: [], isPhishing: false, explanation: "Legitimate firmware update. From vendor's domain, includes your equipment details, firmware updates are critical. Verify with vendor before applying."},
+                {from: "epa@epa-inspections.org", to: "facility@manufacturer.com", subject: "EPA Violation - Pay Fine", date: "Mon, 27 Oct 2025 07:30:22", body: "Inspection failed. Fine: $45,000\n\nPay via wire within 72 hours to avoid:\n• Facility shutdown\n• Criminal prosecution\n\nEPA Compliance", redFlags: ["Not from .gov", "Immediate wire transfer", "No legal process"], isPhishing: true, explanation: "EPA compliance follows formal legal procedures, NOT immediate wire transfers. Not from epa.gov. Contact the real EPA directly."},
+                {from: "qc@manufacturer.com", to: "production@manufacturer.com", subject: "QC Alert: Batch Failed", date: "Wed, 29 Oct 2025 15:45:33", body: "Batch #8472 failed inspection.\n\nDimensional tolerance exceeded.\n\nActions:\n1. Halt production\n2. Quarantine batch\n3. Investigate\n\nView: qc-system.manufacturer.com/8472\n\nQuality Control", redFlags: [], isPhishing: false, explanation: "Legitimate automated QC alert from your system. From company domain, specific batch details. Quality alerts are critical for manufacturing."},
+                {from: "iso@iso-services.org", to: "quality@manufacturer.com", subject: "ISO 9001 Renewal URGENT", date: "Sun, 27 Oct 2025 16:22:44", body: "ISO cert expires in 17 days.\n\nExpedited renewal: $8,500 (5 days)\nStandard: $2,500 (6-8 weeks)\n\nWire payment immediately.\n\nISO Certification Services", redFlags: ["Not from your certification body", "High expedite fee", "Wire transfer pressure"], isPhishing: true, explanation: "Certification renewal scam. Legitimate ISO renewals are scheduled through YOUR actual certification body (BSI, TUV, etc). Contact your certifier directly."},
+                {from: "safety-equipment@supplier.com", to: "procurement@manufacturer.com", subject: "Annual Safety Inspection", date: "Mon, 27 Oct 2025 10:15:22", body: "Annual inspection due by Nov 30.\n\nEquipment:\n• Cranes\n• Fall protection\n• Fire systems\n\nSchedule: (555) 789-1234\n\nSafety Equipment Services", redFlags: [], isPhishing: false, explanation: "Legitimate inspection reminder. Annual inspections are legally required, from supplier's domain, provides contact info. Verify through known channels."}
+            ]},
+            retail: {name: "Retail", icon: "🛒", questions: [
+                {from: "security@shopify-merchant-services.com", to: "owner@shop.com", subject: "Store Suspended", date: "Mon, 27 Oct 2025 08:15:33", body: "Your store suspended due to fraud.\n\nVerify at: shopify-security-verify.com\n\n24 hours or permanent closure.\n\nShopify Trust & Safety", redFlags: ["Wrong domain", "External verification", "24-hour threat"], isPhishing: true, explanation: "Shopify's domain is shopify.com. Never use external verification sites. Type shopify.com/admin directly to check account."},
+                {from: "jmartinez@thompsondenver.com", to: "sales@store.com", subject: "Bulk Order Inquiry", date: "Tue, 28 Oct 2025 10:30:22", body: "Corporate gifting company. Need 500 gift baskets ($47,500).\n\nDelivery: April 15, Denver\nTax ID: 84-1234567\nPhone: (720) 555-0847\n\nJennifer Martinez\nThompson & Associates", redFlags: [], isPhishing: false, explanation: "Appears legitimate: specific details, tax ID, verifiable info. HOWEVER: verify company is real, call phone number, only ship after payment clears."},
+                {from: "sales@designer-wholesale.com", to: "boutique@retailstore.com", subject: "70% Off Designer Goods", date: "Sun, 27 Oct 2025 14:45:18", body: "Liquidating designer inventory!\n\n70% off retail!\nMinimum: $25,000\nPayment: Wire/Bitcoin only\n\nEnds Wednesday!\n\nDesigner Wholesale", redFlags: ["Too good to be true", "Wire/Bitcoin only", "$25,000 minimum", "Pressure tactics"], isPhishing: true, explanation: "Counterfeit merchandise scam. Legitimate wholesale doesn't offer 70% discounts. You'll receive fake goods or nothing."},
+                {from: "fraud@creditcardprocessor.com", to: "merchant@store.com", subject: "Fraud Detected - Verify", date: "Wed, 29 Oct 2025 11:20:15", body: "Fraud on merchant account.\n\nReply with:\n• Login username\n• Password\n• Bank account last 4\n\nMerchant Services Security", redFlags: ["Requests login credentials via email", "Asks for password"], isPhishing: true, explanation: "NO legitimate processor asks for passwords via email. Contact your actual processor using phone number on your merchant agreement."},
+                {from: "platform@ecommerce-platform.com", to: "seller@store.com", subject: "Shipping Rate Changes", date: "Mon, 27 Oct 2025 09:45:22", body: "Major carriers rate changes Nov 1:\n\nUPS: +5.9%\nFedEx: +6.5%\nUSPS: +5.4%\n\nDetails: ups.com/rates, fedex.com/rates\n\nE-commerce Platform", redFlags: [], isPhishing: false, explanation: "Legitimate rate change notification. Informational only, links to official carrier sites. Visit carrier websites directly to verify."},
+                {from: "inventory@retailstore.com", to: "manager@retailstore.com", subject: "Low Stock Alert", date: "Tue, 28 Oct 2025 15:30:44", body: "Items below reorder point:\n\nItem #12345: 15 units (reorder: 25)\nItem #67890: 8 units (reorder: 20)\n\nView: inventory.retailstore.com\n\nInventory Management System", redFlags: [], isPhishing: false, explanation: "Legitimate automated inventory alert from your system. From company domain, specific item numbers. Low-stock alerts help manage inventory."},
+                {from: "google-shopping@google-ads-services.com", to: "ecommerce@store.com", subject: "Priority Placement Program", date: "Sun, 27 Oct 2025 16:20:33", body: "Selected for Google Shopping Priority!\n\nGuaranteed top placement!\nCost: $2,500 one-time\n3X traffic increase\n\nWire payment to enroll.\n\nGoogle Shopping Merchant", redFlags: ["Google doesn't offer guaranteed placement", "Wire transfer", "Too good to be true"], isPhishing: true, explanation: "Google does NOT offer guaranteed placement via email. Google Ads works through official google.com platform - never wire transfers."},
+                {from: "rewards@loyaltypartner.com", to: "customer@store.com", subject: "Loyalty Program Update", date: "Mon, 27 Oct 2025 10:15:44", body: "Rewards program terms updating Dec 1.\n\nYour balance: 2,847 points\n\nView: loyaltypartner.com/terms\n\nSupport: 1-800-555-LOYAL\n\nLoyalty Partner", redFlags: [], isPhishing: false, explanation: "Legitimate terms update. From provider's domain, includes point balance, provides contact info. Navigate to website directly."},
+                {from: "amazon-seller@amazon-services.net", to: "seller@store.com", subject: "Account Suspended", date: "Tue, 28 Oct 2025 13:45:22", body: "Seller account suspended.\n\nVerify banking at: amazon-seller-verification.net\n\n24 hours or permanent closure.\n\nAmazon Seller Support", redFlags: ["Wrong domain", "External verification site", "24-hour threat"], isPhishing: true, explanation: "Amazon's domain is amazon.com. Seller communications come through Seller Central dashboard at sellercentral.amazon.com. Never use external sites."},
+                {from: "pos@possystems.com", to: "store@retail.com", subject: "POS Security Patch", date: "Wed, 29 Oct 2025 08:30:15", body: "Critical security patch for POS terminals.\n\nVulnerability: Payment card security\nPatch: 5.2.8\n\nDownload: support.possystems.com/patch\n\nSupport: 1-800-POS-HELP\n\nPOS Systems Technical", redFlags: [], isPhishing: false, explanation: "Legitimate security update for POS systems. From vendor's domain, includes your equipment details. Verify with vendor before applying POS updates."}
+            ]},
+            education: {name: "Education", icon: "🎓", questions: [
+                {from: "financial-aid@studentaid-portal.com", to: "student@university.edu", subject: "Federal Aid Verification", date: "Sun, 27 Oct 2025 19:15:42", body: "Federal aid suspended in 48 hours.\n\nVerify:\n• SSN\n• FAFSA PIN\n• Parent info\n\nVerify at: studentaid-portal.com\n\nFederal Student Aid", redFlags: ["Not .edu or .gov", "Requests SSN and PIN", "48-hour threat"], isPhishing: true, explanation: "Official student aid from .edu (university) or studentaid.gov. They NEVER request SSN or FAFSA PIN via email. Report to financial aid office."},
+                {from: "it-security@university.edu", to: "students@university.edu", subject: "Password Reset Required", date: "Mon, 27 Oct 2025 08:45:18", body: "Security incident requires password reset.\n\nReset at: password.university.edu\n\nDeadline: Friday, Nov 1\n\nQuestions? IT x4000\n\nUniversity IT Security", redFlags: [], isPhishing: false, explanation: "Legitimate from university .edu domain, links to university password portal, reasonable deadline. Contact IT help desk if unsure."},
+                {from: "scholarship@scholarship-foundation.org", to: "student@email.com", subject: "$5,000 Scholarship Award", date: "Tue, 28 Oct 2025 14:30:22", body: "Selected for $5,000 scholarship!\n\nTo claim:\n• Pay $150 processing fee\n• Provide SSN\n• Bank account info\n\n72 hours to claim.\n\nNational Scholarship Foundation", redFlags: ["Payment required to receive award", "Requests SSN and banking", "Didn't apply"], isPhishing: true, explanation: "Legitimate scholarships NEVER require payment. This is advance-fee fraud exploiting students' financial needs."},
+                {from: "canvas@university.edu", to: "student@university.edu", subject: "New Assignment Posted", date: "Mon, 27 Oct 2025 16:20:15", body: "PSY 101 - New Assignment\n\nChapter 5 Review Questions\nDue: Friday 11:59 PM\nPoints: 20\n\nLog into Canvas to view.\n\nCanvas LMS", redFlags: [], isPhishing: false, explanation: "Legitimate Canvas notification. From university .edu, expected course info, instructs logging into Canvas directly."},
+                {from: "research-grants@grant-services.org", to: "researcher@university.edu", subject: "Research Grant - $50,000", date: "Wed, 29 Oct 2025 10:45:33", body: "Selected for $50,000 grant!\n\nApplication fee: $500\nProvide university banking info\n\n72 hours to apply.\n\nNational Research Foundation", redFlags: ["$500 application fee", "Requests banking info", "Advance-fee scam"], isPhishing: true, explanation: "Legitimate grants go through university research offices and NEVER require upfront fees. Contact your Office of Research."},
+                {from: "library@university.edu", to: "student@university.edu", subject: "Overdue Items", date: "Tue, 28 Oct 2025 11:30:44", body: "Overdue library materials:\n\nBiology Textbook: $13.00\nLab Manual: $32.00\nTotal: $45.00\n\nReturn to library or pay online through Student Portal.\n\nPhone: (555) 123-4567 x5000\n\nUniversity Library", redFlags: [], isPhishing: false, explanation: "Legitimate library overdue notice. From university .edu, specific items and fines, directs payment through official student portal."},
+                {from: "loan-forgiveness@student-debt-services.com", to: "graduate@email.com", subject: "Loan Forgiveness - $42,000", date: "Sun, 27 Oct 2025 15:45:18", body: "Qualify for 100% loan forgiveness!\n\nBalance: $42,000\nEnrollment fee: $1,500\n\nEnroll by Friday!\n\nCall: 1-888-LOAN-FREE\n\nStudent Debt Services", redFlags: ["Payment for 'free' forgiveness", "Not studentaid.gov", "Too good to be true"], isPhishing: true, explanation: "Official federal loan forgiveness is FREE through studentaid.gov. This is debt relief scam. Real forgiveness has strict eligibility and proper application."},
+                {from: "registrar@university.edu", to: "students@university.edu", subject: "Course Registration Opens", date: "Mon, 27 Oct 2025 09:00:22", body: "Spring 2026 registration schedule:\n\nSeniors: Nov 4, 8 AM\nJuniors: Nov 5, 8 AM\n\nRegister at: registration.university.edu\n\nQuestions? (555) 123-4567 x3000\n\nOffice of the Registrar", redFlags: [], isPhishing: false, explanation: "Legitimate course registration notification. From university .edu, expected timing, links to official registration portal."},
+                {from: "admissions@university.edu", to: "applicant@email.com", subject: "Application Decision Available", date: "Wed, 29 Oct 2025 14:20:15", body: "Your Fall 2026 application has been reviewed.\n\nView decision at: apply.university.edu\n\nApplication ID: APP-2025-847291\n\nQuestions? (555) 123-4567 x2000\n\nOffice of Admissions", redFlags: [], isPhishing: false, explanation: "Legitimate admissions decision. From university .edu, specific application details, directs to official portal. Log in directly to verify."},
+                {from: "student-accounts@university.edu", to: "student@university.edu", subject: "Spring 2026 Tuition Bill", date: "Tue, 28 Oct 2025 10:15:44", body: "Spring 2026 statement available.\n\nTuition: $6,000\nFees: $850\nHousing: $3,200\nTotal: $12,450\n\nLess financial aid: $10,000\nBalance due: $2,450\n\nDue: January 15, 2026\n\nView: Student Portal > Financial Services\n\nStudent Accounts Office", redFlags: [], isPhishing: false, explanation: "Legitimate university billing. From university .edu, detailed tuition breakdown, directs to official student portal. Verify by logging in directly."}
+            ]},
+            government: {name: "Government", icon: "🏛️", questions: [
+                {from: "irs@irs-compliance.org", to: "taxpayer@email.com", subject: "IRS FINAL NOTICE", date: "Sun, 27 Oct 2025 18:30:22", body: "Tax owed: $4,929.65\n\nPay now via:\n• Wire transfer\n• iTunes gift cards\n• Google Play cards\n\nCall: 1-888-IRS-HELP\n\n24 hours or arrest.\n\nInternal Revenue Service", redFlags: ["IRS never emails", "Gift card payment!", "Arrest threats", "Not irs.gov"], isPhishing: true, explanation: "IRS NEVER: emails about taxes, demands gift cards, threatens arrest. They communicate via postal mail. Gift card request is biggest red flag. Report to phishing@irs.gov."},
+                {from: "notices@ssa.gov", to: "beneficiary@email.com", subject: "Social Security Statement", date: "Mon, 27 Oct 2025 09:15:44", body: "Your 2025 Social Security Statement is available.\n\nLog in: www.ssa.gov/myaccount\n\nQuestions? 1-800-772-1213\n\nSocial Security Administration", redFlags: [], isPhishing: false, explanation: "Legitimate from ssa.gov (official SSA), directs to official SSA website, provides known SSA phone. Type ssa.gov directly into browser."},
+                {from: "usps@package-redelivery.com", to: "recipient@email.com", subject: "USPS Failed Delivery", date: "Tue, 28 Oct 2025 14:20:33", body: "Package delivery failed.\n\nReschedule at: package-redelivery.com\n\nRedelivery fee: $2.95\n\n5 days or returned to sender.\n\nUSPS Package Services", redFlags: ["Wrong domain (not usps.com)", "Redelivery fee", "External site"], isPhishing: true, explanation: "USPS's domain is usps.com. Redelivery through usps.com/redelivery and is FREE. $2.95 fee is credit card theft. Visit usps.com directly."},
+                {from: "benefits@va.gov", to: "veteran@email.com", subject: "VA Benefits Review", date: "Wed, 29 Oct 2025 10:30:15", body: "Annual benefits eligibility review due.\n\nCurrent benefits:\n• Disability: 70%\n• Monthly: $1,716.28\n\nComplete at: www.va.gov/mybenefits\n\nDeadline: Nov 30\n\nQuestions? 1-800-827-1000\n\nDepartment of Veterans Affairs", redFlags: [], isPhishing: false, explanation: "Legitimate from va.gov (official VA), annual reviews are routine, provides known VA phone. Navigate to va.gov directly."},
+                {from: "census@census-survey.org", to: "resident@email.com", subject: "Mandatory Census Survey", date: "Sun, 27 Oct 2025 16:45:22", body: "Selected for American Community Survey.\n\nREQUIRED BY LAW.\n\nProvide:\n• SSN\n• Banking info\n• Immigration status\n\n48 hours or $5,000 fine.\n\nU.S. Census Bureau", redFlags: ["Not census.gov", "Requests SSN and banking", "48-hour threat", "Excessive fear"], isPhishing: true, explanation: "Census Bureau's domain is census.gov. While American Community Survey is real, it NEVER requests SSN or banking. Real surveys arrive by mail. Report to census.gov."},
+                {from: "clerk@uscourts.gov", to: "juror@email.com", subject: "Federal Jury Duty Summons", date: "Mon, 27 Oct 2025 11:15:33", body: "Summoned for federal jury duty.\n\nJuror: 2025-8472\nReport: Nov 18, 2025, 8 AM\nLocation: Federal Courthouse, Houston\n\nConfirm: www.uscourts.gov/jury-service\n\nPhone: (555) 123-4567\n\nU.S. District Court", redFlags: [], isPhishing: false, explanation: "Legitimate from uscourts.gov (official federal courts), specific court location, proper contact info. Verify by calling court directly."},
+                {from: "fbi-cybercrime@fbi-ic3.org", to: "victim@email.com", subject: "FBI: Computer Locked", date: "Tue, 28 Oct 2025 15:30:44", body: "YOUR COMPUTER LOCKED BY FBI\n\nViolations detected.\n\nPay $500 fine via MoneyPak.\n\n72 hours or arrest.\n\nFBI Cyber Crimes Division", redFlags: ["FBI doesn't lock computers", "Ransom payment", "False accusations", "Not fbi.gov"], isPhishing: true, explanation: "RANSOMWARE - malware that locks computers. FBI does NOT lock computers or demand payment. DO NOT PAY! Disconnect internet, run antivirus. Report to IC3.gov (real FBI cybercrime site)."},
+                {from: "alerts@fema.gov", to: "resident@email.com", subject: "FEMA Emergency Alert", date: "Wed, 29 Oct 2025 13:45:18", body: "Severe weather forecasted.\n\nEvent: Thunderstorms Thu-Fri\nCounties: Harris, Fort Bend\n\nPrepare emergency kit.\n\nInfo: www.fema.gov\nApp: FEMA mobile app\n\nFederal Emergency Management Agency", redFlags: [], isPhishing: false, explanation: "Legitimate from fema.gov (official FEMA), provides preparedness information, links to official FEMA site. Verify weather through weather.gov."},
+                {from: "dmv@dmv-services.org", to: "driver@email.com", subject: "License Renewal - Expired", date: "Sun, 27 Oct 2025 19:20:15", body: "Driver license expired.\n\nRenew online: dmv-services.org/renew\n\nFee: $45 + late $25 = $70\n\nRenew now to avoid legal issues.\n\nDepartment of Motor Vehicles", redFlags: ["Not official state .gov", "Online-only renewal", "Excessive fear"], isPhishing: true, explanation: "DMV websites are state .gov domains (like dps.texas.gov). This domain is not official. Scammers create fake DMV sites to steal payment info. Visit your state's official DMV directly."},
+                {from: "ecitizen@cityofhouston.gov", to: "resident@email.com", subject: "Utility Bill Reminder", date: "Mon, 27 Oct 2025 10:45:22", body: "Utility bill due Nov 10.\n\nWater/Wastewater: $45.82\nSolid Waste: $28.50\nTotal: $86.62\n\nPay at: houstontx.gov/utilities\n\nPhone: 311 or (713) 837-0311\n\nCity of Houston Public Works", redFlags: [], isPhishing: false, explanation: "Legitimate from .gov domain, specific account details, multiple official payment options, known city phone (311). Verify by calling 311 or logging in directly."}
+            ]},
+            legal: {name: "Legal", icon: "⚖️", questions: [
+                {from: "courtclerk@state-courts.org", to: "defendant@email.com", subject: "COURT SUMMONS - Warrant", date: "Sun, 27 Oct 2025 17:30:44", body: "Being sued for $12,450.\n\nWarrant issued for failure to appear.\n\nPay $14,950 via wire to cancel warrant.\n\n48 hours or arrest.\n\nState District Court", redFlags: ["Not official .gov", "Wire transfer for court fines", "Immediate arrest threat"], isPhishing: true, explanation: "Real court summons served through proper legal channels (certified mail, process server), NOT email. Courts don't demand wire transfers. This is extortion fraud."},
+                {from: "notices@txcourts.gov", to: "juror@email.com", subject: "Jury Duty Summons", date: "Mon, 27 Oct 2025 09:15:33", body: "Harris County Jury Duty\n\nJuror: 2025-847291\nReport: Nov 25, 8 AM\nLocation: 201 Caroline St, Houston\n\nPostpone: txcourts.gov/juryduty\n\nPhone: (713) 274-8686\n\nHarris County District Court", redFlags: [], isPhishing: false, explanation: "Legitimate from .gov domain, specific court location, proper postponement procedures. Verify by calling court directly."},
+                {from: "legal-notice@lawsuit-settlement.com", to: "participant@email.com", subject: "Class Action Settlement", date: "Tue, 28 Oct 2025 11:45:22", body: "$35 million settlement. You may qualify!\n\nEstimated payment: $125-$400\n\nTo claim:\n• Provide SSN\n• Bank account details\n\nFile at: lawsuit-settlement.com\n\nSettlement Administrator", redFlags: ["Not official settlement website", "Requests SSN and banking", "Unsolicited notice"], isPhishing: true, explanation: "Legitimate settlement administrators use court-approved websites and don't request SSN/banking upfront. Visit actual court case docket or classaction.org to verify."},
+                {from: "filing@courts.gov", to: "litigant@email.com", subject: "E-Filing Receipt", date: "Wed, 29 Oct 2025 14:20:15", body: "Document filed successfully.\n\nCase: Smith v. Johnson\nDocument: Motion for Summary Judgment\nConfirmation: EFS-2025-8472910\n\nAccess: courts.gov/efiling\n\nPhone: (555) 123-4567\n\nCourt Administration", redFlags: [], isPhishing: false, explanation: "Legitimate e-filing confirmation. From official court domain, specific case details. Verify by logging into official e-filing system directly."},
+                {from: "collections@legal-debt-recovery.com", to: "debtor@email.com", subject: "FINAL NOTICE - Legal Action", date: "Sun, 27 Oct 2025 16:45:33", body: "Debt: $3,847.92\n\nLegal actions authorized:\n• Wage garnishment\n• Bank levy\n\nSettle today for 50% off: $1,923.96\n\n48 hours.\n\nLegal Debt Recovery", redFlags: ["Extreme pressure", "48-hour settlement", "Untraceable payment methods"], isPhishing: true, explanation: "While COULD be legitimate debt collection, pressure tactics are red flags. Under FDCPA, you have right to REQUEST WRITTEN VALIDATION before paying. Never pay via wire transfer."},
+                {from: "attorney@attorney-trust.com", to: "beneficiary@email.com", subject: "Estate Distribution - Beneficiary", date: "Mon, 27 Oct 2025 10:30:22", body: "Named as beneficiary in distant relative's estate.\n\nYour share: $1,138,800\n\nTo process:\n• Pay $5,000 legal fees\n• Provide banking info\n\n72 hours or goes to alternates.\n\nEstate & Trust Division", redFlags: ["Unsolicited inheritance", "Advance-fee scam", "Unknown relative", "Payment required"], isPhishing: true, explanation: "Classic 'Nigerian Prince' advance-fee scam. Legitimate inheritances handled through proper legal channels. NEVER pay fees to receive inheritance."},
+                {from: "service@legalzoom.com", to: "customer@email.com", subject: "LLC Formation Complete", date: "Tue, 28 Oct 2025 13:15:44", body: "Your LLC formation complete!\n\nBusiness: Your Company LLC\nState: Texas\nEntity: 847291038\n\nAccess: www.legalzoom.com/account\n\nPhone: 1-800-773-0888\n\nLegalZoom.com, Inc.", redFlags: [], isPhishing: false, explanation: "Legitimate LegalZoom confirmation. From legalzoom.com, specific formation details, known customer service. If you didn't form LLC, investigate immediately."},
+                {from: "attorney@lawfirm.com", to: "client@email.com", subject: "Settlement Offer", date: "Wed, 29 Oct 2025 15:45:18", body: "Settlement offer received: $75,000\n\nYour net: $32,500\n\nRecommend accepting. Discuss?\n\nCall (555) 123-4567\n\nJohn Smith, Esq.\nLaw Firm", redFlags: [], isPhishing: false, explanation: "Legitimate settlement offer from your attorney. From law firm domain, specific case details, offers to discuss by phone. If you have actual case with this firm, this is routine."},
+                {from: "copyright@legal-compliance.org", to: "website-owner@email.com", subject: "DMCA Copyright Infringement", date: "Sun, 27 Oct 2025 18:20:15", body: "Your website hosts copyrighted material.\n\nTo settle:\n• Pay $2,500 licensing fee\n• Remove content\n\n48 hours or federal lawsuit.\n\nWire transfer details provided.\n\nCopyright Enforcement Agency", redFlags: ["Demands payment", "Not from legitimate rights holder", "48-hour threat", "Wire transfer"], isPhishing: true, explanation: "Legitimate DMCA notices come from actual copyright holders, NOT generic agencies. They don't demand immediate wire transfers. Consult attorney if questionable."},
+                {from: "records@countyclerk.gov", to: "property-owner@email.com", subject: "Property Tax Statement", date: "Mon, 27 Oct 2025 09:30:44", body: "2025 Property Tax Statement\n\nProperty: 1234 Main St, Houston\nTaxes Due: $7,847.50\n\nDue: Nov 15, 2025\n\nPay at: hctax.net\nPhone: 713-274-8000\n\nHarris County Tax Office", redFlags: [], isPhishing: false, explanation: "Legitimate property tax statement from .gov domain. Includes specific property details, multiple official payment options. Verify by visiting county tax website directly."}
+            ]}
+        };
+
+        function selectIndustry(industry) {
+            appState.selectedIndustry = industry;
+            document.querySelectorAll('.industry-card').forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            document.getElementById('continueBtn').disabled = false;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goToNameEntry() {
+            if (!appState.selectedIndustry) {alert('Please select your industry first!'); return;}
+            showScreen('nameEntryScreen');
+        }
+
+        function startTraining(event) {
+            event.preventDefault();
+            appState.userName = document.getElementById('userName').value.trim();
+            if (!appState.userName) {alert('Please enter your name!'); return;}
+            appState.currentQuestion = 0; appState.answers = []; appState.score = 0;
+            const industry = questionDatabase[appState.selectedIndustry];
+            document.getElementById('industryTitle').textContent = industry.name + ' Training';
+            showScreen('trainingScreen');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const industry = questionDatabase[appState.selectedIndustry];
+            const question = industry.questions[appState.currentQuestion];
+            const questionNum = appState.currentQuestion + 1;
+            const total = industry.questions.length;
+            document.getElementById('progressText').textContent = `Question ${questionNum} of ${total}`;
+            const progress = (questionNum / total) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            const html = `
+                <div style="font-size: 16px; color: #667eea; margin-bottom: 20px; font-weight: 700;">
+                    Question ${questionNum} of ${total}
+                </div>
+                <div class="email-container">
+                    <div class="email-header">
+                        <div class="email-field">
+                            <span class="email-field-label">From:</span>
+                            <span class="email-field-value">${question.from}</span>
+                        </div>
+                        <div class="email-field">
+                            <span class="email-field-label">To:</span>
+                            <span class="email-field-value">${question.to}</span>
+                        </div>
+                        <div class="email-field">
+                            <span class="email-field-label">Date:</span>
+                            <span class="email-field-value">${question.date}</span>
+                        </div>
+                        <div class="email-subject">Subject: ${question.subject}</div>
+                    </div>
+                    <div class="email-body">${question.body.replace(/\n/g, '<br>')}</div>
+                </div>
+                <div class="answer-options">
+                    <button class="answer-btn phishing" onclick="submitAnswer(true)">🚨 PHISHING<br><small>Threat detected!</small></button>
+                    <button class="answer-btn legitimate" onclick="submitAnswer(false)">✅ LEGITIMATE<br><small>Looks safe!</small></button>
+                </div>
+                <div class="feedback" id="feedback"></div>
+            `;
+            document.getElementById('questionContainer').innerHTML = html;
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('finishBtn').style.display = 'none';
+        }
+
+        function submitAnswer(userAnswer) {
+            const industry = questionDatabase[appState.selectedIndustry];
+            const question = industry.questions[appState.currentQuestion];
+            const isCorrect = userAnswer === question.isPhishing;
+            appState.answers.push({question: appState.currentQuestion, userAnswer, correct: isCorrect});
+            if (isCorrect) appState.score++;
+            
+            const feedback = document.getElementById('feedback');
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
+            
+            let feedbackHTML = `<div class="feedback-title">${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</div>
+                <div style="line-height: 1.8; margin-bottom: 20px; font-size: 17px; font-weight: 600;">
+                    <strong>💡 Explanation:</strong> ${question.explanation}
+                </div>`;
+            
+            if (question.redFlags && question.redFlags.length > 0) {
+                feedbackHTML += `<div style="background: white; padding: 20px; border-radius: 12px;">
+                    <div style="font-weight: 900; margin-bottom: 15px; color: #dc3545; font-size: 18px;">🚩 Red Flags:</div>
+                    <ul style="list-style-position: inside; color: #333; font-weight: 600;">
+                        ${question.redFlags.map(flag => `<li style="margin-bottom: 8px;">${flag}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+            
+            feedback.innerHTML = feedbackHTML;
+            document.querySelectorAll('.answer-btn').forEach(btn => {btn.disabled = true; btn.style.opacity = '0.6';});
+            
+            if (appState.currentQuestion < industry.questions.length - 1) {
+                document.getElementById('nextBtn').style.display = 'block';
+            } else {
+                document.getElementById('finishBtn').style.display = 'block';
+            }
+        }
+
+        function nextQuestion() {appState.currentQuestion++; loadQuestion();}
+        function finishTraining() {showResults();}
+
+        function showResults() {
+            const industry = questionDatabase[appState.selectedIndustry];
+            const total = industry.questions.length;
+            const correct = appState.score;
+            const percentage = Math.round((correct / total) * 100);
+            
+            document.getElementById('scoreValue').textContent = percentage + '%';
+            document.getElementById('correctValue').textContent = `${correct}/${total}`;
+            
+            let grade, message, messageType;
+            if (percentage >= 90) {
+                grade = 'A+'; message = '🏆 Outstanding!'; messageType = 'success';
+            } else if (percentage >= 80) {
+                grade = 'A'; message = '🌟 Great work!'; messageType = 'success';
+            } else if (percentage >= 70) {
+                grade = 'B'; message = '👍 Good job!'; messageType = 'info';
+            } else if (percentage >= 60) {
+                grade = 'C'; message = '📚 Passing!'; messageType = 'info';
+            } else {
+                grade = 'F'; message = '⚠️ More practice needed.'; messageType = 'info';
+            }
+            
+            document.getElementById('gradeValue').textContent = grade;
+            document.getElementById('resultMessage').className = `alert alert-${messageType}`;
+            document.getElementById('resultMessage').textContent = message;
+            generateCertificate(percentage);
+            showScreen('resultsScreen');
+        }
+
+        function generateCertificate(score) {
+            const industryData = questionDatabase[appState.selectedIndustry];
+            const date = new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
+            const certId = 'CDA-' + appState.selectedIndustry.toUpperCase().substring(0,3) + '-2025-' + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+            
+            document.getElementById('certName').textContent = appState.userName;
+            document.getElementById('certIndustry').textContent = industryData.name;
+            document.getElementById('certScore').textContent = score + '%';
+            document.getElementById('certDate').textContent = date;
+            document.getElementById('certId').textContent = certId;
+        }
+
+        function restartTraining() {
+            appState = {selectedIndustry: null, userName: '', currentQuestion: 0, answers: [], score: 0};
+            document.querySelectorAll('.industry-card').forEach(card => card.classList.remove('selected'));
+            document.getElementById('continueBtn').disabled = true;
+            showScreen('welcomeScreen');
+        }
+
+        console.log('🛡️ CYBER DRILL AI - Complete Training System');
+        console.log('✅ 8 Industries × 10 Questions = 80 Total Questions');
+        console.log('📧 All questions in professional email format');
+    </script>
+</body>
+</html>
