@@ -1,0 +1,2539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviva Metals Inc. - Phishing Awareness Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header-logo {
+            max-width: 250px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header .company {
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .login-screen, .user-info-screen {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .login-logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        .login-box, .user-info-box {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-box h2, .user-info-box h2 {
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .btn-login, .btn-submit-info {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-login:hover, .btn-submit-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+
+        .progress-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            font-weight: 600;
+            color: #1e3c72;
+        }
+
+        .progress-stats {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+
+        .btn-pause {
+            background: #ffc107;
+            color: #212529;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pause:hover {
+            background: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .scenario-number {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .scenario-type {
+            background: #e7f3ff;
+            color: #004085;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .email-container {
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+
+        .email-header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .email-field {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .email-field strong {
+            color: #495057;
+            min-width: 80px;
+            display: inline-block;
+        }
+
+        .email-field span {
+            color: #212529;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .suspicious-domain {
+            color: #dc3545;
+            font-weight: 700;
+            background: #fff5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .email-body {
+            padding: 20px;
+            line-height: 1.6;
+            background: white;
+        }
+
+        .email-link {
+            color: #0066cc;
+            text-decoration: underline;
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .email-attachment {
+            display: inline-block;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin: 25px 0 20px 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-safe {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-safe:hover:not(:disabled) {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            border: 2px solid #28a745;
+        }
+
+        .feedback.incorrect {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+        }
+
+        .feedback-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feedback.correct .feedback-title {
+            color: #155724;
+        }
+
+        .feedback.incorrect .feedback-title {
+            color: #856404;
+        }
+
+        .stars {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+
+        .encouragement {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .feedback-content {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .red-flags {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .red-flags h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .red-flags ul {
+            margin-left: 20px;
+        }
+
+        .red-flags li {
+            margin-bottom: 8px;
+            color: #495057;
+        }
+
+        .tips {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 4px solid #0066cc;
+        }
+
+        .tips h4 {
+            color: #004085;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .tips ul {
+            margin-left: 20px;
+        }
+
+        .tips li {
+            margin-bottom: 8px;
+            color: #004085;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+
+        .results-screen {
+            padding: 40px;
+            text-align: center;
+            display: none;
+        }
+
+        .results-screen h2 {
+            color: #1e3c72;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 64px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .final-score.pass {
+            color: #28a745;
+        }
+
+        .final-score.fail {
+            color: #ffc107;
+        }
+
+        .result-message {
+            font-size: 20px;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn-training, .btn-retake {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-training:hover, .btn-retake:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.4);
+        }
+
+        .training-module {
+            padding: 40px;
+            display: none;
+        }
+
+        .training-module h2 {
+            color: #1e3c72;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .training-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2a5298;
+        }
+
+        .training-section h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .training-section ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .training-section li {
+            margin-bottom: 10px;
+        }
+
+        .training-example {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .example-good {
+            border-left: 4px solid #28a745;
+        }
+
+        .example-bad {
+            border-left: 4px solid #dc3545;
+        }
+
+        .btn-complete-training {
+            background: #28a745;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-complete-training:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .footer a {
+            color: #2a5298;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .pause-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .pause-content {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .pause-content h3 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .btn-resume {
+            background: #28a745;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .btn-resume:hover {
+            background: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+
+            .progress-section {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        .certificate-container {
+            background: white;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 50px;
+            border: 10px solid #1e3c72;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .certificate-border {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 3px solid #ffd700;
+            border-radius: 5px;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .certificate-header {
+            color: #1e3c72;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .certificate-subtitle {
+            color: #666;
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .certificate-recipient {
+            font-size: 32px;
+            color: #1e3c72;
+            margin: 30px 0;
+            font-weight: bold;
+        }
+
+        .certificate-text {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.8;
+            margin: 20px 0;
+        }
+
+        .certificate-score {
+            font-size: 36px;
+            color: #28a745;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .certificate-date {
+            font-size: 16px;
+            color: #666;
+            margin: 30px 0 20px 0;
+        }
+
+        .certificate-signature {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 50px;
+        }
+
+        .signature-line {
+            text-align: center;
+        }
+
+        .signature-name {
+            border-top: 2px solid #333;
+            padding-top: 10px;
+            margin-top: 40px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .signature-title {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .certificate-seal {
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            width: 100px;
+            height: 100px;
+            border: 5px solid #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            font-size: 40px;
+        }
+
+        .btn-print {
+            background: #28a745;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+        }
+
+        .btn-print:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .certificate-container,
+            .certificate-container * {
+                visibility: visible;
+            }
+            .certificate-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .btn-print,
+            .btn-retake,
+            .btn-training,
+            .btn-advanced {
+                display: none !important;
+            }
+        }
+        
+        /* Practice Questions Styles */
+        .practice-question {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .practice-question h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .practice-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .practice-btn {
+            background: white;
+            border: 2px solid #dee2e6;
+            padding: 15px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .practice-btn:hover:not(:disabled) {
+            background: #f8f9fa;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .practice-btn:disabled {
+            cursor: not-allowed;
+        }
+        
+        .practice-btn.correct {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+            font-weight: 600;
+        }
+        
+        .practice-btn.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        
+        .practice-answer {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .practice-answer.show {
+            display: block;
+        }
+        
+        .practice-answer.correct {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        
+        .practice-answer.incorrect {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .practice-answer strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        /* Real Example Styles */
+        .real-example {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .real-example.danger {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .real-example.alert {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .real-example.info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .real-example h4 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .real-example .email-mock {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .real-example .red-flags-list {
+            margin-top: 15px;
+        }
+        
+        .real-example .red-flags-list ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .training-progress-summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 30px 0;
+            display: none;
+        }
+        
+        .training-progress-summary.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="company">🏭 Aviva Metals Inc.</div>
+            <h1>Security Awareness Training</h1>
+            <p>Protect Our Company from Phishing Attacks</p>
+        </div>
+
+        <!-- Login Screen -->
+        <div class="login-screen" id="loginScreen">
+            <div class="login-box">
+                <h2>🔐 Training Portal Login</h2>
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password">
+                </div>
+                <div class="error-message" id="loginError">Invalid username or password</div>
+                <button class="btn-login" onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <!-- User Info Screen -->
+        <div class="user-info-screen" id="userInfoScreen" style="display: none;">
+            <div class="user-info-box">
+                <h2>👤 Welcome to Training</h2>
+                <p style="margin-bottom: 30px; color: #495057;">Please enter your information to begin</p>
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="firstName" placeholder="Enter your first name">
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="lastName" placeholder="Enter your last name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="userEmailInput" placeholder="Enter your work email">
+                </div>
+                <div class="form-group">
+                    <label>Department</label>
+                    <select id="userDepartment" style="width: 100%; padding: 12px 15px; border: 2px solid #dee2e6; border-radius: 6px; font-size: 16px; transition: border-color 0.3s;">
+                        <option value="">Select your department</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Trading">Trading</option>
+                        <option value="Purchasing">Purchasing</option>
+                        <option value="Warehouse">Warehouse</option>
+                        <option value="Accounting - AR">Accounting - AR (Accounts Receivable)</option>
+                        <option value="Accounting - AP">Accounting - AP (Accounts Payable)</option>
+                        <option value="Accounting - General">Accounting - General</option>
+                        <option value="All Accounting">All Accounting</option>
+                        <option value="Administration">Administration</option>
+                        <option value="IT">IT / Technology</option>
+                        <option value="HR">Human Resources</option>
+                        <option value="Executive">Executive / Management</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="error-message" id="nameError">Please enter all required information</div>
+                <button class="btn-submit-info" onclick="submitUserInfo()">Start Training</button>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section" id="progressSection" style="display: none;">
+            <div class="user-info">
+                👤 <span id="displayName"></span>
+            </div>
+            <div class="progress-stats">
+                <div class="stat">
+                    <div class="stat-number" id="questionNum">1/15</div>
+                    <div class="stat-label">Question</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="correctCount">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="scoreDisplay">0%</div>
+                    <div class="stat-label">Score</div>
+                </div>
+                <button class="btn-pause" onclick="pauseQuiz()">⏸ Pause</button>
+            </div>
+        </div>
+
+        <!-- Quiz Content -->
+        <div class="content" id="quizContent" style="display: none;">
+            <!-- Questions will be loaded here -->
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="resultsScreen">
+            <!-- Results will be shown here -->
+        </div>
+
+        <!-- Training Module -->
+        <div class="training-module" id="trainingModule">
+            <h2>📚 Comprehensive Phishing Awareness Training</h2>
+            
+            <div class="training-section">
+                <h3>🎯 Understanding Phishing Attacks</h3>
+                <p><strong>What is Phishing?</strong></p>
+                <p>Phishing is a cybersecurity attack where criminals impersonate legitimate organizations to steal sensitive information like passwords, credit card numbers, or personal data. These attacks have become increasingly sophisticated and can cost companies millions of dollars.</p>
+                
+                <div class="training-example example-bad">
+                    <strong>📊 Phishing Statistics:</strong><br>
+                    • 90% of data breaches start with phishing emails<br>
+                    • Average cost of a successful phishing attack: $4.65 million<br>
+                    • Phishing attempts increased by 65% in 2024<br>
+                    • 1 in 4 employees will click on a phishing link
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>Why Attackers Target You:</strong></p>
+                <ul>
+                    <li>You have access to company systems and sensitive data</li>
+                    <li>Your email credentials can be used to attack others</li>
+                    <li>Financial transactions you process can be redirected</li>
+                    <li>Customer information you handle is valuable on black markets</li>
+                </ul>
+                
+                <!-- Practice Question 1 -->
+                <div class="practice-question" style="margin-top: 25px;">
+                    <h4>💡 Practice Question 1</h4>
+                    <p style="font-weight: 600; margin-bottom: 15px;">Your company loses $4.65M on average from a phishing attack. If 1 in 4 employees clicks a phishing link in your 400-person company, how many employees are at risk per campaign?</p>
+                    <div class="practice-options">
+                        <button class="practice-btn" onclick="checkPractice(1, 'a')">A) 25 employees</button>
+                        <button class="practice-btn" onclick="checkPractice(1, 'b')">B) 50 employees</button>
+                        <button class="practice-btn" onclick="checkPractice(1, 'c')">C) 100 employees</button>
+                        <button class="practice-btn" onclick="checkPractice(1, 'd')">D) 400 employees</button>
+                    </div>
+                    <div id="practice-1-answer" class="practice-answer"></div>
+                </div>
+            </div>
+
+            <div class="training-section">
+                <h3>🚩 Advanced Red Flag Recognition</h3>
+                
+                <p><strong>Domain and Email Analysis:</strong></p>
+                <ul>
+                    <li><strong>Look-Alike Domains:</strong> avivametalz.com, aviva-metals.com, avivarnetals.com</li>
+                    <li><strong>Wrong Extensions:</strong> avivametals.net, avivametals.org instead of .com</li>
+                    <li><strong>Subdomain Tricks:</strong> avivametals.com.secure-verify.net (real domain is secure-verify.net)</li>
+                    <li><strong>Homograph Attacks:</strong> Using similar-looking characters from different alphabets</li>
+                </ul>
+                
+                <div class="training-example example-good">
+                    <strong>✅ How to Verify Email Addresses:</strong><br>
+                    1. Check the actual email domain, not just the display name<br>
+                    2. Look for what comes AFTER the @ symbol<br>
+                    3. Verify the domain matches official company communications<br>
+                    4. Be suspicious of generic addresses (noreply@, admin@, support@)
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>Social Engineering Tactics:</strong></p>
+                <ul>
+                    <li><strong>Urgency:</strong> "Act now!", "Within 24 hours", "Immediate action required"</li>
+                    <li><strong>Authority:</strong> Impersonating executives, IT staff, or government agencies</li>
+                    <li><strong>Fear:</strong> Threats of account closure, legal action, or job loss</li>
+                    <li><strong>Greed:</strong> Promises of money, prizes, or exclusive opportunities</li>
+                    <li><strong>Curiosity:</strong> "You won't believe this!", mysterious attachments</li>
+                    <li><strong>Trust:</strong> Impersonating colleagues, partners, or customers</li>
+                </ul>
+                
+                <p style="margin-top: 15px;"><strong>Attachment Red Flags:</strong></p>
+                <ul>
+                    <li><strong>Dangerous Extensions:</strong> .exe, .bat, .scr, .vbs, .js, .cmd</li>
+                    <li><strong>Double Extensions:</strong> document.pdf.exe, invoice.doc.js</li>
+                    <li><strong>Macro-Enabled Files:</strong> .docm, .xlsm (can contain malicious code)</li>
+                    <li><strong>Archive Files:</strong> .zip, .rar, .7z containing executables</li>
+                </ul>
+                
+                <!-- Real Example 1: Look-Alike Domain -->
+                <div class="real-example danger" style="margin-top: 25px;">
+                    <h4 style="color: #856404;">🔍 Real-World Example #1: Look-Alike Domain Attack</h4>
+                    <div class="email-mock">
+                        <strong>From:</strong> security@avivametalsinc.com<br>
+                        <strong>To:</strong> you@avivametals.com<br>
+                        <strong>Subject:</strong> Security Alert - Verify Your Account Now<br>
+                        <br>
+                        Your account has been flagged for unusual login activity from an unknown location.<br>
+                        Please verify your identity immediately to prevent account suspension.<br>
+                        <br>
+                        Click here to verify: https://avivametalsinc.com/verify?id=8472<br>
+                        <br>
+                        This link expires in 2 hours.<br>
+                        <br>
+                        IT Security Team<br>
+                        Aviva Metals Inc.
+                    </div>
+                    <div class="red-flags-list">
+                        <p style="margin-top: 15px;"><strong>🚨 What's Wrong:</strong></p>
+                        <ul>
+                            <li>Domain is "avivametalsinc.com" - notice the extra "<strong>inc</strong>" before .com</li>
+                            <li>Real domain is "avivametals.com" - subtle one-word difference!</li>
+                            <li>Creates urgency with "2 hours" expiration</li>
+                            <li>Threatens account suspension to cause panic</li>
+                            <li>URL parameter (id=8472) looks technical to seem legitimate</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 5px;"><strong>✅ Always check:</strong> The exact domain spelling AFTER the @ symbol. One letter difference = phishing!</p>
+                    </div>
+                </div>
+                
+                <!-- Practice Question 2 -->
+                <div class="practice-question" style="margin-top: 25px;">
+                    <h4>💡 Practice Question 2</h4>
+                    <p style="font-weight: 600; margin-bottom: 15px;">Which of these email addresses is the REAL Aviva Metals HR department?</p>
+                    <div class="practice-options">
+                        <button class="practice-btn" onclick="checkPractice(2, 'a')">A) hr@avivametals.com</button>
+                        <button class="practice-btn" onclick="checkPractice(2, 'b')">B) hr@aviva-metals.com</button>
+                        <button class="practice-btn" onclick="checkPractice(2, 'c')">C) hr@avivametalz.com</button>
+                        <button class="practice-btn" onclick="checkPractice(2, 'd')">D) hr@avivametals.net</button>
+                    </div>
+                    <div id="practice-2-answer" class="practice-answer"></div>
+                </div>
+                
+                <!-- Real Example 2: CEO Fraud -->
+                <div class="real-example alert" style="margin-top: 25px;">
+                    <h4 style="color: #721c24;">🔍 Real-World Example #2: CEO Fraud (Business Email Compromise)</h4>
+                    <div class="email-mock">
+                        <strong>From:</strong> Norman Lazarus &lt;nlazarus.urgent@gmail.com&gt;<br>
+                        <strong>To:</strong> you@avivametals.com<br>
+                        <strong>Subject:</strong> URGENT: Wire Transfer Needed Immediately<br>
+                        <br>
+                        I'm in a crucial meeting with a client and need your help NOW.<br>
+                        <br>
+                        Please process an urgent wire transfer:<br>
+                        <strong>Amount:</strong> $45,000<br>
+                        <strong>Account:</strong> 7834-2918-4456<br>
+                        <strong>Bank:</strong> Wells Fargo<br>
+                        <br>
+                        This deal closes in 30 minutes. Send confirmation when complete.<br>
+                        DO NOT discuss this with anyone - client confidentiality.<br>
+                        <br>
+                        Norman Lazarus<br>
+                        President, Aviva Metals Inc.
+                    </div>
+                    <div class="red-flags-list">
+                        <p style="margin-top: 15px;"><strong>🚨 Red Flags:</strong></p>
+                        <ul>
+                            <li><strong>Gmail address</strong> - Company president uses corporate email (@avivametals.com)</li>
+                            <li><strong>Extreme urgency</strong> - "30 minutes" creates panic</li>
+                            <li><strong>Bypasses approval</strong> - Normal wire transfers require proper workflow</li>
+                            <li><strong>Demands secrecy</strong> - "DO NOT discuss" prevents verification</li>
+                            <li><strong>Unusual channel</strong> - Large transactions not done via email</li>
+                        </ul>
+                        <p style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.7); border-radius: 5px;"><strong>✅ What to do:</strong> Call Norman using the company directory number. NEVER process urgent wire transfers based solely on email!</p>
+                    </div>
+                </div>
+                
+                <!-- Practice Question 3 -->
+                <div class="practice-question" style="margin-top: 25px;">
+                    <h4>💡 Practice Question 3</h4>
+                    <p style="font-weight: 600; margin-bottom: 15px;">You receive an urgent email from "Norman Lazarus" requesting a wire transfer. What should you do FIRST?</p>
+                    <div class="practice-options">
+                        <button class="practice-btn" onclick="checkPractice(3, 'a')">A) Process the transfer immediately - he's the president!</button>
+                        <button class="practice-btn" onclick="checkPractice(3, 'b')">B) Call Norman using the number from the company directory</button>
+                        <button class="practice-btn" onclick="checkPractice(3, 'c')">C) Reply to the email asking for confirmation</button>
+                        <button class="practice-btn" onclick="checkPractice(3, 'd')">D) Forward to IT and wait for their response</button>
+                    </div>
+                    <div id="practice-3-answer" class="practice-answer"></div>
+                </div>
+            </div>
+
+            <div class="training-section">
+                <h3>🔍 Advanced Verification Techniques</h3>
+                
+                <p><strong>The "Hover Test":</strong></p>
+                <div class="training-example example-good">
+                    Before clicking any link, hover your mouse over it to see the actual URL. If it doesn't match what the text says, it's suspicious!<br><br>
+                    Example: Link text says "portal.avivametals.com" but hovering shows "avivametalz.net/login" → PHISHING!
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>Multi-Channel Verification:</strong></p>
+                <ul>
+                    <li>If you receive an unexpected email requesting action, verify through a separate channel</li>
+                    <li>Call the person using a phone number from company directory (NOT from the email)</li>
+                    <li>Walk to their office if they're in the building</li>
+                    <li>Send a new email (don't reply to suspicious one) or use Teams/Slack</li>
+                    <li>For customers: Use contact information from your CRM, not the email</li>
+                </ul>
+                
+                <p style="margin-top: 15px;"><strong>Email Header Analysis:</strong></p>
+                <ul>
+                    <li>Check the "Reply-To" address - does it match the sender?</li>
+                    <li>Look at the full email headers for suspicious routing</li>
+                    <li>Verify SPF, DKIM, and DMARC authentication passes</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <h3>💼 Business Email Compromise (BEC) Prevention</h3>
+                
+                <p>BEC attacks are highly targeted and can result in massive financial losses. Attackers research your company and impersonate executives or customers.</p>
+                
+                <div class="training-example example-bad">
+                    <strong>⚠️ Common BEC Scenarios:</strong><br>
+                    • CEO/CFO requesting urgent wire transfers<br>
+                    • Customer changing banking information via email<br>
+                    • Vendor requesting payment to a new account<br>
+                    • Attorney requesting urgent payments for legal matters<br>
+                    • HR requesting W-2 information for "payroll audit"
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>AvivaMetals BEC Protection Protocol:</strong></p>
+                <ul>
+                    <li>ALL wire transfer requests must be verified by phone using known numbers</li>
+                    <li>Banking information changes require written confirmation via registered mail</li>
+                    <li>Executive requests for financial transactions follow approval workflow</li>
+                    <li>Never process urgent payments that bypass normal procedures</li>
+                    <li>Be suspicious of requests for secrecy or confidentiality regarding payments</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <h3>✅ What to Do When You Suspect Phishing</h3>
+                
+                <p><strong>Immediate Actions:</strong></p>
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li><strong>DON'T CLICK</strong> any links or download attachments</li>
+                    <li><strong>DON'T REPLY</strong> to the email (confirms your address is active)</li>
+                    <li><strong>DON'T DELETE</strong> it yet (IT Security may need to analyze it)</li>
+                    <li><strong>DO REPORT</strong> it immediately to security@avivametals.com</li>
+                    <li><strong>DO VERIFY</strong> through another channel if it seems to be from a colleague</li>
+                    <li><strong>DO WARN</strong> others if it appears to target multiple employees</li>
+                </ol>
+                
+                <p style="margin-top: 15px;"><strong>If You Already Clicked:</strong></p>
+                <ul>
+                    <li><strong>Don't panic</strong> - immediate action can prevent damage</li>
+                    <li><strong>Disconnect</strong> from network if you downloaded something</li>
+                    <li><strong>Change passwords</strong> immediately if you entered credentials</li>
+                    <li><strong>Report to IT Security</strong> immediately - the faster we know, the better</li>
+                    <li><strong>Contact your bank</strong> if you provided financial information</li>
+                </ul>
+                
+                <div class="training-example example-good">
+                    <strong>🏆 Remember: Reporting a phishing attempt is GOOD!</strong><br>
+                    You're protecting the entire company. We never penalize employees for reporting suspicious emails, even false alarms. It's always better to report and be wrong than to ignore a real threat.
+                </div>
+            </div>
+
+            <div class="training-section">
+                <h3>🛡️ Building Strong Security Habits</h3>
+                
+                <ul>
+                    <li><strong>Use Multi-Factor Authentication (MFA):</strong> Even if attackers get your password, MFA stops them</li>
+                    <li><strong>Use Strong, Unique Passwords:</strong> Different password for every account, use a password manager</li>
+                    <li><strong>Keep Software Updated:</strong> Security patches fix vulnerabilities that attackers exploit</li>
+                    <li><strong>Think Before You Click:</strong> Take 10 seconds to evaluate every unexpected email</li>
+                    <li><strong>Trust Your Instincts:</strong> If something feels off, it probably is</li>
+                    <li><strong>Stay Informed:</strong> Attend security training and read company security updates</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <h3>📱 Mobile Device Security</h3>
+                
+                <p>Phishing isn't just on computers - mobile attacks are increasing:</p>
+                <ul>
+                    <li><strong>SMS Phishing (Smishing):</strong> Fake texts claiming to be from banks, delivery services, or IT</li>
+                    <li><strong>Voice Phishing (Vishing):</strong> Phone calls from "tech support" or "fraud department"</li>
+                    <li><strong>App-Based Attacks:</strong> Fake apps that look like legitimate company tools</li>
+                    <li><strong>QR Code Scams:</strong> Malicious QR codes that lead to phishing sites</li>
+                </ul>
+                
+                <div class="training-example example-good">
+                    <strong>Mobile Safety Tips:</strong><br>
+                    • Don't click links in unexpected text messages<br>
+                    • Verify caller identity before providing information<br>
+                    • Only download apps from official app stores<br>
+                    • Be cautious scanning QR codes from unknown sources
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-complete-training" onclick="completeTraining()">✅ Complete Training & Retake Quiz</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            Designed by <a href="mailto:zaheer@avivametals.com">Zaheer Syed</a> © 2025 | AvivaMetals Security Awareness Training
+        </div>
+
+        <!-- Pause Modal -->
+        <div class="pause-modal" id="pauseModal">
+            <div class="pause-content">
+                <h3>⏸ Quiz Paused</h3>
+                <p>Your progress has been saved. Click resume when you're ready to continue.</p>
+                <button class="btn-resume" onclick="resumeQuiz()">▶ Resume Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let correctAnswers = 0;
+        let userName = '';
+        let userEmail = '';
+        let userDepartment = '';
+
+        const questions = [
+            {
+                type: "Look-Alike Domain",
+                from: "security@avivametalz.com",
+                subject: "Urgent: Password Reset Required",
+                body: `Dear Employee,
+
+We have detected suspicious activity on your AvivaMetals account. Please reset your password immediately by clicking the link below:
+
+https://avivametals-security.com/reset-password
+
+Failure to reset your password within 24 hours will result in account suspension.
+
+Best regards,
+IT Security Team
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "This is a phishing email! The sender address is 'avivametalz.com' (with a 'z') instead of 'avivametals.com'. This is a common technique where attackers register look-alike domains.",
+                redFlags: [
+                    "Sender domain is 'avivametalz.com' not 'avivametals.com' (look-alike domain)",
+                    "Creates urgent threat of account suspension",
+                    "Asks you to click a link to reset password",
+                    "URL goes to different domain (avivametals-security.com)",
+                    "Legitimate IT would use official password reset system"
+                ]
+            },
+            {
+                type: "Legitimate Email",
+                from: "hr@avivametals.com",
+                subject: "Upcoming Benefits Open Enrollment",
+                body: `Hello Team,
+
+This is a reminder that our annual benefits open enrollment period begins next Monday, November 1st.
+
+To review your options and make changes:
+1. Log into the AvivaMetals employee portal at portal.avivametals.com
+2. Navigate to the Benefits section
+3. Review the 2025 benefits guide
+4. Submit your elections by November 15th
+
+If you have questions, please contact HR at extension 5100 or visit us in Building A, Room 210.
+
+Thank you,
+Human Resources Department
+AvivaMetals`,
+                isPhishing: false,
+                explanation: "This is a legitimate email! The sender domain is correct (avivametals.com), it doesn't create artificial urgency, provides multiple contact methods, and doesn't ask you to click suspicious links.",
+                tips: [
+                    "Sender domain matches official company domain",
+                    "Provides multiple ways to contact (phone extension, physical location)",
+                    "Directs to known company portal without clickable links",
+                    "Professional tone without urgency or threats",
+                    "Gives reasonable timeframe (2 weeks)"
+                ]
+            },
+            {
+                type: "Hyphenated Domain",
+                from: "support@aviva-metals.com",
+                subject: "System Maintenance - Action Required",
+                body: `Dear User,
+
+We will be performing critical system maintenance this weekend. All employees must verify their accounts before Saturday to prevent service interruption.
+
+Click here to verify your account:
+http://aviva-metals.com/verify-account?user=you
+
+This is mandatory for all employees. Accounts not verified by Saturday will be temporarily disabled.
+
+Technical Support Team`,
+                isPhishing: true,
+                explanation: "Phishing attack! The domain 'aviva-metals.com' has a hyphen, while the real company domain is 'avivametals.com' (no hyphen). Attackers often use hyphens to create look-alike domains.",
+                redFlags: [
+                    "Domain is 'aviva-metals.com' with hyphen instead of 'avivametals.com'",
+                    "Creates urgency with weekend deadline",
+                    "Threatens account disabling",
+                    "Asks you to click verification link",
+                    "Legitimate maintenance wouldn't require individual verification"
+                ]
+            },
+            {
+                type: "CEO Fraud",
+                from: "norman.lazarus@avivametals.com",
+                subject: "Confidential: Urgent Wire Transfer",
+                body: `Hi,
+
+I'm currently in a meeting with a potential acquisition target and need your help with something time-sensitive. We need to send a wire transfer of $75,000 today to secure the deal.
+
+Please process this immediately:
+Account Number: 9876543210
+Routing Number: 123456789
+Bank: Global Commerce Bank
+Beneficiary: Peterson Industries LLC
+
+This is highly confidential - please don't discuss with anyone else including Jairo or the finance department as we haven't announced this acquisition yet.
+
+Thanks,
+Norman Lazarus
+President, AvivaMetals`,
+                isPhishing: true,
+                explanation: "This is CEO fraud (Business Email Compromise)! Even though the email domain looks correct, the sender could be spoofed. Legitimate wire transfers always follow proper authorization procedures and would never be requested via email with secrecy demands.",
+                redFlags: [
+                    "Requests immediate financial transaction via email",
+                    "Demands confidentiality and bypassing normal procedures",
+                    "Creates artificial urgency around business deal",
+                    "Real President would follow company financial authorization process",
+                    "Asking to exclude CFO Jairo Parez and finance department is major red flag",
+                    "Email address could be spoofed even if domain looks correct"
+                ]
+            },
+            {
+                type: "CFO Fraud",
+                from: "jairo.parez@avivametals.com",
+                subject: "RE: Vendor Payment - Urgent",
+                body: `Hi there,
+
+Norman and I just got off a call with our legal team about a vendor issue that needs immediate attention. We have an outstanding invoice that needs to be paid today to avoid litigation.
+
+Please wire $45,000 to the following account ASAP:
+
+Account Name: Premium Steel Suppliers
+Account Number: 4455667788
+Routing Number: 998877665
+Bank: First National Commerce Bank
+
+This is time-sensitive and I'm heading into back-to-back meetings. Please handle this right away and confirm once it's sent. Norman has already approved this.
+
+Thanks,
+Jairo Parez
+Chief Financial Officer
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "This is CFO fraud! While the email appears to come from the real CFO, it could be spoofed. The request bypasses normal vendor payment procedures, creates false urgency with litigation threats, and name-drops the President for authority. Real payments always go through proper approval workflows.",
+                redFlags: [
+                    "Requests immediate payment outside normal procedures",
+                    "Creates urgency with threat of litigation",
+                    "Name-drops President Norman Lazarus to add false authority",
+                    "Real CFO would use proper vendor payment systems",
+                    "No purchase order or invoice number referenced",
+                    "Asking for immediate action while 'in meetings' prevents verification",
+                    "Email could be spoofed even if domain appears correct"
+                ]
+            },
+            {
+                type: "Malicious Attachment",
+                from: "payroll@avivametals.com",
+                subject: "October Payroll Statement",
+                body: `Hello,
+
+Your October payroll statement is ready for review. Please open the attached document to view your earnings, deductions, and year-to-date totals.
+
+If you notice any discrepancies, please contact the payroll department within 5 business days.
+
+Attachment: Payroll_Statement_October_2025.pdf.exe
+
+Payroll Department
+AvivaMetals`,
+                attachment: "Payroll_Statement_October_2025.pdf.exe",
+                isPhishing: true,
+                explanation: "Phishing with malicious attachment! The file has a double extension '.pdf.exe' which means it's an executable program disguised as a PDF. Legitimate payroll documents would be actual PDFs or accessed through a secure portal.",
+                redFlags: [
+                    "Attachment has double extension: .pdf.exe (it's an executable program!)",
+                    "Real file type is .exe (executable) which can install malware",
+                    "Legitimate payroll statements are usually .pdf or accessed via portal",
+                    "Never open .exe files from emails, even from known senders",
+                    "Payroll systems typically use secure web portals, not email attachments"
+                ]
+            },
+            {
+                type: "Wrong Domain Extension",
+                from: "benefits@avivametals.net",
+                subject: "Update Your Health Insurance Information",
+                body: `Dear Employee,
+
+Your health insurance information needs to be updated in our system. Please click the link below to update your details:
+
+https://benefits.avivametals.net/update-info
+
+You must complete this within 48 hours or your health coverage may be affected.
+
+Benefits Administration
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "Phishing attempt! The domain is 'avivametals.net' instead of 'avivametals.com'. Attackers register similar domains with different extensions (.net, .org, .info) to fool victims.",
+                redFlags: [
+                    "Domain extension is .net instead of company's .com domain",
+                    "Creates urgency with 48-hour deadline",
+                    "Threatens impact to health coverage",
+                    "Asks to click link to update sensitive information",
+                    "Legitimate benefits updates would be through official HR portal"
+                ]
+            },
+            {
+                type: "Legitimate Email",
+                from: "safety@avivametals.com",
+                subject: "Reminder: Monthly Safety Training - November 5th",
+                body: `Good morning everyone,
+
+This is a reminder about our monthly safety training session scheduled for:
+
+Date: Tuesday, November 5th
+Time: 10:00 AM - 11:00 AM
+Location: Conference Room B, Building C
+
+Topics covered:
+- Proper PPE usage
+- Emergency evacuation procedures
+- Workplace hazard identification
+- First aid basics
+
+Please confirm your attendance by replying to this email or calling the Safety Department at extension 5300.
+
+Stay safe!
+
+Safety Department
+AvivaMetals
+safety@avivametals.com | Ext. 5300 | Building C, Room 105`,
+                isPhishing: false,
+                explanation: "This is a legitimate email! It has the correct company domain, provides complete contact information, gives reasonable notice, and doesn't ask for any sensitive information or suspicious actions.",
+                tips: [
+                    "Correct sender domain (avivametals.com)",
+                    "Provides multiple contact methods (email, phone, location)",
+                    "Gives advance notice (not creating false urgency)",
+                    "Clear, specific information about the event",
+                    "Professional signature with full contact details",
+                    "Doesn't ask to click suspicious links or provide sensitive data"
+                ]
+            },
+            {
+                type: "Typosquatting",
+                from: "it-support@avivarnetals.com",
+                subject: "Multi-Factor Authentication Setup Required",
+                body: `Hello,
+
+As part of our security enhancement initiative, all employees must set up multi-factor authentication on their accounts by end of day.
+
+Please click the link below to complete your MFA setup:
+https://avivarnetals.com/mfa-setup
+
+This is mandatory and your account will be locked if not completed today.
+
+IT Support Team
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "Phishing via typosquatting! The domain is 'avivarnetals.com' instead of 'avivametals.com'. Notice the 'r' and 'm' are swapped. This is called typosquatting where attackers register domains with common typos.",
+                redFlags: [
+                    "Domain has typo: 'avivarnetals.com' instead of 'avivametals.com' (m and r swapped)",
+                    "Creates false urgency with same-day deadline",
+                    "Threatens account lockout",
+                    "Asks to click link for security setup",
+                    "While MFA is legitimate, setup would be through official IT portal"
+                ]
+            },
+            {
+                type: "Subdomain Spoofing",
+                from: "noreply@avivametals.com.secure-verify.net",
+                subject: "Verify Your Account - Unusual Login Detected",
+                body: `We detected an unusual login attempt to your AvivaMetals account from:
+
+Location: Moscow, Russia
+Device: Unknown Device
+Time: 2:34 AM EST
+
+If this wasn't you, please verify your account immediately:
+https://avivametals.com.secure-verify.net/login
+
+If you don't verify within 4 hours, we'll lock your account for security.
+
+Account Security Team`,
+                isPhishing: true,
+                explanation: "Sophisticated phishing! The domain is 'avivametals.com.secure-verify.net'. While it contains 'avivametals.com', that's actually a subdomain of 'secure-verify.net' (the attacker's domain). Always check what comes AFTER the last dot before the first slash.",
+                redFlags: [
+                    "The actual domain is 'secure-verify.net' (avivametals.com is just a subdomain trick)",
+                    "Creates panic with 'unusual login from Russia'",
+                    "Very short 4-hour deadline to pressure quick action",
+                    "Real security alerts would use proper company authentication systems",
+                    "The full domain should be just 'avivametals.com', nothing after it"
+                ]
+            },
+            {
+                type: "Legitimate Email",
+                from: "facilities@avivametals.com",
+                subject: "Parking Lot Maintenance - Wednesday, November 8th",
+                body: `Dear Aviva Metals Employees,
+
+We will be performing routine maintenance on Parking Lot B on Wednesday, November 8th, from 7:00 AM to 5:00 PM.
+
+During this time:
+- Parking Lot B will be closed
+- Please use Parking Lots A or C
+- Temporary signage will direct you to available parking
+- The main building entrances will remain accessible
+
+We apologize for any inconvenience. If you have questions, please contact Facilities Management:
+- Phone: (555) 123-4567
+- Email: facilities@avivametals.com
+- Office: Building A, Ground Floor
+
+Thank you for your patience!
+
+Facilities Management Team
+Aviva Metals Inc.
+4500 Industrial Drive, Houston, TX 77001`,
+                isPhishing: false,
+                explanation: "This is a legitimate email! It has all the hallmarks of authentic internal communication: correct domain, complete contact information, physical address, reasonable notice period, and helpful information without requesting any actions that could compromise security.",
+                tips: [
+                    "Correct company domain (avivametals.com)",
+                    "Provides complete contact information including phone and office location",
+                    "Includes physical company address",
+                    "Gives several days advance notice",
+                    "Informational only - doesn't ask for sensitive actions",
+                    "Professional formatting and tone",
+                    "Details are specific and relevant to employees"
+                ]
+            },
+            {
+                type: "Customer Inquiry - Legitimate",
+                from: "purchasing@texassteel.com",
+                subject: "Quote Request - Aluminum Sheets",
+                body: `Good afternoon,
+
+My name is Robert Chen and I'm the Purchasing Manager at Texas Steel Manufacturing. We've worked with AvivaMetals before on several projects.
+
+We're looking to get a quote for the following:
+
+Product: 5052 Aluminum Sheets
+Quantity: 500 sheets
+Dimensions: 4' x 8' x 0.125"
+Finish: Mill finish
+Delivery: Houston, TX area
+
+Could you please provide pricing and lead time? Our project timeline is flexible, looking at delivery in 4-6 weeks.
+
+You can reach me at:
+Robert Chen
+Purchasing Manager
+Texas Steel Manufacturing
+Phone: (713) 555-0198
+Email: purchasing@texassteel.com
+Website: www.texassteel.com
+
+Thank you for your time!
+
+Best regards,
+Robert Chen`,
+                isPhishing: false,
+                explanation: "This is a legitimate customer inquiry! It contains specific product details, reasonable requests, complete contact information, and mentions previous business relationship. The email domain appears to be from a real company.",
+                tips: [
+                    "Specific product details and technical specifications",
+                    "Reasonable business request (quote and lead time)",
+                    "Complete professional contact information provided",
+                    "Mentions existing business relationship",
+                    "Professional tone and realistic timeline",
+                    "Company website and full contact details included",
+                    "No urgent pressure or suspicious payment requests"
+                ]
+            },
+            {
+                type: "Customer Phishing",
+                from: "procurement@ConstructionServices-usa.com",
+                subject: "URGENT: Final Notice - Payment Required to Release Order",
+                body: `ATTENTION ACCOUNTS PAYABLE DEPARTMENT
+
+This is a final notice regarding outstanding invoice #AVM-8834 for $127,500.00
+
+Your shipment of steel materials ordered on October 15th is currently being held at our distribution center due to non-payment. We need immediate payment to release your order.
+
+URGENT ACTION REQUIRED:
+To avoid storage fees ($500/day) and order cancellation, please wire payment immediately to:
+
+Bank: Global Payment Solutions
+Account #: 8829347621
+Routing #: 445566778
+SWIFT: GPSLUS33
+
+Once payment is confirmed, we will release your shipment within 24 hours.
+
+Contact our emergency payment hotline: +1-888-PAY-NOW
+
+This is time-sensitive. Failure to pay within 24 hours will result in order cancellation and a 25% restocking fee.
+
+Procurement Department
+Construction Services USA`,
+                isPhishing: true,
+                explanation: "This is a phishing scam impersonating a customer! Red flags include: urgent payment demands, threats of fees, requesting wire transfer to unusual account, and pressure tactics. Legitimate customers would follow established invoicing and payment procedures through your accounting system.",
+                redFlags: [
+                    "Creates extreme urgency with threats of daily storage fees",
+                    "Demands immediate wire transfer to unfamiliar account",
+                    "Uses pressure tactics (final notice, 24-hour deadline, cancellation threats)",
+                    "Generic greeting to 'Accounts Payable Department' instead of specific person",
+                    "Suspicious domain 'ConstructionServices-usa.com' (hyphenated, may not be real company)",
+                    "No purchase order number or legitimate invoice reference",
+                    "Real customers would contact through established channels, not demand emergency wire transfers",
+                    "Emergency hotline number format is suspicious"
+                ]
+            },
+            {
+                type: "Customer Phishing",
+                from: "orders@petrol-industrial.net",
+                subject: "Updated Banking Information - Immediate Action Required",
+                body: `Dear Accounts Payable Team,
+
+This email is to inform you that Petroleum Industrial Supplies has updated our banking information effective immediately.
+
+Please update your records and use the following account details for ALL future payments:
+
+NEW BANKING DETAILS:
+Bank Name: International Commerce Bank
+Account Name: Petroleum Industrial Holdings LLC
+Account Number: 9087654321
+Routing Number: 123456780
+SWIFT Code: ICBKUS44
+
+IMPORTANT: We have several open invoices that are past due. Please process payments using the new account information as soon as possible. Any payments sent to our old account will be rejected and may cause delays in your orders.
+
+For urgent payment processing, please call our finance team at: +1-800-555-0847
+
+Please confirm receipt of this email and that you've updated our banking information in your system.
+
+Thank you for your immediate attention to this matter.
+
+Finance Department
+Petroleum Industrial Supplies
+www.petrol-industrial.net`,
+                isPhishing: true,
+                explanation: "This is a Business Email Compromise (BEC) phishing attack! Scammers impersonate legitimate customers to redirect payments to fraudulent accounts. Real banking changes would never be communicated solely via email and would require verification through multiple channels.",
+                redFlags: [
+                    "Requests immediate change to banking information via email only",
+                    "Creates urgency about 'past due invoices' to pressure action",
+                    "Domain uses .net instead of .com (could be fake company domain)",
+                    "Legitimate banking changes require formal documentation and verification calls",
+                    "Generic sender (Finance Department) instead of specific contact person",
+                    "Threatens delays to create pressure",
+                    "Phone number provided may go to scammer, not real company",
+                    "Real companies would send banking updates through registered mail or official portals",
+                    "Would never ask to update 'ALL future payments' without proper authorization process"
+                ]
+            },
+            {
+                type: "Customer Inquiry - Legitimate",
+                from: "jmartinez@gulfcoastfab.com",
+                subject: "RE: Quote #AV-2847 - Questions Before Ordering",
+                body: `Hi there,
+
+Thanks for the quote you sent last week (Quote #AV-2847) for the stainless steel tubing. Before we place the order, I have a few questions:
+
+1. Can you confirm the material certification will be included with shipment?
+2. What's the typical lead time for this quantity?
+3. Do you offer any volume discounts if we increase the order to 1000 feet?
+4. What are your payment terms?
+
+We've been happy with the quality from our previous orders and would like to continue working with AvivaMetals.
+
+Please let me know when you have a chance. No rush - we're planning to place the order next week.
+
+Thanks!
+
+Jessica Martinez
+Operations Manager
+Gulf Coast Fabrication
+Direct: (281) 555-0142
+Office: (281) 555-0140
+jmartinez@gulfcoastfab.com`,
+                isPhishing: false,
+                explanation: "This is a legitimate customer inquiry! It references a specific quote number, asks reasonable business questions, mentions previous orders establishing relationship, and provides complete contact information. The customer is not pressuring for immediate action.",
+                tips: [
+                    "References specific quote number from your system",
+                    "Asks legitimate business questions about products and terms",
+                    "Mentions previous successful business relationship",
+                    "Provides complete contact information with multiple phone numbers",
+                    "Professional tone without urgency or pressure",
+                    "Realistic timeline ('next week' not 'immediately')",
+                    "Email signature includes full business details",
+                    "No requests for sensitive information or unusual payment methods"
+                ]
+            }
+        ];
+
+        const advancedQuestions = [
+            {
+                type: "Advanced - Spoofed Display Name",
+                from: "admin@securemail-verification.com",
+                subject: "Security Alert: Verify Your Identity",
+                body: `FROM: IT Security Team <security@avivametals.com>
+
+We've detected unusual login activity from an unrecognized device attempting to access your account.
+
+Device: iPhone 13 Pro
+Location: Lagos, Nigeria
+Time: 3:47 AM CST
+IP: 41.203.72.145
+
+If this was not you, please verify your identity immediately to prevent unauthorized access:
+
+https://avivametals-secureportal.com/verify?token=847HxK92mP
+
+This link expires in 2 hours. Failure to verify will result in temporary account suspension for your protection.
+
+IT Security Operations Center
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "Advanced phishing! While the display name shows 'IT Security Team <security@avivametals.com>', the ACTUAL sender is 'admin@securemail-verification.com'. Attackers can fake display names easily. Always check the real email address, not just the display name.",
+                redFlags: [
+                    "Real sender address is 'securemail-verification.com', NOT avivametals.com",
+                    "Display name spoofing - shows fake sender in the 'FROM' line",
+                    "Suspicious domain 'avivametals-secureportal.com' (not official domain)",
+                    "Creates panic with foreign location and late-night access",
+                    "Urgent 2-hour expiration to pressure quick action",
+                    "Legitimate security alerts would come from official company systems",
+                    "Token in URL is designed to look technical and legitimate"
+                ]
+            },
+            {
+                type: "Advanced - Credential Harvesting",
+                from: "servicedesk@avivametals.com",
+                subject: "Action Required: Multi-Factor Authentication Enrollment",
+                body: `Dear Employee,
+
+As part of our security enhancement initiative, all employees must enroll in Multi-Factor Authentication (MFA) by end of week.
+
+Your account: ${userEmail}
+
+Please complete your MFA setup using our secure portal:
+
+Step 1: Click here to access the MFA enrollment portal
+Step 2: Enter your current password to verify your identity
+Step 3: Follow the instructions to link your mobile device
+Step 4: Test your new MFA setup
+
+https://portal-avivametals.com/mfa/enroll
+
+This is mandatory per company policy. Accounts not enrolled by Friday will have limited access until MFA is configured.
+
+If you have questions, contact the Service Desk at ext. 5500.
+
+Service Desk Team
+Information Technology
+AvivaMetals`,
+                isPhishing: true,
+                explanation: "Sophisticated credential harvesting attack! The sender appears to be from avivametals.com but asks you to enter your password on a suspicious portal. The URL 'portal-avivametals.com' looks close but isn't the real company domain. Real IT would never ask you to enter your current password.",
+                redFlags: [
+                    "URL is 'portal-avivametals.com' (fake domain with hyphen added)",
+                    "Asks you to enter your current password (huge red flag!)",
+                    "Legitimate MFA setup would be through authenticated company portal",
+                    "Real IT never asks for your password, even during MFA enrollment",
+                    "Creates urgency with end-of-week deadline and access limitations",
+                    "While sender might look correct, the entire process is suspicious",
+                    "Personalized with your email address to seem more legitimate"
+                ]
+            },
+            {
+                type: "Advanced - Invoice Fraud",
+                from: "accounting@texasteel.com",
+                subject: "RE: Invoice #TS-8847 - Payment Status",
+                body: `Hi there,
+
+Following up on Invoice #TS-8847 dated October 15 for $43,750.00. According to our records, this invoice is now 45 days past due.
+
+We value our partnership with AvivaMetals, but our accounting department has flagged this for collections if not resolved within 5 business days.
+
+UPDATED PAYMENT INFORMATION:
+Due to a recent bank merger, Texas Steel has changed our banking details. Please update your records:
+
+Bank: Southwestern Commerce Bank
+Account Name: Texas Steel Manufacturing LLC
+Account #: 4477889921
+Routing #: 111000025
+Reference: Invoice TS-8847
+
+Please process payment ASAP and reply with confirmation. We'd like to avoid any service interruptions on your current orders.
+
+Best regards,
+Patricia Williams
+Accounts Receivable Manager
+Texas Steel Manufacturing
+pwilliams@texasteel.com
+Direct: (713) 555-0198`,
+                isPhishing: true,
+                explanation: "Advanced Business Email Compromise! This appears to be from a real customer (Texas Steel was mentioned in earlier quiz), making it more believable. However, it's likely a compromised account or spoofed email requesting payment to a fraudulent account. Banking changes should NEVER be communicated solely via email.",
+                redFlags: [
+                    "Requests immediate payment to 'updated' banking information via email",
+                    "Creates urgency with collections threat and 5-day deadline",
+                    "Threatens service interruption to pressure payment",
+                    "Legitimate banking changes require formal documentation and verification",
+                    "Even if domain looks correct, account could be compromised",
+                    "Should verify through known contact (phone call) before changing payment info",
+                    "Real vendors would send banking updates via certified mail or official portals",
+                    "Uses established relationship to build trust ('value our partnership')"
+                ]
+            },
+            {
+                type: "Advanced - Legitimate Complex Email",
+                from: "legal@bakerhughes.com",
+                subject: "Contract Amendment - Project Titan NDA Update",
+                body: `Good afternoon,
+
+This email is regarding the Non-Disclosure Agreement for Project Titan between Baker Hughes and AvivaMetals, originally executed on March 15, 2024.
+
+We need to process an amendment to extend the NDA term and update the scope to include our new joint development initiative. 
+
+Please have your legal department review the attached amendment:
+• Current NDA expires December 31, 2025
+• Proposed extension through December 31, 2027
+• Additional scope: Advanced materials research collaboration
+
+Our legal team will need a signed copy by November 15th to maintain continuity of the agreement. The original NDA will be available for reference in our shared SharePoint site at:
+https://bakerhughes.sharepoint.com/sites/vendor-contracts
+
+Please route this to:
+Jairo Parez (CFO) for financial review
+Legal Department for contract review
+Norman Lazarus (President) for final signature
+
+If you have questions, please contact me directly:
+Sarah Chen, Senior Legal Counsel
+Baker Hughes International
+Phone: (281) 555-3400
+Email: sarah.chen@bakerhughes.com
+
+We can also schedule a call if you'd like to discuss the amendments in detail.
+
+Best regards,
+Sarah Chen
+Senior Legal Counsel | Baker Hughes`,
+                isPhishing: false,
+                explanation: "This is likely a legitimate business email! It references specific people at your company (Norman Lazarus, Jairo Parez), mentions a realistic project, provides complete contact information, and directs to an official SharePoint site. The request follows normal business procedures.",
+                tips: [
+                    "References specific executives by name and role",
+                    "Mentions specific dates and project names that can be verified",
+                    "Provides multiple contact methods (phone, email)",
+                    "Directs to official company SharePoint (bakerhughes.sharepoint.com)",
+                    "Follows normal business contract procedures",
+                    "Professional tone without urgency or threats",
+                    "Offers to schedule call for discussion (legitimate communication)",
+                    "However, ALWAYS verify important contracts through known channels before proceeding"
+                ]
+            },
+            {
+                type: "Advanced - Supply Chain Attack",
+                from: "updates@microsoft-security.com",
+                subject: "Critical Security Update Required - Office 365",
+                body: `IMPORTANT SECURITY NOTICE
+
+Microsoft has identified a critical zero-day vulnerability affecting Office 365 Business accounts (CVE-2024-8847). This vulnerability is actively being exploited and requires immediate patching.
+
+AFFECTED USERS:
+All AvivaMetals Office 365 accounts
+
+ACTION REQUIRED:
+Install the emergency security patch within 24 hours to protect your account and company data.
+
+Download patch: https://microsoft-security.com/office365/patch/CVE-2024-8847
+
+Installation Instructions:
+1. Download the security patch file (Office365_SecurityPatch_Oct2024.exe)
+2. Close all Office applications
+3. Run the patch installer as administrator
+4. Restart your computer when complete
+
+This patch has been verified by Microsoft Security Response Center and is mandatory for all enterprise customers.
+
+For technical support, contact Microsoft Business Support:
+Phone: 1-800-MSFT-SEC
+Email: security-support@microsoft-security.com
+
+Do not delay - your account security depends on immediate action.
+
+Microsoft Security Response Center
+© 2024 Microsoft Corporation`,
+                isPhishing: true,
+                explanation: "Sophisticated supply chain phishing attack! While it appears to be from Microsoft, the domain 'microsoft-security.com' is NOT Microsoft's official domain (should be microsoft.com). Microsoft NEVER distributes security patches via email. This is malware disguised as a security update.",
+                redFlags: [
+                    "Domain is 'microsoft-security.com' NOT microsoft.com (attacker's domain)",
+                    "Microsoft NEVER sends security patches via email",
+                    "Asks you to download and run an .exe file (executable malware)",
+                    "Creates extreme urgency with 'critical zero-day' and 24-hour deadline",
+                    "CVE number might be real or fake, but distribution method is wrong",
+                    "Real Microsoft updates come through Windows Update or official channels",
+                    "Phone number and email likely go to attackers, not real Microsoft support",
+                    "Uses official-looking branding and terminology to appear legitimate"
+                ]
+            },
+            {
+                type: "Advanced - Internal Compromise",
+                from: "jmartinez@avivametals.com",
+                subject: "Quick Question",
+                body: `Hey,
+
+Sorry to bother you, but I'm working from home today and having issues with our VPN. I need to access some files urgently for the client meeting at 2pm.
+
+Can you do me a huge favor? Can you forward me the latest version of the Q4 financial projections and the customer pricing database? I know you have access to those files.
+
+My personal email is jmartinez.work@gmail.com - can you just send them there so I can work on them? My VPN keeps timing out and I don't have time to wait for IT to fix it.
+
+I'll owe you one!
+
+Thanks,
+Jessica
+
+Sent from my iPhone`,
+                isPhishing: true,
+                explanation: "This is an internal account compromise or impersonation! Even though the email appears to come from avivametals.com, the request violates security policies. Never send sensitive company data to personal email addresses. Jessica's account may be compromised, or someone is impersonating her.",
+                redFlags: [
+                    "Requests sensitive financial data be sent to personal Gmail account",
+                    "Major security policy violation (company data to personal email)",
+                    "Creates urgency with time pressure ('client meeting at 2pm')",
+                    "Casual tone tries to bypass normal procedures",
+                    "'Sent from my iPhone' can be faked to seem authentic",
+                    "Even if sender appears legitimate, the REQUEST is suspicious",
+                    "Should verify with Jessica through another channel (call, Teams, in person)",
+                    "Real employees should know never to request data sent to personal email",
+                    "VPN issues should be resolved through IT, not by bypassing security"
+                ]
+            }
+        ];
+
+        let isAdvancedMode = false;
+
+        function startAdvancedQuiz() {
+            isAdvancedMode = true;
+            currentQuestion = 0;
+            correctAnswers = 0;
+            questions.length = 0; // Clear regular questions
+            questions.push(...advancedQuestions); // Load advanced questions
+            
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'flex';
+            document.getElementById('quizContent').style.display = 'block';
+            
+            // Update header to show advanced mode
+            document.querySelector('.header h1').textContent = '🚀 Advanced Security Training';
+            document.querySelector('.header p').textContent = 'Master-Level Phishing Detection';
+            
+            loadQuestion(0);
+        }
+
+        // SHA-256 hashing function
+        async function sha256(str) {
+            const buffer = new TextEncoder().encode(str);
+            const hash = await crypto.subtle.digest('SHA-256', buffer);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        // Secure login with hashed credentials
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Hash the input credentials
+            const usernameHash = await sha256(username);
+            const passwordHash = await sha256(password);
+            
+            // Authentication credentials (SHA-256 hashed)
+            const validUsernameHash = '8df187827791a21b869d290ee3aaa0de178451c04ab289e0f9ad2d2a5778359d';
+            const validPasswordHash = 'a1a6cb558a6a65497b6cbe1b1aa795ea440954461821b33e5176bf8ca0a33315';
+            
+            if (usernameHash === validUsernameHash && passwordHash === validPasswordHash) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('userInfoScreen').style.display = 'block';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function submitUserInfo() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const emailInput = document.getElementById('userEmailInput').value.trim();
+            const department = document.getElementById('userDepartment').value;
+            
+            if (firstName && lastName && emailInput && department) {
+                userName = firstName + ' ' + lastName;
+                userEmail = emailInput;
+                userDepartment = department;
+                
+                document.getElementById('displayName').textContent = userName + ' (' + userEmail + ') - ' + userDepartment;
+                document.getElementById('userInfoScreen').style.display = 'none';
+                document.getElementById('progressSection').style.display = 'flex';
+                document.getElementById('quizContent').style.display = 'block';
+                loadQuestion(0);
+            } else {
+                document.getElementById('nameError').style.display = 'block';
+            }
+        }
+
+        function loadQuestion(index) {
+            const question = questions[index];
+            const content = document.getElementById('quizContent');
+            
+            let questionHTML = `
+                <div class="scenario-number">
+                    <span>Question ${index + 1} of ${questions.length}</span>
+                </div>
+                
+                <div class="email-container">
+                    <div class="email-header">
+                        <div class="email-field"><strong>From:</strong> <span class="${question.from.includes('avivametals.com') && !question.isPhishing ? '' : 'suspicious-domain'}">${question.from}</span></div>
+                        <div class="email-field"><strong>To:</strong> <span>${userEmail}</span></div>
+                        <div class="email-field"><strong>Subject:</strong> <span>${question.subject}</span></div>
+                    </div>
+                    <div class="email-body">
+                        ${question.body.replace(/\n/g, '<br>')}
+                        ${question.attachment ? `<div class="email-attachment">📎 ${question.attachment}</div>` : ''}
+                    </div>
+                </div>
+                
+                <div class="question">Is this email legitimate or a phishing attempt?</div>
+                
+                <div class="buttons">
+                    <button class="btn btn-safe" onclick="checkAnswer(false)">✓ Legitimate Email</button>
+                    <button class="btn btn-danger" onclick="checkAnswer(true)">⚠️ Phishing Attempt</button>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            `;
+            
+            content.innerHTML = questionHTML;
+            updateProgress();
+        }
+
+        function checkAnswer(userThinkIsPhishing) {
+            const question = questions[currentQuestion];
+            const isCorrect = userThinkIsPhishing === question.isPhishing;
+            const feedback = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                correctAnswers++;
+                feedback.className = 'feedback correct';
+                feedback.innerHTML = `
+                    <div class="feedback-title">
+                        <span>🎉 Excellent Work, ${userName.split(' ')[0]}!</span>
+                    </div>
+                    <div class="stars">⭐⭐⭐</div>
+                    <div class="encouragement">You correctly identified this ${question.isPhishing ? 'phishing attempt' : 'legitimate email'}!</div>
+                    <div style="background: #e7f3ff; padding: 10px; border-radius: 5px; margin: 15px 0; font-weight: 600; color: #1e3c72;">
+                        📋 Attack Type: ${question.type}
+                    </div>
+                    <div class="feedback-content">
+                        ${question.explanation}
+                    </div>
+                    ${question.isPhishing ? `
+                    <div class="red-flags">
+                        <h4>🚩 Red Flags You Caught:</h4>
+                        <ul>
+                            ${question.redFlags.map(flag => `<li>${flag}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : `
+                    <div class="tips">
+                        <h4>✅ Signs of Legitimacy:</h4>
+                        <ul>
+                            ${question.tips.map(tip => `<li>${tip}</li>`).join('')}
+                        </ul>
+                    </div>
+                    `}
+                    <button class="btn-next" onclick="nextQuestion()">Continue to Next Question →</button>
+                `;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.innerHTML = `
+                    <div class="feedback-title">
+                        <span>Keep Going, ${userName.split(' ')[0]}! 💪</span>
+                    </div>
+                    <div class="encouragement">Don't worry - these attacks are designed to be tricky! Let's learn from this one.</div>
+                    <div style="background: #fff3cd; padding: 10px; border-radius: 5px; margin: 15px 0; font-weight: 600; color: #856404;">
+                        📋 Attack Type: ${question.type}
+                    </div>
+                    <div class="feedback-content">
+                        ${question.explanation}
+                    </div>
+                    ${question.isPhishing ? `
+                    <div class="red-flags">
+                        <h4>🚩 Red Flags to Remember:</h4>
+                        <ul>
+                            ${question.redFlags.map(flag => `<li>${flag}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : `
+                    <div class="tips">
+                        <h4>✅ Signs This Was Legitimate:</h4>
+                        <ul>
+                            ${question.tips.map(tip => `<li>${tip}</li>`).join('')}
+                        </ul>
+                    </div>
+                    `}
+                    <button class="btn-next" onclick="nextQuestion()">Try the Next Question →</button>
+                `;
+            }
+            
+            feedback.style.display = 'block';
+            
+            const buttons = document.querySelectorAll('.btn-safe, .btn-danger');
+            buttons.forEach(btn => btn.disabled = true);
+            
+            updateProgress();
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
+        }
+
+        function updateProgress() {
+            const totalQuestions = questions.length;
+            document.getElementById('questionNum').textContent = `${currentQuestion + 1}/${totalQuestions}`;
+            document.getElementById('correctCount').textContent = correctAnswers;
+            const currentScore = Math.round((correctAnswers / totalQuestions) * 100);
+            document.getElementById('scoreDisplay').textContent = currentScore + '%';
+        }
+
+        function showResults() {
+            document.getElementById('progressSection').style.display = 'none';
+            document.getElementById('quizContent').style.display = 'none';
+            
+            const resultsScreen = document.getElementById('resultsScreen');
+            resultsScreen.style.display = 'block';
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            const passed = percentage >= 70;
+            const perfect = percentage === 100;
+            
+            // Optional: Send completion data to server for analytics
+            // Uncomment the code below to enable data collection
+            /*
+            const completionData = {
+                name: userName,
+                email: userEmail,
+                department: userDepartment,
+                score: percentage,
+                correct: correctAnswers,
+                total: questions.length,
+                passed: passed,
+                date: new Date().toISOString(),
+                mode: isAdvancedMode ? 'advanced' : 'standard'
+            };
+            
+            // Send to server endpoint
+            fetch('save_results.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(completionData)
+            });
+            */
+            
+            if (passed) {
+                // Show certificate for passing users
+                const today = new Date();
+                const dateString = today.toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
+                resultsScreen.innerHTML = `
+                    <h2>🎉 Congratulations, ${userName}!</h2>
+                    <div class="result-message" style="margin-bottom: 30px;">
+                        You have successfully completed the Aviva Metals Inc. Phishing Awareness Training!
+                    </div>
+                    
+                    <div class="certificate-container" id="certificate">
+                        <div class="certificate-border"></div>
+                        <div class="certificate-content">
+                            <div class="certificate-header">Certificate</div>
+                            <div class="certificate-subtitle">of Completion</div>
+                            
+                            <div class="certificate-text">This certifies that</div>
+                            <div class="certificate-recipient">${userName}</div>
+                            <div class="certificate-text" style="font-size: 16px; color: #666; margin-top: -15px;">${userDepartment} Department</div>
+                            <div class="certificate-text">has successfully completed the</div>
+                            <div class="certificate-text" style="font-weight: bold; font-size: 22px; color: #1e3c72;">
+                                Aviva Metals Inc. Cybersecurity<br>Phishing Awareness Training
+                            </div>
+                            
+                            <div class="certificate-text">
+                                Demonstrating proficiency in identifying and responding to phishing threats,
+                                understanding social engineering tactics, and protecting company assets
+                                from cyber attacks.
+                            </div>
+                            
+                            <div class="certificate-score">Score: ${percentage}%</div>
+                            <div class="certificate-text">${correctAnswers} out of ${questions.length} questions correct</div>
+                            
+                            <div class="certificate-date">Date: ${dateString}</div>
+                            
+                            <div class="certificate-signature">
+                                <div class="signature-line">
+                                    <div class="signature-name">Norman Lazarus</div>
+                                    <div class="signature-title">President</div>
+                                    <div class="signature-title">Aviva Metals Inc.</div>
+                                </div>
+                                <div class="signature-line">
+                                    <div class="signature-name">Information Security Team</div>
+                                    <div class="signature-title">Cybersecurity Department</div>
+                                    <div class="signature-title">Aviva Metals Inc.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="certificate-seal">🛡️</div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn-print" onclick="window.print()">🖨️ Print Certificate</button>
+                        <button class="btn-pdf" style="background: #dc3545; color: white; padding: 15px 40px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 20px 10px;" onclick="saveAsPDF()">📄 Save as PDF</button>
+                        <button class="btn-image" style="background: #17a2b8; color: white; padding: 15px 40px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; margin: 20px 10px;" onclick="saveAsImage()">🖼️ Save as Image</button>
+                        <button class="btn-retake" onclick="retakeQuiz()">🔄 Retake Quiz</button>
+                        ${perfect ? 
+                            `<button class="btn-advanced" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 40px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; margin: 20px 10px;" onclick="startAdvancedQuiz()">🚀 Try Advanced Questions</button>` :
+                            `<button class="btn-training" onclick="showTraining()">📚 Take Additional Training</button>`
+                        }
+                    </div>
+                `;
+            } else {
+                // Show training requirement for failing users
+                resultsScreen.innerHTML = `
+                    <h2>Training Required, ${userName}</h2>
+                    <div class="final-score fail">
+                        ${percentage}%
+                    </div>
+                    <div class="result-message">
+                        You answered ${correctAnswers} out of ${questions.length} questions correctly.
+                        <br><br><strong>📚 Additional Training Recommended</strong><br>
+                        You need a score of 70% or higher to pass. Let's review the key concepts to improve your phishing detection skills.
+                    </div>
+                    <button class="btn-training" onclick="showTraining()">Start Training Module</button>
+                `;
+            }
+        }
+
+        function showTraining() {
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('trainingModule').style.display = 'block';
+        }
+
+        function completeTraining() {
+            hasCompletedTraining = true;
+            retakeQuiz();
+        }
+
+        function retakeQuiz() {
+            currentQuestion = 0;
+            correctAnswers = 0;
+            
+            // Reset to regular questions if in advanced mode
+            if (isAdvancedMode) {
+                isAdvancedMode = false;
+                location.reload(); // Reload to reset everything
+                return;
+            }
+            
+            document.getElementById('trainingModule').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('progressSection').style.display = 'flex';
+            document.getElementById('quizContent').style.display = 'block';
+            loadQuestion(0);
+        }
+
+        function pauseQuiz() {
+            document.getElementById('pauseModal').style.display = 'flex';
+        }
+
+        function resumeQuiz() {
+            document.getElementById('pauseModal').style.display = 'none';
+        }
+
+        // Allow Enter key for login
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') login();
+            });
+            
+            document.getElementById('lastName').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    // Move to email field
+                    document.getElementById('userEmailInput').focus();
+                }
+            });
+            
+            document.getElementById('userEmailInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') submitUserInfo();
+            });
+        });
+        
+        // Certificate Save Functions
+        function saveAsPDF() {
+            const certificate = document.getElementById('certificate');
+            const buttons = document.querySelectorAll('.btn-print, .btn-retake, .btn-training, .btn-advanced, .btn-pdf, .btn-image');
+            
+            // Hide buttons temporarily
+            buttons.forEach(btn => btn.style.display = 'none');
+            
+            html2canvas(certificate, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                pdf.save(`${userName.replace(/\s+/g, '_')}_Aviva_Metals_Certificate.pdf`);
+                
+                // Show buttons again
+                buttons.forEach(btn => btn.style.display = '');
+            });
+        }
+        
+        function saveAsImage() {
+            const certificate = document.getElementById('certificate');
+            const buttons = document.querySelectorAll('.btn-print, .btn-retake, .btn-training, .btn-advanced, .btn-pdf, .btn-image');
+            
+            // Hide buttons temporarily
+            buttons.forEach(btn => btn.style.display = 'none');
+            
+            html2canvas(certificate, {
+                scale: 2,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `${userName.replace(/\s+/g, '_')}_Aviva_Metals_Certificate.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Show buttons again
+                buttons.forEach(btn => btn.style.display = '');
+            });
+        }
+        
+        // Practice Question Handler
+        let practiceAnswers = {
+            1: 'c',  // 100 employees (400 * 0.25)
+            2: 'a',  // hr@avivametals.com
+            3: 'b'   // Call using company directory
+        };
+        
+        let practiceExplanations = {
+            1: {
+                correct: "Correct! 1 in 4 employees = 25% = 100 employees (400 × 0.25 = 100). This shows how one phishing campaign can put 100 employees at risk!",
+                incorrect: "Not quite. 1 in 4 employees means 25% of your workforce. 400 employees × 0.25 = 100 employees at risk per phishing campaign."
+            },
+            2: {
+                correct: "Correct! hr@avivametals.com is the legitimate domain. Watch out for hyphens (aviva-metals.com), different letters (avivametalz.com), or wrong extensions (.net instead of .com).",
+                incorrect: "Incorrect. The real domain is avivametals.com (no hyphen, no 'z', and .com extension). Options B, C, and D are all phishing attempts with slight variations."
+            },
+            3: {
+                correct: "Correct! Always verify urgent financial requests through a separate channel. Call Norman using the company directory number, not any number from the email. Never process urgent wire transfers based solely on email!",
+                incorrect: "Incorrect. Never process urgent financial requests without verification. The correct answer is to call Norman using the company directory number. Replying to the email or waiting won't prevent the fraud if you've already been targeted."
+            }
+        };
+        
+        function checkPractice(questionNum, selectedAnswer) {
+            const correctAnswer = practiceAnswers[questionNum];
+            const isCorrect = selectedAnswer === correctAnswer;
+            const answerDiv = document.getElementById(`practice-${questionNum}-answer`);
+            const buttons = document.querySelectorAll(`#practice-${questionNum}-answer`).length > 0 
+                ? document.querySelectorAll(`#practice-${questionNum}-answer`)[0].parentElement.querySelectorAll('.practice-btn')
+                : [];
+            
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+            
+            // Mark correct/incorrect
+            buttons.forEach(btn => {
+                const btnAnswer = btn.onclick.toString().match(/checkPractice\(\d+,\s*'([a-d])'\)/)[1];
+                if (btnAnswer === correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (btnAnswer === selectedAnswer && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+            
+            // Show explanation
+            answerDiv.className = isCorrect ? 'practice-answer correct show' : 'practice-answer incorrect show';
+            answerDiv.innerHTML = isCorrect 
+                ? `<strong>✅ Excellent!</strong><p>${practiceExplanations[questionNum].correct}</p>`
+                : `<strong>❌ Not Quite</strong><p>${practiceExplanations[questionNum].incorrect}</p>`;
+        }
+    </script>
+</body>
+</html>
