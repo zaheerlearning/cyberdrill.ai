@@ -3,23 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Drill AI - Enhanced Training</title>
+    <title>Cyber Drill AI - Complete Phishing Detection Training</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8LQPY2BVT7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-8LQPY2BVT7');
+    </script>
+    <!-- End Google Analytics -->
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; color: #333; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .screen { display: none; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: fadeIn 0.6s; }
         .screen.active { display: block; }
+        
+        /* Kids Module Special Styling */
+        .screen.kids-theme { background: linear-gradient(135deg, #FFE5E5 0%, #FFF5E1 50%, #E5F5FF 100%); }
+        .kids-theme .header .logo { background: linear-gradient(135deg, #FF6B9D 0%, #FFA500 50%, #4CAF50 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes celebrate { 0% { transform: scale(1); } 50% { transform: scale(1.2) rotate(5deg); } 100% { transform: scale(1) rotate(0deg); } }
+        
         .header { text-align: center; margin-bottom: 40px; }
         .logo { font-size: 48px; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; letter-spacing: 3px; }
         .tagline { font-size: 20px; color: #666; font-weight: 500; }
+        
+        /* Section Headers */
+        .section-header { text-align: center; margin: 40px 0 25px 0; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; font-size: 22px; font-weight: 800; }
+        .section-divider { height: 3px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); margin: 30px 0; border-radius: 2px; }
+        
         .industry-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0; }
         .industry-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.4s; border: 4px solid transparent; }
         .industry-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4); border-color: #667eea; }
         .industry-card.selected { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-color: #f5576c; }
+        .industry-card.kids-card { background: linear-gradient(135deg, #FF6B9D 0%, #FFA500 100%); border-color: #4CAF50; }
+        .industry-card.kids-card:hover { transform: translateY(-10px) rotate(2deg); box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6); }
+        .industry-card.kids-card.selected { background: linear-gradient(135deg, #4CAF50 0%, #2196F3 100%); }
+        .industry-card.teacher-card { background: linear-gradient(135deg, #E8F5E9 0%, #FFF9C4 100%); border-color: #4CAF50; }
+        .industry-card.teacher-card .industry-icon { font-size: 64px; }
+        
         .industry-icon { font-size: 56px; margin-bottom: 15px; }
         .industry-name { font-size: 18px; font-weight: 700; }
+        .industry-subtitle { font-size: 14px; margin-top: 8px; color: #666; font-weight: 500; }
+        .kids-card .industry-subtitle, .teacher-card .industry-subtitle { color: #333; }
+        
         .form-group { margin-bottom: 25px; }
         .form-group label { display: block; margin-bottom: 10px; font-weight: 600; color: #667eea; font-size: 16px; }
         .form-group input { width: 100%; padding: 15px; border: 3px solid #e0e0e0; border-radius: 10px; font-size: 18px; }
@@ -29,16 +61,22 @@
         .checkbox-wrapper input[type="checkbox"] { margin-top: 4px; width: 20px; height: 20px; cursor: pointer; }
         .checkbox-label { font-size: 16px; font-weight: 600; color: #333; cursor: pointer; flex: 1; }
         .checkbox-note { font-size: 14px; color: #666; margin-top: 8px; line-height: 1.6; padding-left: 32px; }
+        
         .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px 45px; border: none; border-radius: 50px; font-size: 20px; font-weight: 700; cursor: pointer; transition: all 0.4s; width: 100%; margin-top: 15px; }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-secondary { background: linear-gradient(135deg, #868f96 0%, #596164 100%); }
         .btn-success { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
         .btn-warning { background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); }
+        .btn-kids { background: linear-gradient(135deg, #FF6B9D 0%, #FFA500 100%); font-size: 22px; }
+        .btn-kids:hover { box-shadow: 0 15px 40px rgba(255, 107, 157, 0.6); }
+        
         .alert { padding: 20px; border-radius: 15px; margin-bottom: 25px; font-weight: 600; }
         .alert-success { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); color: #155724; }
         .alert-info { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #0c5460; }
         .alert-warning { background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); color: #856404; border: 3px solid #ffc107; }
+        .alert-kids { background: linear-gradient(135deg, #FFE5E5 0%, #FFF5E1 100%); color: #FF6B9D; border: 3px solid #FFA500; font-size: 18px; }
+        
         .email-container { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
         .email-header { background: white; padding: 20px; border-bottom: 2px solid #dee2e6; }
         .email-field { margin-bottom: 12px; font-size: 15px; }
@@ -46,23 +84,34 @@
         .email-field-value { color: #212529; }
         .email-subject { font-size: 18px; font-weight: 700; color: #212529; margin-top: 15px; }
         .email-body { padding: 25px; background: white; font-size: 16px; line-height: 1.8; color: #212529; }
+        
         .answer-options { display: flex; gap: 20px; margin-top: 30px; }
         .answer-btn { flex: 1; padding: 25px; font-size: 19px; font-weight: 700; border: 4px solid #ddd; background: white; border-radius: 15px; cursor: pointer; transition: all 0.4s; }
         .answer-btn.phishing { border-color: #dc3545; color: #dc3545; }
         .answer-btn.legitimate { border-color: #28a745; color: #28a745; }
         .answer-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        
         .feedback { margin-top: 25px; padding: 25px; border-radius: 15px; display: none; }
-        .feedback.show { display: block; }
+        .feedback.show { display: block; animation: fadeIn 0.5s; }
         .feedback.correct { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); border: 4px solid #28a745; }
         .feedback.incorrect { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border: 4px solid #dc3545; }
         .feedback-title { font-size: 28px; font-weight: 900; margin-bottom: 15px; }
+        
         .progress-bar { height: 12px; background: #e9ecef; border-radius: 20px; margin-bottom: 30px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); transition: width 0.6s; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); border-radius: 20px; transition: width 0.6s; }
+        
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin: 35px 0; }
         .stat-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 20px; text-align: center; }
         .stat-value { font-size: 56px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .badge-display { text-align: center; margin: 25px 0; font-size: 72px; animation: celebrate 0.6s ease-in-out; }
+        .progress-message { text-align: center; font-size: 20px; font-weight: 700; color: #4CAF50; margin: 15px 0; }
+        
         .certificate { background: white; border: 15px double #667eea; padding: 50px; text-align: center; margin: 35px 0; }
         .certificate-name { font-size: 42px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 25px 0; }
+        .certificate.kids-cert { border-color: #FF6B9D; background: linear-gradient(135deg, #FFE5E5 0%, #FFF5E1 50%, #E5F5FF 100%); }
+        .certificate.kids-cert .certificate-name { background: linear-gradient(135deg, #FF6B9D 0%, #FFA500 50%, #4CAF50 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         .training-module { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 40px; border-radius: 20px; margin: 30px 0; }
         .training-section { background: white; padding: 30px; border-radius: 15px; margin-bottom: 25px; }
         .training-title { font-size: 28px; font-weight: 900; color: #667eea; margin-bottom: 20px; }
@@ -70,10 +119,11 @@
         .training-list { margin-left: 25px; line-height: 2; }
         .training-list li { margin-bottom: 15px; }
         .tip-box { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); padding: 20px; border-radius: 10px; margin: 20px 0; }
+        
         .attempt-badge { display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 20px; }
         .score-comparison { background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%); padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; }
         .score-comparison-text { font-size: 24px; font-weight: 700; color: #856404; }
-        .improvement { color: #28a745; font-size: 28px; font-weight: 900; }
+        
         .value-prop { margin-top: 25px; display: flex; flex-wrap: wrap; gap: 25px; align-items: flex-start; }
         .value-text { flex: 2; min-width: 260px; }
         .value-heading { font-size: 24px; font-weight: 800; color: #333; margin-bottom: 8px; }
@@ -81,14 +131,15 @@
         .feature-list { list-style: none; padding-left: 0; margin: 0; }
         .feature-list li { position: relative; padding-left: 26px; margin-bottom: 8px; font-size: 15px; line-height: 1.6; color: #333; }
         .feature-list li::before { content: "✓"; position: absolute; left: 0; top: 0; font-weight: 900; color: #28a745; }
+        
         .value-stats { flex: 1; min-width: 220px; display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; }
         .value-card { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); border-radius: 14px; padding: 16px 14px; text-align: center; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08); }
         .value-number { font-size: 26px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 4px; }
         .value-label { font-size: 13px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+        
         .button-group { display: flex; gap: 15px; margin-top: 20px; }
         .button-group .btn { flex: 1; }
         
-        /* QUICK TIPS SCREEN STYLES */
         .tips-header { text-align: center; margin-bottom: 35px; }
         .tips-logo { font-size: 52px; font-weight: 900; color: #667eea; margin-bottom: 10px; }
         .tips-subtitle { font-size: 20px; color: #666; font-weight: 600; }
@@ -98,6 +149,11 @@
         .tip-icon { font-size: 36px; margin-bottom: 12px; }
         .tip-title { font-size: 19px; font-weight: 800; color: #333; margin-bottom: 10px; }
         .tip-description { font-size: 15px; color: #555; line-height: 1.6; }
+        
+        /* Kids Training Specific */
+        .kids-training { background: linear-gradient(135deg, #FFE5E5 0%, #FFF5E1 50%, #E5F5FF 100%); padding: 40px; border-radius: 20px; }
+        .kids-training .training-title { background: linear-gradient(135deg, #FF6B9D 0%, #FFA500 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .kids-tip { background: linear-gradient(135deg, #FFE5E5 0%, #E5F5FF 100%); padding: 20px; border-radius: 15px; margin: 15px 0; border: 3px solid #FF6B9D; }
         
         @media (max-width: 768px) { 
             .answer-options { flex-direction: column; }
@@ -112,71 +168,119 @@
         <div id="welcomeScreen" class="screen active">
             <div class="header">
                 <div class="logo">🛡️ CYBER DRILL AI 🛡️</div>
-                <div class="tagline">Complete Phishing Detection Training</div>
+                <div class="tagline">Complete Phishing Detection Training - From Kids to Professionals</div>
             </div>
+            
             <div class="alert alert-info">
-                <strong>🎯 Complete Training Program!</strong><br>
-                10 realistic email scenarios per industry + comprehensive education module
+                <strong>🎯 Complete Training Ecosystem!</strong><br>
+                Professional Training: 9 Industries • Kids Cyber Detective (Ages 8-14) • 100 Real-World Email Scenarios
             </div>
 
             <div class="value-prop">
                 <div class="value-text">
                     <div class="value-heading">
-                        Strengthen your human firewall without breaking the bank.
+                        Strengthen your human firewall — from kids to professionals.
                     </div>
                     <div class="value-subheading">
-                        Cyber Drill AI delivers realistic, industry-specific phishing simulations and instant coaching,
-                        so your employees learn by doing — not just watching another boring slideshow.
+                        Cyber Drill AI delivers realistic, industry-specific phishing simulations and instant coaching for everyone in your organization — including the next generation.
                     </div>
                     <ul class="feature-list">
-                        <li>10 realistic email scenarios per industry, modeled on real-world attacks.</li>
-                        <li>Instant, plain-language feedback for every decision — with red flags clearly explained.</li>
-                        <li>Printable completion certificate with name, industry, score, date, and unique ID.</li>
-                        <li>Built-in education module your team can revisit anytime for quick refreshers.</li>
-                        <li>Designed for short, high-impact sessions your users can complete in minutes.</li>
+                        <li>100 realistic email scenarios modeled on real-world attacks</li>
+                        <li>9 professional industry modules + Kids Cyber Detective Academy</li>
+                        <li>Complete education ecosystem: Kids, Students, Teachers</li>
+                        <li>Instant feedback with red flags clearly explained</li>
+                        <li>Printable certificates for all ages</li>
+                        <li>Built-in education module for quick refreshers</li>
                     </ul>
                 </div>
 
                 <div class="value-stats">
                     <div class="value-card">
-                        <div class="value-number">8</div>
-                        <div class="value-label">Industries</div>
+                        <div class="value-number">10</div>
+                        <div class="value-label">Training Modules</div>
                     </div>
                     <div class="value-card">
-                        <div class="value-number">80</div>
+                        <div class="value-number">100</div>
                         <div class="value-label">Email Scenarios</div>
                     </div>
                     <div class="value-card">
-                        <div class="value-number">1</div>
-                        <div class="value-label">Unified Training Hub</div>
+                        <div class="value-number">ALL</div>
+                        <div class="value-label">Ages Covered</div>
                     </div>
                 </div>
             </div>
 
-            <h2 style="text-align: center; margin: 30px 0; color: #667eea;">Select Your Industry</h2>
+            <div class="section-header">📚 COMPLETE EDUCATION ECOSYSTEM</div>
+            
             <div class="industry-grid">
-                <div class="industry-card" onclick="selectIndustry('financial', this)"><div class="industry-icon">🏦</div><div class="industry-name">Financial Services</div></div>
-                <div class="industry-card" onclick="selectIndustry('healthcare', this)"><div class="industry-icon">🏥</div><div class="industry-name">Healthcare</div></div>
-                <div class="industry-card" onclick="selectIndustry('technology', this)"><div class="industry-icon">💻</div><div class="industry-name">Technology</div></div>
-                <div class="industry-card" onclick="selectIndustry('manufacturing', this)"><div class="industry-icon">🏭</div><div class="industry-name">Manufacturing</div></div>
-                <div class="industry-card" onclick="selectIndustry('retail', this)"><div class="industry-icon">🛒</div><div class="industry-name">Retail</div></div>
-                <div class="industry-card" onclick="selectIndustry('education', this)"><div class="industry-icon">🎓</div><div class="industry-name">Education</div></div>
-                <div class="industry-card" onclick="selectIndustry('government', this)"><div class="industry-icon">🏛️</div><div class="industry-name">Government</div></div>
-                <div class="industry-card" onclick="selectIndustry('legal', this)"><div class="industry-icon">⚖️</div><div class="industry-name">Legal</div></div>
+                <div class="industry-card kids-card" onclick="selectIndustry('kids', this)">
+                    <div class="industry-icon">🎮</div>
+                    <div class="industry-name">Kids Cyber Detective</div>
+                    <div class="industry-subtitle">Ages 8-14 • Fun & Interactive</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('education', this)">
+                    <div class="industry-icon">🎓</div>
+                    <div class="industry-name">Students</div>
+                    <div class="industry-subtitle">College & University</div>
+                </div>
+                <div class="industry-card teacher-card" onclick="selectIndustry('teachers', this)">
+                    <div class="industry-icon">👩‍🏫</div>
+                    <div class="industry-name">Teachers & Educators</div>
+                    <div class="industry-subtitle">K-12 Staff</div>
+                </div>
             </div>
+
+            <div class="section-divider"></div>
+            <div class="section-header">💼 PROFESSIONAL INDUSTRIES</div>
+            
+            <div class="industry-grid">
+                <div class="industry-card" onclick="selectIndustry('financial', this)">
+                    <div class="industry-icon">🏦</div>
+                    <div class="industry-name">Financial Services</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('healthcare', this)">
+                    <div class="industry-icon">🏥</div>
+                    <div class="industry-name">Healthcare</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('technology', this)">
+                    <div class="industry-icon">💻</div>
+                    <div class="industry-name">Technology</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('manufacturing', this)">
+                    <div class="industry-icon">🏭</div>
+                    <div class="industry-name">Manufacturing</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('retail', this)">
+                    <div class="industry-icon">🛒</div>
+                    <div class="industry-name">Retail</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('government', this)">
+                    <div class="industry-icon">🏛️</div>
+                    <div class="industry-name">Government</div>
+                </div>
+                <div class="industry-card" onclick="selectIndustry('legal', this)">
+                    <div class="industry-icon">⚖️</div>
+                    <div class="industry-name">Legal</div>
+                </div>
+            </div>
+            
             <button class="btn" id="continueBtn" onclick="goToNameEntry()" disabled>🚀 Begin Training →</button>
         </div>
 
         <div id="nameEntryScreen" class="screen">
-            <div class="header"><div class="logo">🛡️ CYBER DRILL AI 🛡️</div></div>
-            <div class="alert alert-info"><strong>🎖️ Certificate Awaits!</strong><br>Enter your information for your certificate.</div>
+            <div class="header">
+                <div class="logo">🛡️ CYBER DRILL AI 🛡️</div>
+            </div>
+            <div class="alert alert-info" id="nameEntryAlert">
+                <strong>🎖️ Certificate Awaits!</strong><br>Enter your information for your certificate.
+            </div>
             <form onsubmit="startTraining(event)">
                 <div class="form-group">
-                    <label>👤 Your Full Name</label>
+                    <label id="nameLabel">👤 Your Full Name</label>
                     <input type="text" id="userName" required placeholder="John Doe">
                 </div>
                 
-                <div class="checkbox-group">
+                <div class="checkbox-group" id="emailCheckboxGroup">
                     <div class="checkbox-wrapper">
                         <input type="checkbox" id="usePersonalEmail" onchange="toggleEmailField()">
                         <label for="usePersonalEmail" class="checkbox-label">
@@ -185,8 +289,7 @@
                     </div>
                     <div class="checkbox-note">
                         <strong>Recommended!</strong> When enabled, you'll see YOUR email address in the "To:" field 
-                        of each phishing scenario. This makes the training feel more realistic and helps you 
-                        recognize how these attacks could actually appear in your inbox.
+                        of each phishing scenario. This makes the training feel more realistic.
                     </div>
                 </div>
 
@@ -195,15 +298,15 @@
                     <input type="email" id="userEmail" placeholder="john.doe@company.com">
                 </div>
 
-                <button type="submit" class="btn">Continue →</button>
-                <button type="button" class="btn btn-outline" onclick="reviewTrainingFirst()">📚 Review Full Training Material First</button>
+                <button type="submit" class="btn" id="continueToTrainingBtn">Continue →</button>
+                <button type="button" class="btn btn-secondary" onclick="reviewTrainingFirst()">📚 Review Full Training Material First</button>
             </form>
         </div>
 
-        <!-- QUICK TIPS SCREEN - NEW! -->
+        <!-- QUICK TIPS SCREEN -->
         <div id="quickTipsScreen" class="screen">
             <div class="tips-header">
-                <div class="tips-logo">🍎 QUICK TIPS</div>
+                <div class="tips-logo">🎯 QUICK TIPS</div>
                 <div class="tips-subtitle">Essential Red Flags - Quick Review</div>
             </div>
             
@@ -212,58 +315,12 @@
                 Before your certification assessment, here's a 1-minute refresher of the most critical red flags.
             </div>
 
-            <div class="tips-grid">
-                <div class="tip-card">
-                    <div class="tip-icon">⏰</div>
-                    <div class="tip-title">Urgency & Pressure</div>
-                    <div class="tip-description">"Act now!" "Within 24 hours!" - Scammers create fake urgency.</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">📧</div>
-                    <div class="tip-title">Suspicious Sender</div>
-                    <div class="tip-description">Check email carefully: amaz0n.com, paypa1.com - Tiny typos = huge red flags!</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">👋</div>
-                    <div class="tip-title">Generic Greetings</div>
-                    <div class="tip-description">"Dear Customer" - Legitimate companies use your actual name.</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">🔒</div>
-                    <div class="tip-title">Requests for Credentials</div>
-                    <div class="tip-description">NO company asks for passwords, SSN, or CVV via email. Ever.</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">🔗</div>
-                    <div class="tip-title">Suspicious Links</div>
-                    <div class="tip-description">Hover to see real URL. Does it match the sender?</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">💰</div>
-                    <div class="tip-title">Too Good to Be True</div>
-                    <div class="tip-description">"You've won $10,000!" - If it sounds impossible, it is.</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">⚠️</div>
-                    <div class="tip-title">Threatening Language</div>
-                    <div class="tip-description">"Account will be closed!" - Real companies don't threaten you.</div>
-                </div>
-
-                <div class="tip-card">
-                    <div class="tip-icon">📎</div>
-                    <div class="tip-title">Unexpected Attachments</div>
-                    <div class="tip-description">Especially .exe, .zip files - Never open unexpected attachments.</div>
-                </div>
+            <div class="tips-grid" id="tipsGrid">
+                <!-- Tips will be loaded dynamically -->
             </div>
 
-            <div class="alert alert-info" style="margin-top: 30px; text-align: center; font-size: 18px;">
-                <strong>🎯 Golden Rule:</strong> When in doubt, verify through official channels - NEVER through links in the email!
+            <div class="alert alert-info" style="margin-top: 30px; text-align: center; font-size: 18px;" id="goldenRuleAlert">
+                <strong>🎯 Golden Rule:</strong> When in doubt, verify through official channels!
             </div>
 
             <button class="btn" onclick="startFromQuickTips()">🚀 Start Certification Assessment Now →</button>
@@ -276,6 +333,7 @@
                 <div class="tagline" id="industryTitle"></div>
             </div>
             <div id="attemptBadge"></div>
+            <div id="progressMessage" class="progress-message" style="display: none;"></div>
             <div style="text-align: center; margin-bottom: 15px; font-weight: 700; color: #667eea; font-size: 18px;" id="progressText"></div>
             <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
             <div id="questionContainer"></div>
@@ -286,15 +344,29 @@
         </div>
 
         <div id="resultsScreen" class="screen">
-            <div class="header"><div class="logo">🛡️ CYBER DRILL AI 🛡️</div><div class="tagline">Training Complete!</div></div>
+            <div class="header">
+                <div class="logo">🛡️ CYBER DRILL AI 🛡️</div>
+                <div class="tagline" id="resultsTagline">Training Complete!</div>
+            </div>
             
+            <div id="badgeDisplay" class="badge-display" style="display: none;"></div>
             <div id="scoreComparison"></div>
             
             <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value" id="scoreValue">0%</div><div style="font-size: 18px; color: #666; font-weight: 700;">Score</div></div>
-                <div class="stat-card"><div class="stat-value" id="correctValue">0/10</div><div style="font-size: 18px; color: #666; font-weight: 700;">Correct</div></div>
-                <div class="stat-card"><div class="stat-value" id="gradeValue">-</div><div style="font-size: 18px; color: #666; font-weight: 700;">Grade</div></div>
+                <div class="stat-card">
+                    <div class="stat-value" id="scoreValue">0%</div>
+                    <div style="font-size: 18px; color: #666; font-weight: 700;">Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="correctValue">0/10</div>
+                    <div style="font-size: 18px; color: #666; font-weight: 700;">Correct</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="gradeValue">-</div>
+                    <div style="font-size: 18px; color: #666; font-weight: 700;" id="gradeLabel">Grade</div>
+                </div>
             </div>
+            
             <div id="resultMessage" class="alert"></div>
             
             <div id="failureMessage" style="display: none;">
@@ -310,99 +382,45 @@
             </div>
 
             <div class="certificate" id="certificateSection">
-                <div style="font-size: 40px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px;">🛡️ CERTIFICATE 🛡️</div>
+                <div id="certHeader" style="font-size: 40px; font-weight: 900; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 25px;">🛡️ CERTIFICATE 🛡️</div>
                 <p style="font-size: 20px; margin: 25px 0; font-weight: 600;">This certifies that</p>
                 <div class="certificate-name" id="certName">Champion</div>
-                <p style="font-size: 20px; margin: 25px 0; font-weight: 600;">completed Phishing Detection Training</p>
+                <p style="font-size: 20px; margin: 25px 0; font-weight: 600;" id="certCompletionText">completed Phishing Detection Training</p>
                 <div style="margin: 35px 0; line-height: 2.2; font-size: 18px; font-weight: 600;">
                     <strong>Industry:</strong> <span id="certIndustry">-</span><br>
                     <strong>Score:</strong> <span id="certScore">0%</span><br>
+                    <span id="certBadgeLine" style="display: none;"><strong>Badge Earned:</strong> <span id="certBadge">-</span><br></span>
                     <strong>Date:</strong> <span id="certDate">-</span><br>
                     <strong>ID:</strong> <span id="certId">-</span>
+                </div>
+                <div id="parentNote" style="display: none; margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #FFE5E5 0%, #E5F5FF 100%); border-radius: 12px; border: 3px solid #FF6B9D;">
+                    <strong style="font-size: 20px;">📧 For Parents & Guardians:</strong>
+                    <p style="margin-top: 15px; font-size: 16px; line-height: 1.8; text-align: left;">
+                        <span id="certChildName">Your child</span> has successfully completed cybersecurity training! They learned to spot:
+                        <br>✓ Fake messages and suspicious links
+                        <br>✓ Too-good-to-be-true offers
+                        <br>✓ Requests for personal information
+                        <br>✓ Common scams targeting kids online
+                        <br><br>
+                        <strong>Keep the conversation going!</strong> Ask them to show you what they learned and practice spotting scams together.
+                    </p>
                 </div>
             </div>
 
             <div class="training-module" id="trainingModule">
                 <div class="training-title">📚 PHISHING EDUCATION MODULE</div>
-                
-                <div class="training-section">
-                    <div class="training-subtitle">🎯 What is Phishing?</div>
-                    <p style="line-height: 1.8;">Phishing is a cyber attack where criminals impersonate legitimate organizations to trick you into revealing sensitive information, clicking malicious links, or downloading malware. 91% of data breaches start with a phishing email.</p>
-                </div>
-
-                <div class="training-section">
-                    <div class="training-subtitle">🚩 Top 10 Red Flags</div>
-                    <ul class="training-list">
-                        <li><strong>Urgency & Pressure:</strong> "Act now!" "Within 24 hours!"</li>
-                        <li><strong>Suspicious Sender:</strong> Check email address for typos</li>
-                        <li><strong>Generic Greetings:</strong> "Dear Customer" vs your name</li>
-                        <li><strong>Spelling Errors:</strong> Professional orgs proofread</li>
-                        <li><strong>Requests for Sensitive Info:</strong> No legit company asks for passwords via email</li>
-                        <li><strong>Suspicious Links:</strong> Hover to see real URL</li>
-                        <li><strong>Unexpected Attachments:</strong> Especially .exe, .zip files</li>
-                        <li><strong>Too Good to Be True:</strong> "You've won $10,000!"</li>
-                        <li><strong>Threatening Language:</strong> "Account will be closed!"</li>
-                        <li><strong>Mismatched Domains:</strong> Email from @amaz0n-security.net</li>
-                    </ul>
-                </div>
-
-                <div class="training-section">
-                    <div class="training-subtitle">✅ Best Practices</div>
-                    <ul class="training-list">
-                        <li><strong>Verify Before You Click:</strong> Go directly to websites by typing URL</li>
-                        <li><strong>Use Multi-Factor Authentication:</strong> Extra protection layer</li>
-                        <li><strong>Keep Software Updated:</strong> Security patches are critical</li>
-                        <li><strong>Use Password Managers:</strong> Unique passwords for every account</li>
-                        <li><strong>Report Suspicious Emails:</strong> Forward to IT security team</li>
-                        <li><strong>Trust Your Instincts:</strong> If it feels off, it probably is</li>
-                    </ul>
-                </div>
-
-                <div class="training-section">
-                    <div class="training-subtitle">🎭 Common Techniques</div>
-                    <ul class="training-list">
-                        <li><strong>Email Phishing:</strong> Mass emails to thousands</li>
-                        <li><strong>Spear Phishing:</strong> Targeted attacks using personal info</li>
-                        <li><strong>Whaling:</strong> Attacks against executives</li>
-                        <li><strong>Smishing:</strong> Phishing via SMS text messages</li>
-                        <li><strong>Vishing:</strong> Phone calls impersonating organizations</li>
-                        <li><strong>BEC:</strong> Business Email Compromise attacks</li>
-                    </ul>
-                </div>
-
-                <div class="training-section">
-                    <div class="training-subtitle">🛡️ If You Click a Phishing Link</div>
-                    <ul class="training-list">
-                        <li><strong>Don't Panic:</strong> Quick action minimizes damage</li>
-                        <li><strong>Disconnect Internet:</strong> Prevent malware spread</li>
-                        <li><strong>Don't Enter Credentials:</strong> Close browser immediately</li>
-                        <li><strong>Change Passwords:</strong> On a different clean device</li>
-                        <li><strong>Run Antivirus Scan:</strong> Check for malware</li>
-                        <li><strong>Report to IT Security:</strong> Notify immediately</li>
-                        <li><strong>Monitor Accounts:</strong> Watch for unusual activity</li>
-                        <li><strong>Enable MFA:</strong> Add extra security layer</li>
-                    </ul>
-                </div>
-
-                <div class="training-section">
-                    <div class="training-subtitle">📞 Important Resources</div>
-                    <ul class="training-list">
-                        <li><strong>FTC:</strong> ReportFraud.ftc.gov</li>
-                        <li><strong>IRS Phishing:</strong> phishing@irs.gov</li>
-                        <li><strong>Anti-Phishing Group:</strong> reportphishing@apwg.org</li>
-                        <li><strong>Check Compromises:</strong> haveibeenpwned.com</li>
-                        <li><strong>Your IT Team:</strong> First line of defense!</li>
-                    </ul>
-                    <div class="tip-box"><strong>🎓 Remember:</strong> Cybersecurity is a journey. Stay vigilant and keep learning!</div>
+                <div id="trainingContent">
+                    <!-- Training content will be loaded dynamically -->
                 </div>
             </div>
 
             <div class="button-group" id="passedButtons">
                 <button class="btn" onclick="window.print()">🖨️ Print Certificate</button>
-                <button class="btn btn-secondary" onclick="restartTraining()">🔄 Train Another Industry</button>
+                <button class="btn btn-secondary" onclick="restartTraining()">🔄 Train Another Module</button>
             </div>
         </div>
     </div>
+
     <script>
         let appState = {
             selectedIndustry: null, 
@@ -414,10 +432,62 @@
             score: 0,
             attemptNumber: 1,
             previousScore: null,
-            reviewMode: false
+            reviewMode: false,
+            isKidsMode: false
         };
 
         const questionDatabase = {
+            kids: {
+                name: "Kids Cyber Detective Academy",
+                isKids: true,
+                questions: [
+                    {from: "free-robux@roblox-generator.net", to: "gamer@email.com", subject: "FREE 10,000 ROBUX!", date: "Today", body: "Congratulations! You've been selected!\n\nGet 10,000 FREE ROBUX now!\n\nJust enter your Roblox username and password:\nfree-robux-generator.net\n\nHurry! Only 50 spots left!", redFlags: ["Wrong website (.net not .com)", "Asks for password", "Too good to be true", "Creates fake urgency"], isPhishing: true, explanation: "This is a SCAM! Roblox NEVER gives free Robux through random emails. They would NEVER ask for your password. Real Robux comes from Roblox.com only!"},
+                    
+                    {from: "roblox@roblox.com", to: "player@email.com", subject: "Happy Birthday!", date: "Today", body: "Happy Birthday!\n\nEnjoy 800 Robux as a birthday gift!\n\nLog into Roblox.com to claim your gift.\n\nHave an awesome birthday!\n- The Roblox Team", redFlags: [], isPhishing: false, explanation: "This is REAL! Roblox really does give birthday Robux. The email is from roblox.com (the real website), doesn't ask for passwords, and just tells you to log in normally."},
+                    
+                    {from: "alert@roblox-security.org", to: "player@email.com", subject: "URGENT: Account Will Be Deleted!", date: "Today", body: "WARNING! Your account will be DELETED in 24 hours!\n\nSomeone reported you for breaking rules!\n\nClick here NOW to save your account:\nroblox-verify.org\n\nEnter your password to prove it's really you!", redFlags: ["Wrong website (.org not .com)", "Scary threats", "Asks for password", "Fake urgency"], isPhishing: true, explanation: "This is FAKE and trying to scare you! Roblox would NEVER delete your account through an email. They don't use roblox-security.org. If there's really a problem, you'd see it when you log into Roblox.com!"},
+                    
+                    {from: "MrBeastYT@fake-youtube.com", to: "fan@email.com", subject: "You Won My Giveaway!", date: "Today", body: "CONGRATULATIONS!!!\n\nYou won my $10,000 giveaway!\n\nTo claim your prize:\n1. Click this link\n2. Enter your mom's credit card\n3. Pay $50 shipping fee\n\nHurry or someone else gets it!", redFlags: ["Asks for credit card", "Wants money for a 'free' prize", "Wrong email address", "Creates pressure"], isPhishing: true, explanation: "SCAM ALERT! Real YouTube creators NEVER ask winners to pay fees or give credit card info. Real giveaways are actually FREE! If you won something real, they'd contact you through YouTube, not random email."},
+                    
+                    {from: "minecraft@mojang.com", to: "player@email.com", subject: "Minecraft Realms Renewal", date: "Today", body: "Your Minecraft Realms subscription renews in 3 days.\n\nRealms Plus: $7.99/month\n\nManage subscription: minecraft.net/account\n\nQuestions? Help.minecraft.net", redFlags: [], isPhishing: false, explanation: "This is REAL! Mojang (Minecraft's company) really sends reminders about Realms. The email is from mojang.com (the real company), doesn't ask for passwords, and directs you to the real minecraft.net website."},
+                    
+                    {from: "friend.discord.gg", to: "gamer@email.com", subject: "Check out this cool game!", date: "Today", body: "Hey! Found this awesome new game!\n\nDownload here: free-minecraft-mods.exe\n\nIt's totally safe I promise!\n\nLet me know when you try it!", redFlags: [".exe file is dangerous", "Downloads from strangers", "Not from a real friend"], isPhishing: true, explanation: "DANGER! Never download .exe files from emails, even if they look like they're from friends! Their account might be hacked. .exe files can be viruses! Only download games from official stores like Steam, Epic, or the Apple/Google app stores."},
+                    
+                    {from: "itunes@apple.com", to: "user@email.com", subject: "Purchase Receipt", date: "Today", body: "Thank you for your purchase!\n\nMinecraft - $6.99\n\nCharged to card ending in 1234\n\nView receipt: apple.com/receipt\n\nOrder #: 847291038", redFlags: [], isPhishing: false, explanation: "This is REAL! When you buy something from iTunes or the App Store, Apple sends a receipt. It's from apple.com (real Apple), has your order number, and doesn't ask you to click suspicious links or enter passwords."},
+                    
+                    {from: "fortnite-vbucks@epicgame.net", to: "player@email.com", subject: "Complete Survey for FREE V-Bucks!", date: "Today", body: "Get 5,000 V-Bucks FREE!\n\nJust complete this 5-minute survey!\n\nWe'll ask for:\n• Your Epic Games password\n• Your parent's email\n• Your home address\n\nClaim now: fortnite-survey.net", redFlags: ["Wrong website (epicgame.net not epicgames.com)", "Asks for password", "Wants personal information", "Surveys don't give real V-Bucks"], isPhishing: true, explanation: "This is a SCAM! Epic Games NEVER gives V-Bucks for surveys. They would NEVER ask for your password or address. The only way to get V-Bucks is to buy them from the real Fortnite game or epicgames.com!"},
+                    
+                    {from: "youtube@youtube.com", to: "creator@email.com", subject: "Copyright Claim on Your Video", date: "Today", body: "A copyright claim was made on your video:\n\n'My Minecraft Build'\n\nThis does NOT affect your account.\n\nView details: studio.youtube.com\n\nQuestions? support.google.com/youtube", redFlags: [], isPhishing: false, explanation: "This is REAL. YouTube really sends emails about copyright claims. It's from youtube.com (real YouTube), doesn't ask for passwords, and directs you to studio.youtube.com (the real YouTube Studio). They're just letting you know - your account is fine!"},
+                    
+                    {from: "steam-support@steam-community.org", to: "gamer@email.com", subject: "Your account has been reported", date: "Today", body: "Your Steam account was reported for scamming.\n\nAccount Status: SUSPENDED\n\nTo unlock your account:\n1. Click here: steam-verify.org\n2. Sign in with your Steam password\n3. Provide ID verification\n\nYou have 48 hours!", redFlags: ["Wrong website (.org not .com)", "Asks for password on fake site", "Scary threats", "Fake time pressure"], isPhishing: true, explanation: "FAKE! Steam's real website is steampowered.com, not steam-community.org! Real Steam support NEVER asks you to sign in through email links. If there's a real problem, you'd see it when you log into Steam normally. Don't let scary messages trick you!"}
+                ]
+            },
+            
+            teachers: {
+                name: "Teachers & Educators (K-12)",
+                questions: [
+                    {from: "principal@school-district.org", to: "teacher@school.edu", subject: "URGENT: Wire Transfer Needed", date: "Fri, Dec 13 2024 4:45 PM", body: "I'm in a board meeting and can't take calls.\n\nWe need to wire $8,500 immediately for the new library computers.\n\nAccount: 847291038475\nRouting: 091000022\n\nPlease handle this personally - confidential.\n\nDr. Johnson, Principal", redFlags: ["Sent after hours", "Urgency prevents verification", "Unusual financial request via email", "Requests confidentiality"], isPhishing: true, explanation: "BEC (Business Email Compromise) attack. Even if the principal's name is correct, the email could be spoofed. ALWAYS verify large financial requests by calling the principal directly at their known number."},
+                    
+                    {from: "googleclassroom@classroom-update.com", to: "teacher@school.edu", subject: "Action Required: Verify Your Account", date: "Mon, Dec 02 2024 8:30 AM", body: "Google Classroom security update required.\n\nYour account will be suspended unless you verify:\n\nClick here: classroom-verify.com\nEnter your school email and password\n\nDeadline: Dec 5, 2024", redFlags: ["Wrong domain (not google.com)", "Requests password", "Account suspension threat"], isPhishing: true, explanation: "Credential harvesting attack. Google Classroom is classroom.google.com, NOT classroom-update.com. Google NEVER asks for passwords via email. Always access Google services by typing google.com directly in your browser."},
+                    
+                    {from: "parent.johnson@email.com", to: "teacher@school.edu", subject: "Meeting About Grades", date: "Wed, Dec 04 2024 3:15 PM", body: "Hello Ms. Smith,\n\nI need to discuss Emma's grades. Can we meet this week?\n\nI'm available:\nTuesday 4 PM\nThursday 3:30 PM\n\nPlease let me know what works.\n\nBest regards,\nSarah Johnson\nEmma's mom", redFlags: [], isPhishing: false, explanation: "Legitimate parent communication. Uses personal email (normal), reasonable request, doesn't ask for sensitive info, and can be verified through school records showing Emma Johnson is in your class."},
+                    
+                    {from: "it@school.edu", to: "teachers@school.edu", subject: "Password Reset Required", date: "Tue, Dec 03 2024 7:00 AM", body: "IT Department - Security Incident\n\nA data breach was detected over the weekend.\n\nAll teachers must reset passwords:\n\nReset at: password.school.edu\nDeadline: Friday 5 PM\n\nContact IT Helpdesk: x4500\n\nIT Department", redFlags: [], isPhishing: false, explanation: "Legitimate IT communication from school domain (school.edu). Links to school's actual password portal, provides IT contact, and reasonable timeline. Still wise to verify with IT if concerned!"},
+                    
+                    {from: "education@teacher-grants.org", to: "teacher@school.edu", subject: "You've Been Awarded $5,000!", date: "Sun, Dec 01 2024 6:22 PM", body: "Congratulations! You've been selected for a $5,000 classroom grant!\n\nTo receive your grant:\n• Pay $150 processing fee\n• Provide SSN for tax forms\n• Submit bank account details\n\nClaim by Dec 15!", redFlags: ["Unsolicited grant", "Requests payment for 'free' grant", "Asks for SSN", "Requests banking info"], isPhishing: true, explanation: "Classic grant scam targeting teachers. Real grants NEVER require upfront fees. Legitimate educational grants go through school administration or known foundations, not random emails asking for SSN and money."},
+                    
+                    {from: "canvas@instructure.com", to: "teacher@school.edu", subject: "Canvas System Update", date: "Mon, Dec 02 2024 9:15 AM", body: "Canvas will undergo maintenance:\n\nDate: Saturday, Dec 7\nTime: 2:00 AM - 6:00 AM EST\n\nServices affected: Gradebook\n\nNo action needed.\n\nCanvas Support\n1-800-203-6755", redFlags: [], isPhishing: false, explanation: "Legitimate Canvas notification from instructure.com (Canvas's parent company). Typical maintenance notice, doesn't ask for credentials, provides real support number. No action required from teachers."},
+                    
+                    {from: "student.rodriguez@email.com", to: "teacher@school.edu", subject: "Please Change My Grade", date: "Thu, Dec 05 2024 11:47 PM", body: "Mr. Thompson,\n\nI really need you to change my grade on the last test from F to B.\n\nMy parents will ground me if I fail.\n\nPlease update it in PowerSchool tonight.\n\nThanks,\nMiguel Rodriguez", redFlags: ["Late night email (unusual)", "Inappropriate request", "Pressures immediate action"], isPhishing: true, explanation: "This could be a hacked student account OR a sophisticated phishing attempt. Students wouldn't normally demand grade changes via email at midnight. Verify in person before taking any action. Real Miguel would ask during class!"},
+                    
+                    {from: "supplies@classroomcentral.com", to: "teacher@school.edu", subject: "Your Order Confirmation", date: "Tue, Dec 03 2024 2:30 PM", body: "Order Confirmation #874291\n\nMarkers (24 pack): $15.99\nConstruction Paper: $8.50\nGlue Sticks (12): $6.99\n\nTotal: $35.47\nShip to: Lincoln Elementary\n\nTrack order: classroomcentral.com", redFlags: [], isPhishing: false, explanation: "Legitimate order confirmation from a real education supply vendor. Has order number, itemized list, doesn't ask for payment info (already processed), from company's actual domain."},
+                    
+                    {from: "fedloans@studentloan-forgiveness.net", to: "teacher@school.edu", subject: "Teacher Loan Forgiveness - $17,500!", date: "Sun, Dec 01 2024 3:15 PM", body: "You qualify for Teacher Loan Forgiveness!\n\nUp to $17,500 forgiven!\n\nEnrollment fee: $500 (one-time)\n\nProvide:\n• Student loan account numbers\n• SSN\n• Bank account for 'refund'\n\nEnroll now: teacherloanforgiveness.net", redFlags: ["Charges fee for 'free' forgiveness", "Wrong domain (not .gov)", "Requests SSN and banking", "Unsolicited offer"], isPhishing: true, explanation: "SCAM! Real Teacher Loan Forgiveness is FREE through StudentAid.gov. They NEVER charge fees or ask for banking info via email. Scammers target teachers with fake forgiveness programs!"},
+                    
+                    {from: "pd@schooldistrict.edu", to: "teachers@school.edu", subject: "Professional Development Credit", date: "Mon, Dec 02 2024 8:00 AM", body: "Reminder: PD Credit Opportunity\n\nCybersecurity Awareness Training\nDate: Dec 12, 2024\nTime: 3:30 PM - 4:30 PM\nLocation: Media Center\n\nEarns: 1 PD Credit\n\nRSVP: pd@schooldistrict.edu\nDeadline: Dec 9", redFlags: [], isPhishing: false, explanation: "Legitimate PD announcement from school district domain. Typical format for professional development offerings, reasonable time/location, appropriate contact email for RSVP."}
+                ]
+            },
+            
             financial: {name: "Financial Services", questions: [
                 {from: "CEO@company-finance.com", to: "you@company.com", subject: "URGENT: Wire Transfer Required", date: "Wed, Dec 04 2025 14:32", body: "I'm in a critical meeting and unable to take calls. We need to wire $50,000 immediately.\n\nBank: First National\nAccount: 847291038475\n\nTime-sensitive and confidential - handle personally.\n\nThanks, Michael Chen, CEO", redFlags: ["Domain typo (company-finance.com)", "Urgency", "Confidentiality prevents verification"], isPhishing: true, explanation: "BEC attack. CEO's email has tiny typo. Always verify large wire transfers via phone to known number."},
                 {from: "no-reply@irs.gov", to: "taxpayer@email.com", subject: "Tax Compliance Required", date: "Sun, Dec 01 2025 19:15", body: "Outstanding tax liability: $2,847\n\nPay immediately via wire or face:\n• Arrest within 24 hours\n• Bank seizure\n\nInternal Revenue Service", redFlags: ["IRS never emails", "Arrest threats", "Wire transfer demand"], isPhishing: true, explanation: "IRS NEVER emails about taxes or threatens arrest. They use postal mail. Report to phishing@irs.gov."},
@@ -430,6 +500,7 @@
                 {from: "card-services@creditcard.com", to: "cardholder@email.com", subject: "Verify Identity", date: "Tue, Dec 03 2025 14:22", body: "Fraudulent activity detected.\n\nReply with:\n• Full Card Number\n• CVV Code\n• Mother's Maiden Name", redFlags: ["Requests CVV", "Asks for full card number"], isPhishing: true, explanation: "NO financial institution asks for CVV or full card number via email. Call number on your card."},
                 {from: "business-loans@federal-reserve.org", to: "business@company.com", subject: "Pre-Approved $150K", date: "Tue, Dec 03 2025 11:23", body: "Pre-approved for $150,000 at 2.9% APR!\n\nProvide:\n• EIN\n• SSN\n• Bank account\n\n72 hours to claim.", redFlags: ["Fed Reserve doesn't offer loans", "Requests SSN", "Too good to be true"], isPhishing: true, explanation: "Federal Reserve does NOT offer direct business loans. No lender asks for full SSN via email."}
             ]},
+            
             healthcare: {name: "Healthcare", questions: [
                 {from: "medicare@cms-verification.org", to: "beneficiary@email.com", subject: "Benefits Suspended", date: "Sun, Dec 01 2025 18:22", body: "Benefits suspended in 48 hours.\n\nVerify:\n• Medicare Number\n• SSN\n• DOB", redFlags: ["Not .gov", "Requests SSN", "48-hour threat"], isPhishing: true, explanation: "Medicare NEVER emails for personal info. Official communications via postal mail using .gov domains."},
                 {from: "itsecurity@hospitalsystem.org", to: "staff@hospitalsystem.org", subject: "HIPAA Training Due", date: "Mon, Dec 02 2025 08:30", body: "Annual HIPAA training due Friday.\n\nComplete at: training.hospitalsystem.org\n\nQuestions? IT x4357", redFlags: [], isPhishing: false, explanation: "Legitimate: hospital's domain, HIPAA training is mandatory, links to hospital system."},
@@ -442,6 +513,7 @@
                 {from: "equipment-recall@fda.gov", to: "admin@hospital.com", subject: "Device Recall", date: "Wed, Dec 04 2025 13:10", body: "FDA Class I Recall: MediTech Infusion Pumps\n\nCease use immediately.\n\nFull info: fda.gov/recalls\n\nFDA MedWatch: 1-800-FDA-1088", redFlags: [], isPhishing: false, explanation: "Legitimate FDA recall from fda.gov. Verify recall number on FDA.gov directly."},
                 {from: "supplies@supplies-discount.com", to: "purchasing@hospital.com", subject: "PPE Supply Shortage", date: "Mon, Dec 02 2025 07:45", body: "Critical PPE available!\n\nN95: $2.99 (70% off!)\nMinimum: $10,000\nPayment: Wire/Bitcoin\n24 hours only!", redFlags: ["Too good to be true", "Wire/Bitcoin only"], isPhishing: true, explanation: "Counterfeit medical supplies scam. Legitimate suppliers don't require untraceable payments."}
             ]},
+            
             technology: {name: "Technology", questions: [
                 {from: "security@github-services.com", to: "dev@company.com", subject: "GitHub Security Alert", date: "Tue, Dec 03 2025 03:47", body: "Suspicious login from Russia.\n\nVerify at: github-security-portal.com\n\n24 hours or repositories deleted.", redFlags: ["Wrong domain", "External verification", "Deletion threat"], isPhishing: true, explanation: "GitHub's domain is github.com. Type github.com directly to check account. Enable 2FA."},
                 {from: "billing@aws.amazon.com", to: "customer@company.com", subject: "AWS Monthly Statement", date: "Mon, Dec 02 2025 09:00", body: "December AWS Statement available.\n\nTotal: $1,716.85\n\nView: aws.amazon.com/billing\n\nQuestions? 1-888-280-2375", redFlags: [], isPhishing: false, explanation: "Legitimate AWS billing. From AWS domain, standard billing info. Type aws.amazon.com directly."},
@@ -454,6 +526,7 @@
                 {from: "api@stripe.com", to: "dev@startup.com", subject: "API Key Exposed", date: "Wed, Dec 04 2025 11:30", body: "Stripe API key exposed in GitHub repo.\n\nRepo: github.com/company/app\nKey rolled automatically.\n\nGenerate new: dashboard.stripe.com/keys", redFlags: [], isPhishing: false, explanation: "Legitimate Stripe alert. Stripe monitors for exposed keys. Log into Stripe dashboard directly."},
                 {from: "jetbrains@jetbrains-services.com", to: "dev@email.com", subject: "License Renewal", date: "Sun, Dec 01 2025 09:45", body: "IntelliJ license expires in 7 days.\n\nRenew at: jetbrains-renewal.com ($149/year)", redFlags: ["Wrong domain", "External renewal site"], isPhishing: true, explanation: "JetBrains' domain is jetbrains.com. License renewals happen through jetbrains.com/store."}
             ]},
+            
             manufacturing: {name: "Manufacturing", questions: [
                 {from: "accounts@acmeparts.com", to: "ap@manufacturer.com", subject: "Updated Banking", date: "Wed, Dec 04 2025 14:15", body: "Please update banking for all payments:\n\nNew Account: 847291038475\nRouting: 091000022\n\nEffective immediately.", redFlags: ["Banking change via email only"], isPhishing: true, explanation: "Vendor email compromise. ALWAYS verify banking changes via phone to known number."},
                 {from: "safety@company.com", to: "staff@company.com", subject: "OSHA Training", date: "Mon, Dec 02 2025 08:30", body: "OSHA Hazmat training due Friday.\n\nAccess: training.company.com/osha\n\nQuestions? Safety x5678", redFlags: [], isPhishing: false, explanation: "Legitimate internal training. From company domain, OSHA training is routine."},
@@ -466,6 +539,7 @@
                 {from: "iso@iso-services.org", to: "quality@manufacturer.com", subject: "ISO Renewal URGENT", date: "Sun, Dec 01 2025 16:22", body: "ISO cert expires in 17 days.\n\nExpedited renewal: $8,500 (5 days)\nStandard: $2,500 (6-8 weeks)\n\nWire payment immediately.", redFlags: ["Not from certifier", "Wire pressure"], isPhishing: true, explanation: "Certification renewal scam. Contact YOUR actual certification body (BSI, TUV, etc)."},
                 {from: "safety-equipment@supplier.com", to: "procurement@manufacturer.com", subject: "Annual Inspection", date: "Mon, Dec 02 2025 10:15", body: "Annual inspection due by Nov 30.\n\nEquipment:\n• Cranes\n• Fall protection\n• Fire systems\n\nSchedule: (555) 789-1234", redFlags: [], isPhishing: false, explanation: "Legitimate inspection reminder. Annual inspections are legally required."}
             ]},
+            
             retail: {name: "Retail & E-commerce", questions: [
                 {from: "security@shopify-merchant-services.com", to: "owner@shop.com", subject: "Store Suspended", date: "Mon, Dec 02 2025 08:15", body: "Your store suspended due to fraud.\n\nVerify at: shopify-security-verify.com\n\n24 hours or permanent closure.", redFlags: ["Wrong domain", "External verification"], isPhishing: true, explanation: "Shopify's domain is shopify.com. Type shopify.com/admin directly to check account."},
                 {from: "jmartinez@thompsondenver.com", to: "sales@store.com", subject: "Bulk Order", date: "Tue, Dec 03 2025 10:30", body: "Corporate gifting. Need 500 gift baskets ($47,500).\n\nDelivery: April 15, Denver\nTax ID: 84-1234567\nPhone: (720) 555-0847", redFlags: [], isPhishing: false, explanation: "Appears legitimate: specific details, tax ID. HOWEVER: verify company, ship after payment clears."},
@@ -478,7 +552,8 @@
                 {from: "amazon-seller@amazon-services.net", to: "seller@store.com", subject: "Account Suspended", date: "Tue, Dec 03 2025 13:45", body: "Seller account suspended.\n\nVerify banking at: amazon-seller-verification.net\n\n24 hours or permanent closure.", redFlags: ["Wrong domain", "External verification site"], isPhishing: true, explanation: "Amazon's domain is amazon.com. Seller communications come through sellercentral.amazon.com."},
                 {from: "pos@possystems.com", to: "store@retail.com", subject: "POS Security Patch", date: "Wed, Dec 04 2025 08:30", body: "Critical security patch for POS.\n\nVulnerability: Payment card security\nPatch: 5.2.8\n\nDownload: support.possystems.com/patch", redFlags: [], isPhishing: false, explanation: "Legitimate security update. From vendor's domain. Verify before applying POS updates."}
             ]},
-            education: {name: "Education", questions: [
+            
+            education: {name: "Students (College & University)", questions: [
                 {from: "financial-aid@studentaid-portal.com", to: "student@university.edu", subject: "Aid Suspended", date: "Sun, Dec 01 2025 19:15", body: "Federal aid suspended in 48 hours.\n\nVerify:\n• SSN\n• FAFSA PIN\n• Parent info\n\nVerify at: studentaid-portal.com", redFlags: ["Not .edu or .gov", "Requests SSN and PIN"], isPhishing: true, explanation: "Official student aid from .edu (university) or studentaid.gov. NEVER request SSN/PIN via email."},
                 {from: "it-security@university.edu", to: "students@university.edu", subject: "Password Reset", date: "Mon, Dec 02 2025 08:45", body: "Security incident requires password reset.\n\nReset at: password.university.edu\n\nDeadline: Friday, Dec 6\n\nQuestions? IT x4000", redFlags: [], isPhishing: false, explanation: "Legitimate from university .edu domain, links to university password portal."},
                 {from: "scholarship@scholarship-foundation.org", to: "student@email.com", subject: "$5,000 Scholarship", date: "Tue, Dec 03 2025 14:30", body: "Selected for $5,000 scholarship!\n\nTo claim:\n• Pay $150 processing fee\n• Provide SSN\n• Bank account info\n\n72 hours to claim.", redFlags: ["Payment required", "Requests SSN and banking"], isPhishing: true, explanation: "Legitimate scholarships NEVER require payment. Advance-fee fraud exploiting students."},
@@ -490,6 +565,7 @@
                 {from: "admissions@university.edu", to: "applicant@email.com", subject: "Application Decision", date: "Wed, Dec 04 2025 14:20", body: "Your Fall 2026 application reviewed.\n\nView decision at: apply.university.edu\n\nApplication ID: APP-2025-847291\n\nQuestions? (555) 123-4567 x2000", redFlags: [], isPhishing: false, explanation: "Legitimate admissions decision. From university .edu, specific application details."},
                 {from: "student-accounts@university.edu", to: "student@university.edu", subject: "Tuition Bill", date: "Tue, Dec 03 2025 10:15", body: "Spring 2026 statement available.\n\nTuition: $6,000\nFees: $850\nTotal: $12,450\n\nLess financial aid: $10,000\nBalance due: $2,450\n\nDue: January 15, 2026", redFlags: [], isPhishing: false, explanation: "Legitimate university billing. From university .edu, detailed tuition breakdown."}
             ]},
+            
             government: {name: "Government & Public Sector", questions: [
                 {from: "irs-notices@irs-compliance.org", to: "taxpayer@email.com", subject: "IRS FINAL NOTICE", date: "Sun, Dec 01 2025 18:30", body: "Tax owed: $4,929.65\n\nPay now via:\n• iTunes gift cards\n• Google Play cards\n\nCall: 1-888-IRS-HELP\n\n24 hours or arrest.", redFlags: ["IRS never emails", "Gift card payment!", "Arrest threats"], isPhishing: true, explanation: "IRS NEVER: emails about taxes, demands gift cards, threatens arrest. Report to phishing@irs.gov."},
                 {from: "notices@ssa.gov", to: "beneficiary@email.com", subject: "Social Security Statement", date: "Mon, Dec 02 2025 09:15", body: "Your 2025 Social Security Statement available.\n\nLog into: www.ssa.gov/myaccount\n\nQuestions? 1-800-772-1213", redFlags: [], isPhishing: false, explanation: "Legitimate from ssa.gov (official SSA domain). Type ssa.gov directly into browser."},
@@ -502,6 +578,7 @@
                 {from: "dmv-renewal@dmv-services.org", to: "driver@email.com", subject: "License Expired", date: "Sun, Dec 01 2025 19:20", body: "Driver license expired.\n\nRenew online: dmv-services.org/renew\n\nFee: $45 + late $25 = $70\n\nRenew now to avoid legal complications.", redFlags: ["Not official state .gov", "Excessive fear tactics"], isPhishing: true, explanation: "DMV websites are state .gov domains (like dps.texas.gov). This domain is not official."},
                 {from: "ecitizen@cityofhouston.gov", to: "resident@email.com", subject: "Utility Bill Reminder", date: "Mon, Dec 02 2025 10:45", body: "City of Houston Public Works\n\nUtility Bill Reminder\n\nAccount: 8472910384\nWater/Wastewater: $45.82\nSolid Waste: $28.50\nTotal: $86.62\n\nDue: Dec 10, 2025\n\nPay at: houstontx.gov/utilities\nPhone: 311 or (713) 837-0311", redFlags: [], isPhishing: false, explanation: "Legitimate from .gov domain, specific account details, multiple official payment options."}
             ]},
+            
             legal: {name: "Legal & Professional Services", questions: [
                 {from: "courtclerk@state-courts.org", to: "defendant@email.com", subject: "COURT SUMMONS - Warrant", date: "Sun, Dec 01 2025 17:30", body: "You are being sued for $12,450.\n\nWarrant issued for failure to appear.\n\nPay $14,950 via wire to cancel warrant.\n\n48 hours or arrest.", redFlags: ["Not official .gov", "Wire transfer for court fines"], isPhishing: true, explanation: "Real court summons served through proper legal channels, NOT email. Courts don't demand wire transfers."},
                 {from: "notices@txcourts.gov", to: "juror@email.com", subject: "Jury Duty Summons", date: "Mon, Dec 02 2025 09:15", body: "Harris County District Court\n\nJury Duty Summons\n\nJuror: 2025-847291\nReport Date: Nov 25, 2025\nReport Time: 8:00 AM\nLocation: 201 Caroline Street, Houston\n\nPostpone: www.txcourts.gov/juryduty\n\nQuestions? (713) 274-8686", redFlags: [], isPhishing: false, explanation: "Legitimate from .gov domain, specific court location. Verify by calling court directly."},
@@ -515,6 +592,125 @@
                 {from: "records@countyclerk.gov", to: "property-owner@email.com", subject: "Property Tax Statement", date: "Mon, Dec 02 2025 09:30", body: "Harris County Tax Assessor\n\nProperty Tax Statement\n\nAccount: 8472910384750\nProperty: 1234 Main St, Houston\nTax Year 2025\n\nTotal Taxes Due: $7,847.50\n\nDue: Nov 15, 2025\n\nPay at: www.hctax.net\nPhone: 713-274-8000", redFlags: [], isPhishing: false, explanation: "Legitimate property tax statement from .gov domain. Verify by visiting county tax website directly."}
             ]}
         };
+
+        // Kids Training Content
+        const kidsTrainingContent = `
+            <div class="training-section">
+                <div class="training-subtitle">🎯 What Are Online Tricks?</div>
+                <p style="line-height: 1.8;">Bad people on the internet try to trick kids into giving away passwords, clicking bad links, or downloading dangerous things. They pretend to be your favorite games, YouTubers, or even your friends! But YOU can learn to spot these tricks!</p>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🚩 The Detective's 5 Super Clues</div>
+                <ul class="training-list">
+                    <li><strong>Too Good to Be True:</strong> "Free 10,000 Robux!" or "You won an iPhone!" - If it sounds impossible, it IS!</li>
+                    <li><strong>Asks for Passwords:</strong> Real companies NEVER ask for your password in emails or messages. NEVER!</li>
+                    <li><strong>Scary or Urgent:</strong> "Your account will be deleted in 24 hours!" - They're trying to scare you into clicking without thinking.</li>
+                    <li><strong>Wrong Website:</strong> roblox-free.NET instead of roblox.COM - Check the ending carefully!</li>
+                    <li><strong>Stranger Danger Online:</strong> If someone you don't know asks you to download something or click a link - DON'T!</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🛡️ Your Detective Powers</div>
+                <ul class="training-list">
+                    <li><strong>STOP:</strong> Don't click or download right away - take a breath!</li>
+                    <li><strong>THINK:</strong> Does this make sense? Is it asking for something it shouldn't?</li>
+                    <li><strong>CHECK:</strong> Look at the email address and website carefully</li>
+                    <li><strong>TELL:</strong> Ask a parent, teacher, or trusted adult if you're not sure</li>
+                    <li><strong>NEVER GIVE:</strong> Passwords, addresses, phone numbers, or your parents' credit card!</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🎮 Common Traps for Kids</div>
+                <ul class="training-list">
+                    <li><strong>Free Robux/V-Bucks Generators:</strong> These are ALWAYS scams - they just want your password!</li>
+                    <li><strong>Fake Giveaways:</strong> Real YouTubers don't ask for money or passwords for giveaways</li>
+                    <li><strong>Scary Account Messages:</strong> Real game companies don't threaten to delete your account in emails</li>
+                    <li><strong>.EXE Downloads:</strong> Never download .exe files from emails or messages - they can be viruses!</li>
+                    <li><strong>Stranger Messages:</strong> Even if they say they're your friend's cousin - if you don't know them, don't trust them!</li>
+                </ul>
+            </div>
+
+            <div class="kids-tip">
+                <strong>🎓 Remember:</strong> You're smarter than the scammers! When something feels weird or wrong, it probably is. Trust your gut and ask an adult. You're not in trouble for asking - you're being a smart detective! 🕵️
+            </div>
+        `;
+
+        // Professional Training Content (Adult Modules)
+        const professionalTrainingContent = `
+            <div class="training-section">
+                <div class="training-subtitle">🎯 What is Phishing?</div>
+                <p style="line-height: 1.8;">Phishing is a cyber attack where criminals impersonate legitimate organizations to trick you into revealing sensitive information, clicking malicious links, or downloading malware. <strong>91% of data breaches start with a phishing email.</strong></p>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🚩 Top 10 Red Flags</div>
+                <ul class="training-list">
+                    <li><strong>Urgency & Pressure:</strong> "Act now!" "Within 24 hours!"</li>
+                    <li><strong>Suspicious Sender:</strong> Check email address for typos (amaz0n.com vs amazon.com)</li>
+                    <li><strong>Generic Greetings:</strong> "Dear Customer" instead of your actual name</li>
+                    <li><strong>Spelling/Grammar Errors:</strong> Professional companies proofread carefully</li>
+                    <li><strong>Requests for Sensitive Info:</strong> NO legit company asks for passwords via email</li>
+                    <li><strong>Suspicious Links:</strong> Hover over links to see the real URL destination</li>
+                    <li><strong>Unexpected Attachments:</strong> Especially .exe, .zip, .scr files</li>
+                    <li><strong>Too Good to Be True:</strong> "You've won $10,000!" or "40% guaranteed returns!"</li>
+                    <li><strong>Threatening Language:</strong> "Account will be closed!" "Legal action pending!"</li>
+                    <li><strong>Mismatched Domains:</strong> Email claims to be from PayPal but sent from paypa1-security.net</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">✅ Best Practices</div>
+                <ul class="training-list">
+                    <li><strong>Verify Before You Click:</strong> Go directly to websites by typing the URL yourself</li>
+                    <li><strong>Use Multi-Factor Authentication (MFA):</strong> Adds an extra security layer</li>
+                    <li><strong>Keep Software Updated:</strong> Security patches protect against new threats</li>
+                    <li><strong>Use Password Managers:</strong> Generate and store unique passwords for every account</li>
+                    <li><strong>Report Suspicious Emails:</strong> Forward to your IT security team immediately</li>
+                    <li><strong>Trust Your Instincts:</strong> If something feels wrong, it probably is</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🎭 Common Attack Techniques</div>
+                <ul class="training-list">
+                    <li><strong>Email Phishing:</strong> Mass emails sent to thousands of targets</li>
+                    <li><strong>Spear Phishing:</strong> Highly targeted attacks using personal information</li>
+                    <li><strong>Whaling:</strong> Attacks specifically targeting executives and high-level personnel</li>
+                    <li><strong>Smishing:</strong> Phishing attacks via SMS text messages</li>
+                    <li><strong>Vishing:</strong> Phone calls from scammers impersonating legitimate organizations</li>
+                    <li><strong>Business Email Compromise (BEC):</strong> Attackers pose as executives requesting wire transfers</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">🛡️ If You Click a Phishing Link - Act Fast!</div>
+                <ul class="training-list">
+                    <li><strong>Don't Panic:</strong> Quick action can minimize damage</li>
+                    <li><strong>Disconnect from Internet:</strong> Prevent malware from spreading or communicating</li>
+                    <li><strong>Don't Enter Credentials:</strong> Close the browser window immediately</li>
+                    <li><strong>Change Passwords:</strong> Use a different, clean device to update passwords</li>
+                    <li><strong>Run Antivirus Scan:</strong> Check for malware installation</li>
+                    <li><strong>Report to IT Security:</strong> Notify your security team right away</li>
+                    <li><strong>Monitor Your Accounts:</strong> Watch for unusual activity or unauthorized access</li>
+                    <li><strong>Enable MFA Everywhere:</strong> Add extra protection layers to all accounts</li>
+                </ul>
+            </div>
+
+            <div class="training-section">
+                <div class="training-subtitle">📞 Important Resources</div>
+                <ul class="training-list">
+                    <li><strong>Federal Trade Commission:</strong> ReportFraud.ftc.gov</li>
+                    <li><strong>IRS Phishing Reports:</strong> phishing@irs.gov</li>
+                    <li><strong>Anti-Phishing Working Group:</strong> reportphishing@apwg.org</li>
+                    <li><strong>Check if You've Been Compromised:</strong> haveibeenpwned.com</li>
+                    <li><strong>Your IT Security Team:</strong> Always your first line of defense!</li>
+                </ul>
+                <div class="tip-box"><strong>🎓 Remember:</strong> Cybersecurity is an ongoing journey, not a destination. Stay vigilant and keep learning!</div>
+            </div>
+        `;
 
         function toggleEmailField() {
             const checkbox = document.getElementById('usePersonalEmail');
@@ -531,6 +727,8 @@
 
         function selectIndustry(industry, el) {
             appState.selectedIndustry = industry;
+            appState.isKidsMode = (industry === 'kids');
+            
             document.querySelectorAll('.industry-card').forEach(card => card.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('continueBtn').disabled = false;
@@ -538,7 +736,14 @@
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+            const targetScreen = document.getElementById(screenId);
+            targetScreen.classList.add('active');
+            
+            // Add kids theme if in kids mode
+            if (appState.isKidsMode && screenId === 'trainingScreen') {
+                targetScreen.classList.add('kids-theme');
+            }
+            
             window.scrollTo(0, 0);
         }
 
@@ -547,12 +752,9 @@
         }
 
         function reviewTrainingFirst() {
-            // Go directly to results screen to show full training module
-            // Set a flag so we know to skip the test
             appState.reviewMode = true;
             appState.score = 0;
             showResults();
-            // Scroll to training module
             setTimeout(() => {
                 const trainingModule = document.getElementById('trainingModule');
                 trainingModule.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -560,7 +762,26 @@
         }
 
         function goToNameEntry() {
-            if (!appState.selectedIndustry) {alert('Please select your industry first!'); return;}
+            if (!appState.selectedIndustry) {
+                alert('Please select your training module first!'); 
+                return;
+            }
+            
+            // Update UI for kids mode
+            if (appState.isKidsMode) {
+                document.getElementById('nameEntryAlert').innerHTML = '<strong>🎮 Get Ready Detective!</strong><br>Tell us your detective name to earn your badge!';
+                document.getElementById('nameLabel').textContent = '🎮 Your Detective Name (First Name)';
+                document.getElementById('userName').placeholder = 'Alex';
+                document.getElementById('emailCheckboxGroup').style.display = 'none';
+                document.getElementById('continueToTrainingBtn').innerHTML = 'Start Detective Training! 🚀';
+            } else {
+                document.getElementById('nameEntryAlert').innerHTML = '<strong>🎖️ Certificate Awaits!</strong><br>Enter your information for your certificate.';
+                document.getElementById('nameLabel').textContent = '👤 Your Full Name';
+                document.getElementById('userName').placeholder = 'John Doe';
+                document.getElementById('emailCheckboxGroup').style.display = 'block';
+                document.getElementById('continueToTrainingBtn').innerHTML = 'Continue →';
+            }
+            
             showScreen('nameEntryScreen');
         }
 
@@ -575,10 +796,10 @@
                 return;
             }
             
-            appState.usePersonalEmail = emailCheckbox.checked;
+            appState.usePersonalEmail = emailCheckbox.checked && !appState.isKidsMode;
             appState.userEmail = '';
             
-            if (emailCheckbox.checked) {
+            if (appState.usePersonalEmail) {
                 const emailValue = emailInput.value.trim();
                 if (!emailValue) {
                     alert('Please enter your email address!');
@@ -591,8 +812,54 @@
                 appState.userEmail = emailValue;
             }
             
-            // Go to Quick Tips screen instead of directly to training
-            showScreen('quickTipsScreen');
+            // Skip quick tips for kids, go straight to training
+            if (appState.isKidsMode) {
+                startKidsTraining();
+            } else {
+                loadQuickTips();
+                showScreen('quickTipsScreen');
+            }
+        }
+
+        function loadQuickTips() {
+            const tipsGrid = document.getElementById('tipsGrid');
+            const tips = [
+                {icon: "⏰", title: "Urgency & Pressure", desc: "\"Act now!\" \"Within 24 hours!\" - Scammers create fake urgency."},
+                {icon: "📧", title: "Suspicious Sender", desc: "Check email carefully: amaz0n.com, paypa1.com - Tiny typos = huge red flags!"},
+                {icon: "👋", title: "Generic Greetings", desc: "\"Dear Customer\" - Legitimate companies use your actual name."},
+                {icon: "🔐", title: "Requests for Credentials", desc: "NO company asks for passwords, SSN, or CVV via email. Ever."},
+                {icon: "🔗", title: "Suspicious Links", desc: "Hover to see real URL. Does it match the sender?"},
+                {icon: "💰", title: "Too Good to Be True", desc: "\"You've won $10,000!\" - If it sounds impossible, it is."},
+                {icon: "⚠️", title: "Threatening Language", desc: "\"Account will be closed!\" - Scare tactics to bypass judgment."},
+                {icon: "📎", title: "Unexpected Attachments", desc: ".exe, .zip, .scr files from unknown senders = DANGER!"}
+            ];
+            
+            tipsGrid.innerHTML = tips.map(tip => `
+                <div class="tip-card">
+                    <div class="tip-icon">${tip.icon}</div>
+                    <div class="tip-title">${tip.title}</div>
+                    <div class="tip-description">${tip.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function startKidsTraining() {
+            appState.currentQuestion = 0;
+            appState.answers = [];
+            appState.score = 0;
+            
+            const industry = questionDatabase[appState.selectedIndustry];
+            document.getElementById('industryTitle').textContent = `${appState.userName}'s Detective Training`;
+            
+            const attemptBadge = document.getElementById('attemptBadge');
+            if (appState.attemptNumber > 1) {
+                attemptBadge.innerHTML = `<div class="attempt-badge">📝 Attempt #${appState.attemptNumber}</div>`;
+            } else {
+                attemptBadge.innerHTML = '';
+            }
+            
+            showScreen('trainingScreen');
+            loadQuestion();
         }
 
         function startFromQuickTips() {
@@ -603,7 +870,6 @@
             const industry = questionDatabase[appState.selectedIndustry];
             document.getElementById('industryTitle').textContent = industry.name + ' Training';
             
-            // Show attempt badge
             const attemptBadge = document.getElementById('attemptBadge');
             if (appState.attemptNumber > 1) {
                 attemptBadge.innerHTML = `<div class="attempt-badge">📝 Attempt #${appState.attemptNumber}</div>`;
@@ -620,16 +886,23 @@
             const question = industry.questions[appState.currentQuestion];
             const questionNum = appState.currentQuestion + 1;
             const total = industry.questions.length;
-            document.getElementById('progressText').textContent = `Question ${questionNum} of ${total}`;
+            
+            document.getElementById('progressText').textContent = appState.isKidsMode 
+                ? `Mission ${questionNum} of ${total}` 
+                : `Question ${questionNum} of ${total}`;
+            
             const progress = (questionNum / total) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
             
-            // Use user's email if they opted in, otherwise use generic email
             const toEmail = appState.usePersonalEmail && appState.userEmail ? appState.userEmail : question.to;
             
+            const questionLabel = appState.isKidsMode 
+                ? `Detective ${appState.userName}, what do YOU think about this email?`
+                : `Question ${questionNum} of ${total}`;
+            
             const html = `
-                <div style="font-size: 16px; color: #667eea; margin-bottom: 20px; font-weight: 700;">
-                    Question ${questionNum} of ${total}
+                <div style="font-size: ${appState.isKidsMode ? '20px' : '16px'}; color: ${appState.isKidsMode ? '#FF6B9D' : '#667eea'}; margin-bottom: 20px; font-weight: 700;">
+                    ${questionLabel}
                 </div>
                 <div class="email-container">
                     <div class="email-header">
@@ -650,8 +923,14 @@
                     <div class="email-body">${question.body.replace(/\n/g, '<br>')}</div>
                 </div>
                 <div class="answer-options">
-                    <button class="answer-btn phishing" onclick="submitAnswer(true)">🚨 PHISHING<br><small>Threat detected!</small></button>
-                    <button class="answer-btn legitimate" onclick="submitAnswer(false)">✅ LEGITIMATE<br><small>Looks safe!</small></button>
+                    <button class="answer-btn phishing" onclick="submitAnswer(true)">
+                        ${appState.isKidsMode ? '🚨 SCAM!' : '🚨 PHISHING'}
+                        <br><small>${appState.isKidsMode ? 'This is a trick!' : 'Threat detected!'}</small>
+                    </button>
+                    <button class="answer-btn legitimate" onclick="submitAnswer(false)">
+                        ${appState.isKidsMode ? '✅ SAFE!' : '✅ LEGITIMATE'}
+                        <br><small>${appState.isKidsMode ? 'This is real!' : 'Looks safe!'}</small>
+                    </button>
                 </div>
                 <div class="feedback" id="feedback"></div>
             `;
@@ -670,49 +949,89 @@
             const feedback = document.getElementById('feedback');
             feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
             
-            let feedbackHTML = `<div class="feedback-title">${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</div>
+            let encouragement = '';
+            if (appState.isKidsMode) {
+                encouragement = isCorrect 
+                    ? `🎉 YES ${appState.userName}! You caught it! You're an amazing detective! ⭐`
+                    : `Good try, ${appState.userName}! This one was tricky! Even expert detectives make mistakes - that's how we learn! 💪`;
+            } else {
+                encouragement = isCorrect ? '✅ Correct!' : '❌ Incorrect';
+            }
+            
+            let feedbackHTML = `<div class="feedback-title">${encouragement}</div>
                 <div style="line-height: 1.8; margin-bottom: 20px; font-size: 17px; font-weight: 600;">
                     <strong>💡 Explanation:</strong> ${question.explanation}
                 </div>`;
             
             if (question.redFlags && question.redFlags.length > 0) {
                 feedbackHTML += `<div style="background: white; padding: 20px; border-radius: 12px;">
-                    <div style="font-weight: 900; margin-bottom: 15px; color: #dc3545; font-size: 18px;">🚩 Red Flags:</div>
+                    <div style="font-weight: 900; margin-bottom: 15px; color: #dc3545; font-size: 18px;">🚩 ${appState.isKidsMode ? 'Warning Signs' : 'Red Flags'}:</div>
                     <ul style="list-style-position: inside; color: #333; font-weight: 600;">
                         ${question.redFlags.map(flag => `<li style="margin-bottom: 8px;">${flag}</li>`).join('')}
                     </ul>
                 </div>`;
             }
             
+            // Show progress for kids
+            if (appState.isKidsMode) {
+                const progressMsg = getKidsProgressMessage(appState.score, appState.currentQuestion + 1);
+                if (progressMsg) {
+                    const progressDiv = document.getElementById('progressMessage');
+                    progressDiv.textContent = progressMsg;
+                    progressDiv.style.display = 'block';
+                    setTimeout(() => {
+                        progressDiv.style.display = 'none';
+                    }, 3000);
+                }
+            }
+            
             feedback.innerHTML = feedbackHTML;
-            document.querySelectorAll('.answer-btn').forEach(btn => {btn.disabled = true; btn.style.opacity = '0.6';});
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.disabled = true; 
+                btn.style.opacity = '0.6';
+            });
             
             if (appState.currentQuestion < industry.questions.length - 1) {
                 document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('nextBtn').textContent = appState.isKidsMode ? `Next Mission! (${appState.score}/${appState.currentQuestion + 1} correct so far!) →` : 'Next Question →';
             } else {
                 document.getElementById('finishBtn').style.display = 'block';
+                document.getElementById('finishBtn').textContent = appState.isKidsMode ? '🎉 See My Badge! →' : 'View Results →';
             }
         }
 
-        function nextQuestion() {appState.currentQuestion++; loadQuestion();}
-        function finishTraining() {showResults();}
+        function getKidsProgressMessage(score, totalAnswered) {
+            if (score >= 3 && totalAnswered === 3) return `🥉 Awesome ${appState.userName}! You're earning your Bronze Badge!`;
+            if (score >= 5 && totalAnswered === 5) return `🥈 Incredible ${appState.userName}! Silver Detective!`;
+            if (score >= 7 && totalAnswered === 7) return `🥇 Amazing ${appState.userName}! Gold Detective!`;
+            if (score === 10 && totalAnswered === 10) return `🏆 WOW ${appState.userName}! You're a MASTER CYBER DETECTIVE!`;
+            return null;
+        }
+
+        function nextQuestion() {
+            appState.currentQuestion++; 
+            loadQuestion();
+        }
+        
+        function finishTraining() {
+            showResults();
+        }
 
         function showResults() {
-            // Check if in review mode (user clicked "Review Training First")
             if (appState.reviewMode) {
                 appState.reviewMode = false;
-                // Hide stats, certificate, and score comparison when in review mode
                 document.getElementById('scoreComparison').style.display = 'none';
                 document.querySelector('.stats-grid').style.display = 'none';
                 document.getElementById('resultMessage').style.display = 'none';
                 document.getElementById('failureMessage').style.display = 'none';
                 document.getElementById('certificateSection').style.display = 'none';
                 document.getElementById('passedButtons').style.display = 'none';
-                
-                // Show training module
+                document.getElementById('badgeDisplay').style.display = 'none';
                 document.getElementById('trainingModule').style.display = 'block';
                 
-                // Add a "Start Training" button at the top
+                const trainingContent = document.getElementById('trainingContent');
+                trainingContent.innerHTML = appState.isKidsMode ? kidsTrainingContent : professionalTrainingContent;
+                
                 const header = document.querySelector('#resultsScreen .header');
                 header.innerHTML = `
                     <div class="logo">🛡️ CYBER DRILL AI 🛡️</div>
@@ -734,7 +1053,37 @@
             const correct = appState.score;
             const percentage = Math.round((correct / total) * 100);
             
-            // Show score comparison if this is a retry
+            // Load training content
+            const trainingContent = document.getElementById('trainingContent');
+            trainingContent.innerHTML = appState.isKidsMode ? kidsTrainingContent : professionalTrainingContent;
+            
+            // Apply kids theme if needed
+            const resultsScreen = document.getElementById('resultsScreen');
+            const certificate = document.getElementById('certificateSection');
+            if (appState.isKidsMode) {
+                resultsScreen.classList.add('kids-theme');
+                certificate.classList.add('kids-cert');
+                document.getElementById('resultsTagline').textContent = `🎉 Way to Go, Detective ${appState.userName}! 🎉`;
+                document.getElementById('gradeLabel').textContent = 'Badge';
+                
+                // Show badge with animation
+                const badgeDisplay = document.getElementById('badgeDisplay');
+                const badge = getBadge(correct);
+                badgeDisplay.innerHTML = badge.icon;
+                badgeDisplay.style.display = 'block';
+                
+                document.getElementById('parentNote').style.display = 'block';
+                document.getElementById('certChildName').textContent = appState.userName;
+            } else {
+                resultsScreen.classList.remove('kids-theme');
+                certificate.classList.remove('kids-cert');
+                document.getElementById('resultsTagline').textContent = 'Training Complete!';
+                document.getElementById('gradeLabel').textContent = 'Grade';
+                document.getElementById('badgeDisplay').style.display = 'none';
+                document.getElementById('parentNote').style.display = 'none';
+            }
+            
+            // Score comparison for retries
             const comparisonDiv = document.getElementById('scoreComparison');
             if (appState.previousScore !== null && appState.attemptNumber > 1) {
                 const improvement = percentage - appState.previousScore;
@@ -761,23 +1110,34 @@
             document.getElementById('correctValue').textContent = `${correct}/${total}`;
             
             let grade, message, messageType;
-            if (percentage >= 90) {
-                grade = 'A+'; message = '🏆 Outstanding! Excellent phishing detection skills!'; messageType = 'success';
-            } else if (percentage >= 80) {
-                grade = 'A'; message = '🌟 Great work! You caught most threats!'; messageType = 'success';
-            } else if (percentage >= 70) {
-                grade = 'B'; message = '👍 Good job! You\'re getting there!'; messageType = 'info';
-            } else if (percentage >= 60) {
-                grade = 'C'; message = '📚 Passing! But there\'s room to improve.'; messageType = 'info';
+            
+            if (appState.isKidsMode) {
+                const badge = getBadge(correct);
+                grade = badge.icon;
+                message = badge.message.replace('{name}', appState.userName);
+                messageType = badge.type;
+                
+                document.getElementById('certBadgeLine').style.display = 'block';
+                document.getElementById('certBadge').textContent = badge.name;
             } else {
-                grade = 'F'; message = '⚠️ More practice needed. Review the training module!'; messageType = 'info';
+                if (percentage >= 90) {
+                    grade = 'A+'; message = '🏆 Outstanding! Excellent phishing detection skills!'; messageType = 'success';
+                } else if (percentage >= 80) {
+                    grade = 'A'; message = '🌟 Great work! You caught most threats!'; messageType = 'success';
+                } else if (percentage >= 70) {
+                    grade = 'B'; message = '👍 Good job! You\'re getting there!'; messageType = 'info';
+                } else if (percentage >= 60) {
+                    grade = 'C'; message = '📚 Passing! But there\'s room to improve.'; messageType = 'info';
+                } else {
+                    grade = 'F'; message = '⚠️ More practice needed. Review the training module!'; messageType = 'info';
+                }
+                document.getElementById('certBadgeLine').style.display = 'none';
             }
             
             document.getElementById('gradeValue').textContent = grade;
             document.getElementById('resultMessage').className = `alert alert-${messageType}`;
             document.getElementById('resultMessage').textContent = message;
             
-            // Show retry option if score is below 70%
             const failureMessage = document.getElementById('failureMessage');
             const certificateSection = document.getElementById('certificateSection');
             const passedButtons = document.getElementById('passedButtons');
@@ -796,6 +1156,14 @@
             showScreen('resultsScreen');
         }
 
+        function getBadge(score) {
+            if (score === 10) return {icon: '🏆', name: 'Master Detective', message: '🏆 PERFECT SCORE, {name}! You\'re a MASTER CYBER DETECTIVE! 🎉', type: 'success'};
+            if (score >= 7) return {icon: '🥇', name: 'Gold Detective', message: '🥇 Amazing work, {name}! You\'re a GOLD Detective! 🌟', type: 'success'};
+            if (score >= 5) return {icon: '🥈', name: 'Silver Detective', message: '🥈 Great job, {name}! You\'re a SILVER Detective! ⭐', type: 'success'};
+            if (score >= 3) return {icon: '🥉', name: 'Bronze Detective', message: '🥉 Good start, {name}! You\'re a BRONZE Detective! Keep practicing! 💪', type: 'info'};
+            return {icon: '🎯', name: 'Junior Detective', message: '🎯 Keep learning, {name}! You\'re on your way to being a great detective! 📚', type: 'info'};
+        }
+
         function generateCertificate(score) {
             const industryData = questionDatabase[appState.selectedIndustry];
             const date = new Date().toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'});
@@ -806,6 +1174,14 @@
             document.getElementById('certScore').textContent = score + '%';
             document.getElementById('certDate').textContent = date;
             document.getElementById('certId').textContent = certId;
+            
+            if (appState.isKidsMode) {
+                document.getElementById('certHeader').style.background = 'linear-gradient(135deg, #FF6B9D 0%, #FFA500 50%, #4CAF50 100%)';
+                document.getElementById('certHeader').style.webkitBackgroundClip = 'text';
+                document.getElementById('certHeader').style.webkitTextFillColor = 'transparent';
+                document.getElementById('certHeader').textContent = '🏆 CYBER DETECTIVE BADGE 🏆';
+                document.getElementById('certCompletionText').textContent = `is now an official Cyber Detective!`;
+            }
         }
 
         function scrollToTraining() {
@@ -814,20 +1190,17 @@
         }
 
         function retryTraining() {
-            // Save current score for comparison
             appState.previousScore = Math.round((appState.score / questionDatabase[appState.selectedIndustry].questions.length) * 100);
             appState.attemptNumber++;
-            
-            // Reset question state but keep user info and industry selection
             appState.currentQuestion = 0;
             appState.answers = [];
             appState.score = 0;
             
-            // Go back to training screen
             const industry = questionDatabase[appState.selectedIndustry];
-            document.getElementById('industryTitle').textContent = industry.name + ' Training';
+            document.getElementById('industryTitle').textContent = appState.isKidsMode 
+                ? `${appState.userName}'s Detective Training` 
+                : industry.name + ' Training';
             
-            // Show attempt badge
             const attemptBadge = document.getElementById('attemptBadge');
             attemptBadge.innerHTML = `<div class="attempt-badge">📝 Attempt #${appState.attemptNumber}</div>`;
             
@@ -846,7 +1219,8 @@
                 score: 0,
                 attemptNumber: 1,
                 previousScore: null,
-                reviewMode: false
+                reviewMode: false,
+                isKidsMode: false
             };
             document.querySelectorAll('.industry-card').forEach(card => card.classList.remove('selected'));
             document.getElementById('continueBtn').disabled = true;
@@ -856,15 +1230,15 @@
         }
 
         function goBackToStartTraining() {
-            // User finished reviewing training material, now start the actual test
             appState.currentQuestion = 0;
             appState.answers = [];
             appState.score = 0;
             
             const industry = questionDatabase[appState.selectedIndustry];
-            document.getElementById('industryTitle').textContent = industry.name + ' Training';
+            document.getElementById('industryTitle').textContent = appState.isKidsMode 
+                ? `${appState.userName}'s Detective Training` 
+                : industry.name + ' Training';
             
-            // Show attempt badge
             const attemptBadge = document.getElementById('attemptBadge');
             if (appState.attemptNumber > 1) {
                 attemptBadge.innerHTML = `<div class="attempt-badge">📝 Attempt #${appState.attemptNumber}</div>`;
@@ -876,10 +1250,30 @@
             loadQuestion();
         }
 
-        console.log('🛡️ CYBER DRILL AI - Enhanced Training System');
-        console.log('✅ 8 Industries × 10 Questions = 80 Total');
-        console.log('📧 Optional email personalization');
-        console.log('🔄 Retry after study feature');
+        console.log('🛡️ CYBER DRILL AI - Complete Training Ecosystem Loaded');
+        console.log('✅ 10 Training Modules (9 Professional + Kids)');
+        console.log('✅ 100 Real-World Email Scenarios');
+        console.log('✅ Complete Education Coverage');
+        console.log('✅ Google Analytics: G-8LQPY2BVT7');
+        console.log('✅ Statcounter: Project #13189683');
     </script>
+
+    <!-- Default Statcounter code for Cyber Drill AI http://www.cyberdrill.ai -->
+    <script type="text/javascript">
+    var sc_project=13189683; 
+    var sc_invisible=1; 
+    var sc_security="75303770"; 
+    </script>
+    <script type="text/javascript"
+    src="https://www.statcounter.com/counter/counter.js"
+    async></script>
+    <noscript><div class="statcounter"><a title="free web stats"
+    href="https://statcounter.com/" target="_blank"><img
+    class="statcounter"
+    src="https://c.statcounter.com/13189683/0/75303770/1/"
+    alt="free web stats"
+    referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+    <!-- End of Statcounter Code -->
+
 </body>
 </html>
