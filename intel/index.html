@@ -1,1 +1,1244 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Complete Intelligence Suite | Zaheer Syed</title>
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9K8SQ2M2RC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9K8SQ2M2RC');
+  </script>
+  
+  <!-- Tailwind CSS CDN - Using CDN for simplified deployment of internal tool -->
+  <!-- For production optimization, consider Tailwind CLI: https://tailwindcss.com/docs/installation -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.10.51/bundle/libphonenumber-js.min.js"></script>
+  <style>
+    .badge{border-radius:9999px;padding:.125rem .5rem;font-size:.75rem;font-weight:600}
+    .tab-active{border-bottom:3px solid #4f46e5;color:#4f46e5;font-weight:700}
+    .spinner{border:3px solid #f3f4f6;border-top:3px solid #4f46e5;border-radius:50%;width:20px;height:20px;animation:spin 1s linear infinite;display:inline-block}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    @media print{.no-print{display:none !important}}
+  </style>
+</head>
+<body class="bg-gradient-to-b from-slate-50 to-indigo-50 text-gray-900 min-h-screen">
+  
+  <!-- Login Screen -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-6">
+    <div class="bg-white shadow-2xl rounded-3xl p-8 max-w-md w-full border-2 border-indigo-200">
+      <div class="text-center mb-8">
+        <div class="text-6xl mb-4">🔐</div>
+        <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-amber-500 mb-2">
+          Intelligence Suite
+        </h1>
+        <p class="text-sm text-gray-600 mb-4">Secure Access Portal</p>
+        
+        <!-- Description Box -->
+        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 text-left border border-indigo-200">
+          <h3 class="font-bold text-indigo-900 text-sm mb-2">🛡️ Cybersecurity Intelligence Tools</h3>
+          <p class="text-xs text-gray-700 mb-3">
+            A comprehensive suite of threat intelligence and analysis tools for cybersecurity professionals.
+          </p>
+          <div class="space-y-2 text-xs text-gray-600">
+            <div class="flex items-start gap-2">
+              <span class="text-base">📞</span>
+              <div>
+                <strong>Phone Lookup:</strong> Identify carrier, location, and validate phone numbers
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-base">🌐</span>
+              <div>
+                <strong>Domain Analysis:</strong> WHOIS lookup, DNS records, IP geolocation
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-base">📧</span>
+              <div>
+                <strong>Email Header Analyzer:</strong> Detect phishing, verify authentication (SPF/DKIM/DMARC)
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-indigo-200 text-xs text-gray-500 italic">
+            Part of Cyber Drill AI - Aviva Metals Cybersecurity Training Platform
+          </div>
+        </div>
+      </div>
+      
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+          <input 
+            type="text" 
+            id="loginUsername"
+            class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter username"
+            required
+          />
+        </div>
+        
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+          <input 
+            type="password" 
+            id="loginPassword"
+            class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        
+        <div id="loginError" class="hidden p-3 bg-red-50 border-2 border-red-300 rounded-xl text-red-700 text-sm"></div>
+        
+        <button 
+          type="submit"
+          class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-6 py-3 font-bold shadow-lg"
+        >
+          🔓 Login
+        </button>
+      </form>
+      
+      <div class="mt-6 text-center text-xs text-gray-500">
+        <p>Authorized Access Only</p>
+        <p class="mt-1">© 2025 Zaheer Syed | Cyber Drill AI™ for Aviva Metals</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application (Hidden until logged in) -->
+  <div id="mainApp" class="hidden">
+  <div class="max-w-7xl mx-auto p-6">
+    
+    <!-- Header -->
+    <header class="mb-6">
+      <div class="flex items-start md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-amber-500">
+            Complete Intelligence Suite
+          </h1>
+          <p class="text-sm text-gray-600 mt-2">
+            📞 Phone Lookup • 🌐 Domain Analysis • 📧 Email Header Analyzer • Powered by Google Apps Script
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="text-xs px-3 py-1 rounded-full bg-green-600 text-white whitespace-nowrap">
+            👤 <span id="loggedInUser"></span>
+          </div>
+          <button 
+            onclick="handleLogout()"
+            class="text-xs px-3 py-1 rounded-full bg-red-600 hover:bg-red-700 text-white whitespace-nowrap"
+          >
+            🚪 Logout
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Disclaimer -->
+    <div class="mb-6 p-4 bg-amber-50 border-2 border-amber-400 rounded-xl">
+      <div class="flex items-start gap-3">
+        <span class="text-2xl">⚠️</span>
+        <div class="flex-1">
+          <h3 class="font-bold text-amber-900 text-sm mb-2">Important Disclaimer</h3>
+          <div class="text-xs text-amber-800 space-y-1">
+            <p><strong>For Internal Use Only:</strong> This tool is provided for legitimate cybersecurity and threat intelligence purposes at Aviva Metals.</p>
+            <p><strong>Data Accuracy:</strong> Information is sourced from public databases and APIs. Always verify critical findings through multiple sources.</p>
+            <p><strong>Privacy & Legal:</strong> Use only for authorized security investigations. Respect privacy laws and company policies. Do not use for harassment, stalking, or unauthorized surveillance.</p>
+            <p><strong>No Warranty:</strong> This tool is provided "as is" without guarantees. Results should be used as investigative aids, not definitive conclusions.</p>
+            <p><strong>Responsible Use:</strong> Users are responsible for ethical and legal use of this intelligence suite.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backend Setup (One-Time) -->
+    <div id="setupBox" class="mb-6 p-5 bg-blue-50 border-2 border-blue-400 rounded-xl">
+      <div class="flex items-start gap-3">
+        <span class="text-3xl">⚙️</span>
+        <div class="flex-1">
+          <h3 class="font-bold text-blue-900 text-lg mb-2">📍 Google Apps Script Backend URL</h3>
+          <p class="text-sm text-blue-800 mb-3">
+            Paste your Google Apps Script deployment URL below (one-time setup for automatic carrier detection):
+          </p>
+          <div class="flex gap-3">
+            <input 
+              id="backendUrlInput" 
+              type="text"
+              placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"
+              class="flex-1 border-2 border-blue-300 rounded-lg px-4 py-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button 
+              onclick="saveBackendUrl()" 
+              class="bg-green-600 hover:bg-green-700 text-white rounded-lg px-6 py-2 font-bold whitespace-nowrap"
+            >
+              ✓ Save URL
+            </button>
+          </div>
+          <p class="text-xs text-blue-700 mt-2">💾 Auto-saves in browser • Required for phone carrier detection</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backend Status -->
+    <div id="backendStatus" class="hidden mb-6 p-4 rounded-xl"></div>
+
+    <!-- Tabs -->
+    <div class="mb-6 flex gap-4 border-b-2 border-gray-200 overflow-x-auto">
+      <button id="tabPhone" class="px-4 py-3 tab-active transition-all whitespace-nowrap" onclick="switchTab('phone')">
+        📞 Phone Lookup
+      </button>
+      <button id="tabDomain" class="px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap" onclick="switchTab('domain')">
+        🌐 Domain Check
+      </button>
+      <button id="tabEmail" class="px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap" onclick="switchTab('email')">
+        📧 Email Headers
+      </button>
+    </div>
+
+    <!-- ========== PHONE LOOKUP SECTION ========== -->
+    <div id="sectionPhone">
+      <section class="bg-white shadow-xl rounded-2xl p-6 border-2 border-indigo-200">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-900">📞 Phone Number Intelligence</h2>
+        
+        <form id="phoneForm" class="flex flex-col md:flex-row gap-3 mb-4">
+          <input 
+            id="phoneInput" 
+            class="flex-1 border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+            placeholder="e.g., +1-713-555-1234" 
+            required 
+          />
+          <button 
+            type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-8 py-3 font-bold shadow-lg"
+          >
+            🔍 Lookup Phone
+          </button>
+        </form>
+
+        <!-- Phone Loading -->
+        <div id="phoneLoading" class="hidden mt-6 p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
+          <div class="flex items-center gap-3">
+            <div class="spinner"></div>
+            <span class="font-bold text-blue-900">Analyzing phone number...</span>
+          </div>
+        </div>
+
+        <!-- Phone Error -->
+        <div id="phoneError" class="hidden mt-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="text-3xl">⚠️</span>
+            <div>
+              <h4 class="font-bold text-red-900">Error</h4>
+              <p class="text-sm text-red-700 mt-1" id="phoneErrorMsg"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone Results -->
+        <div id="phoneResults" class="hidden mt-6 space-y-6">
+          
+          <!-- Summary -->
+          <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-400 rounded-xl p-6">
+            <h3 class="text-2xl font-bold mb-2 text-green-900">✅ Phone Lookup Complete!</h3>
+            <div id="phoneSummary" class="text-gray-700 mb-3"></div>
+            <div class="flex flex-wrap gap-2" id="phoneBadges"></div>
+          </div>
+
+          <!-- Phone Details -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">📱 Number Information</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">International</div>
+                <div id="phoneIntl" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">National</div>
+                <div id="phoneNational" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Country</div>
+                <div id="phoneCountry" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Type</div>
+                <div id="phoneType" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Area Code</div>
+                <div id="phoneArea" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Valid</div>
+                <div id="phoneValid" class="font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carrier Info -->
+          <div class="border-4 border-green-500 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6">
+            <h3 class="text-2xl font-bold text-green-900 mb-4">📡 Carrier & Owner Information</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-4 bg-white border-2 border-green-300 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1">Carrier / Provider</div>
+                <div id="phoneCarrier" class="font-bold text-xl text-green-900">—</div>
+              </div>
+              <div class="p-4 bg-white border-2 border-green-300 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1">Line Type</div>
+                <div id="phoneLineType" class="font-bold text-lg">—</div>
+              </div>
+              <div class="p-4 bg-white border-2 border-green-300 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1">Owner Name (CNAM)</div>
+                <div id="phoneOwner" class="font-bold text-lg">—</div>
+              </div>
+              <div class="p-4 bg-white border-2 border-green-300 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1">Data Sources</div>
+                <div id="phoneSources" class="text-xs font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🌍 Location</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">City</div>
+                <div id="phoneCity" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">State/Region</div>
+                <div id="phoneState" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Timezone</div>
+                <div id="phoneTimezone" class="font-semibold text-sm">—</div>
+              </div>
+            </div>
+            <div id="phoneMapWrap" class="mt-4 hidden">
+              <div id="phoneMap" class="h-64 rounded-lg border-2"></div>
+            </div>
+          </div>
+
+          <!-- Manual Search -->
+          <div class="border-2 border-indigo-400 bg-indigo-50 rounded-xl p-5">
+            <h3 class="text-lg font-bold text-indigo-900 mb-2">🔍 Additional Database Search</h3>
+            <p class="text-sm text-indigo-800 mb-3">
+              Search 6 databases for spam reports, user comments, and additional details:
+            </p>
+            <button 
+              onclick="searchPhoneDatabases()" 
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-6 py-3 font-bold"
+            >
+              🚀 Search Truecaller, WhitePages & More
+            </button>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== DOMAIN CHECK SECTION ========== -->
+    <div id="sectionDomain" class="hidden">
+      <section class="bg-white shadow-xl rounded-2xl p-6 border-2 border-indigo-200">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-900">🌐 Domain WHOIS & DNS Lookup</h2>
+        
+        <form id="domainForm" class="flex flex-col md:flex-row gap-3 mb-4">
+          <input 
+            id="domainInput" 
+            class="flex-1 border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+            placeholder="e.g., google.com" 
+            required 
+          />
+          <button 
+            type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-8 py-3 font-bold shadow-lg"
+          >
+            🔍 Check Domain
+          </button>
+        </form>
+
+        <div id="domainLoading" class="hidden mt-6 p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
+          <div class="flex items-center gap-3">
+            <div class="spinner"></div>
+            <span class="font-bold text-blue-900">Analyzing domain...</span>
+          </div>
+        </div>
+
+        <div id="domainError" class="hidden mt-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+          <span class="text-red-700" id="domainErrorMsg"></span>
+        </div>
+
+        <div id="domainResults" class="hidden mt-6 space-y-6">
+          
+          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-300 rounded-xl p-6">
+            <h3 class="text-xl font-bold mb-2">Domain Information</h3>
+            <div id="domainSummary" class="text-gray-700 mb-3"></div>
+            <div class="flex flex-wrap gap-2" id="domainBadges"></div>
+          </div>
+
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">📋 WHOIS / RDAP Data</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Domain Name</div>
+                <div id="domainName" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Registrar</div>
+                <div id="domainRegistrar" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Created</div>
+                <div id="domainCreated" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Expires</div>
+                <div id="domainExpires" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Updated</div>
+                <div id="domainUpdated" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Status</div>
+                <div id="domainStatus" class="font-semibold text-xs">—</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🌍 DNS & Hosting</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">IPv4</div>
+                <div id="domainIPv4" class="font-mono text-sm font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">IPv6</div>
+                <div id="domainIPv6" class="font-mono text-xs font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Country</div>
+                <div id="domainCountry" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">City / Region</div>
+                <div id="domainCity" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Provider / ISP</div>
+                <div id="domainOrg" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">ASN</div>
+                <div id="domainASN" class="font-semibold">—</div>
+              </div>
+            </div>
+            <div id="domainMapWrap" class="mt-4 hidden">
+              <div id="domainMap" class="h-64 rounded-lg border-2"></div>
+            </div>
+          </div>
+
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-3">📡 Nameservers</h3>
+            <div id="domainNameservers" class="font-mono text-sm text-gray-700 whitespace-pre-wrap">—</div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== EMAIL HEADER ANALYZER ========== -->
+    <div id="sectionEmail" class="hidden">
+      <section class="bg-white shadow-xl rounded-2xl p-6 border-2 border-indigo-200">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-900">📧 Email Header Analyzer</h2>
+        
+        <!-- Tab Selection for Input Method -->
+        <div class="mb-6 flex gap-2 border-b-2 border-gray-200">
+          <button 
+            id="emailInputMethodPaste" 
+            class="px-4 py-2 border-b-2 border-indigo-600 text-indigo-600 font-semibold transition-all"
+            onclick="switchEmailInputMethod('paste')"
+          >
+            📋 Paste Headers
+          </button>
+          <button 
+            id="emailInputMethodUpload" 
+            class="px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all"
+            onclick="switchEmailInputMethod('upload')"
+          >
+            📎 Upload .eml File
+          </button>
+        </div>
+
+        <!-- Paste Method -->
+        <div id="emailPasteMethod" class="mb-4">
+          <label class="block text-sm font-bold text-gray-700 mb-2">
+            📋 Paste Email Headers Below (Right-click email → View Source or Properties)
+          </label>
+          <textarea 
+            id="emailHeaderInput" 
+            rows="12"
+            class="w-full border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm" 
+            placeholder="Paste full email headers here...
+
+Example headers to look for:
+From: sender@example.com
+To: recipient@example.com
+Subject: Test Email
+Date: Wed, 15 Jan 2026 10:30:00 +0000
+Message-ID: <abc123@example.com>
+Received: from mail.example.com...
+X-Originating-IP: [123.456.789.0]
+DKIM-Signature: ...
+SPF: Pass
+DMARC: Pass"
+          ></textarea>
+        </div>
+
+        <!-- Upload Method -->
+        <div id="emailUploadMethod" class="hidden mb-4">
+          <label class="block text-sm font-bold text-gray-700 mb-2">
+            📎 Upload Email File (.eml, .html, or .txt)
+          </label>
+          <div class="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+            <p class="text-blue-800"><strong>💡 How to save emails for upload:</strong></p>
+            <ul class="list-disc ml-5 mt-2 text-blue-700 space-y-1">
+              <li><strong>Gmail:</strong> Open email → ⋮ (three dots) → "Download message" (saves as .eml)</li>
+              <li><strong>Outlook:</strong> 
+                <ul class="list-circle ml-4 mt-1">
+                  <li><strong>Best:</strong> File → Save As → "HTML" (NOT "Web Page, Filtered") - saves single .html file</li>
+                  <li><strong>Alternative:</strong> File → Properties → Copy "Internet Headers" → Paste in tool</li>
+                </ul>
+              </li>
+              <li><strong>Apple Mail:</strong> File → Save As → Format: "Raw Message Source" (saves as .eml)</li>
+            </ul>
+            <p class="text-blue-700 mt-2 text-xs"><strong>✅ Supported:</strong> .eml, .html, .htm, .txt (single file)</p>
+            <p class="text-red-700 mt-1 text-xs"><strong>⚠️ NOT Supported:</strong> .msg files or multi-file HTML exports</p>
+          </div>
+          <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center bg-gray-50 hover:bg-gray-100 transition-all">
+            <input 
+              type="file" 
+              id="emailFileInput" 
+              accept=".eml,.html,.htm,.txt" 
+              class="hidden"
+              onchange="handleEmailFileUpload(event)"
+            />
+            <label for="emailFileInput" class="cursor-pointer">
+              <div class="text-5xl mb-3">📧</div>
+              <div class="text-lg font-semibold text-gray-700 mb-2">
+                Click to upload email file
+              </div>
+              <div class="text-sm text-gray-500">
+                Supports .eml, .html, .htm, and .txt files
+              </div>
+              <div class="text-xs text-gray-400 mt-2">
+                If Outlook creates multiple files, use the "Paste Headers" method instead
+              </div>
+              <div id="uploadedFileName" class="hidden mt-3 text-sm font-semibold text-indigo-600">
+                ✓ File loaded: <span id="fileName"></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <button 
+          onclick="analyzeEmailHeaders()"
+          class="w-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-8 py-4 font-bold shadow-lg text-lg mb-4"
+        >
+          🔍 Analyze Email Headers
+        </button>
+
+        <div id="emailError" class="hidden mt-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+          <span class="text-red-700" id="emailErrorMsg"></span>
+        </div>
+
+        <div id="emailResults" class="hidden mt-6 space-y-6">
+          
+          <!-- Security Assessment -->
+          <div id="emailSecurityBox" class="border-4 rounded-xl p-6">
+            <h3 class="text-2xl font-bold mb-3">🛡️ Security Assessment</h3>
+            <div id="emailSecurityScore" class="text-4xl font-bold mb-3">—</div>
+            <div id="emailSecurityDetails" class="space-y-2"></div>
+          </div>
+
+          <!-- Sender Information -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">📤 Sender Information</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">From Address</div>
+                <div id="emailFrom" class="font-semibold break-all">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Reply-To</div>
+                <div id="emailReplyTo" class="font-semibold break-all">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Return-Path</div>
+                <div id="emailReturnPath" class="font-semibold break-all">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Originating IP</div>
+                <div id="emailOriginIP" class="font-mono font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Authentication -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🔐 Email Authentication</h3>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-2 font-semibold">SPF (Sender Policy Framework)</div>
+                <div id="emailSPF" class="text-lg font-bold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-2 font-semibold">DKIM (DomainKeys)</div>
+                <div id="emailDKIM" class="text-lg font-bold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-2 font-semibold">DMARC (Domain Auth)</div>
+                <div id="emailDMARC" class="text-lg font-bold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message Details -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">📋 Message Details</h3>
+            <div class="space-y-3">
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Subject</div>
+                <div id="emailSubject" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Message-ID</div>
+                <div id="emailMessageID" class="font-mono text-sm break-all">—</div>
+              </div>
+              <div class="p-3 bg-gray-50 rounded">
+                <div class="text-gray-500 text-xs mb-1">Date Sent</div>
+                <div id="emailDate" class="font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Routing Path -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🔀 Email Routing Path</h3>
+            <div id="emailReceived" class="space-y-2 font-mono text-xs">—</div>
+          </div>
+
+          <!-- Red Flags -->
+          <div id="emailRedFlags" class="hidden border-4 border-red-500 bg-red-50 rounded-xl p-6">
+            <h3 class="text-xl font-bold text-red-900 mb-3">🚨 Security Red Flags Detected</h3>
+            <ul id="emailRedFlagsList" class="list-disc ml-5 space-y-1 text-red-800"></ul>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-10 text-center text-sm text-gray-600 pb-6">
+      <p class="font-bold text-lg">Complete Intelligence Suite</p>
+      <p class="mt-1">© 2025 Zaheer Syed | <b>Cyber Drill AI™</b> for Aviva Metals</p>
+      <p class="text-xs mt-1">Phone • Domain • Email Analysis • Powered by Google Apps Script</p>
+    </footer>
+
+  </div>
+  </div>
+  <!-- End Main App -->
+
+  <script>
+    // ==================== AUTHENTICATION SYSTEM ====================
+    
+    // User credentials (In production, move this to server-side)
+    const AUTHORIZED_USERS = {
+      'aviva': 'CyberDrill2026!',
+      'zaheer': 'Intel@Suite2026',
+      'admin': 'SecureAccess#2026'
+    };
+    
+    // Check if user is already logged in
+    function checkAuth() {
+      const loggedInUser = sessionStorage.getItem('intelSuiteUser');
+      if (loggedInUser) {
+        showMainApp(loggedInUser);
+      }
+    }
+    
+    // Handle login
+    function handleLogin(event) {
+      event.preventDefault();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      if (AUTHORIZED_USERS[username] && AUTHORIZED_USERS[username] === password) {
+        sessionStorage.setItem('intelSuiteUser', username);
+        showMainApp(username);
+      } else {
+        document.getElementById('loginError').textContent = '❌ Invalid username or password';
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    }
+    
+    // Show main application
+    function showMainApp(username) {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('mainApp').classList.remove('hidden');
+      document.getElementById('loggedInUser').textContent = username;
+    }
+    
+    // Handle logout
+    function handleLogout() {
+      sessionStorage.removeItem('intelSuiteUser');
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('mainApp').classList.add('hidden');
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginError').classList.add('hidden');
+    }
+    
+    // Check authentication on page load
+    window.addEventListener('DOMContentLoaded', checkAuth);
+    
+    // ==================== MAIN APPLICATION CODE ====================
+    
+    // Global state
+    let backendUrl = localStorage.getItem('phoneBackendUrl') || '';
+    let phoneMap = null;
+    let domainMap = null;
+    let currentPhoneData = null;
+
+    // Area code database
+    const areaCodeDB = {
+      '201': {city: 'Jersey City', state: 'NJ', tz: 'America/New_York', coords: [40.7178, -74.0431]},
+      '202': {city: 'Washington', state: 'DC', tz: 'America/New_York', coords: [38.9072, -77.0369]},
+      '212': {city: 'New York', state: 'NY', tz: 'America/New_York', coords: [40.7128, -74.0060]},
+      '213': {city: 'Los Angeles', state: 'CA', tz: 'America/Los_Angeles', coords: [34.0522, -118.2437]},
+      '214': {city: 'Dallas', state: 'TX', tz: 'America/Chicago', coords: [32.7767, -96.7970]},
+      '281': {city: 'Houston', state: 'TX', tz: 'America/Chicago', coords: [29.7604, -95.3698]},
+      '305': {city: 'Miami', state: 'FL', tz: 'America/New_York', coords: [25.7617, -80.1918]},
+      '310': {city: 'Los Angeles', state: 'CA', tz: 'America/Los_Angeles', coords: [34.0522, -118.2437]},
+      '312': {city: 'Chicago', state: 'IL', tz: 'America/Chicago', coords: [41.8781, -87.6298]},
+      '404': {city: 'Atlanta', state: 'GA', tz: 'America/New_York', coords: [33.7490, -84.3880]},
+      '415': {city: 'San Francisco', state: 'CA', tz: 'America/Los_Angeles', coords: [37.7749, -122.4194]},
+      '512': {city: 'Austin', state: 'TX', tz: 'America/Chicago', coords: [30.2672, -97.7431]},
+      '617': {city: 'Boston', state: 'MA', tz: 'America/New_York', coords: [42.3601, -71.0589]},
+      '619': {city: 'San Diego', state: 'CA', tz: 'America/Los_Angeles', coords: [32.7157, -117.1611]},
+      '713': {city: 'Houston', state: 'TX', tz: 'America/Chicago', coords: [29.7604, -95.3698]},
+      '832': {city: 'Houston', state: 'TX', tz: 'America/Chicago', coords: [29.7604, -95.3698]}
+    };
+
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      if (backendUrl) {
+        document.getElementById('backendUrlInput').value = backendUrl;
+        showBackendStatus('configured');
+      }
+    });
+
+    function getFlagEmoji(cc) {
+      if (!cc) return '';
+      return String.fromCodePoint(...cc.toUpperCase().split('').map(c => 127397 + c.charCodeAt()));
+    }
+
+    // Tab switching
+    function switchTab(tab) {
+      const tabs = {
+        phone: {btn: 'tabPhone', section: 'sectionPhone'},
+        domain: {btn: 'tabDomain', section: 'sectionDomain'},
+        email: {btn: 'tabEmail', section: 'sectionEmail'}
+      };
+
+      Object.keys(tabs).forEach(t => {
+        const btn = document.getElementById(tabs[t].btn);
+        const section = document.getElementById(tabs[t].section);
+        if (t === tab) {
+          btn.className = 'px-4 py-3 tab-active transition-all whitespace-nowrap';
+          section.classList.remove('hidden');
+        } else {
+          btn.className = 'px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap';
+          section.classList.add('hidden');
+        }
+      });
+    }
+
+    // Backend URL management
+    function saveBackendUrl() {
+      const url = document.getElementById('backendUrlInput').value.trim();
+      if (!url) {
+        alert('Please enter your Google Apps Script URL');
+        return;
+      }
+      if (!url.includes('script.google.com')) {
+        alert('⚠️ URL should be from script.google.com');
+        return;
+      }
+      backendUrl = url;
+      localStorage.setItem('phoneBackendUrl', url);
+      showBackendStatus('configured');
+      alert('✅ Backend URL saved! Try looking up a phone number.');
+    }
+
+    function showBackendStatus(status) {
+      const box = document.getElementById('backendStatus');
+      box.classList.remove('hidden');
+      if (status === 'configured') {
+        box.className = 'mb-6 p-4 rounded-xl bg-green-50 border-2 border-green-400';
+        box.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-2xl">✅</span>
+            <div class="flex-1">
+              <p class="font-semibold text-green-900">Backend Connected</p>
+              <p class="text-xs text-green-700 mt-1">Using: ${backendUrl.substring(0,50)}...</p>
+            </div>
+            <button onclick="document.getElementById('setupBox').style.display='block'" class="text-sm text-green-700 hover:underline">
+              Edit
+            </button>
+          </div>
+        `;
+        document.getElementById('setupBox').style.display = 'none';
+      }
+    }
+
+    // ==================== PHONE LOOKUP ====================
+    document.getElementById('phoneForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const input = document.getElementById('phoneInput').value.trim();
+      
+      document.getElementById('phoneLoading').classList.remove('hidden');
+      document.getElementById('phoneError').classList.add('hidden');
+      document.getElementById('phoneResults').classList.add('hidden');
+      
+      try {
+        let phoneNumber;
+        try {
+          phoneNumber = libphonenumber.parsePhoneNumber(input);
+        } catch {
+          phoneNumber = libphonenumber.parsePhoneNumber(input, 'US');
+        }
+        
+        if (!phoneNumber.isValid()) {
+          throw new Error('Invalid phone number format');
+        }
+        
+        currentPhoneData = {
+          e164: phoneNumber.number,
+          intl: phoneNumber.formatInternational(),
+          national: phoneNumber.formatNational(),
+          country: phoneNumber.country,
+          type: phoneNumber.getType() || 'UNKNOWN',
+          nationalNumber: phoneNumber.nationalNumber.toString()
+        };
+        
+        const areaCode = currentPhoneData.nationalNumber.substring(0, 3);
+        const location = areaCodeDB[areaCode];
+        const countryName = new Intl.DisplayNames(['en'], {type: 'region'}).of(currentPhoneData.country);
+        const flag = getFlagEmoji(currentPhoneData.country);
+        
+        // Populate basic info
+        document.getElementById('phoneIntl').textContent = currentPhoneData.intl;
+        document.getElementById('phoneNational').textContent = currentPhoneData.national;
+        document.getElementById('phoneCountry').textContent = `${flag} ${countryName}`;
+        document.getElementById('phoneType').textContent = currentPhoneData.type.replace(/_/g, ' ');
+        document.getElementById('phoneArea').textContent = areaCode;
+        document.getElementById('phoneValid').textContent = '✅ Valid';
+        
+        document.getElementById('phoneCity').textContent = location?.city || 'Unknown';
+        document.getElementById('phoneState').textContent = location?.state || 'Unknown';
+        document.getElementById('phoneTimezone').textContent = location?.tz || 'Unknown';
+        
+        if (location?.coords) {
+          document.getElementById('phoneMapWrap').classList.remove('hidden');
+          if (phoneMap) phoneMap.remove();
+          phoneMap = L.map('phoneMap').setView(location.coords, 8);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(phoneMap);
+          L.marker(location.coords).addTo(phoneMap).bindPopup(`${location.city}, ${location.state}`).openPopup();
+        }
+        
+        // Get carrier from backend
+        let carrierInfo = {
+          carrier: null,
+          lineType: currentPhoneData.type.replace(/_/g, ' '),
+          ownerName: null,
+          sources: []
+        };
+        
+        if (backendUrl) {
+          try {
+            const res = await fetch(`${backendUrl}?phone=${encodeURIComponent(currentPhoneData.e164)}`, {
+              signal: AbortSignal.timeout(15000)
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (!data.error) {
+                carrierInfo.carrier = data.carrier;
+                carrierInfo.lineType = data.lineType || carrierInfo.lineType;
+                carrierInfo.ownerName = data.ownerName;
+                carrierInfo.sources = data.sources || [];
+              }
+            }
+          } catch (err) {
+            console.error('Backend error:', err);
+          }
+        }
+        
+        document.getElementById('phoneCarrier').textContent = carrierInfo.carrier || 'Not in databases';
+        document.getElementById('phoneLineType').textContent = carrierInfo.lineType;
+        document.getElementById('phoneOwner').textContent = carrierInfo.ownerName || 'Private / Unlisted';
+        document.getElementById('phoneSources').textContent = carrierInfo.sources.length > 0 ? carrierInfo.sources.join(', ') : 'Local validation';
+        
+        const summary = `Phone <b>${currentPhoneData.intl}</b> is valid for <b>${countryName}</b>. ` +
+          (carrierInfo.carrier ? `Carrier: <b>${carrierInfo.carrier}</b>. ` : '') +
+          (location ? `Located in <b>${location.city}, ${location.state}</b>.` : '');
+        document.getElementById('phoneSummary').innerHTML = summary;
+        
+        const badges = [
+          '<span class="badge bg-green-600 text-white">✅ Valid</span>',
+          `<span class="badge bg-blue-600 text-white">${currentPhoneData.type.replace(/_/g, ' ')}</span>`,
+          `<span class="badge bg-purple-600 text-white">${flag} ${currentPhoneData.country}</span>`
+        ];
+        if (carrierInfo.carrier) {
+          badges.push(`<span class="badge bg-green-600 text-white">📡 ${carrierInfo.carrier}</span>`);
+        }
+        document.getElementById('phoneBadges').innerHTML = badges.join(' ');
+        
+        document.getElementById('phoneLoading').classList.add('hidden');
+        document.getElementById('phoneResults').classList.remove('hidden');
+        
+      } catch (err) {
+        document.getElementById('phoneErrorMsg').textContent = err.message;
+        document.getElementById('phoneError').classList.remove('hidden');
+        document.getElementById('phoneLoading').classList.add('hidden');
+      }
+    });
+
+    function searchPhoneDatabases() {
+      if (!currentPhoneData) return alert('Analyze a phone number first!');
+      const clean = currentPhoneData.e164.replace(/\D/g, '');
+      const dbs = [
+        `https://www.truecaller.com/search/us/${clean}`,
+        `https://www.whitepages.com/phone/${clean}`,
+        `https://800notes.com/Phone.aspx/${clean}`,
+        `https://www.shouldianswer.com/phone-number/${clean}`,
+        `https://www.callersmart.com/number/${clean}`,
+        `https://www.spokeo.com/${clean}`
+      ];
+      if (confirm('Open 6 database tabs?')) {
+        dbs.forEach((url, i) => setTimeout(() => window.open(url, '_blank'), i * 200));
+      }
+    }
+
+    // ==================== DOMAIN CHECK ====================
+    document.getElementById('domainForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const domain = document.getElementById('domainInput').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+      
+      document.getElementById('domainLoading').classList.remove('hidden');
+      document.getElementById('domainError').classList.add('hidden');
+      document.getElementById('domainResults').classList.add('hidden');
+      
+      try {
+        // RDAP
+        const rdapRes = await fetch(`https://rdap.org/domain/${domain}`);
+        if (!rdapRes.ok) throw new Error('Domain not found');
+        const rdap = await rdapRes.json();
+        
+        document.getElementById('domainName').textContent = rdap.ldhName || domain;
+        
+        const created = rdap.events?.find(e => e.eventAction === 'registration')?.eventDate;
+        const expires = rdap.events?.find(e => e.eventAction === 'expiration')?.eventDate;
+        const updated = rdap.events?.find(e => e.eventAction === 'last changed')?.eventDate;
+        
+        document.getElementById('domainCreated').textContent = created ? new Date(created).toLocaleDateString() : '—';
+        document.getElementById('domainExpires').textContent = expires ? new Date(expires).toLocaleDateString() : '—';
+        document.getElementById('domainUpdated').textContent = updated ? new Date(updated).toLocaleDateString() : '—';
+        
+        const registrar = rdap.entities?.find(e => e.roles?.includes('registrar'))?.vcardArray?.[1]?.find(v => v[0] === 'fn')?.[3];
+        document.getElementById('domainRegistrar').textContent = registrar || '—';
+        document.getElementById('domainStatus').textContent = rdap.status?.join(', ') || '—';
+        document.getElementById('domainNameservers').textContent = rdap.nameservers?.map(n => n.ldhName).join('\n') || '—';
+        
+        // DNS
+        const dnsRes = await fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=A`, {
+          headers: {'accept': 'application/dns-json'}
+        });
+        const dns = await dnsRes.json();
+        const ipv4 = dns.Answer?.[0]?.data || '—';
+        document.getElementById('domainIPv4').textContent = ipv4;
+        
+        const dns6Res = await fetch(`https://cloudflare-dns.com/dns-query?name=${domain}&type=AAAA`, {
+          headers: {'accept': 'application/dns-json'}
+        });
+        const dns6 = await dns6Res.json();
+        document.getElementById('domainIPv6').textContent = dns6.Answer?.[0]?.data || 'None';
+        
+        // Geo
+        if (ipv4 !== '—') {
+          const geoRes = await fetch(`https://ipwho.is/${ipv4}`);
+          const geo = await geoRes.json();
+          
+          const flag = geo.flag?.emoji || '';
+          document.getElementById('domainCountry').textContent = `${flag} ${geo.country || '—'}`;
+          document.getElementById('domainCity').textContent = [geo.city, geo.region].filter(Boolean).join(', ') || '—';
+          document.getElementById('domainOrg').textContent = geo.connection?.org || geo.isp || '—';
+          document.getElementById('domainASN').textContent = geo.connection?.asn || geo.asn || '—';
+          
+          if (geo.latitude && geo.longitude) {
+            document.getElementById('domainMapWrap').classList.remove('hidden');
+            if (domainMap) domainMap.remove();
+            domainMap = L.map('domainMap').setView([geo.latitude, geo.longitude], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(domainMap);
+            L.marker([geo.latitude, geo.longitude]).addTo(domainMap).bindPopup(`${geo.city}, ${geo.country}`).openPopup();
+          }
+        }
+        
+        document.getElementById('domainSummary').innerHTML = 
+          `Domain <b>${rdap.ldhName || domain}</b> registered with <b>${registrar || 'Unknown'}</b>. Hosted at <b>${ipv4}</b>.`;
+        
+        const badges = [
+          '<span class="badge bg-green-600 text-white">✓ Valid</span>',
+          `<span class="badge bg-blue-600 text-white">${ipv4}</span>`
+        ];
+        document.getElementById('domainBadges').innerHTML = badges.join(' ');
+        
+        document.getElementById('domainLoading').classList.add('hidden');
+        document.getElementById('domainResults').classList.remove('hidden');
+        
+      } catch (err) {
+        document.getElementById('domainErrorMsg').textContent = err.message;
+        document.getElementById('domainError').classList.remove('hidden');
+        document.getElementById('domainLoading').classList.add('hidden');
+      }
+    });
+
+    // ==================== EMAIL HEADER ANALYZER ====================
+    
+    // Switch between paste and upload methods
+    function switchEmailInputMethod(method) {
+      const pasteBtn = document.getElementById('emailInputMethodPaste');
+      const uploadBtn = document.getElementById('emailInputMethodUpload');
+      const pasteSection = document.getElementById('emailPasteMethod');
+      const uploadSection = document.getElementById('emailUploadMethod');
+      
+      if (method === 'paste') {
+        pasteBtn.className = 'px-4 py-2 border-b-2 border-indigo-600 text-indigo-600 font-semibold transition-all';
+        uploadBtn.className = 'px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all';
+        pasteSection.classList.remove('hidden');
+        uploadSection.classList.add('hidden');
+      } else {
+        uploadBtn.className = 'px-4 py-2 border-b-2 border-indigo-600 text-indigo-600 font-semibold transition-all';
+        pasteBtn.className = 'px-4 py-2 text-gray-600 hover:text-indigo-600 transition-all';
+        uploadSection.classList.remove('hidden');
+        pasteSection.classList.add('hidden');
+      }
+    }
+    
+    // Handle email file upload
+    function handleEmailFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      // Check if it's a .msg file
+      if (file.name.toLowerCase().endsWith('.msg')) {
+        document.getElementById('emailErrorMsg').textContent = '⚠️ .MSG files are not supported. Please save your email as HTML or .EML format instead. See instructions above.';
+        document.getElementById('emailError').classList.remove('hidden');
+        document.getElementById('uploadedFileName').classList.add('hidden');
+        event.target.value = ''; // Clear the file input
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        let content = e.target.result;
+        
+        // If it's an HTML file, try to extract headers from various formats
+        if (file.name.toLowerCase().endsWith('.html') || file.name.toLowerCase().endsWith('.htm')) {
+          // Try to extract headers from HTML
+          // Look for headers in <head> meta tags or in pre/code blocks
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(content, 'text/html');
+          
+          // Check if headers are in the body text
+          const bodyText = doc.body ? doc.body.textContent : content;
+          
+          // If we find typical email header patterns, use the body text
+          if (bodyText.includes('From:') || bodyText.includes('Received:') || bodyText.includes('X-Mailer:')) {
+            content = bodyText;
+          } else {
+            // Try to extract from meta tags
+            const metas = doc.querySelectorAll('meta');
+            let headerText = '';
+            metas.forEach(meta => {
+              const name = meta.getAttribute('name') || meta.getAttribute('property');
+              const contentAttr = meta.getAttribute('content');
+              if (name && contentAttr) {
+                headerText += `${name}: ${contentAttr}\n`;
+              }
+            });
+            
+            if (headerText) {
+              content = headerText + '\n' + bodyText;
+            } else {
+              content = bodyText;
+            }
+          }
+        }
+        
+        // Check if content looks like valid email headers
+        if (!content.includes('From:') && !content.includes('Received:') && !content.includes('Subject:')) {
+          document.getElementById('emailErrorMsg').textContent = '⚠️ This file doesn\'t appear to contain valid email headers. Please try: 1) Save as HTML, 2) Open email → File → Properties → Copy Internet Headers';
+          document.getElementById('emailError').classList.remove('hidden');
+          document.getElementById('uploadedFileName').classList.add('hidden');
+          event.target.value = '';
+          return;
+        }
+        
+        document.getElementById('emailHeaderInput').value = content;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('uploadedFileName').classList.remove('hidden');
+        document.getElementById('emailError').classList.add('hidden');
+      };
+      reader.readAsText(file);
+    }
+    
+    function analyzeEmailHeaders() {
+      const headers = document.getElementById('emailHeaderInput').value.trim();
+      
+      if (!headers) {
+        document.getElementById('emailErrorMsg').textContent = 'Please paste email headers or upload an email file';
+        document.getElementById('emailError').classList.remove('hidden');
+        return;
+      }
+      
+      document.getElementById('emailError').classList.add('hidden');
+      document.getElementById('emailResults').classList.remove('hidden');
+      
+      // Parse headers
+      const getHeader = (name) => {
+        const regex = new RegExp(`^${name}:\\s*(.+)$`, 'im');
+        const match = headers.match(regex);
+        return match ? match[1].trim() : null;
+      };
+      
+      const getAllHeaders = (name) => {
+        const regex = new RegExp(`^${name}:\\s*(.+)$`, 'img');
+        const matches = [...headers.matchAll(regex)];
+        return matches.map(m => m[1].trim());
+      };
+      
+      // Extract info
+      const from = getHeader('From') || getHeader('X-From');
+      const replyTo = getHeader('Reply-To');
+      const returnPath = getHeader('Return-Path');
+      const subject = getHeader('Subject');
+      const messageId = getHeader('Message-ID');
+      const date = getHeader('Date');
+      
+      // Get originating IP
+      const xOriginatingIP = getHeader('X-Originating-IP');
+      const receivedIPs = headers.match(/\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]/g);
+      const originIP = xOriginatingIP ? xOriginatingIP.replace(/[\[\]]/g, '') : 
+                       (receivedIPs ? receivedIPs[receivedIPs.length - 1].replace(/[\[\]]/g, '') : null);
+      
+      // Authentication
+      const spf = getHeader('Received-SPF') || getHeader('Authentication-Results');
+      const dkim = headers.includes('DKIM-Signature') ? 'Present' : 'Not Found';
+      const dmarc = headers.match(/dmarc=(\w+)/i)?.[1];
+      
+      // Received headers
+      const received = getAllHeaders('Received');
+      
+      // Display
+      document.getElementById('emailFrom').textContent = from || '—';
+      document.getElementById('emailReplyTo').textContent = replyTo || 'Same as From';
+      document.getElementById('emailReturnPath').textContent = returnPath || '—';
+      document.getElementById('emailOriginIP').textContent = originIP || 'Not Found';
+      document.getElementById('emailSubject').textContent = subject || '—';
+      document.getElementById('emailMessageID').textContent = messageId || '—';
+      document.getElementById('emailDate').textContent = date || '—';
+      
+      // SPF/DKIM/DMARC
+      let spfStatus = '❓ Unknown';
+      if (spf) {
+        if (spf.toLowerCase().includes('pass')) spfStatus = '✅ Pass';
+        else if (spf.toLowerCase().includes('fail')) spfStatus = '❌ Fail';
+        else if (spf.toLowerCase().includes('softfail')) spfStatus = '⚠️ SoftFail';
+      }
+      document.getElementById('emailSPF').textContent = spfStatus;
+      
+      let dkimStatus = dkim === 'Present' ? '✅ Present' : '❌ Not Found';
+      document.getElementById('emailDKIM').textContent = dkimStatus;
+      
+      let dmarcStatus = dmarc ? (dmarc.toLowerCase() === 'pass' ? '✅ Pass' : '❌ Fail') : '❓ Unknown';
+      document.getElementById('emailDMARC').textContent = dmarcStatus;
+      
+      // Routing
+      if (received.length > 0) {
+        document.getElementById('emailReceived').innerHTML = received
+          .map((r, i) => `<div class="p-2 bg-gray-50 rounded mb-2"><b>Hop ${i+1}:</b> ${r}</div>`)
+          .join('');
+      }
+      
+      // Security score
+      let score = 0;
+      const issues = [];
+      
+      if (spfStatus.includes('Pass')) score += 25; else issues.push('SPF not passing');
+      if (dkimStatus.includes('Present')) score += 25; else issues.push('DKIM signature missing');
+      if (dmarcStatus.includes('Pass')) score += 25; else issues.push('DMARC not passing');
+      if (from && replyTo && from !== replyTo) issues.push('Reply-To differs from From address');
+      if (from && returnPath && !returnPath.includes(from.split('@')[1])) issues.push('Return-Path domain mismatch');
+      if (!originIP) issues.push('Cannot verify originating IP');
+      if (score < 50) issues.push('Poor email authentication');
+      
+      if (issues.length === 0) score = 100;
+      else if (score === 0) score = 25;
+      
+      const securityBox = document.getElementById('emailSecurityBox');
+      if (score >= 75) {
+        securityBox.className = 'border-4 border-green-500 bg-green-50 rounded-xl p-6';
+        document.getElementById('emailSecurityScore').innerHTML = 
+          `<span class="text-green-900">${score}/100</span> <span class="text-lg">🛡️ Good Security</span>`;
+      } else if (score >= 50) {
+        securityBox.className = 'border-4 border-yellow-500 bg-yellow-50 rounded-xl p-6';
+        document.getElementById('emailSecurityScore').innerHTML = 
+          `<span class="text-yellow-900">${score}/100</span> <span class="text-lg">⚠️ Moderate Risk</span>`;
+      } else {
+        securityBox.className = 'border-4 border-red-500 bg-red-50 rounded-xl p-6';
+        document.getElementById('emailSecurityScore').innerHTML = 
+          `<span class="text-red-900">${score}/100</span> <span class="text-lg">🚨 High Risk</span>`;
+      }
+      
+      // Red flags
+      if (issues.length > 0) {
+        document.getElementById('emailRedFlags').classList.remove('hidden');
+        document.getElementById('emailRedFlagsList').innerHTML = issues.map(i => `<li>${i}</li>`).join('');
+      } else {
+        document.getElementById('emailRedFlags').classList.add('hidden');
+      }
+      
+      document.getElementById('emailSecurityDetails').innerHTML = 
+        `<div class="text-sm text-gray-700">
+          <p><b>SPF:</b> ${spfStatus}</p>
+          <p><b>DKIM:</b> ${dkimStatus}</p>
+          <p><b>DMARC:</b> ${dmarcStatus}</p>
+          <p class="mt-2"><b>Routing hops:</b> ${received.length}</p>
+        </div>`;
+    }
+  </script>
+</body>
+</html>
+
