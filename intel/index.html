@@ -38,38 +38,50 @@
       <div class="text-center mb-8">
         <div class="text-6xl mb-4">🔐</div>
         <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-fuchsia-600 to-amber-500 mb-2">
-          Intelligence Suite
+          Complete Intelligence Suite
         </h1>
-        <p class="text-sm text-gray-600 mb-4">Secure Access Portal</p>
+        <p class="text-sm text-gray-600 mb-4">5 Powerful OSINT Tools • Secure Access Portal</p>
         
         <!-- Description Box -->
         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 text-left border border-indigo-200">
-          <h3 class="font-bold text-indigo-900 text-sm mb-2">🛡️ Cybersecurity Intelligence Tools</h3>
+          <h3 class="font-bold text-indigo-900 text-sm mb-2">🛡️ Complete OSINT Intelligence Suite</h3>
           <p class="text-xs text-gray-700 mb-3">
-            A comprehensive suite of threat intelligence and analysis tools for cybersecurity professionals.
+            Professional threat intelligence and company reconnaissance toolkit for cybersecurity training.
           </p>
           <div class="space-y-2 text-xs text-gray-600">
             <div class="flex items-start gap-2">
               <span class="text-base">📞</span>
               <div>
-                <strong>Phone Lookup:</strong> Identify carrier, location, and validate phone numbers
+                <strong>Phone Lookup:</strong> Carrier detection, owner identification, location mapping
               </div>
             </div>
             <div class="flex items-start gap-2">
               <span class="text-base">🌐</span>
               <div>
-                <strong>Domain Analysis:</strong> WHOIS lookup, DNS records, IP geolocation
+                <strong>Domain Analysis:</strong> WHOIS data, DNS records, hosting provider intelligence
               </div>
             </div>
             <div class="flex items-start gap-2">
               <span class="text-base">📧</span>
               <div>
-                <strong>Email Header Analyzer:</strong> Detect phishing, verify authentication (SPF/DKIM/DMARC)
+                <strong>Email Security:</strong> Header analysis, phishing detection, SPF/DKIM/DMARC verification
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-base">🔍</span>
+              <div>
+                <strong>IP Address Intel:</strong> Geolocation, threat scoring, VPN/Tor detection, nearby landmarks
+              </div>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="text-base">🏢</span>
+              <div>
+                <strong>Company Intelligence:</strong> Email patterns, social engineering risk assessment, OSINT data
               </div>
             </div>
           </div>
           <div class="mt-3 pt-3 border-t border-indigo-200 text-xs text-gray-500 italic">
-            Part of Cyber Drill AI - Aviva Metals Cybersecurity Training Platform
+            Part of Cyber Drill AI™ - Aviva Metals Cybersecurity Training Platform
           </div>
         </div>
       </div>
@@ -126,7 +138,7 @@
             Complete Intelligence Suite
           </h1>
           <p class="text-sm text-gray-600 mt-2">
-            📞 Phone Lookup • 🌐 Domain Analysis • 📧 Email Header Analyzer • Powered by Google Apps Script
+            📞 Phone • 🌐 Domain • 📧 Email • 🔍 IP Address • 🏢 Company Intel • Complete OSINT Toolkit
           </p>
         </div>
         <div class="flex items-center gap-3">
@@ -201,6 +213,12 @@
       </button>
       <button id="tabEmail" class="px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap" onclick="switchTab('email')">
         📧 Email Headers
+      </button>
+      <button id="tabIP" class="px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap" onclick="switchTab('ip')">
+        🔍 IP Address
+      </button>
+      <button id="tabCompany" class="px-4 py-3 text-gray-600 hover:text-indigo-600 transition-all whitespace-nowrap" onclick="switchTab('company')">
+        🏢 Company Intel
       </button>
     </div>
 
@@ -649,11 +667,380 @@ DMARC: Pass"
       </section>
     </div>
 
+    <div id="sectionIP" class="hidden">
+      <section class="bg-white shadow-xl rounded-2xl p-6 border-2 border-indigo-200">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-900">🔍 IP Address Intelligence</h2>
+        
+        <form id="ipForm" class="flex flex-col md:flex-row gap-3 mb-4">
+          <input 
+            id="ipInput" 
+            class="flex-1 border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono" 
+            placeholder="e.g., 8.8.8.8 or 2001:4860:4860::8888" 
+            required 
+          />
+          <button 
+            type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-8 py-3 font-bold shadow-lg"
+          >
+            🔍 Analyze IP
+          </button>
+        </form>
+
+        <!-- Quick Examples -->
+        <div class="mb-4 flex flex-wrap gap-2">
+          <span class="text-xs text-gray-600">Quick test:</span>
+          <button onclick="document.getElementById('ipInput').value='8.8.8.8'; document.getElementById('ipForm').dispatchEvent(new Event('submit'))" 
+                  class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+            8.8.8.8 (Google DNS)
+          </button>
+          <button onclick="document.getElementById('ipInput').value='1.1.1.1'; document.getElementById('ipForm').dispatchEvent(new Event('submit'))" 
+                  class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+            1.1.1.1 (Cloudflare)
+          </button>
+        </div>
+
+        <div id="ipLoading" class="hidden mt-6 p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
+          <div class="flex items-center gap-3">
+            <div class="spinner"></div>
+            <span class="font-bold text-blue-900">Analyzing IP address...</span>
+          </div>
+        </div>
+
+        <div id="ipError" class="hidden mt-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+          <div class="flex items-start gap-3">
+            <span class="text-3xl">⚠️</span>
+            <div>
+              <h4 class="font-bold text-red-900">Error</h4>
+              <p class="text-sm text-red-700 mt-1" id="ipErrorMsg"></p>
+            </div>
+          </div>
+        </div>
+
+        <div id="ipResults" class="hidden mt-6 space-y-6">
+          
+          <!-- Threat Score -->
+          <div id="ipThreatBox" class="border-4 rounded-xl p-6">
+            <h3 class="text-2xl font-bold mb-3">🛡️ Threat Assessment</h3>
+            <div id="ipThreatScore" class="text-5xl font-bold mb-3">—</div>
+            <div id="ipThreatDetails" class="space-y-2 text-sm"></div>
+          </div>
+
+          <!-- Geolocation -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🌍 Geolocation</h3>
+            <div class="mb-4 p-3 bg-yellow-50 border border-yellow-400 rounded text-xs text-yellow-900">
+              ⚠️ <b>Accuracy Note:</b> Country is 95-99% accurate. City is 60-80% accurate (approximate, not exact address). Mobile IPs may be off by 50-100 miles.
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">IP Address</div>
+                <div id="ipAddress" class="font-mono font-bold text-indigo-900">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">IP Type</div>
+                <div id="ipType" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Country</div>
+                <div id="ipCountry" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Region / State</div>
+                <div id="ipRegion" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">City</div>
+                <div id="ipCity" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Postal Code</div>
+                <div id="ipPostal" class="font-semibold">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Timezone</div>
+                <div id="ipTimezone" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-3 bg-blue-50 rounded">
+                <div class="text-gray-600 text-xs mb-1">Coordinates</div>
+                <div id="ipCoords" class="font-mono text-xs">—</div>
+              </div>
+            </div>
+            <div id="ipMapWrap" class="mt-4 hidden">
+              <div class="text-sm text-gray-600 mb-2">📍 Approximate Location (City-Level)</div>
+              <div id="ipMap" class="h-80 rounded-lg border-2"></div>
+            </div>
+          </div>
+
+          <!-- Network Details -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🌐 Network Information</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">ISP / Organization</div>
+                <div id="ipISP" class="font-bold text-lg">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">ASN (Autonomous System)</div>
+                <div id="ipASN" class="font-mono font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Connection Type</div>
+                <div id="ipConnectionType" class="font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Hostname (Reverse DNS)</div>
+                <div id="ipHostname" class="font-mono text-xs break-all">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Domain</div>
+                <div id="ipDomain" class="font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Mobile Carrier</div>
+                <div id="ipMobile" class="font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Flags -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🚨 Security Indicators</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-4 rounded-lg" id="ipProxyBox">
+                <div class="text-xs mb-1 font-semibold">VPN / Proxy</div>
+                <div id="ipProxy" class="text-2xl font-bold">—</div>
+              </div>
+              <div class="p-4 rounded-lg" id="ipTorBox">
+                <div class="text-xs mb-1 font-semibold">Tor Exit Node</div>
+                <div id="ipTor" class="text-2xl font-bold">—</div>
+              </div>
+              <div class="p-4 rounded-lg" id="ipHostingBox">
+                <div class="text-xs mb-1 font-semibold">Data Center / Cloud</div>
+                <div id="ipHosting" class="text-2xl font-bold">—</div>
+              </div>
+              <div class="p-4 rounded-lg" id="ipAbuseBox">
+                <div class="text-xs mb-1 font-semibold">Abuse Reports</div>
+                <div id="ipAbuse" class="text-2xl font-bold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nearby Landmarks -->
+          <div id="ipLandmarksWrap" class="hidden border-2 border-purple-400 bg-purple-50 rounded-xl p-5">
+            <h3 class="text-lg font-bold text-purple-900 mb-3">🗺️ Nearby Landmarks</h3>
+            <p class="text-xs text-purple-800 mb-3">
+              ⚠️ Major landmarks within ~10km of city center (IP location is approximate)
+            </p>
+            <div id="ipLandmarksLoading" class="hidden flex items-center gap-2 text-sm text-purple-800">
+              <div class="spinner"></div>
+              <span>Searching nearby landmarks...</span>
+            </div>
+            <div id="ipLandmarksList" class="space-y-2"></div>
+          </div>
+
+          <!-- Additional Info -->
+          <div class="border-2 border-indigo-400 bg-indigo-50 rounded-xl p-5">
+            <h3 class="text-lg font-bold text-indigo-900 mb-3">📊 IP Reputation Databases</h3>
+            <p class="text-sm text-indigo-800 mb-3">
+              Check this IP across multiple blacklist databases:
+            </p>
+            <div class="grid md:grid-cols-2 gap-3">
+              <button 
+                onclick="openIPDB('abuseipdb')" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 py-2 text-sm font-semibold"
+              >
+                🔍 AbuseIPDB Lookup
+              </button>
+              <button 
+                onclick="openIPDB('virustotal')" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 py-2 text-sm font-semibold"
+              >
+                🔍 VirusTotal Lookup
+              </button>
+              <button 
+                onclick="openIPDB('shodan')" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 py-2 text-sm font-semibold"
+              >
+                🔍 Shodan Lookup
+              </button>
+              <button 
+                onclick="openIPDB('talos')" 
+                class="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg px-4 py-2 text-sm font-semibold"
+              >
+                🔍 Cisco Talos Lookup
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== COMPANY INTELLIGENCE SECTION (NEW!) ========== -->
+    <div id="sectionCompany" class="hidden">
+      <section class="bg-white shadow-xl rounded-2xl p-6 border-2 border-indigo-200">
+        <h2 class="text-2xl font-bold mb-4 text-indigo-900">🏢 Company Intelligence</h2>
+        
+        <form id="companyForm" class="flex flex-col md:flex-row gap-3 mb-4">
+          <input 
+            id="companyInput" 
+            class="flex-1 border-2 border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+            placeholder="Enter company name (e.g., Microsoft) or domain (e.g., microsoft.com)" 
+            required 
+          />
+          <button 
+            type="submit"
+            class="bg-gradient-to-r from-indigo-600 to-fuchsia-600 hover:from-indigo-700 hover:to-fuchsia-700 text-white rounded-xl px-8 py-3 font-bold shadow-lg"
+          >
+            🔍 Analyze Company
+          </button>
+        </form>
+
+        <div class="mb-4 flex flex-wrap gap-2">
+          <span class="text-xs text-gray-600">Quick test:</span>
+          <button onclick="document.getElementById('companyInput').value='Google'; document.getElementById('companyForm').requestSubmit()" 
+                  class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+            Google (name)
+          </button>
+          <button onclick="document.getElementById('companyInput').value='stripe.com'; document.getElementById('companyForm').requestSubmit()" 
+                  class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+            Stripe (domain)
+          </button>
+          <button onclick="document.getElementById('companyInput').value='Microsoft'; document.getElementById('companyForm').requestSubmit()" 
+                  class="text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded">
+            Microsoft
+          </button>
+        </div>
+
+        <div class="mb-4 p-3 bg-green-50 border border-green-400 rounded text-xs text-green-900">
+          💡 <b>Pro Tip:</b> Enter company names (e.g., "Aviva Metals", "JP Morgan") or domains (e.g., "avivametals.com") - spaces are automatically removed!
+        </div>
+
+
+        <div id="companyLoading" class="hidden mt-6 p-6 bg-blue-50 border-2 border-blue-300 rounded-xl">
+          <div class="flex items-center gap-3">
+            <div class="spinner"></div>
+            <span class="font-bold text-blue-900">Analyzing company...</span>
+          </div>
+        </div>
+
+        <div id="companyError" class="hidden mt-6 p-4 bg-red-50 border-2 border-red-300 rounded-xl">
+          <span class="text-red-700" id="companyErrorMsg"></span>
+        </div>
+
+        <div id="companyResults" class="hidden mt-6 space-y-6">
+          
+          <!-- API Status Banner -->
+          <div id="apiStatusBanner" class="p-3 bg-blue-50 border border-blue-300 rounded-lg">
+            <div class="text-xs">
+              <b>🔧 API Status:</b>
+              <span id="apiStatusText"></span>
+            </div>
+          </div>
+          
+          <!-- Data Quality Banner -->
+          <div id="dataQualityBanner" class="hidden p-4 bg-yellow-50 border-2 border-yellow-400 rounded-xl">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl">⚠️</span>
+              <div>
+                <h4 class="font-bold text-yellow-900 mb-2">Limited Company Data Available</h4>
+                <p class="text-sm text-yellow-800 mb-2">
+                  This company has minimal public information in Hunter.io database. For better results:
+                </p>
+                <ul class="text-sm text-yellow-800 list-disc ml-5 space-y-1">
+                  <li><b>Add Brandfetch API</b> (FREE - 100 requests/month) for real descriptions, employee counts</li>
+                  <li>Try well-known companies like: google.com, stripe.com, microsoft.com</li>
+                  <li>Current accuracy with Hunter.io only: ~60% for known companies, lower for small businesses</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Overview -->
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-indigo-300 rounded-xl p-6">
+            <h3 class="text-2xl font-bold text-indigo-900 mb-4">🏢 Company Overview</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Company Name</div>
+                <div id="companyName" class="font-bold text-lg">—</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Domain</div>
+                <div id="companyDomain" class="font-mono font-semibold text-sm">—</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Industry</div>
+                <div id="companyIndustry" class="font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Company Size</div>
+                <div id="companySize" class="font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Headquarters</div>
+                <div id="companyLocation" class="font-semibold text-sm">—</div>
+              </div>
+              <div class="p-4 bg-white rounded-lg border">
+                <div class="text-gray-600 text-xs mb-1">Website</div>
+                <div id="companyWebsite" class="font-semibold text-sm break-all">—</div>
+              </div>
+            </div>
+            <div class="mt-4 p-4 bg-white rounded-lg border">
+              <div class="text-gray-600 text-xs mb-2">Description</div>
+              <div id="companyDescription" class="text-sm">—</div>
+            </div>
+          </div>
+
+          <!-- Digital Footprint -->
+          <div class="border-2 border-gray-300 rounded-xl p-6">
+            <h3 class="text-lg font-bold mb-4">🌐 Digital Footprint</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Email Pattern</div>
+                <div id="companyEmailPattern" class="font-mono text-sm font-semibold text-indigo-900">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">LinkedIn</div>
+                <div id="companyLinkedIn" class="text-sm">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Twitter</div>
+                <div id="companyTwitter" class="text-sm">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Facebook</div>
+                <div id="companyFacebook" class="text-sm">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Founded</div>
+                <div id="companyFounded" class="font-semibold">—</div>
+              </div>
+              <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="text-gray-600 text-xs mb-1 font-semibold">Type</div>
+                <div id="companyType" class="font-semibold">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Assessment -->
+          <div class="border-4 border-yellow-500 bg-yellow-50 rounded-xl p-6">
+            <h3 class="text-xl font-bold text-yellow-900 mb-3">🚨 Social Engineering Risk Assessment</h3>
+            <div id="companyRiskAssessment" class="space-y-3 text-sm"></div>
+            <div class="mt-4 p-4 bg-white border-2 border-yellow-400 rounded-lg">
+              <h4 class="font-bold text-yellow-900 mb-2">🎓 Training Recommendations:</h4>
+              <ul id="companyTrainingRecs" class="list-disc ml-5 space-y-1 text-sm text-gray-700"></ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
     <!-- Footer -->
     <footer class="mt-10 text-center text-sm text-gray-600 pb-6">
       <p class="font-bold text-lg">Complete Intelligence Suite</p>
       <p class="mt-1">© 2025 Zaheer Syed | <b>Cyber Drill AI™</b> for Aviva Metals</p>
-      <p class="text-xs mt-1">Phone • Domain • Email Analysis • Powered by Google Apps Script</p>
+      <p class="text-xs mt-1">Phone • Domain • Email • IP Address • Company Intelligence • Powered by Google Apps Script</p>
     </footer>
 
   </div>
@@ -718,6 +1105,8 @@ DMARC: Pass"
     let backendUrl = localStorage.getItem('phoneBackendUrl') || '';
     let phoneMap = null;
     let domainMap = null;
+    let ipMap = null;
+    let currentIPData = null;
     let currentPhoneData = null;
 
     // Area code database
@@ -758,7 +1147,9 @@ DMARC: Pass"
       const tabs = {
         phone: {btn: 'tabPhone', section: 'sectionPhone'},
         domain: {btn: 'tabDomain', section: 'sectionDomain'},
-        email: {btn: 'tabEmail', section: 'sectionEmail'}
+        email: {btn: 'tabEmail', section: 'sectionEmail'},
+        ip: {btn: 'tabIP', section: 'sectionIP'},
+        company: {btn: 'tabCompany', section: 'sectionCompany'}
       };
 
       Object.keys(tabs).forEach(t => {
@@ -1238,7 +1629,689 @@ DMARC: Pass"
           <p class="mt-2"><b>Routing hops:</b> ${received.length}</p>
         </div>`;
     }
+
+    // ==================== IP ADDRESS LOOKUP (NEW!) ====================
+    document.getElementById('ipForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const ip = document.getElementById('ipInput').value.trim();
+      
+      document.getElementById('ipLoading').classList.remove('hidden');
+      document.getElementById('ipError').classList.add('hidden');
+      document.getElementById('ipResults').classList.add('hidden');
+      
+      try {
+        // Basic IP validation
+        const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+        const ipv6Regex = /^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}$/;
+        
+        if (!ipv4Regex.test(ip) && !ipv6Regex.test(ip)) {
+          throw new Error('Invalid IP address format');
+        }
+        
+        // Check for private/reserved IPs
+        const isPrivate = ip.startsWith('192.168.') || ip.startsWith('10.') || 
+                         ip.startsWith('172.16.') || ip.startsWith('127.') ||
+                         ip === '0.0.0.0' || ip === '255.255.255.255';
+        
+        if (isPrivate) {
+          throw new Error('Private/Reserved IP address - not routable on public internet');
+        }
+        
+        // Try multiple APIs until one works
+        let geo = null;
+        let dataSource = '';
+        
+        // API 1: ip-api.com (FREE, 45/min)
+        try {
+          const res1 = await fetch(`http://ip-api.com/json/${ip}?fields=66846719`, {signal: AbortSignal.timeout(5000)});
+          if (res1.ok) {
+            const data = await res1.json();
+            if (data.status === 'success') {
+              geo = {
+                success: true, ip: ip, type: data.hosting ? 'Hosting' : 'Residential',
+                country: data.country, region: data.regionName, city: data.city,
+                postal: data.zip, latitude: data.lat, longitude: data.lon,
+                timezone: {id: data.timezone}, flag: {emoji: ''},
+                connection: {isp: data.isp, org: data.org, asn: data.as?.split(' ')[0]?.replace('AS', ''), domain: data.org},
+                isp: data.isp, is_mobile: data.mobile || false
+              };
+              dataSource = 'ip-api.com';
+            }
+          }
+        } catch(e) { console.log('API 1 failed'); }
+        
+        // API 2: ipapi.co (backup)
+        if (!geo) {
+          try {
+            const res2 = await fetch(`https://ipapi.co/${ip}/json/`, {signal: AbortSignal.timeout(5000)});
+            if (res2.ok) {
+              const data = await res2.json();
+              if (!data.error) {
+                geo = {
+                  success: true, ip: ip, type: 'Unknown', country: data.country_name,
+                  region: data.region, city: data.city, postal: data.postal,
+                  latitude: data.latitude, longitude: data.longitude,
+                  timezone: {id: data.timezone}, flag: {emoji: ''},
+                  connection: {isp: data.org, org: data.org, asn: data.asn?.replace('AS', ''), domain: data.org},
+                  isp: data.org, is_mobile: false
+                };
+                dataSource = 'ipapi.co';
+              }
+            }
+          } catch(e) { console.log('API 2 failed'); }
+        }
+        
+        // API 3: ipinfo.io (backup)
+        if (!geo) {
+          try {
+            const res3 = await fetch(`https://ipinfo.io/${ip}/json`, {signal: AbortSignal.timeout(5000)});
+            if (res3.ok) {
+              const data = await res3.json();
+              if (!data.error && !data.bogon) {
+                const [lat, lon] = (data.loc || '0,0').split(',').map(Number);
+                geo = {
+                  success: true, ip: ip, type: 'Unknown', country: data.country,
+                  region: data.region, city: data.city, postal: data.postal,
+                  latitude: lat, longitude: lon,
+                  timezone: {id: data.timezone || 'Unknown'}, flag: {emoji: ''},
+                  connection: {isp: data.org, org: data.org, asn: data.org?.match(/AS\d+/)?.[0]?.replace('AS', ''), domain: data.org},
+                  isp: data.org, is_mobile: false
+                };
+                dataSource = 'ipinfo.io';
+              }
+            }
+          } catch(e) { console.log('API 3 failed'); }
+        }
+        
+        if (!geo) {
+          throw new Error('All IP lookup services failed. Try again in a moment.');
+        }
+        
+        currentIPData = geo;
+        console.log('Using data from:', dataSource);
+        
+        // Display geolocation
+        const flag = geo.flag?.emoji || '';
+        document.getElementById('ipAddress').textContent = ip;
+        document.getElementById('ipType').textContent = geo.type || 'Unknown';
+        document.getElementById('ipCountry').textContent = `${flag} ${geo.country || 'Unknown'}`;
+        document.getElementById('ipRegion').textContent = geo.region || 'Unknown';
+        document.getElementById('ipCity').textContent = geo.city || 'Unknown';
+        document.getElementById('ipPostal').textContent = geo.postal || 'Unknown';
+        document.getElementById('ipTimezone').textContent = geo.timezone?.id || 'Unknown';
+        document.getElementById('ipCoords').textContent = geo.latitude && geo.longitude ? 
+          `${geo.latitude.toFixed(4)}, ${geo.longitude.toFixed(4)}` : 'Unknown';
+        
+        // Network info
+        document.getElementById('ipISP').textContent = geo.connection?.isp || geo.isp || 'Unknown';
+        document.getElementById('ipASN').textContent = geo.connection?.asn ? `AS${geo.connection.asn}` : 'Unknown';
+        document.getElementById('ipConnectionType').textContent = geo.connection?.domain || 'Unknown';
+        document.getElementById('ipHostname').textContent = 'Checking...';
+        document.getElementById('ipDomain').textContent = geo.connection?.domain || 'Unknown';
+        document.getElementById('ipMobile').textContent = geo.is_mobile ? 'Yes' : 'No';
+        
+        // Reverse DNS lookup
+        try {
+          const dnsRes = await fetch(`https://cloudflare-dns.com/dns-query?name=${ip.split('.').reverse().join('.')}.in-addr.arpa&type=PTR`, {
+            headers: {'accept': 'application/dns-json'}
+          });
+          const dnsData = await dnsRes.json();
+          const hostname = dnsData.Answer?.[0]?.data || 'No PTR record';
+          document.getElementById('ipHostname').textContent = hostname;
+        } catch {
+          document.getElementById('ipHostname').textContent = 'Lookup failed';
+        }
+        
+        // Security flags
+        const isProxy = geo.connection?.isp?.toLowerCase().includes('vpn') || 
+                       geo.connection?.isp?.toLowerCase().includes('proxy') ||
+                       geo.connection?.org?.toLowerCase().includes('vpn');
+        
+        const isTor = geo.connection?.isp?.toLowerCase().includes('tor') ||
+                     geo.connection?.org?.toLowerCase().includes('tor');
+        
+        const isHosting = geo.type === 'Hosting' || geo.type === 'Data Center' ||
+                         geo.connection?.isp?.toLowerCase().includes('amazon') ||
+                         geo.connection?.isp?.toLowerCase().includes('google cloud') ||
+                         geo.connection?.isp?.toLowerCase().includes('microsoft azure');
+        
+        // Display security flags
+        const proxyBox = document.getElementById('ipProxyBox');
+        if (isProxy) {
+          proxyBox.className = 'p-4 rounded-lg bg-red-100 border-2 border-red-400';
+          document.getElementById('ipProxy').innerHTML = '<span class="text-red-700">❌ Detected</span>';
+        } else {
+          proxyBox.className = 'p-4 rounded-lg bg-green-100 border-2 border-green-400';
+          document.getElementById('ipProxy').innerHTML = '<span class="text-green-700">✅ No</span>';
+        }
+        
+        const torBox = document.getElementById('ipTorBox');
+        if (isTor) {
+          torBox.className = 'p-4 rounded-lg bg-red-100 border-2 border-red-400';
+          document.getElementById('ipTor').innerHTML = '<span class="text-red-700">🚨 YES</span>';
+        } else {
+          torBox.className = 'p-4 rounded-lg bg-green-100 border-2 border-green-400';
+          document.getElementById('ipTor').innerHTML = '<span class="text-green-700">✅ No</span>';
+        }
+        
+        const hostingBox = document.getElementById('ipHostingBox');
+        if (isHosting) {
+          hostingBox.className = 'p-4 rounded-lg bg-yellow-100 border-2 border-yellow-400';
+          document.getElementById('ipHosting').innerHTML = '<span class="text-yellow-700">⚠️ Yes</span>';
+        } else {
+          hostingBox.className = 'p-4 rounded-lg bg-green-100 border-2 border-green-400';
+          document.getElementById('ipHosting').innerHTML = '<span class="text-green-700">✅ No</span>';
+        }
+        
+        const abuseBox = document.getElementById('ipAbuseBox');
+        abuseBox.className = 'p-4 rounded-lg bg-gray-100 border-2 border-gray-400';
+        document.getElementById('ipAbuse').innerHTML = '<span class="text-gray-700">? Check DB</span>';
+        
+        // Calculate threat score
+        let threatScore = 0;
+        const threats = [];
+        
+        if (isTor) {
+          threatScore += 40;
+          threats.push('Tor exit node detected');
+        }
+        if (isProxy) {
+          threatScore += 20;
+          threats.push('VPN/Proxy detected');
+        }
+        if (isHosting) {
+          threatScore += 10;
+          threats.push('Data center hosting');
+        }
+        
+        // Display threat assessment
+        const threatBox = document.getElementById('ipThreatBox');
+        if (threatScore >= 50) {
+          threatBox.className = 'border-4 border-red-500 bg-red-50 rounded-xl p-6';
+          document.getElementById('ipThreatScore').innerHTML = 
+            `<span class="text-red-900">${threatScore}/100</span> <span class="text-2xl">🚨 High Risk</span>`;
+        } else if (threatScore >= 20) {
+          threatBox.className = 'border-4 border-yellow-500 bg-yellow-50 rounded-xl p-6';
+          document.getElementById('ipThreatScore').innerHTML = 
+            `<span class="text-yellow-900">${threatScore}/100</span> <span class="text-2xl">⚠️ Moderate</span>`;
+        } else {
+          threatBox.className = 'border-4 border-green-500 bg-green-50 rounded-xl p-6';
+          document.getElementById('ipThreatScore').innerHTML = 
+            `<span class="text-green-900">${threatScore}/100</span> <span class="text-2xl">✅ Low Risk</span>`;
+        }
+        
+        document.getElementById('ipThreatDetails').innerHTML = 
+          threats.length > 0 ? 
+          `<ul class="list-disc ml-5 text-sm">${threats.map(t => `<li>${t}</li>`).join('')}</ul>` :
+          '<p class="text-sm text-green-800">✅ No major threats detected</p>';
+        
+        // Map
+        if (geo.latitude && geo.longitude) {
+          document.getElementById('ipMapWrap').classList.remove('hidden');
+          if (ipMap) ipMap.remove();
+          ipMap = L.map('ipMap').setView([geo.latitude, geo.longitude], 10);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(ipMap);
+          L.marker([geo.latitude, geo.longitude]).addTo(ipMap)
+            .bindPopup(`<b>${ip}</b><br>${geo.city}, ${geo.country}`).openPopup();
+        }
+        
+        document.getElementById('ipLoading').classList.add('hidden');
+        document.getElementById('ipResults').classList.remove('hidden');
+        
+        // Fetch nearby landmarks
+        if (geo.latitude && geo.longitude) {
+          fetchNearbyLandmarks(geo.latitude, geo.longitude, geo.city, geo.country);
+        }
+        
+      } catch (err) {
+        document.getElementById('ipErrorMsg').textContent = err.message;
+        document.getElementById('ipError').classList.remove('hidden');
+        document.getElementById('ipLoading').classList.add('hidden');
+      }
+    });
+
+    
+    // Fetch nearby landmarks using Overpass API (OpenStreetMap)
+    async function fetchNearbyLandmarks(lat, lon, city, country) {
+      document.getElementById('ipLandmarksWrap').classList.remove('hidden');
+      document.getElementById('ipLandmarksLoading').classList.remove('hidden');
+      document.getElementById('ipLandmarksList').innerHTML = '';
+      
+      try {
+        // Query OpenStreetMap for tourism attractions and historic sites within 10km
+        const radius = 10000; // 10km in meters
+        const query = `[out:json][timeout:10];(node["tourism"="attraction"](around:${radius},${lat},${lon});node["historic"](around:${radius},${lat},${lon});way["tourism"="attraction"](around:${radius},${lat},${lon});way["tourism"="museum"](around:${radius},${lat},${lon}););out 10;`;
+        
+        const res = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`, {
+          signal: AbortSignal.timeout(10000)
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          const landmarks = [];
+          
+          // Process results
+          data.elements.forEach(el => {
+            if (el.tags && el.tags.name) {
+              const dist = calculateDistance(lat, lon, el.lat || el.center.lat, el.lon || el.center.lon);
+              landmarks.push({
+                name: el.tags.name,
+                type: el.tags.tourism || el.tags.historic || 'landmark',
+                distance: dist.toFixed(1)
+              });
+            }
+          });
+          
+          // Sort by distance
+          landmarks.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+          
+          // Display top 5
+          const list = document.getElementById('ipLandmarksList');
+          if (landmarks.length > 0) {
+            landmarks.slice(0, 5).forEach((lm, i) => {
+              const div = document.createElement('div');
+              div.className = 'p-3 bg-white border border-purple-300 rounded-lg flex justify-between items-center';
+              div.innerHTML = `
+                <div>
+                  <span class="font-semibold text-purple-900">${i+1}. ${lm.name}</span>
+                  <span class="text-xs text-gray-500 ml-2">(${lm.type})</span>
+                </div>
+                <span class="text-sm font-bold text-purple-700">${lm.distance} km</span>
+              `;
+              list.appendChild(div);
+            });
+          } else {
+            list.innerHTML = '<p class="text-sm text-purple-700">No major landmarks found within 10km radius.</p>';
+          }
+        } else {
+          throw new Error('Landmark API failed');
+        }
+      } catch (err) {
+        console.log('Landmark fetch error:', err);
+        document.getElementById('ipLandmarksList').innerHTML = 
+          `<p class="text-sm text-purple-700">⚠️ Unable to fetch landmarks. City center is approximately in <b>${city}, ${country}</b>.</p>`;
+      } finally {
+        document.getElementById('ipLandmarksLoading').classList.add('hidden');
+      }
+    }
+    
+    // Calculate distance between two lat/lon points (Haversine formula)
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; // Earth radius in km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function openIPDB(type) {
+      if (!currentIPData) return alert('Analyze an IP first!');
+      const ip = currentIPData.ip;
+      
+      const urls = {
+        abuseipdb: `https://www.abuseipdb.com/check/${ip}`,
+        virustotal: `https://www.virustotal.com/gui/ip-address/${ip}`,
+        shodan: `https://www.shodan.io/host/${ip}`,
+        talos: `https://talosintelligence.com/reputation_center/lookup?search=${ip}`
+      };
+      
+      window.open(urls[type], '_blank');
+    }
+
+    // ==================== COMPANY INTELLIGENCE ====================
+    let currentCompanyData = null;
+    
+    // ⚙️ ADD YOUR API KEYS HERE (Get FREE accounts - see guide)
+    const HUNTER_API_KEY = 'd050c4ba07f7f18805c9ac46c8d40a0ccbea5c3c'; // https://hunter.io - 50 FREE/month
+    const BRANDFETCH_API_KEY = 'TpFig2ukTDwY81VEh4NFPgMbPdN0eiRuBa6swjmVmlcXIAHps0OcFYu7L27Q6hM1kO5bIw8wsXdWCXiXiasGKw'; // https://brandfetch.com - 100 FREE/month  
+    const CLEARBIT_API_KEY = ''; // Optional ($99/mo): https://clearbit.com - NOT RECOMMENDED
+    
+    // ✅ FREE API Built-in - No signup required!
+    // Google Knowledge Graph: Already working! Gives industry, type, descriptions
+    // Note: OpenCorporates now requires payment ($20+/mo) - skipping it
+    
+    // Status indicator
+    const API_STATUS = {
+      hunter: HUNTER_API_KEY ? '✅ Active' : '⚠️ Not configured (using estimates)',
+      brandfetch: BRANDFETCH_API_KEY ? '✅ Active' : '⚠️ Not configured',
+      clearbit: CLEARBIT_API_KEY ? '✅ Active' : '❌ Not used'
+    };
+    
+    console.log('📊 Company Intel API Status:', API_STATUS);
+    
+    // Show API status on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const statusText = `Hunter: ${API_STATUS.hunter} | Brandfetch: ${API_STATUS.brandfetch}`;
+      console.log('🔧 API Configuration:', statusText);
+    });
+    
+    document.getElementById('companyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('companyInput').value.trim();
+      
+      document.getElementById('companyLoading').classList.remove('hidden');
+      document.getElementById('companyError').classList.add('hidden');
+      document.getElementById('companyResults').classList.add('hidden');
+      
+      try {
+        // Smart domain extraction - handles company names, domains, and URLs
+        let domain = input.toLowerCase()
+          .replace(/^https?:\/\//, '')
+          .replace(/^www\./, '')
+          .replace(/\/.*$/, '')
+          .replace(/\s+/g, '')  // Remove ALL spaces (e.g., "Aviva Metals" → "avivametals")
+          .trim();
+        
+        // If input doesn't have a dot, it's likely a company name - try adding .com
+        if (!domain.includes('.')) {
+          console.log(`📝 Input "${input}" looks like a company name, trying ${domain}.com`);
+          domain = `${domain}.com`;
+          
+          // Show user what we're searching
+          document.getElementById('companyLoading').innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="spinner"></div>
+              <div>
+                <p class="font-bold text-blue-900">Analyzing company...</p>
+                <p class="text-xs text-blue-700 mt-1">🔍 Searching for: <b>${domain}</b> (auto-detected from "${input}")</p>
+              </div>
+            </div>
+          `;
+        }
+        
+        // Validate domain format
+        if (!domain.includes('.') || domain.length < 4) {
+          throw new Error(`Invalid domain: "${domain}". Please enter a company name (e.g., "Microsoft") or domain (e.g., "microsoft.com")`);
+        }
+        
+        let companyData = {
+          domain: domain,
+          name: domain.split('.')[0].charAt(0).toUpperCase() + domain.split('.')[0].slice(1),
+          emailPattern: null,
+          employees: null,
+          founded: null,
+          industry: null,
+          location: null,
+          description: null
+        };
+        
+        // Try Hunter.io (Email Patterns - 95% accuracy when API key provided)
+        if (HUNTER_API_KEY) {
+          try {
+            const hunterRes = await fetch(
+              `https://api.hunter.io/v2/domain-search?domain=${domain}&api_key=${HUNTER_API_KEY}&limit=1`,
+              { signal: AbortSignal.timeout(10000) }
+            );
+            if (hunterRes.ok) {
+              const hunterData = await hunterRes.json();
+              if (hunterData.data) {
+                companyData.emailPattern = hunterData.data.pattern;
+                companyData.name = hunterData.data.organization || companyData.name;
+                companyData.emailsFound = hunterData.data.emails;
+                companyData.country = hunterData.data.country;
+                console.log('✅ Hunter.io: Success', hunterData.data);
+              }
+            }
+          } catch (err) {
+            console.log('⚠️ Hunter.io failed:', err.message);
+          }
+        }
+        
+        // Fallback email patterns if no API
+        if (!companyData.emailPattern) {
+          const patterns = {
+            'google.com': '{first}.{last}@google.com',
+            'stripe.com': '{first}@stripe.com',
+            'microsoft.com': '{first}.{last}@microsoft.com'
+          };
+          companyData.emailPattern = patterns[domain] || `{first}.{last}@${domain}`;
+        }
+        
+        // Try Brandfetch (Company info - 90% accuracy)
+        if (BRANDFETCH_API_KEY) {
+          console.log('🔍 Trying Brandfetch API...');
+          console.log('API Key present:', BRANDFETCH_API_KEY ? 'Yes (starts with: ' + BRANDFETCH_API_KEY.substring(0, 5) + '...)' : 'No');
+          try {
+            const brandRes = await fetch(
+              `https://api.brandfetch.com/v2/brands/${domain}`,
+              { 
+                headers: { 'Authorization': `Bearer ${BRANDFETCH_API_KEY}` },
+                signal: AbortSignal.timeout(10000)
+              }
+            );
+            console.log('Brandfetch response status:', brandRes.status);
+            if (brandRes.ok) {
+              const brandData = await brandRes.json();
+              console.log('Brandfetch data received:', brandData);
+              console.log('Brandfetch employees field:', brandData.company?.employees);
+              console.log('Brandfetch industry field:', brandData.company?.industry);
+              console.log('Brandfetch description field:', brandData.description);
+              
+              // Extract data with better handling
+              if (brandData.name) companyData.name = brandData.name;
+              if (brandData.description) companyData.description = brandData.description;
+              
+              // Handle employees - could be in different formats
+              if (brandData.company?.employees) {
+                companyData.employees = brandData.company.employees;
+              } else if (brandData.employees) {
+                companyData.employees = brandData.employees;
+              }
+              
+              // Handle founded year
+              if (brandData.company?.foundedYear) {
+                companyData.founded = brandData.company.foundedYear;
+              } else if (brandData.foundedYear) {
+                companyData.founded = brandData.foundedYear;
+              }
+              
+              // Handle industry
+              if (brandData.company?.industry) {
+                companyData.industry = brandData.company.industry;
+              } else if (brandData.industry) {
+                companyData.industry = brandData.industry;
+              }
+              
+              console.log('✅ Brandfetch: Success');
+              console.log('Extracted - Industry:', companyData.industry, '| Employees:', companyData.employees);
+            } else {
+              const errorText = await brandRes.text();
+              console.log('❌ Brandfetch HTTP error:', brandRes.status, errorText);
+            }
+          } catch (err) {
+            console.log('⚠️ Brandfetch failed:', err.message);
+          }
+        } else {
+          console.log('⚠️ Brandfetch API key not configured');
+        }
+        
+        // ============ API 3: Google Knowledge Graph (FREE - No signup!) ============
+        console.log('🔍 Trying Google Knowledge Graph API...');
+        try {
+          const kgRes = await fetch(
+            `https://kgsearch.googleapis.com/v1/entities:search?query=${encodeURIComponent(companyData.name)}&types=Organization&limit=1&key=AIzaSyCVAXiUzRYsML1Pv6RwSG1gunmMikTzQqY`,
+            { signal: AbortSignal.timeout(10000) }
+          );
+          if (kgRes.ok) {
+            const kgData = await kgRes.json();
+            console.log('Knowledge Graph response:', kgData);
+            if (kgData.itemListElement && kgData.itemListElement.length > 0) {
+              const entity = kgData.itemListElement[0].result;
+              if (!companyData.description && entity.detailedDescription?.articleBody) {
+                companyData.description = entity.detailedDescription.articleBody;
+              }
+              if (!companyData.industry && entity['@type']) {
+                // Extract type (e.g., "Corporation", "Organization")
+                const types = Array.isArray(entity['@type']) ? entity['@type'] : [entity['@type']];
+                companyData.industry = types.filter(t => t !== 'Thing').join(', ');
+              }
+              console.log('✅ Knowledge Graph: Success');
+            }
+          }
+        } catch (err) {
+          console.log('⚠️ Knowledge Graph failed:', err.message);
+        }
+        
+        // ============ OpenCorporates (NOW PAID - Commented Out) ============
+        // OpenCorporates used to have a free tier but now requires payment
+        // Leaving code here in case you want to subscribe in the future
+        // Cost: Starts at $20/month for API access
+        /*
+        const OPENCORPORATES_API_KEY = '';
+        if (OPENCORPORATES_API_KEY) {
+          console.log('🔍 Trying OpenCorporates API...');
+          try {
+            const ocRes = await fetch(
+              `https://api.opencorporates.com/v0.4/companies/search?q=${encodeURIComponent(companyData.name)}&api_token=${OPENCORPORATES_API_KEY}`,
+              { signal: AbortSignal.timeout(10000) }
+            );
+            if (ocRes.ok) {
+              const ocData = await ocRes.json();
+              if (ocData.results?.companies?.length > 0) {
+                const company = ocData.results.companies[0].company;
+                if (!companyData.location && company.registered_address_in_full) {
+                  companyData.location = company.registered_address_in_full;
+                }
+                if (!companyData.founded && company.incorporation_date) {
+                  companyData.founded = new Date(company.incorporation_date).getFullYear();
+                }
+                if (!companyData.type && company.company_type) {
+                  companyData.type = company.company_type;
+                }
+                console.log('✅ OpenCorporates: Success');
+              }
+            }
+          } catch (err) {
+            console.log('⚠️ OpenCorporates failed:', err.message);
+          }
+        }
+        */
+        
+        // Fallback defaults
+        if (!companyData.employees) companyData.employees = 'Unknown (Add Brandfetch API for real data)';
+        
+        // Smart industry detection from description (if Brandfetch didn't provide it)
+        if (!companyData.industry && companyData.description) {
+          const desc = companyData.description.toLowerCase();
+          if (desc.includes('manufact') || desc.includes('alloy') || desc.includes('metal') || desc.includes('bronze') || desc.includes('brass')) {
+            companyData.industry = 'Manufacturing - Metals & Alloys';
+          } else if (desc.includes('software') || desc.includes('saas') || desc.includes('technology') || desc.includes('app')) {
+            companyData.industry = 'Technology - Software';
+          } else if (desc.includes('payment') || desc.includes('financial') || desc.includes('banking') || desc.includes('fintech')) {
+            companyData.industry = 'Financial Services';
+          } else if (desc.includes('media') || desc.includes('newspaper') || desc.includes('publishing') || desc.includes('news')) {
+            companyData.industry = 'Media & Publishing';
+          } else if (desc.includes('retail') || desc.includes('ecommerce') || desc.includes('store')) {
+            companyData.industry = 'Retail & E-commerce';
+          } else if (desc.includes('healthcare') || desc.includes('medical') || desc.includes('hospital')) {
+            companyData.industry = 'Healthcare & Medical';
+          } else if (desc.includes('education') || desc.includes('university') || desc.includes('school')) {
+            companyData.industry = 'Education';
+          } else if (desc.includes('consulting') || desc.includes('advisory')) {
+            companyData.industry = 'Professional Services - Consulting';
+          } else {
+            companyData.industry = 'Not Available (auto-detection: no match found)';
+          }
+        }
+        
+        if (!companyData.industry) companyData.industry = 'Not Available (industry data not included in Brandfetch free tier)';
+        if (!companyData.location) companyData.location = 'Unknown';
+        if (!companyData.description) companyData.description = `⚠️ Limited public data available for ${domain}. This may be a small/private company with minimal online presence. Add Brandfetch API key (FREE - 5 min setup) for detailed company information including descriptions, employee counts, and industry classifications.`;
+        
+        currentCompanyData = companyData;
+        
+        // Display results
+        document.getElementById('companyName').textContent = companyData.name;
+        document.getElementById('companyDomain').textContent = domain;
+        document.getElementById('companyWebsite').innerHTML = `<a href="https://${domain}" target="_blank" class="text-indigo-600 hover:underline">${domain}</a>`;
+        
+        // Fix email pattern display - ensure it has @ and domain
+        let displayPattern = companyData.emailPattern || `{first}.{last}@${domain}`;
+        if (displayPattern && !displayPattern.includes('@')) {
+          displayPattern = `${displayPattern}@${domain}`;
+        }
+        document.getElementById('companyEmailPattern').textContent = displayPattern;
+        document.getElementById('companySize').textContent = companyData.employees;
+        document.getElementById('companyIndustry').textContent = companyData.industry;
+        document.getElementById('companyLocation').textContent = companyData.location;
+        document.getElementById('companyFounded').textContent = companyData.founded || 'N/A';
+        document.getElementById('companyType').textContent = 'Private';
+        document.getElementById('companyDescription').textContent = companyData.description;
+        
+        // Social profiles
+        const baseName = domain.split('.')[0];
+        document.getElementById('companyLinkedIn').innerHTML = 
+          `<a href="https://linkedin.com/company/${baseName}" target="_blank" class="text-indigo-600 hover:underline">View Profile</a>`;
+        document.getElementById('companyTwitter').innerHTML = 
+          `<a href="https://twitter.com/${baseName}" target="_blank" class="text-indigo-600 hover:underline">@${baseName}</a>`;
+        document.getElementById('companyFacebook').innerHTML = 
+          `<a href="https://facebook.com/${baseName}" target="_blank" class="text-indigo-600 hover:underline">View Page</a>`;
+        
+        // Risk Assessment
+        const riskAssessment = document.getElementById('companyRiskAssessment');
+        const apiStatus = (HUNTER_API_KEY || BRANDFETCH_API_KEY) ? 
+          '<span class="text-xs text-green-700">✅ Using REAL API data</span>' : 
+          '<span class="text-xs text-yellow-700">⚠️ Using estimates - Add API keys for 90% accuracy</span>';
+        
+        const risks = [
+          `<p class="text-xs mb-2">${apiStatus}</p>`,
+          `⚠️ <b>Email Pattern:</b> <code class="bg-yellow-200 px-2">${displayPattern}</code> - Attackers can guess employee emails`,
+          '⚠️ <b>LinkedIn Profiles:</b> Public employee data enables social engineering',
+          '⚠️ <b>Domain Spoofing:</b> Similar domains can be registered for phishing'
+        ];
+        
+        if (companyData.emailsFound && typeof companyData.emailsFound === 'number') {
+          risks.push(`🚨 <b>${companyData.emailsFound} employee emails</b> found in Hunter.io database`);
+        }
+        
+        riskAssessment.innerHTML = risks.join('<br><br>');
+        
+        // Training Recommendations
+        document.getElementById('companyTrainingRecs').innerHTML = [
+          'Verify email addresses carefully - check domain, not just display name',
+          'Implement SPF, DKIM, and DMARC to prevent spoofing',
+          'Use multi-factor authentication (MFA) everywhere',
+          'Train employees on social engineering awareness',
+          'Establish out-of-band verification for sensitive requests',
+          'Run phishing simulations with Cyber Drill AI'
+        ].map(r => `<li>${r}</li>`).join('');
+        
+        // Show data quality warning if limited data
+        const hasLimitedData = (!BRANDFETCH_API_KEY && 
+          (companyData.employees === 'Unknown (Add Brandfetch API for real data)' || 
+           companyData.industry === 'Unknown (Add Brandfetch API for real data)'));
+        
+        if (hasLimitedData) {
+          document.getElementById('dataQualityBanner').classList.remove('hidden');
+        } else {
+          document.getElementById('dataQualityBanner').classList.add('hidden');
+        }
+        
+        document.getElementById('companyLoading').classList.add('hidden');
+        document.getElementById('companyResults').classList.remove('hidden');
+        
+        // Show API status
+        const statusParts = [];
+        if (HUNTER_API_KEY) statusParts.push('✅ Hunter.io Active');
+        else statusParts.push('❌ Hunter.io NOT configured');
+        
+        if (BRANDFETCH_API_KEY) statusParts.push('✅ Brandfetch Active');
+        else statusParts.push('❌ Brandfetch NOT configured');
+        
+        statusParts.push('✅ Google API Active (built-in)');
+        
+        document.getElementById('apiStatusText').innerHTML = statusParts.join(' | ');
+        
+      } catch (err) {
+        document.getElementById('companyErrorMsg').textContent = err.message;
+        document.getElementById('companyError').classList.remove('hidden');
+        document.getElementById('companyLoading').classList.add('hidden');
+      }
+    });
   </script>
 </body>
 </html>
-
