@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C.T.T.C Academy - Cybersecurity Excellence Through Education</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ff9d;
+            --primary-dark: #00cc7d;
+            --secondary: #0a1628;
+            --accent: #ff3366;
+            --bg-dark: #050b14;
+            --bg-card: #0d1829;
+            --text-light: #e0e6ed;
+            --text-muted: #8a9ab0;
+            --border: #1a2942;
+            --gradient-1: linear-gradient(135deg, #00ff9d 0%, #00b8d4 100%);
+            --gradient-2: linear-gradient(135deg, #ff3366 0%, #ff6b35 100%);
+            --glow: 0 0 20px rgba(0, 255, 157, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 255, 157, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 51, 102, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(0, 184, 212, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            background: rgba(5, 11, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .header-top {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 22, 40, 0.5);
+        }
+
+        .header-top .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+
+        .toll-free {
+            background: var(--gradient-1);
+            color: var(--secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: var(--glow);
+        }
+
+        nav {
+            padding: 1.2rem 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(0, 255, 157, 0.5);
+        }
+
+        .tagline {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: -5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        .search-bar input {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            outline: none;
+            width: 250px;
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: var(--secondary);
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(0, 255, 157, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 255, 157, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 0.7rem 1.8rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--secondary);
+            box-shadow: var(--glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding: 6rem 0;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(120deg); }
+            66% { transform: translate(-30px, 30px) rotate(240deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 2.5rem;
+        }
+
+        .carousel {
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .carousel-item {
+            display: none;
+            text-align: center;
+            padding: 3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-item.active {
+            display: block;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .carousel-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.05) 0%, rgba(255, 51, 102, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            box-shadow: var(--glow);
+            transform: scale(1.3);
+        }
+
+        /* Section Titles */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-1);
+            box-shadow: var(--glow);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.8rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .tab:hover, .tab.active {
+            background: var(--gradient-1);
+            color: var(--secondary);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+            transform: translateY(-2px);
+        }
+
+        /* Course Grid */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .course-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.05) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .course-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 255, 157, 0.2);
+        }
+
+        .course-card:hover::before {
+            opacity: 1;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gradient-2);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'Orbitron', monospace;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--glow);
+        }
+
+        .course-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            color: #ffa500;
+        }
+
+        .rating .stars {
+            font-size: 0.9rem;
+        }
+
+        .rating .count {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .next-batch {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .next-batch strong {
+            color: var(--primary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .modules {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .modules h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .modules ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .modules li {
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            position: relative;
+            padding-left: 1.2rem;
+        }
+
+        .modules li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        .view-details {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        /* Program Cards */
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .program-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(13, 24, 41, 0.8) 100%);
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .program-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1) 0%, rgba(0, 184, 212, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .program-card:hover::before {
+            opacity: 1;
+        }
+
+        .program-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 255, 157, 0.25);
+        }
+
+        .program-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .course-list {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .course-list h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .course-list ul {
+            list-style: none;
+        }
+
+        .course-list li {
+            padding: 0.6rem 0;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .course-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .category-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            color: var(--text-light);
+        }
+
+        /* Testimonials */
+        .testimonials-slider {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .testimonial {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 6rem;
+            color: var(--primary);
+            opacity: 0.2;
+            font-family: 'Orbitron', monospace;
+        }
+
+        .testimonial-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            font-family: 'Orbitron', monospace;
+            box-shadow: var(--glow);
+        }
+
+        .testimonial-info h4 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .testimonial-role {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .testimonial-course {
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1) 0%, rgba(0, 184, 212, 0.1) 100%);
+            border: 2px solid var(--primary);
+            border-radius: 20px;
+            padding: 4rem 3rem;
+            text-align: center;
+            margin: 5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 157, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .cta-banner h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .blog-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .blog-content {
+            padding: 1.5rem;
+        }
+
+        .blog-date {
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-family: 'Space Mono', monospace;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+        }
+
+        /* Edge Cards */
+        .edge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .edge-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .edge-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
+        }
+
+        .edge-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .edge-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .edge-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Corporate Section */
+        .corporate-section {
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.05) 0%, rgba(0, 184, 212, 0.05) 100%);
+            border-radius: 20px;
+            padding: 5rem 3rem;
+            text-align: center;
+            margin: 5rem 0;
+        }
+
+        .corporate-section h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .corporate-section p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .client-logos {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .client-logo {
+            width: 150px;
+            height: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .client-logo:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--secondary);
+            border-top: 2px solid var(--border);
+            padding: 4rem 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: var(--secondary);
+            border-color: var(--primary);
+            box-shadow: var(--glow);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .course-grid,
+            .program-grid,
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            /* Founder section responsive */
+            .founder-grid {
+                grid-template-columns: 1fr !important;
+                gap: 2rem !important;
+            }
+
+            .founder-avatar {
+                width: 200px !important;
+                height: 200px !important;
+            }
+
+            .founder-stats {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-top">
+            <div class="container">
+                <div class="contact-info">
+                    <span>New Course Enquiry:</span>
+                    <span class="toll-free">+92 315 9552882</span>
+                </div>
+                <div>
+                    <button class="btn-secondary" style="padding: 0.4rem 1.2rem; font-size: 0.75rem;">Sign Up</button>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <div class="container nav-container">
+                <div>
+                    <div class="logo">CTTC</div>
+                    <div class="tagline">Microsoft & Cisco Authorized Training Center</div>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#categories">Categories</a></li>
+                    <li><a href="#courses">All Courses</a></li>
+                    <li><a href="#corporate">Corporate Training</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+                <div style="display: flex; gap: 1.5rem; align-items: center;">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search courses...">
+                        <span style="color: var(--primary);">🔍</span>
+                    </div>
+                    <button class="btn-primary">Log In</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>SECURE THE FUTURE</h1>
+                <p>Master Technology with Industry Expert Mr. Farrukh Nizami</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary">Explore Courses</button>
+                    <button class="btn-secondary">Contact Us</button>
+                </div>
+
+                <div class="carousel">
+                    <div class="carousel-item active">
+                        <h2 style="font-family: 'Orbitron', monospace; font-size: 2.5rem; margin-bottom: 1rem;">Learn from Mr. Farrukh Nizami</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">Microsoft & Cisco Authorized Expert with 20+ years of industry experience</p>
+                        <button class="btn-primary">Know More</button>
+                    </div>
+                    <div class="carousel-item">
+                        <h2 style="font-family: 'Orbitron', monospace; font-size: 2.5rem; margin-bottom: 1rem;">Industry-Recognized Certifications</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">Prepare for CISSP, CEH, CCNA, CCNP, Azure, and specialized certifications</p>
+                        <button class="btn-primary">Know More</button>
+                    </div>
+                    <div class="carousel-item">
+                        <h2 style="font-family: 'Orbitron', monospace; font-size: 2.5rem; margin-bottom: 1rem;">24/7 Support & Career Assistance</h2>
+                        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1.5rem;">Lifetime access with expert mentorship and job placement support</p>
+                        <button class="btn-primary">Know More</button>
+                    </div>
+                    <div class="carousel-dots">
+                        <span class="dot active" onclick="currentSlide(0)"></span>
+                        <span class="dot" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet Our Founder -->
+    <section class="section" style="background: linear-gradient(135deg, rgba(0, 255, 157, 0.05) 0%, rgba(0, 184, 212, 0.05) 100%);">
+        <div class="container">
+            <h2 class="section-title">Meet Our Founder</h2>
+            
+            <div class="founder-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto;">
+                <div style="text-align: center;">
+                    <div class="founder-avatar" style="width: 280px; height: 280px; border-radius: 20px; background: var(--gradient-1); display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 20px 60px rgba(0, 255, 157, 0.3); border: 3px solid var(--primary);">
+                        <div style="font-size: 8rem; font-weight: 700; font-family: 'Orbitron', monospace; color: var(--secondary);">FN</div>
+                    </div>
+                    <h3 style="font-family: 'Orbitron', monospace; font-size: 1.8rem; margin-top: 2rem; margin-bottom: 0.5rem;">Mr. Farrukh Nizami</h3>
+                    <p style="color: var(--primary); font-weight: 600; font-size: 1.1rem; margin-bottom: 0.3rem;">CEO, CTTC (Pvt) Ltd</p>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Microsoft & Cisco Authorized Instructor</p>
+                </div>
+                
+                <div>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 15px; padding: 2.5rem;">
+                        <h3 style="font-family: 'Orbitron', monospace; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--primary);">Industry Leadership & Expertise</h3>
+                        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-light); margin-bottom: 1.5rem;">
+                            With decades of experience in technology training and certifications, Mr. Farrukh Nizami has established CTTC as Pakistan's premier Microsoft and Cisco Authorized Training Center.
+                        </p>
+                        
+                        <div class="founder-stats" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2rem;">
+                            <div style="background: rgba(0, 255, 157, 0.05); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                                <h4 style="font-family: 'Orbitron', monospace; font-size: 1rem; margin-bottom: 0.5rem;">Microsoft Certified</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">Authorized Training Partner</p>
+                            </div>
+                            <div style="background: rgba(0, 255, 157, 0.05); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🌐</div>
+                                <h4 style="font-family: 'Orbitron', monospace; font-size: 1rem; margin-bottom: 0.5rem;">Cisco Certified</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">Authorized Training Partner</p>
+                            </div>
+                            <div style="background: rgba(0, 255, 157, 0.05); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">💼</div>
+                                <h4 style="font-family: 'Orbitron', monospace; font-size: 1rem; margin-bottom: 0.5rem;">Industry Expert</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">20+ Years Experience</p>
+                            </div>
+                            <div style="background: rgba(0, 255, 157, 0.05); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem;">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
+                                <h4 style="font-family: 'Orbitron', monospace; font-size: 1rem; margin-bottom: 0.5rem;">Proven Results</h4>
+                                <p style="font-size: 0.9rem; color: var(--text-muted);">10,000+ Students Trained</p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border);">
+                            <p style="font-style: italic; color: var(--text-muted); font-size: 1rem; line-height: 1.7;">
+                                "My mission is to empower professionals across Pakistan with world-class technology certifications and practical skills that drive career growth. At CTTC, we don't just teach courses—we build careers."
+                            </p>
+                            <p style="color: var(--primary); font-weight: 600; margin-top: 1rem; font-family: 'Orbitron', monospace;">— Mr. Farrukh Nizami</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trending Courses -->
+    <section class="section" id="courses">
+        <div class="container">
+            <h2 class="section-title">Trending Courses</h2>
+            
+            <div class="tabs">
+                <div class="tab active">All</div>
+                <div class="tab">AI & Machine Learning</div>
+                <div class="tab">Cisco (CCNA/CCNP)</div>
+                <div class="tab">Cybersecurity</div>
+                <div class="tab">Cloud (Azure/AWS)</div>
+            </div>
+
+            <div class="course-grid">
+                <div class="course-card">
+                    <span class="badge">NEW BATCH</span>
+                    <div class="course-icon">🤖</div>
+                    <h3>AI Agent Architect Certification</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">5.0 (New Course)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 11, 2026 (Sunday)</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>LLM Foundations & Advanced Prompting</li>
+                            <li>Building Agents with Tools & APIs</li>
+                            <li>No-Code Automation (n8n & Make)</li>
+                            <li>RAG & Memory Systems</li>
+                            <li>Launching & Monetizing AI Agents</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <span class="badge">BEST SELLER</span>
+                    <div class="course-icon">🛡️</div>
+                    <h3>Phishing Awareness & Prevention</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (2,450)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 25, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Phishing Detection & Response Strategies</li>
+                            <li>Email Security Best Practices</li>
+                            <li>Social Engineering Defense Techniques</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">⚙️</div>
+                    <h3>Industrial Cybersecurity Fundamentals</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.8 (1,890)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 30, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>ICS/SCADA Security Principles</li>
+                            <li>OT Network Architecture</li>
+                            <li>Manufacturing Sector Threats</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <span class="badge">NEW</span>
+                    <div class="course-icon">🔐</div>
+                    <h3>Advanced Threat Detection</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="count">4.7 (980)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 5, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>SIEM Tools & Log Analysis</li>
+                            <li>Behavioral Analytics</li>
+                            <li>Incident Response Automation</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">📋</div>
+                    <h3>CISSP Certification Preparation</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (3,200)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 28, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Security & Risk Management</li>
+                            <li>Asset Security & Architecture</li>
+                            <li>Identity & Access Management</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🎯</div>
+                    <h3>Security Awareness Training</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.8 (5,670)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Rolling Enrollment</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Social Engineering Defense</li>
+                            <li>Password & Data Protection</li>
+                            <li>Safe Internet Practices</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <span class="badge">TRENDING</span>
+                    <div class="course-icon">🔬</div>
+                    <h3>Incident Response & Forensics</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (1,450)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 10, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Digital Evidence Collection</li>
+                            <li>Malware Analysis Techniques</li>
+                            <li>Post-Incident Reporting</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <span class="badge">HOT</span>
+                    <div class="course-icon">☁️</div>
+                    <h3>Azure Security Engineer (AZ-500)</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.8 (2,340)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 27, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Azure Identity & Access Management</li>
+                            <li>Platform Protection & Network Security</li>
+                            <li>Security Operations in Azure</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🌐</div>
+                    <h3>AWS Security Fundamentals</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="count">4.7 (1,890)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 3, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>IAM Policies & Best Practices</li>
+                            <li>S3 Bucket Security & Encryption</li>
+                            <li>VPC Security & Network Controls</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🔐</div>
+                    <h3>Cloud Security Architecture</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (1,560)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 12, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Multi-Cloud Security Strategies</li>
+                            <li>Cloud-Native Security Tools</li>
+                            <li>Compliance & Governance (CSPM)</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <span class="badge">POPULAR</span>
+                    <div class="course-icon">🌐</div>
+                    <h3>CCNA - Cisco Certified Network Associate</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.8 (3,120)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 1, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Network Fundamentals & IP Connectivity</li>
+                            <li>Routing & Switching Technologies</li>
+                            <li>Network Security & Automation</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+
+                <div class="course-card">
+                    <div class="course-icon">🔧</div>
+                    <h3>CCNP - Cisco Certified Network Professional</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (1,850)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 15, 2026</strong>
+                    </div>
+                    <div class="modules">
+                        <h4>What will I learn?</h4>
+                        <ul>
+                            <li>Advanced Routing & Layer 3 Technologies</li>
+                            <li>Enterprise Network Design & Implementation</li>
+                            <li>Network Troubleshooting & Optimization</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">View Details</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <button class="btn-secondary">Browse All Courses</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Programs -->
+    <section class="section" style="background: rgba(10, 22, 40, 0.3);">
+        <div class="container">
+            <h2 class="section-title">Career-Related Programs</h2>
+            
+            <div class="program-grid">
+                <div class="program-card">
+                    <span class="badge">FEATURED</span>
+                    <h3>AI Agent Development Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">5.0 (New Program)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 11, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>AI Agent Architect Certification</li>
+                            <li>LLM Foundations & Prompt Engineering</li>
+                            <li>No-Code AI Automation</li>
+                            <li>RAG Systems & Memory Architecture</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+
+                <div class="program-card">
+                    <h3>Industrial Cybersecurity Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.8 (850)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Jan 25, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>Industrial Cybersecurity Fundamentals</li>
+                            <li>ICS/SCADA Security Architecture</li>
+                            <li>OT Network Defense Strategies</li>
+                            <li>Compliance & Standards (IEC 62443)</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+
+                <div class="program-card">
+                    <h3>Cybersecurity Analyst Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (1,200)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 1, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>Network Security Fundamentals</li>
+                            <li>Advanced Threat Detection</li>
+                            <li>Incident Response & Forensics</li>
+                            <li>Security Information & Event Management</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+
+                <div class="program-card">
+                    <h3>Ethical Hacking Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="count">4.7 (950)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 8, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>Penetration Testing Fundamentals</li>
+                            <li>Web Application Security Testing</li>
+                            <li>Wireless Network Exploitation</li>
+                            <li>CEH Certification Preparation</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+
+                <div class="program-card">
+                    <h3>Cloud Security Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (1,150)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 5, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>Azure Security Engineer (AZ-500)</li>
+                            <li>AWS Security Fundamentals</li>
+                            <li>Cloud Security Architecture</li>
+                            <li>Multi-Cloud Security & Compliance</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+
+                <div class="program-card">
+                    <span class="badge">CISCO CERTIFIED</span>
+                    <h3>Cisco Networking Masters Program</h3>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="count">4.9 (2,340)</span>
+                    </div>
+                    <div class="next-batch">
+                        Next batch: <strong>Feb 1, 2026</strong>
+                    </div>
+                    <div class="course-list">
+                        <h4>Courses under the program</h4>
+                        <ul>
+                            <li>CCNA - Network Associate</li>
+                            <li>CCNP - Network Professional</li>
+                            <li>Network Security Fundamentals</li>
+                            <li>SD-WAN & Network Automation</li>
+                        </ul>
+                    </div>
+                    <button class="btn-primary view-details">SEE MORE</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="section" id="categories">
+        <div class="container">
+            <h2 class="section-title">Discover Top Categories</h2>
+            
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🤖</div>
+                    <h3>AI & Machine Learning</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🌐</div>
+                    <h3>Cisco Certifications</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">☁️</div>
+                    <h3>Microsoft Azure</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🔒</div>
+                    <h3>Cybersecurity</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🔐</div>
+                    <h3>Cloud Security</h3>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🎓</div>
+                    <h3>Microsoft Certifications</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section" style="background: rgba(10, 22, 40, 0.3);">
+        <div class="container">
+            <h2 class="section-title">What Our Students Say</h2>
+            
+            <div class="testimonials-slider">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">AK</div>
+                            <div class="testimonial-info">
+                                <h4>Ahmed Khan</h4>
+                                <div class="testimonial-role">Network Security Engineer</div>
+                                <div class="testimonial-course">CCNA & Cybersecurity Program</div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">
+                            "Learning directly from Mr. Farrukh Nizami was a game-changer for my career. His deep expertise in networking and cybersecurity, combined with hands-on teaching approach, made complex concepts easy to grasp. CTTC provided world-class training right here in Pakistan. The Microsoft and Cisco authorized certifications opened doors I never thought possible."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="testimonial" style="margin-top: 2rem;">
+                    <div class="testimonial-content">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">SF</div>
+                            <div class="testimonial-info">
+                                <h4>Sarah Fatima</h4>
+                                <div class="testimonial-role">Cloud Solutions Architect</div>
+                                <div class="testimonial-course">Azure & AI Masters Program</div>
+                            </div>
+                        </div>
+                        <p class="testimonial-text">
+                            "Mr. Farrukh Nizami's teaching style is exceptional. He doesn't just cover theory—he shares real-world insights from his decades of experience. The AI Agent Architect course was transformative, and the Azure certifications boosted my career prospects tremendously. CTTC is the gold standard for IT training in Pakistan."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="container">
+        <div class="cta-banner">
+            <h2>Enroll, Learn, Secure, Repeat!</h2>
+            <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2rem;">Get ready to achieve your cybersecurity goals with C.T.T.C Academy</p>
+            <button class="btn-primary" style="font-size: 1rem; padding: 1rem 2.5rem;">View All Courses</button>
+        </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="section" id="resources">
+        <div class="container">
+            <h2 class="section-title">Latest Blog Posts</h2>
+            
+            <div class="blog-grid">
+                <div class="blog-card">
+                    <div class="blog-image">🤖</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 18, 2026</div>
+                        <h3>New Course Alert: AI Agent Architect - Build Digital Employees</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">📝</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 15, 2026</div>
+                        <h3>Top Cybersecurity Interview Questions & Answers for 2026</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">⚙️</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 12, 2026</div>
+                        <h3>ICS Security Best Practices for Manufacturing</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🌐</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 11, 2026</div>
+                        <h3>CCNA 2026: Complete Preparation Guide & Study Tips</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🎣</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 10, 2026</div>
+                        <h3>Complete Guide to Phishing Prevention in 2026</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🔐</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 8, 2026</div>
+                        <h3>CISSP Certification: Your Complete Study Guide</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🛡️</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 5, 2026</div>
+                        <h3>Zero Trust Architecture: Implementation Guide</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🌐</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 3, 2026</div>
+                        <h3>Network Segmentation Strategies for OT Environments</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">☁️</div>
+                    <div class="blog-content">
+                        <div class="blog-date">January 1, 2026</div>
+                        <h3>Azure Security Best Practices: AZ-500 Study Guide</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🔒</div>
+                    <div class="blog-content">
+                        <div class="blog-date">December 28, 2025</div>
+                        <h3>Securing Multi-Cloud Environments in 2026</h3>
+                    </div>
+                </div>
+
+                <div class="blog-card">
+                    <div class="blog-image">🛡️</div>
+                    <div class="blog-content">
+                        <div class="blog-date">December 25, 2025</div>
+                        <h3>AWS IAM Security: Complete Implementation Guide</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The C.T.T.C Edge -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">The C.T.T.C Edge</h2>
+            
+            <div class="edge-grid">
+                <div class="edge-card">
+                    <div class="edge-icon">💬</div>
+                    <h3>Real-Time Doubt Resolution</h3>
+                    <p>Connect with expert instructors and teaching assistants 24/7 for immediate help</p>
+                </div>
+
+                <div class="edge-card">
+                    <div class="edge-icon">♾️</div>
+                    <h3>Unlimited Access</h3>
+                    <p>Lifetime access to course materials, recordings, and updated content</p>
+                </div>
+
+                <div class="edge-card">
+                    <div class="edge-icon">🎓</div>
+                    <h3>Learning Assistants</h3>
+                    <p>Dedicated mentors to guide your learning journey and career development</p>
+                </div>
+
+                <div class="edge-card">
+                    <div class="edge-icon">📈</div>
+                    <h3>Track Your Career Growth</h3>
+                    <h3>Track Career Growth</h3>
+                    <p>Monitor progress with analytics, certifications, and placement assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Corporate Training -->
+    <section class="corporate-section" id="corporate">
+        <div class="container">
+            <h2>No more security gaps in your company</h2>
+            <p>Transform your workforce with industry-leading cybersecurity training</p>
+            <button class="btn-primary" style="font-size: 1rem; padding: 1rem 2.5rem;">LEARN MORE</button>
+
+            <div class="client-logos">
+                <div class="client-logo">ENTERPRISE A</div>
+                <div class="client-logo">ENTERPRISE B</div>
+                <div class="client-logo">ENTERPRISE C</div>
+                <div class="client-logo">ENTERPRISE D</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Trending Courses</h3>
+                    <ul>
+                        <li><a href="#">AI Agent Architect Certification</a></li>
+                        <li><a href="#">CCNA - Cisco Network Associate</a></li>
+                        <li><a href="#">CCNP - Cisco Network Professional</a></li>
+                        <li><a href="#">Azure Security Engineer (AZ-500)</a></li>
+                        <li><a href="#">CISSP Preparation</a></li>
+                        <li><a href="#">AWS Security Fundamentals</a></li>
+                        <li><a href="#">Ethical Hacking</a></li>
+                        <li><a href="#">Cloud Security Architecture</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Master Programs</h3>
+                    <ul>
+                        <li><a href="#">AI Agent Development Masters</a></li>
+                        <li><a href="#">Cisco Networking Masters</a></li>
+                        <li><a href="#">Cybersecurity Analyst Masters</a></li>
+                        <li><a href="#">Cloud Security Masters</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">About Mr. Farrukh Nizami</a></li>
+                        <li><a href="#">Microsoft Partnership</a></li>
+                        <li><a href="#">Cisco Partnership</a></li>
+                        <li><a href="#">Reviews</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="tel:+923159552882">📞 +92 315 9552882</a></li>
+                        <li><a href="/cdn-cgi/l/email-protection#a1c8cfc7cee1c2d5d5c28fcfc4d58fd1ca">📧 <span class="__cf_email__" data-cfemail="2b42454d446b485f5f4805454e5f055b40">[email&#160;protected]</span></a></li>
+                        <li><a href="#">📍 Pakistan</a></li>
+                    </ul>
+                    <h3 style="margin-top: 1.5rem;">Resources</h3>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Videos</a></li>
+                        <li><a href="#">Webinars</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 CTTC (Pvt) Ltd - Microsoft & Cisco Authorized Training Center. All Rights Reserved.</p>
+                <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">Founded by Mr. Farrukh Nizami | Empowering Pakistan's Tech Professionals Since 2000</p>
+                <div class="social-links">
+                    <a href="#">📘</a>
+                    <a href="#">🐦</a>
+                    <a href="#">💼</a>
+                    <a href="#">📸</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Carousel functionality
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            dots[index].classList.add('active');
+        }
+
+        function currentSlide(index) {
+            currentSlideIndex = index;
+            showSlide(index);
+        }
+
+        // Auto-advance carousel
+        setInterval(() => {
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            showSlide(currentSlideIndex);
+        }, 5000);
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all course cards and program cards
+        document.querySelectorAll('.course-card, .program-card, .blog-card').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = doc
