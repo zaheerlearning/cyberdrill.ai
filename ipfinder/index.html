@@ -1,1 +1,576 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IP Info with Map — Enhanced</title>
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet (Map, no API key needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Leaflet MarkerCluster (for many IPs) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <!-- (Optional) Heatmap plugin -->
+  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <!-- UA Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/ua-parser-js@1.0.37/src/ua-parser.min.js"></script>
+  <!-- jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-Yk0GQ2b3n8p0oO1nM1k0d8uwa0pV3f1zS3+zqk80yI3b1h9m9dZcD6qvB5F7m6LwTt7A2x9G1w5b3yS9H0P0GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <style>
+    :root { color-scheme: light dark; }
+    .skeleton { @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded; }
+    .flag { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; }
+    .badge { @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium; }
+    .badge-safe { @apply bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200; }
+    .badge-warn { @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-200; }
+    .badge-danger { @apply bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200; }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100">
+  <div class="max-w-7xl mx-auto p-4 md:p-6 space-y-4">
+    <header class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">IP Info with Map — Enhanced</h1>
+        <p class="text-sm text-slate-600 dark:text-slate-300">Look up IP intel, visualize on map, detect VPN/Proxy/Tor, reverse DNS, parse User-Agent, batch lookup, export & more.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="darkToggle" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700">🌙/☀️ Theme</button>
+        <button id="btnInstallPWA" class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 hidden">Install</button>
+      </div>
+    </header>
+
+    <!-- API keys panel -->
+    <details class="border border-slate-200 dark:border-slate-700 rounded-lg p-3 open:shadow">
+      <summary class="cursor-pointer font-semibold">🔑 API Keys (stored locally)</summary>
+      <div class="grid md:grid-cols-3 gap-4 mt-3">
+        <label class="block">
+          <span class="text-sm">ipinfo.io token</span>
+          <input id="keyIpinfo" class="mt-1 w-full rounded border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800 p-2" placeholder="e.g. 123abc..." />
+        </label>
+        <label class="block">
+          <span class="text-sm">IPQualityScore key</span>
+          <input id="keyIPQS" class="mt-1 w-full rounded border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800 p-2" placeholder="e.g. pk_live_..." />
+        </label>
+        <label class="block">
+          <span class="text-sm">ipapi.co (optional)</span>
+          <input id="keyIpapi" class="mt-1 w-full rounded border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-800 p-2" placeholder="api key or leave blank" />
+        </label>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button id="saveKeys" class="px-3 py-2 rounded bg-blue-600 text-white">Save Keys</button>
+        <button id="clearKeys" class="px-3 py-2 rounded bg-slate-200 dark:bg-slate-800">Clear</button>
+      </div>
+      <p class="text-xs text-slate-500 mt-2">Keys are saved to <code>localStorage</code> only on your device.</p>
+    </details>
+
+    <!-- Input panel -->
+    <section class="grid lg:grid-cols-3 gap-4">
+      <div class="lg:col-span-2 space-y-3">
+        <div class="flex gap-2 items-start">
+          <textarea id="ipInput" rows="3" class="flex-1 rounded border border-slate-300 dark:border-slate-700 p-3" placeholder="Enter an IP (e.g., 8.8.8.8), or multiple IPs separated by commas/newlines"></textarea>
+          <div class="flex flex-col gap-2 w-40">
+            <button id="btnLookup" class="px-3 py-2 rounded bg-blue-600 text-white">Lookup</button>
+            <button id="btnMyIP" class="px-3 py-2 rounded bg-slate-200 dark:bg-slate-800">Use My IP</button>
+            <button id="btnClear" class="px-3 py-2 rounded bg-slate-200 dark:bg-slate-800">Clear</button>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="chkThreat" type="checkbox" class="accent-blue-600" checked />
+            Threat detection (IPQS)
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="chkCache" type="checkbox" class="accent-blue-600" checked />
+            Cache responses
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="chkBatch" type="checkbox" class="accent-blue-600" />
+            Batch mode (treat input as list)
+          </label>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="btnExportCSV" class="px-3 py-2 rounded border">Export CSV</button>
+          <button id="btnExportPDF" class="px-3 py-2 rounded border">Export PDF</button>
+          <button id="btnShare" class="px-3 py-2 rounded border">Share Link</button>
+          <button id="btnCopyIP" class="px-3 py-2 rounded border">Copy IP(s)</button>
+        </div>
+        
+        <!-- User-Agent tools -->
+        <details class="border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+          <summary class="cursor-pointer font-medium">🖥️ User-Agent Analyzer</summary>
+          <div class="mt-3 grid md:grid-cols-2 gap-3">
+            <textarea id="uaInput" rows="3" class="w-full rounded border border-slate-300 dark:border-slate-700 p-2" placeholder="Paste a User-Agent string (or leave blank to parse your current UA)"></textarea>
+            <div>
+              <button id="btnParseUA" class="px-3 py-2 rounded bg-slate-200 dark:bg-slate-800">Parse UA</button>
+              <div id="uaResult" class="mt-2 text-sm whitespace-pre-wrap"></div>
+            </div>
+          </div>
+        </details>
+
+        <!-- History -->
+        <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="font-semibold">Search History</h3>
+            <button id="btnClearHistory" class="text-xs underline">Clear</button>
+          </div>
+          <div id="historyList" class="flex flex-wrap gap-2 text-sm"></div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="lg:col-span-1">
+        <div id="map" class="h-[420px] rounded-lg border border-slate-300 dark:border-slate-700"></div>
+        <div class="text-xs text-slate-500 mt-2">Tiles © OpenStreetMap contributors</div>
+        <div class="mt-2 flex items-center gap-2 text-xs">
+          <label class="inline-flex items-center gap-1"><input id="chkCluster" type="checkbox" class="accent-blue-600" checked/> Cluster</label>
+          <label class="inline-flex items-center gap-1"><input id="chkHeat" type="checkbox" class="accent-blue-600"/> Heatmap</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="space-y-3">
+      <h2 class="text-lg font-semibold">Results</h2>
+      <div id="results" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+    </section>
+
+    <footer class="pt-6 text-xs text-slate-500">
+      <p>Pro tips: separate multiple IPs with commas or new lines. Use the API Keys panel to enable richer data. This app caches recent results in-memory and (optionally) in localStorage.</p>
+    </footer>
+  </div>
+
+  <script>
+    // ------------ Utilities ------------
+    const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+    const store = {
+      get(key, def=null){ try { return JSON.parse(localStorage.getItem(key)) ?? def; } catch { return def; } },
+      set(key, val){ localStorage.setItem(key, JSON.stringify(val)); },
+      del(key){ localStorage.removeItem(key); }
+    };
+    const sleep = (ms) => new Promise(r=>setTimeout(r, ms));
+
+    // Parse query param ?ip=
+    const qp = new URLSearchParams(location.search);
+
+    // ------------ Theme toggle ------------
+    const darkToggle = $('#darkToggle');
+    const themeKey = 'ipapp_theme';
+    function applyTheme() {
+      const pref = store.get(themeKey, 'auto');
+      const isDark = pref === 'dark' || (pref==='auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', isDark);
+    }
+    darkToggle.addEventListener('click', () => {
+      const current = store.get(themeKey, 'auto');
+      const next = current === 'light' ? 'dark' : current === 'dark' ? 'auto' : 'light';
+      store.set(themeKey, next); applyTheme();
+    });
+    applyTheme();
+
+    // ------------ Map ------------
+    const map = L.map('map', { worldCopyJump: true }).setView([20, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    let cluster = L.markerClusterGroup();
+    map.addLayer(cluster);
+    let heatLayer = null; // created on demand
+
+    const markers = []; // { marker, lat, lon }
+
+    function setMapLayers() {
+      const doCluster = $('#chkCluster').checked;
+      const doHeat = $('#chkHeat').checked;
+
+      // markers
+      if (!doCluster) { map.removeLayer(cluster); markers.forEach(m=>m.marker.addTo(map)); }
+      else { 
+        map.addLayer(cluster);
+        markers.forEach(m=> { try { cluster.addLayer(m.marker); } catch(e){} });
+      }
+
+      // heat
+      if (doHeat) {
+        const points = markers.filter(m=>Number.isFinite(m.lat) && Number.isFinite(m.lon)).map(m=>[m.lat, m.lon, 0.5]);
+        if (heatLayer) { map.removeLayer(heatLayer); heatLayer = null; }
+        if (points.length) { heatLayer = L.heatLayer(points, { radius: 20, blur: 15 }); heatLayer.addTo(map); }
+      } else if (heatLayer) { map.removeLayer(heatLayer); heatLayer = null; }
+    }
+    $('#chkCluster').addEventListener('change', setMapLayers);
+    $('#chkHeat').addEventListener('change', setMapLayers);
+
+    function addPin(lat, lon, html) {
+      if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+      const marker = L.marker([lat, lon]).bindPopup(html || '');
+      markers.push({ marker, lat, lon });
+      if ($('#chkCluster').checked) cluster.addLayer(marker); else marker.addTo(map);
+      setMapLayers();
+    }
+
+    function fitToPins() {
+      const pts = markers.filter(m=>Number.isFinite(m.lat) && Number.isFinite(m.lon)).map(m=>[m.lat, m.lon]);
+      if (pts.length === 1) map.setView(pts[0], 6);
+      else if (pts.length > 1) map.fitBounds(pts);
+    }
+
+    // ------------ API keys (local only) ------------
+    const KEYS_KEY = 'ipapp_keys';
+    function loadKeys(){ const k = store.get(KEYS_KEY, {}); $('#keyIpinfo').value = k.ipinfo||''; $('#keyIPQS').value = k.ipqs||''; $('#keyIpapi').value = k.ipapi||''; return k; }
+    function saveKeys(){ const k = { ipinfo:$('#keyIpinfo').value.trim(), ipqs:$('#keyIPQS').value.trim(), ipapi:$('#keyIpapi').value.trim() }; store.set(KEYS_KEY,k); }
+    function clearKeys(){ store.del(KEYS_KEY); loadKeys(); }
+    $('#saveKeys').addEventListener('click', ()=>{ saveKeys(); alert('Saved'); });
+    $('#clearKeys').addEventListener('click', ()=>{ clearKeys(); alert('Cleared'); });
+    loadKeys();
+
+    // ------------ History ------------
+    const HIST_KEY = 'ipHistory';
+    function addHistory(ip){ if(!ip) return; const h = store.get(HIST_KEY, []); if (!h.includes(ip)) { h.unshift(ip); if (h.length>50) h.pop(); store.set(HIST_KEY, h); renderHistory(); } }
+    function renderHistory(){ const h = store.get(HIST_KEY, []); const box = $('#historyList'); box.innerHTML=''; h.forEach(ip=>{ const btn=document.createElement('button'); btn.className='px-2 py-1 rounded border text-xs'; btn.textContent=ip; btn.title='Lookup'; btn.onclick=()=>{ $('#ipInput').value=ip; $('#chkBatch').checked=false; lookupHandler(); }; box.appendChild(btn); }); }
+    $('#btnClearHistory').addEventListener('click', ()=>{ store.del(HIST_KEY); renderHistory(); });
+    renderHistory();
+
+    // ------------ Caching ------------
+    const CACHE_KEY = 'ipCacheV1';
+    const memCache = new Map();
+    function getCache(ip){ if(!$('#chkCache').checked) return null; const disk = store.get(CACHE_KEY, {}); const now = Date.now(); const entry = memCache.get(ip) || disk[ip]; if (!entry) return null; if (now - entry.t > 1000*60*60*24 ) { // 24h TTL
+        delCache(ip); return null;
+      }
+      return entry;
+    }
+    function setCache(ip, data){ if(!$('#chkCache').checked) return; const disk = store.get(CACHE_KEY, {}); const entry = { t: Date.now(), data }; memCache.set(ip, entry); disk[ip]=entry; store.set(CACHE_KEY, disk); }
+    function delCache(ip){ const disk = store.get(CACHE_KEY, {}); delete disk[ip]; store.set(CACHE_KEY, disk); memCache.delete(ip); }
+
+    // ------------ Reverse DNS (PTR) ------------
+    function ipToArpa(ip){
+      if (ip.includes(':')) { // IPv6
+        // Expand shorthand IPv6 is complex; rely on a simple best-effort: split into hex nibble sequence
+        // For correctness, a robust library is recommended. Here we do a basic transform assuming full form.
+        const full = expandIPv6(ip);
+        if (!full) return null;
+        const nibbles = full.replace(/:/g,'').split('').reverse().join('.');
+        return `${nibbles}.ip6.arpa`;
+      } else { // IPv4
+        const parts = ip.split('.'); if (parts.length!==4) return null; return `${parts[3]}.${parts[2]}.${parts[1]}.${parts[0]}.in-addr.arpa`;
+      }
+    }
+    function expandIPv6(address){
+      // Minimal IPv6 expansion
+      const fullSegments = 8;
+      if (address.indexOf('::') !== -1) {
+        const sides = address.split('::');
+        const left = sides[0].length? sides[0].split(':'):[];
+        const right = sides[1].length? sides[1].split(':'):[];
+        const pad = Array(fullSegments - left.length - right.length).fill('0');
+        const segs = [...left, ...pad, ...right].map(x=>x.padStart(4,'0'));
+        return segs.join(':');
+      }
+      const segs = address.split(':').map(x=>x.padStart(4,'0'));
+      if (segs.length!==fullSegments) return null; return segs.join(':');
+    }
+    async function reverseDNS(ip){
+      const arpa = ipToArpa(ip);
+      if (!arpa) return null;
+      const url = `https://dns.google/resolve?name=${encodeURIComponent(arpa)}&type=PTR`;
+      const r = await fetch(url);
+      if (!r.ok) return null;
+      const j = await r.json();
+      if (j.Answer && j.Answer.length) {
+        const ans = j.Answer.find(a=>a.type===12) || j.Answer[0];
+        return ans ? ans.data.replace(/\.$/,'') : null;
+      }
+      return null;
+    }
+
+    // ------------ Core Lookups ------------
+    async function getIpinfo(ip, key){
+      const url = `https://ipinfo.io/${encodeURIComponent(ip)}?token=${encodeURIComponent(key||'')}`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('ipinfo failed');
+      return await r.json();
+    }
+    async function getIpapi(ip, key){
+      const base = `https://ipapi.co/${encodeURIComponent(ip)}/json/`;
+      const url = key ? `${base}?key=${encodeURIComponent(key)}` : base;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('ipapi failed');
+      return await r.json();
+    }
+    async function getIPQS(ip, key){
+      const url = `https://ipqualityscore.com/api/json/ip/${encodeURIComponent(key)}/${encodeURIComponent(ip)}?strictness=1&allow_public_access_points=true&fast=true&lighter_penalties=true`;
+      const r = await fetch(url);
+      if (!r.ok) throw new Error('IPQS failed');
+      return await r.json();
+    }
+
+    function flagImg(country){
+      if (!country) return '';
+      const cc = country.toLowerCase();
+      // flagcdn uses 2-letter codes; ipinfo.country is ISO2
+      return `<img class="flag" alt="${cc}" src="https://flagcdn.com/w20/${cc}.png" loading="lazy"/>`;
+    }
+
+    function classifyRisk(ipqs){
+      if (!ipqs || typeof ipqs.fraud_score === 'undefined') return { level:'unknown', badge:'badge', label:'Unknown' };
+      const s = Number(ipqs.fraud_score);
+      if (s < 35) return { level:'safe', badge:'badge badge-safe', label:`Safe (${s})` };
+      if (s < 75) return { level:'warn', badge:'badge badge-warn', label:`Suspicious (${s})` };
+      return { level:'danger', badge:'badge badge-danger', label:`Malicious (${s})` };
+    }
+
+    function renderCard(data){
+      const {
+        ip, ipinfo, ipapi, ipqs, ptr, cached
+      } = data;
+      const flag = flagImg(ipinfo?.country);
+      const risk = classifyRisk(ipqs);
+      const vpn = ipqs?.vpn || ipqs?.active_vpn;
+      const proxy = ipqs?.proxy || ipqs?.active_proxy;
+      const tor = ipqs?.tor || ipqs?.active_tor;
+      const asn = ipinfo?.org || ipapi?.org || '';
+      const loc = ipinfo?.loc ? ipinfo.loc.split(',').map(Number) : [ipapi?.latitude, ipapi?.longitude];
+      const [lat, lon] = loc;
+
+      // Add pin
+      addPin(lat, lon, `<strong>${ip}</strong><br/>${ipinfo?.city||''}, ${ipinfo?.region||''} ${ipinfo?.country||''}<br/>${asn||''}`);
+
+      const stamp = cached ? `<span class="text-xs text-slate-500">(cached)</span>` : '';
+
+      const badges = [
+        vpn? 'VPN' : null,
+        proxy? 'Proxy' : null,
+        tor? 'Tor' : null,
+        ipqs?.recent_abuse? 'Recent Abuse' : null,
+        ipqs?.bot_status? 'Bot' : null,
+      ].filter(Boolean).map(x=>`<span class="badge badge-warn">${x}</span>`).join(' ');
+
+      const html = `
+        <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-3 space-y-2 bg-white/60 dark:bg-slate-800">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              ${flag}
+              <h3 class="font-semibold text-lg">${ip}</h3>
+              ${stamp}
+            </div>
+            <div>
+              <span class="${risk.badge}">${risk.label}</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div>
+              <div><span class="text-slate-500">Country:</span> ${ipinfo?.country || ipapi?.country_name || '—'}</div>
+              <div><span class="text-slate-500">Region:</span> ${ipinfo?.region || ipapi?.region || '—'}</div>
+              <div><span class="text-slate-500">City:</span> ${ipinfo?.city || ipapi?.city || '—'}</div>
+              <div><span class="text-slate-500">Hostname (PTR):</span> ${ptr || '—'}</div>
+            </div>
+            <div>
+              <div><span class="text-slate-500">ASN/Org:</span> ${asn || '—'}</div>
+              <div><span class="text-slate-500">Latitude:</span> ${Number.isFinite(lat)? lat.toFixed(4) : '—'}</div>
+              <div><span class="text-slate-500">Longitude:</span> ${Number.isFinite(lon)? lon.toFixed(4) : '—'}</div>
+              <div class="space-x-1">${badges}</div>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button class="btn-copy px-2 py-1 rounded border text-xs" data-copy="${ip}">Copy IP</button>
+            <button class="btn-zoom px-2 py-1 rounded border text-xs" data-lat="${lat}" data-lon="${lon}">Zoom</button>
+          </div>
+        </div>`;
+
+      return html;
+    }
+
+    function renderSkeleton(){
+      return `<div class='rounded-lg border border-slate-200 dark:border-slate-700 p-3'>
+        <div class='h-4 w-2/3 skeleton mb-2'></div>
+        <div class='grid grid-cols-2 gap-2'>
+          <div class='h-20 skeleton'></div>
+          <div class='h-20 skeleton'></div>
+        </div>
+      </div>`;
+    }
+
+    // ------------ Lookup flow ------------
+    const resultsEl = $('#results');
+
+    async function lookupIP(ip){
+      ip = ip.trim(); if (!ip) return null;
+
+      // Cache
+      const cached = getCache(ip);
+      if (cached) return { ...cached.data, cached: true };
+
+      const keys = loadKeys();
+      let ipinfoData=null, ipapiData=null, ipqsData=null, ptr=null;
+
+      // Rate-limit friendly: stagger requests a bit
+      const tasks = [];
+      if (keys.ipinfo) tasks.push((async()=>{ try { ipinfoData = await getIpinfo(ip, keys.ipinfo); } catch(e){} })());
+      else tasks.push((async()=>{ try { ipinfoData = await getIpinfo(ip, ''); } catch(e){} })());
+
+      if (keys.ipapi) tasks.push((async()=>{ try { ipapiData = await getIpapi(ip, keys.ipapi); } catch(e){} })());
+
+      if ($('#chkThreat').checked && keys.ipqs) tasks.push((async()=>{ try { ipqsData = await getIPQS(ip, keys.ipqs); } catch(e){} })());
+
+      tasks.push((async()=>{ try { ptr = await reverseDNS(ip); } catch(e){} })());
+
+      // Wait with small spacing to be gentle on rate limits
+      await Promise.all(tasks);
+
+      const bundle = { ip, ipinfo: ipinfoData, ipapi: ipapiData, ipqs: ipqsData, ptr };
+      setCache(ip, bundle);
+      return bundle;
+    }
+
+    async function lookupHandler(){
+      // Clear map+layers for new run
+      cluster.clearLayers();
+      markers.splice(0, markers.length);
+      if (heatLayer) { map.removeLayer(heatLayer); heatLayer=null; }
+
+      const raw = $('#ipInput').value.trim();
+      const ips = $('#chkBatch').checked ? raw.split(/[\n,]+/).map(s=>s.trim()).filter(Boolean) : [raw];
+      if (!ips.length) return;
+
+      resultsEl.innerHTML = ips.map(()=>renderSkeleton()).join('');
+
+      const out = [];
+      for (let i=0;i<ips.length;i++){
+        const ip = ips[i];
+        try {
+          const data = await lookupIP(ip);
+          if (data) {
+            out.push(data);
+            addHistory(ip);
+          }
+        } catch (e) {
+          out.push({ ip, error: e.message });
+        }
+        // small delay between IPs to be polite with APIs
+        await sleep(150);
+      }
+
+      // Render
+      resultsEl.innerHTML = out.map(o=> o.error ? `<div class='rounded-lg border p-3 border-red-300 dark:border-red-800'>${o.ip}: ${o.error}</div>` : renderCard(o)).join('');
+
+      // Bind copy / zoom
+      $$('.btn-copy').forEach(b=> b.addEventListener('click', (e)=>{
+        const val = e.currentTarget.getAttribute('data-copy');
+        navigator.clipboard.writeText(val);
+      }));
+      $$('.btn-zoom').forEach(b=> b.addEventListener('click', (e)=>{
+        const lat = Number(e.currentTarget.getAttribute('data-lat'));
+        const lon = Number(e.currentTarget.getAttribute('data-lon'));
+        if (Number.isFinite(lat) && Number.isFinite(lon)) map.setView([lat,lon], 9);
+      }));
+
+      setMapLayers();
+      fitToPins();
+    }
+
+    $('#btnLookup').addEventListener('click', lookupHandler);
+    $('#btnClear').addEventListener('click', ()=>{ $('#ipInput').value=''; resultsEl.innerHTML=''; cluster.clearLayers(); markers.splice(0, markers.length); if (heatLayer){ map.removeLayer(heatLayer); heatLayer=null; } });
+
+    // Auto-detect my IP
+    $('#btnMyIP').addEventListener('click', async ()=>{
+      try {
+        const r = await fetch('https://api.ipify.org?format=json');
+        const j = await r.json();
+        $('#ipInput').value = j.ip;
+        $('#chkBatch').checked = false;
+        lookupHandler();
+      } catch(e) { alert('Failed to detect IP'); }
+    });
+
+    // Copy IP(s)
+    $('#btnCopyIP').addEventListener('click', ()=>{
+      const txt = $('#ipInput').value.trim(); if (!txt) return;
+      navigator.clipboard.writeText(txt);
+    });
+
+    // Share link (?ip=)
+    $('#btnShare').addEventListener('click', ()=>{
+      const raw = $('#ipInput').value.trim();
+      if (!raw) return;
+      const url = new URL(location.href);
+      url.searchParams.set('ip', raw);
+      navigator.clipboard.writeText(url.toString());
+      alert('Shareable link copied to clipboard');
+    });
+
+    // Export CSV
+    $('#btnExportCSV').addEventListener('click', ()=>{
+      const rows = $$('#results > div');
+      if (!rows.length) return alert('No results');
+      const headers = ['ip','country','region','city','asn_org','lat','lon','risk','vpn','proxy','tor','hostname'];
+      const data = rows.map(card=>{
+        const ip = card.querySelector('h3')?.textContent || '';
+        const text = card.textContent;
+        const get = (label)=>{ const m = text.match(new RegExp(label+":\\s([^\n]+)")); return m? m[1].trim() : ''; };
+        const country = get('Country');
+        const region = get('Region');
+        const city = get('City');
+        const asn = get('ASN/Org');
+        const lat = get('Latitude');
+        const lon = get('Longitude');
+        const hostname = get('Hostname (PTR)');
+        const risk = (card.querySelector('[class*="badge-"]')?.textContent||'').trim();
+        const badges = Array.from(card.querySelectorAll('.badge-warn')).map(b=>b.textContent);
+        return [ip,country,region,city,asn,lat,lon,risk, badges.includes('VPN'), badges.includes('Proxy'), badges.includes('Tor'), hostname];
+      });
+      const csv = [headers.join(','), ...data.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(','))].join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: 'ip_results.csv' });
+      a.click(); URL.revokeObjectURL(a.href);
+    });
+
+    // Export PDF (simple):
+    $('#btnExportPDF').addEventListener('click', ()=>{
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit:'pt', format:'a4' });
+      let y = 40;
+      doc.setFontSize(14);
+      doc.text('IP Results', 40, y); y+=20; doc.setFontSize(10);
+      $$('#results > div').forEach((card, i)=>{
+        const ip = card.querySelector('h3')?.textContent || '';
+        const t = card.innerText.replace(/\n\n+/g,'\n');
+        doc.text(`${i+1}. ${ip}`, 40, y); y+=12;
+        const split = doc.splitTextToSize(t, 520);
+        split.forEach(line=>{ if (y>780){ doc.addPage(); y=40; } doc.text(line, 40, y); y+=12; });
+        y+=8;
+      });
+      doc.save('ip_results.pdf');
+    });
+
+    // UA parser
+    $('#btnParseUA').addEventListener('click', ()=>{
+      const uaStr = $('#uaInput').value.trim() || navigator.userAgent;
+      const ua = new UAParser(uaStr).getResult();
+      $('#uaResult').textContent = JSON.stringify(ua, null, 2);
+    });
+
+    // If ?ip= present, prefill and auto-run
+    if (qp.get('ip')) {
+      $('#ipInput').value = qp.get('ip');
+      $('#chkBatch').checked = /[\n,]/.test(qp.get('ip'));
+      lookupHandler();
+    }
+  </script>
+
+  <!-- (Optional) PWA plumbing (add manifest/service worker later)
+  <link rel="manifest" href="/manifest.webmanifest">
+  <script>
+    let deferredPrompt; 
+    window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; document.getElementById('btnInstallPWA').classList.remove('hidden'); });
+    document.getElementById('btnInstallPWA').addEventListener('click', async()=>{ if (!deferredPrompt) return; deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; console.log('PWA install', outcome); deferredPrompt=null; });
+  </script>
+  -->
+</body>
+</html>
+
