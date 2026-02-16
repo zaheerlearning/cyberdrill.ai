@@ -1,1 +1,551 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybersecurity Knowledge Assessment — 10 Levels</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;background:#020617;color:#e2e8f0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;overflow-x:hidden}
+.bg{position:fixed;inset:0;background-image:radial-gradient(circle at 20% 50%,#1e3a5f22 0%,transparent 50%),radial-gradient(circle at 80% 20%,#10b98111 0%,transparent 40%);pointer-events:none;z-index:0}
+.wrap{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:32px 20px 80px}
+.screen{display:none}.screen.active{display:block;animation:fadeIn .4s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.w-shield{font-size:72px;text-align:center;margin-bottom:8px}
+.w-title{font-size:34px;font-weight:900;text-align:center;line-height:1.15;margin-bottom:12px;background:linear-gradient(135deg,#60a5fa,#a78bfa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.w-sub{text-align:center;color:#94a3b8;font-size:15px;line-height:1.7;max-width:560px;margin:0 auto 28px}
+.name-card{background:#0f172a;border:1px solid #1e293b;border-radius:16px;padding:32px;text-align:center;max-width:480px;margin:0 auto 24px}
+.name-card label{display:block;font-size:16px;font-weight:700;margin-bottom:14px;color:#f1f5f9}
+.name-input{width:100%;padding:14px 18px;border-radius:10px;border:2px solid #334155;background:#1e293b;color:#f1f5f9;font-size:18px;font-family:inherit;text-align:center;outline:none;transition:border-color .2s}
+.name-input:focus{border-color:#60a5fa}
+.name-input::placeholder{color:#475569}
+.start-btn{display:block;width:100%;max-width:480px;margin:0 auto;padding:18px 32px;border:none;border-radius:14px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);color:#fff;font-size:18px;font-weight:800;cursor:pointer;font-family:inherit;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 24px #3b82f644}
+.start-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px #3b82f666}
+.start-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.rules-box{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:20px 24px;margin:0 auto 24px;max-width:480px}
+.rules-box h3{font-size:16px;font-weight:700;margin-bottom:12px}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rule-item{display:flex;align-items:center;gap:10px;font-size:14px;color:#cbd5e1}
+.rule-badge{background:#1e3a5f;color:#60a5fa;font-weight:800;font-size:13px;padding:4px 10px;border-radius:6px;min-width:36px;text-align:center}
+
+.sec-title{font-size:24px;font-weight:800;text-align:center;margin-bottom:6px;color:#f1f5f9}
+.greet{text-align:center;font-size:15px;color:#a78bfa;margin-bottom:18px;font-weight:600;font-style:italic}
+.motiv{background:linear-gradient(135deg,#1e3a5f,#312e81);border:1px solid #4338ca44;border-radius:12px;padding:18px 24px;text-align:center;margin-bottom:20px}
+.motiv p{font-size:15px;color:#c7d2fe;line-height:1.6}.motiv strong{color:#a5b4fc}
+.lvl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:24px}
+.lvl-card{background:#0f172a;border:2px solid #334155;border-radius:14px;padding:18px;transition:all .25s;cursor:pointer;position:relative;user-select:none}
+.lvl-card:hover{transform:translateY(-3px);border-color:#60a5fa}
+.lvl-card.locked{opacity:.4;cursor:not-allowed;pointer-events:none}
+.lvl-card.passed{border-color:#10b981;background:linear-gradient(135deg,#064e3b22,#0f172a)}
+.lvl-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.lvl-icon{font-size:24px}.lvl-num{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:1px}
+.lvl-name{font-size:15px;font-weight:700;color:#f1f5f9;margin-bottom:3px}
+.lvl-desc{font-size:12px;color:#94a3b8;line-height:1.3}
+.lvl-badge{display:inline-block;margin-top:10px;padding:3px 10px;border-radius:16px;font-size:11px;font-weight:700;color:#fff}
+.lvl-lock{margin-top:10px;font-size:11px;color:#64748b;font-style:italic}
+.g-btn{display:block;width:100%;padding:16px;border:none;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .2s}
+.g-btn:hover{transform:scale(1.02)}
+
+.qz-hdr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.back-btn{background:none;border:1px solid #334155;color:#94a3b8;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:inherit}
+.back-btn:hover{border-color:#60a5fa;color:#60a5fa}
+.lvl-tag{font-size:14px;font-weight:700;color:#60a5fa}
+.prog-bar{height:6px;background:#1e293b;border-radius:3px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);border-radius:3px;transition:width .3s}
+.prog-txt{font-size:13px;color:#64748b;text-align:right;margin-bottom:4px}
+.tmr-bar{height:4px;background:#1e293b;border-radius:2px;overflow:hidden;margin-bottom:4px}
+.tmr-fill{height:100%;border-radius:2px;transition:width 1s linear,background .3s}
+.tmr-txt{font-size:12px;font-weight:700;text-align:right;margin-bottom:10px}
+.enc-bar{text-align:center;padding:10px;margin-bottom:14px;border-radius:8px;font-size:14px;font-weight:600;background:#1e293b}
+.q-card{background:#0f172a;border:1px solid #1e293b;border-radius:16px;padding:28px 24px}
+.q-txt{font-size:17px;font-weight:700;line-height:1.5;color:#f1f5f9;margin-bottom:18px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;border:2px solid #334155;border-radius:10px;background:#1e293b;color:#e2e8f0;font-size:14px;line-height:1.5;text-align:left;cursor:pointer;font-family:inherit;transition:all .15s}
+.opt:hover:not(:disabled){border-color:#60a5fa;background:#1e3a5f}
+.opt:disabled{cursor:default}
+.opt.correct{background:#064e3b;border-color:#10b981;color:#a7f3d0}
+.opt.wrong{background:#450a0a;border-color:#ef4444;color:#fca5a5}
+.opt.dimmed{opacity:.5}
+.opt-ltr{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px;background:#334155;color:#94a3b8;font-weight:800;font-size:12px;flex-shrink:0}
+.opt-mark{margin-left:auto;font-weight:800;font-size:18px;flex-shrink:0}
+.exp-box{margin-top:20px;padding:20px;background:#1e293b;border-radius:12px;border-left:4px solid #3b82f6}
+.exp-box .hd{font-size:16px;font-weight:700;margin-bottom:12px}
+.exp-ok{background:#064e3b55;border:1px solid #10b98144;border-radius:8px;padding:12px 14px;margin-bottom:14px}
+.exp-ok .lbl{font-size:11px;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.exp-ok p{font-size:14px;color:#a7f3d0;line-height:1.6;margin:0}
+.exp-wr{margin-bottom:12px}
+.exp-wr-item{padding:10px 12px;border-radius:8px;margin-bottom:6px;background:#0f172a;border:1px solid #334155}
+.exp-wr-item:last-child{margin-bottom:0}
+.exp-wr-item .wr-name{font-size:12px;font-weight:700;color:#f87171;margin-bottom:3px}
+.exp-wr-item p{font-size:13px;color:#94a3b8;line-height:1.5;margin:0}
+.exp-fb{color:#a5b4fc;font-weight:600;font-size:14px;margin:14px 0}
+.nxt-btn{background:#3b82f6;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:background .2s}
+.nxt-btn:hover{background:#2563eb}
+
+.res-card{background:#0f172a;border:2px solid;border-radius:20px;padding:40px 28px;text-align:center;margin-top:24px}
+.res-emoji{font-size:64px;margin-bottom:8px}
+.res-title{font-size:24px;font-weight:800;margin-bottom:4px}
+.res-score{font-size:52px;font-weight:900;margin:8px 0}
+.res-motiv{font-size:15px;font-weight:700;margin-bottom:24px;padding:14px 18px;border-radius:10px;display:inline-block;max-width:520px;line-height:1.5}
+.res-acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.act-btn{color:#fff;border:none;padding:12px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;transition:opacity .2s,transform .2s}
+.act-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+.cert-out{background:linear-gradient(135deg,#fef9c3,#fde68a,#d4a017,#fde68a,#fef9c3);border-radius:14px;padding:8px;margin:24px auto;max-width:720px;box-shadow:0 8px 40px rgba(180,131,9,.25)}
+.cert-in{background:#fffef8;border-radius:8px;padding:52px 44px 40px;text-align:center;position:relative;color:#1c1917;overflow:hidden}
+.cert-in::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5 L35 20 L50 20 L38 28 L42 43 L30 34 L18 43 L22 28 L10 20 L25 20Z' fill='none' stroke='%23d4a01708' stroke-width='1'/%3E%3C/svg%3E") repeat;opacity:.6;pointer-events:none}
+.cert-inner-border{position:absolute;inset:10px;border:2px solid #c8960e;border-radius:4px;pointer-events:none}
+.cert-inner-border2{position:absolute;inset:14px;border:1px solid #c8960e44;border-radius:2px;pointer-events:none}
+.cert-corner{position:absolute;width:40px;height:40px;pointer-events:none}
+.cert-corner svg{width:100%;height:100%}
+.cert-corner.tl{top:6px;left:6px}.cert-corner.tr{top:6px;right:6px;transform:scaleX(-1)}.cert-corner.bl{bottom:6px;left:6px;transform:scaleY(-1)}.cert-corner.br{bottom:6px;right:6px;transform:scale(-1)}
+.cert-logo{margin:0 auto 8px;width:64px;height:64px}
+.cert-heading{font-size:11px;text-transform:uppercase;letter-spacing:3px;color:#92400e;font-weight:700;margin-bottom:10px}
+.cert-ttl{font-size:28px;font-weight:900;color:#78350f;margin-bottom:6px;font-family:Georgia,'Times New Roman',serif}
+.cert-org{font-size:13px;color:#a16207;font-weight:600;margin-bottom:20px;letter-spacing:1px}
+.cert-rule{width:200px;height:1px;background:linear-gradient(90deg,transparent,#c8960e,transparent);margin:0 auto 20px}
+.cert-pre{font-size:13px;color:#92400e;margin-bottom:6px;font-style:italic}
+.cert-name{font-size:38px;font-weight:900;color:#1c1917;margin-bottom:6px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.5px}
+.cert-name-line{width:300px;max-width:80%;height:2px;background:linear-gradient(90deg,transparent,#b45309,transparent);margin:0 auto 18px}
+.cert-for{font-size:13px;color:#78350f;margin-bottom:8px;line-height:1.5}
+.cert-lvl{display:inline-block;padding:10px 28px;border-radius:8px;font-size:16px;font-weight:800;color:#fff;margin-bottom:6px;letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.cert-lvl-sub{font-size:12px;color:#92400e;margin-bottom:16px;font-style:italic}
+.cert-score{font-size:15px;font-weight:800;color:#78350f;margin-bottom:20px}
+.cert-score span{background:#fef3c7;padding:4px 14px;border-radius:6px;border:1px solid #d4a01744}
+.cert-skills{margin:0 auto 22px;max-width:440px}
+.cert-skills-title{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#92400e;font-weight:700;margin-bottom:8px}
+.cert-skills-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.cert-skill-tag{background:#fef9c3;border:1px solid #d4a01733;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;color:#78350f}
+.cert-ft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:24px;padding-top:8px}
+.cert-ft-item{text-align:center;flex:1}
+.cert-ft-line{width:140px;border-top:1.5px solid #b45309;margin:0 auto 6px}
+.cert-ft-val{font-size:13px;font-weight:700;color:#78350f;font-family:Georgia,'Times New Roman',serif}
+.cert-ft-lbl{font-size:9px;color:#92400e;text-transform:uppercase;letter-spacing:1.5px;font-weight:700;margin-top:2px}
+.cert-ft-mid{flex:0.4;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.cert-ft-mid img,.cert-ft-mid svg{margin-bottom:4px}
+.cert-id{font-size:9px;color:#b4930e88;margin-top:18px;letter-spacing:1.5px;font-weight:600}
+.print-btn{display:inline-block;margin:16px 5px 0;padding:14px 28px;border:none;border-radius:10px;background:linear-gradient(135deg,#b45309,#d97706);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 12px #d9770644}
+.print-btn:hover{background:linear-gradient(135deg,#92400e,#b45309)}
+
+.gh{text-align:center;margin:16px 0 24px}
+.g-badge{display:inline-block;padding:6px 20px;border-radius:20px;color:#fff;font-weight:700;font-size:14px;margin-bottom:12px}
+.g-msg{font-size:15px;color:#94a3b8;line-height:1.6;max-width:520px;margin:0 auto}
+.gc{background:#0f172a;border:1px solid #1e293b;border-radius:12px;padding:20px 24px;margin-bottom:16px}
+.gc h3{font-size:16px;font-weight:700;margin-bottom:14px;color:#f1f5f9}
+.sc-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.sc-lbl{font-size:12px;font-weight:700;color:#64748b;width:28px}
+.sc-bar{flex:1;height:18px;background:#1e293b;border-radius:4px;overflow:hidden}
+.sc-fill{height:100%;border-radius:4px;transition:width .6s}
+.sc-val{font-size:12px;font-weight:700;color:#94a3b8;width:40px;text-align:right}
+.rc-item{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #1e293b}
+.rc-item:last-child{border-bottom:none}
+.rc-num{width:24px;height:24px;display:flex;align-items:center;justify-content:center;background:#1e3a5f;color:#60a5fa;border-radius:6px;font-weight:800;font-size:11px;flex-shrink:0}
+.rc-txt{font-size:13px;color:#cbd5e1;line-height:1.5}
+.ct-grid{display:flex;flex-wrap:wrap;gap:8px}
+.ct-tag{background:#1e293b;border:1px solid #334155;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#a78bfa}
+.tf-txt{font-size:15px;color:#cbd5e1;line-height:1.5}
+
+@media print{@page{size:landscape;margin:0.5in}body{background:#fff!important}.bg,.qz-hdr,.back-btn,.print-btn,.act-btn,.res-acts,.g-btn,.motiv,.enc-bar{display:none!important}.wrap{padding:0;max-width:100%}.screen{display:none!important}.screen.active{display:block!important}.cert-out{box-shadow:none;margin:0 auto;max-width:100%}.cert-in{padding:40px 36px}}
+@media(max-width:500px){.w-title{font-size:24px}.rule-grid{grid-template-columns:1fr}.lvl-grid{grid-template-columns:1fr 1fr}.cert-in{padding:28px 16px}.cert-name{font-size:24px}.cert-ttl{font-size:22px}.cert-ft{flex-direction:column;align-items:center;gap:14px}.cert-ft-mid{margin:10px 0}.cert-skills-tags{gap:4px}.cert-skill-tag{font-size:10px;padding:3px 8px}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="wrap">
+  <div id="S_welcome" class="screen active">
+    <div class="w-shield">🛡️</div>
+    <h1 class="w-title">Cybersecurity<br>Knowledge Assessment</h1>
+    <p class="w-sub">Challenge yourself across <strong>10 progressive levels</strong> — from basic awareness to elite mastery. Each question comes with detailed explanations so you learn as you go. Score 7/10 to pass each level, earn certificates, and get a personalized career roadmap. <strong>Can you conquer all 10?</strong></p>
+    <div class="name-card">
+      <label for="pName">👤 Enter Your Full Name to Begin</label>
+      <input type="text" id="pName" class="name-input" placeholder="e.g. John Smith" maxlength="50" autocomplete="off">
+    </div>
+    <div class="rules-box"><h3>📋 Assessment Rules</h3>
+      <div class="rule-grid">
+        <div class="rule-item"><span class="rule-badge">10</span><span>Progressive Levels</span></div>
+        <div class="rule-item"><span class="rule-badge">10</span><span>Questions per Level</span></div>
+        <div class="rule-item"><span class="rule-badge">7/10</span><span>Minimum to Pass</span></div>
+        <div class="rule-item"><span class="rule-badge">⏱</span><span>Timed Questions</span></div>
+      </div>
+    </div>
+    <button id="startBtn" class="start-btn" disabled>🚀 Begin Assessment</button>
+  </div>
+  <div id="S_levels" class="screen">
+    <h2 class="sec-title">Choose Your Challenge</h2>
+    <div id="greet" class="greet"></div>
+    <div id="motiv" class="motiv"></div>
+    <div id="lvlGrid" class="lvl-grid"></div>
+    <div id="gWrap" style="display:none"><button class="g-btn" onclick="showGuide()">📊 View Career Guidance & Recommendations</button></div>
+  </div>
+  <div id="S_quiz" class="screen">
+    <div class="qz-hdr"><button class="back-btn" onclick="backHome()">← Back</button><div id="qzTag" class="lvl-tag"></div></div>
+    <div class="prog-bar"><div id="progFill" class="prog-fill"></div></div>
+    <div id="progTxt" class="prog-txt"></div>
+    <div class="tmr-bar"><div id="tmrFill" class="tmr-fill"></div></div>
+    <div id="tmrTxt" class="tmr-txt"></div>
+    <div id="encBar" class="enc-bar"></div>
+    <div id="qCard" class="q-card"></div>
+  </div>
+  <div id="S_result" class="screen"></div>
+  <div id="S_cert" class="screen"></div>
+  <div id="S_guide" class="screen"></div>
+</div>
+<script>
+/* ===== QUIZ DATA ===== */
+var Q={
+1:{title:"Foundations",sub:"Basic Cybersecurity Awareness",icon:"🛡️",color:"#3b82f6",questions:[
+{q:"What does 'phishing' refer to in cybersecurity?",opts:["A type of firewall configuration","A social engineering attack that tricks users into revealing sensitive information","A method of encrypting data","A network scanning technique"],c:1,exp:{ok:"Phishing uses deceptive emails, websites, or messages to trick people into revealing passwords, credit card numbers, or other sensitive data. It's the #1 attack vector for breaches worldwide.",no:["Firewall configuration involves setting rules for network traffic filtering — it has nothing to do with tricking users.","Encryption transforms readable data into coded form to protect it — the opposite of stealing information.","Network scanning maps devices and services on a network — it's a defensive/recon technique, not a social attack."]}},
+{q:"Which of the following is the STRONGEST password?",opts:["Password123","john1990","Tr0ub4dor&3","J#kL9$mN!2pQ@vX"],c:3,exp:{ok:"At 16 characters with random uppercase, lowercase, numbers, and symbols, this password has maximum entropy. Length + randomness = strength.",no:["'Password123' is one of the most commonly used passwords — easily cracked in seconds by any password tool.","'john1990' combines a common name with a birth year. Personal info is the first thing attackers try.","'Tr0ub4dor&3' uses leet-speak substitutions on a dictionary word. Password crackers have built-in rules for these."]}},
+{q:"What does 'MFA' stand for in security?",opts:["Multiple Firewall Architecture","Multi-Factor Authentication","Managed File Access","Master Forensic Analysis"],c:1,exp:{ok:"MFA requires two or more verification factors: something you know (password), something you have (phone), or something you are (fingerprint). Blocks 99.9% of automated attacks.",no:["Multiple firewalls can exist in a network, but this isn't a standard security acronym.","File access management is part of IAM, but 'MFA' doesn't stand for this.","Forensic analysis examines evidence after incidents — it's investigative, not an authentication method."]}},
+{q:"What is malware?",opts:["A type of hardware failure","Malicious software designed to damage or gain unauthorized access to systems","A legitimate security testing tool","An email filtering system"],c:1,exp:{ok:"Malware (malicious software) includes viruses, worms, trojans, ransomware, spyware, and adware — all designed to harm or exploit computer systems.",no:["Hardware failures are physical component breakdowns. Malware is software-based, not hardware.","Some security tools behave like malware (e.g., Metasploit), but malware itself is unauthorized and malicious by definition.","Email filtering systems protect AGAINST malware — they're defensive tools, not threats."]}},
+{q:"Why should you keep your software updated?",opts:["Only to get new features","To fix security vulnerabilities that attackers could exploit","It's not important for security","Only for appearance improvements"],c:1,exp:{ok:"Software updates (patches) fix known security vulnerabilities. The WannaCry ransomware attack affected 230,000 computers — all running unpatched Windows.",no:["New features are a bonus, but the critical reason is security. Many updates are security-only patches.","Dangerously wrong. Unpatched software is the #2 cause of breaches after phishing.","UI changes are cosmetic. Security patches fix code-level vulnerabilities that could let attackers take control."]}},
+{q:"What is a firewall?",opts:["A physical wall that protects servers from fire","A network security device that monitors and filters incoming/outgoing traffic","A type of antivirus software","An email encryption tool"],c:1,exp:{ok:"Firewalls examine network packets and enforce rules about which traffic is allowed or blocked between trusted and untrusted networks.",no:["Common misconception from the name. Firewalls are digital security barriers, not physical fire protection.","Antivirus scans files for malware signatures. Firewalls filter network traffic. Complementary but different.","Email encryption (PGP, S/MIME) protects email content. Firewalls control network traffic flow — different functions."]}},
+{q:"Which action is MOST risky on public Wi-Fi?",opts:["Reading a news article","Logging into your bank account without a VPN","Checking the weather","Browsing a restaurant menu"],c:1,exp:{ok:"Public Wi-Fi is often unencrypted. Without a VPN, attackers can capture your banking credentials through man-in-the-middle attacks.",no:["Reading news is low-risk since you're not transmitting sensitive data.","Weather apps don't transmit sensitive personal data. The interception risk is negligible.","Browsing menus involves no login credentials or personal data. Safe even on public networks."]}},
+{q:"What does 'ransomware' do?",opts:["Speeds up your computer","Encrypts your files and demands payment for the decryption key","Provides free antivirus protection","Backs up your data to the cloud"],c:1,exp:{ok:"Ransomware encrypts your files with strong encryption, then demands cryptocurrency payment. Major attacks like WannaCry and REvil have cost billions globally.",no:["Ransomware actually slows or locks your computer entirely. No malware improves performance.","Ransomware is the opposite of protection — it's one of the most destructive malware types.","Ransomware destroys access to your data — the opposite of backup. This is why offline backups are critical."]}},
+{q:"What is the safest way to handle a suspicious email attachment?",opts:["Open it to check if it's legitimate","Forward it to all your contacts for their opinion","Do not open it; report it and delete it","Download it to your desktop for later review"],c:2,exp:{ok:"Never open suspicious attachments. Report to your IT/security team (they can analyze it safely), then delete the email.",no:["Opening suspicious attachments is exactly how ransomware and trojans spread. Even 'previewing' can execute malicious code.","Forwarding multiplies the threat — now everyone in your contact list is exposed.","Downloading still puts the malicious file on your system. Accidental clicks could trigger the malware."]}},
+{q:"What does 'HTTPS' indicate about a website?",opts:["The site is guaranteed to be safe","The connection between your browser and the site is encrypted","The site has no malware","The site is run by the government"],c:1,exp:{ok:"HTTPS uses TLS/SSL encryption to protect data in transit. The padlock icon shows the connection is encrypted.",no:["HTTPS only encrypts the connection — phishing sites can and do use HTTPS. It doesn't verify site legitimacy.","HTTPS protects data in transit, not site content. A site can serve malware over a perfectly encrypted connection.","HTTPS is available to anyone with an SSL certificate. Government sites use .gov domains for identification."]}}
+]},
+2:{title:"Digital Hygiene",sub:"Personal Security Practices",icon:"🧹",color:"#06b6d4",questions:[
+{q:"What is the best practice for managing passwords across multiple accounts?",opts:["Use the same strong password everywhere","Write them on a sticky note by your monitor","Use a reputable password manager to generate and store unique passwords","Use your pet's name with different numbers"],c:2,exp:{ok:"Password managers (Bitwarden, 1Password, KeePass) generate unique, complex passwords for every account and store them encrypted. You only remember one master password.",no:["Password reuse is extremely dangerous. If one site is breached, attackers try those credentials everywhere (credential stuffing).","Physical notes can be seen by anyone near your desk. They're also easily lost and can't be backed up.","Pets' names are easily discovered through social media. Adding numbers creates predictable variations that tools crack quickly."]}},
+{q:"How often should you back up important data?",opts:["Only when you remember","Never — cloud storage is enough","Regularly, following the 3-2-1 rule: 3 copies, 2 different media, 1 offsite","Once a year is sufficient"],c:2,exp:{ok:"The 3-2-1 rule provides redundancy against hardware failure, ransomware, theft, and natural disasters.",no:["'When you remember' means you'll lose data when disaster strikes. Backups must be scheduled and automated.","Cloud storage can fail, get hacked, or sync ransomware-encrypted files. It's one copy, not a complete strategy.","Annual backups mean losing up to a year of work. For most people and businesses, this is catastrophic."]}},
+{q:"What should you do before disposing of an old computer or phone?",opts:["Just delete your files and throw it away","Perform a factory reset — that's enough","Securely wipe all data using certified data destruction methods","Remove the battery and it's safe"],c:2,exp:{ok:"Secure wiping overwrites data multiple times. For maximum security, physical destruction of storage media is recommended.",no:["Deleting files only removes directory entries — data remains and is recoverable with free tools like Recuva.","Factory resets don't always overwrite all sectors. Data can often be recovered from factory-reset devices.","Removing the battery doesn't affect stored data. Storage (SSD/HDD) retains all data without power."]}},
+{q:"What is a secure way to use two-factor authentication (2FA)?",opts:["SMS text codes are the most secure method","An authenticator app like Google Authenticator or Authy","Answering security questions","Using your birthday as a verification code"],c:1,exp:{ok:"Authenticator apps generate time-based codes locally on your device. They can't be intercepted via SIM-swapping attacks.",no:["SMS codes can be intercepted through SIM-swapping attacks or SS7 vulnerabilities. It's the weakest 2FA method.","Security questions aren't true 2FA — answers are often guessable or findable on social media.","Birthdays are easily discoverable public information. Using them provides zero additional security."]}},
+{q:"When connecting to a Wi-Fi network, which is the safest option?",opts:["Any open network with the strongest signal","A network named 'Free_Airport_WiFi'","Your personal hotspot or a trusted network with WPA3 encryption","A network that doesn't require a password"],c:2,exp:{ok:"Personal hotspots give you control. WPA3 is the latest Wi-Fi security standard with stronger encryption.",no:["Open networks with strong signals could be 'evil twin' attacks — rogue access points set up by attackers.","'Free' public networks are prime targets. Legitimate airport Wi-Fi usually has the airport's actual name.","Networks without passwords transmit all data unencrypted. Anyone nearby can capture everything you send."]}},
+{q:"What is 'shoulder surfing'?",opts:["A type of surfboard design","Observing someone's screen or keyboard to steal information","A network attack technique","A method of testing website security"],c:1,exp:{ok:"Shoulder surfing is a low-tech but effective attack where someone watches you type passwords or read sensitive info in public.",no:["Nothing to do with water sports. 'Shoulder' refers to someone looking over your shoulder.","Shoulder surfing is a physical/visual attack, not network-based. It requires proximity to the victim.","Website security testing uses technical tools and methods, not physical observation."]}},
+{q:"Why should you be cautious about what you share on social media?",opts:["Social media companies sell your grammar mistakes","Attackers can use personal details for social engineering, phishing, and identity theft","Only celebrities need to worry about privacy","Your posts disappear after 24 hours anyway"],c:1,exp:{ok:"Attackers mine social media for info to craft phishing emails, answer security questions, or commit identity theft.",no:["Companies collect data for advertising, not grammar. The real risk is how attackers use your shared info.","Everyone is a target. Regular people are attacked more often because they have weaker security.","Most posts are permanent and archived. Even 'temporary' stories can be screenshotted."]}},
+{q:"What is the purpose of a privacy screen protector?",opts:["To make your screen brighter","To prevent people nearby from viewing your screen at an angle","To protect against malware","To speed up your device"],c:1,exp:{ok:"Privacy screens narrow the viewing angle so only the person directly in front can see content, blocking shoulder surfers.",no:["Privacy screens actually make displays slightly dimmer. Brightness is not their purpose.","Privacy screens are physical barriers. They provide zero protection against software threats.","Privacy screens are display accessories with no effect on device performance."]}},
+{q:"What should you check before clicking a link in an email?",opts:["Whether the email has a company logo","Hover over the link to verify the actual URL matches the expected domain","Whether the email is colorful and well-designed","Whether it was sent during business hours"],c:1,exp:{ok:"Hovering reveals the true URL. Phishing emails often display 'paypal.com' but link to 'paypa1-secure.evil.com'.",no:["Logos are trivially easy to copy. Phishing emails routinely use stolen branding.","Professional design doesn't equal legitimacy. Modern phishing kits produce pixel-perfect replicas.","Attackers send phishing 24/7. Time of delivery has zero correlation with legitimacy."]}},
+{q:"What is 'credential stuffing'?",opts:["Filling out job applications","Using stolen username/password pairs from one breach to try logging into other services","Encrypting your passwords","A type of physical security measure"],c:1,exp:{ok:"Because people reuse passwords, attackers take breached credentials and automatically try them on thousands of other sites.",no:["Job applications involve qualifications. This term refers specifically to a cyberattack technique.","Encryption protects passwords. Credential stuffing is an attack that exploits password reuse.","Physical security involves locks and badges. Credential stuffing is a purely digital attack."]}}
+]},
+3:{title:"Networking Essentials",sub:"How Networks & Protocols Work",icon:"🌐",color:"#8b5cf6",questions:[
+{q:"What does OSI Layer 3 (Network Layer) primarily handle?",opts:["Physical cable connections","Logical addressing and routing packets between networks","Application-level data formatting","Session management"],c:1,exp:{ok:"Layer 3 handles IP addressing and routing — determining the best path for packets across networks.",no:["Physical cables are Layer 1 (Physical). That layer deals with bits, voltages, and connectors.","Application formatting is Layer 6 (Presentation), handling encryption and data translation.","Session management is Layer 5, which establishes and terminates communication sessions."]}},
+{q:"What is the primary difference between TCP and UDP?",opts:["TCP is faster than UDP","TCP provides reliable, ordered delivery; UDP is faster but unreliable","UDP is more secure than TCP","They are identical protocols"],c:1,exp:{ok:"TCP uses handshakes, acknowledgments, and retransmission to guarantee delivery. UDP sends packets without confirmation — faster but packets can be lost.",no:["TCP is actually slower due to overhead. UDP is faster because it skips handshakes and ACKs.","Neither provides inherent security. Security comes from TLS/SSL layered on top of either.","They're fundamentally different protocols with different headers, behaviors, and use cases."]}},
+{q:"What does DNS do?",opts:["Encrypts all network traffic","Translates domain names into IP addresses","Blocks malicious websites automatically","Manages network bandwidth"],c:1,exp:{ok:"DNS is the internet's phone book. When you type 'google.com', DNS resolves it to an IP address so your browser can connect.",no:["Standard DNS is unencrypted plaintext. DNS over HTTPS/TLS adds encryption, but basic DNS does not.","Standard DNS doesn't block anything. DNS-based filtering is an additional security layer built on top.","Bandwidth is managed by QoS tools and routers, not DNS."]}},
+{q:"What is a VLAN?",opts:["A type of VPN","A Virtual LAN that segments a physical network into logical groups","A virus detection system","A virtual reality network"],c:1,exp:{ok:"VLANs create separate broadcast domains on the same physical switch, improving security and performance.",no:["VPNs create encrypted tunnels over public networks. VLANs segment local networks. Different technologies.","Virus detection is handled by antivirus/EDR. VLANs are network segmentation technology.","VLANs are a well-defined IEEE 802.1Q networking standard, not related to virtual reality."]}},
+{q:"What port does HTTPS typically use?",opts:["Port 21","Port 80","Port 443","Port 25"],c:2,exp:{ok:"HTTPS uses port 443 by default for encrypted web traffic using TLS/SSL.",no:["Port 21 is FTP (File Transfer Protocol) — an unencrypted, legacy protocol.","Port 80 is HTTP (unencrypted web). HTTPS moved to port 443.","Port 25 is SMTP for sending email between mail servers."]}},
+{q:"What is ARP poisoning?",opts:["A chemical attack on network cables","An attack associating the attacker's MAC address with a legitimate IP to intercept traffic","A method of cleaning network protocols","Updating ARP tables for maintenance"],c:1,exp:{ok:"ARP poisoning sends fake ARP messages to link the attacker's MAC with a victim's IP, enabling man-in-the-middle attacks.",no:["ARP is a network protocol. This attack is entirely digital, not physical.","There's no concept of 'cleaning' protocols. ARP poisoning corrupts normal operation.","ARP tables update automatically. ARP poisoning specifically refers to malicious manipulation."]}},
+{q:"What is the purpose of a subnet mask?",opts:["To hide your IP address","To define which portion of an IP identifies the network vs. the host","To encrypt network traffic","To speed up internet connection"],c:1,exp:{ok:"Subnet masks (like 255.255.255.0) tell devices which bits identify the network and which identify individual hosts.",no:["NAT hides internal IPs. Subnet masks define network boundaries — no anonymity.","Encryption is handled by TLS, IPsec, or WPA. Subnet masks are addressing tools.","Subnet masks affect routing but don't increase bandwidth or speed."]}},
+{q:"What does a MAC address identify?",opts:["A device's physical location","A unique hardware identifier for a network interface","The manufacturer of the operating system","The network speed"],c:1,exp:{ok:"MAC addresses are 48-bit hardware identifiers burned into network interface cards, unique to each physical interface.",no:["MAC addresses don't contain location data. IP + geolocation provides approximate location.","MAC addresses identify the NIC manufacturer (first 3 bytes), not the OS maker.","Speed is determined by network standard and negotiation, not MAC addresses."]}},
+{q:"What is the TCP three-way handshake?",opts:["A greeting between network admins","The SYN → SYN-ACK → ACK process that establishes a TCP connection","Encrypting data three times","Three separate password verifications"],c:1,exp:{ok:"Client sends SYN, server responds SYN-ACK, client completes with ACK. This establishes connection parameters before data transfer.",no:["The handshake is an automated protocol process between computers, not humans.","Triple encryption (3DES) exists, but the TCP handshake is about connection setup, not encryption.","Password verification is application-layer. The TCP handshake is transport-layer connection setup."]}},
+{q:"What type of attack floods a target with traffic to make it unavailable?",opts:["Phishing","Man-in-the-middle","Distributed Denial of Service (DDoS)","SQL injection"],c:2,exp:{ok:"DDoS attacks use thousands of compromised devices (botnets) to overwhelm a target, exhausting bandwidth and resources.",no:["Phishing tricks users into revealing info — no traffic flooding involved.","MitM intercepts communications between parties — it's eavesdropping, not overwhelming.","SQL injection manipulates database queries through inputs. It targets data, not availability."]}}
+]},
+4:{title:"Threats & Attacks",sub:"Understanding the Enemy",icon:"☠️",color:"#ef4444",questions:[
+{q:"What is a 'zero-day' vulnerability?",opts:["A vulnerability fixed on day zero","A security flaw unknown to the vendor with no available patch","A vulnerability that exists for 24 hours","A training exercise term"],c:1,exp:{ok:"Zero-day means the vendor has had 'zero days' to fix it. Extremely dangerous because no patch exists.",no:["The opposite — a zero-day is unfixed. Once patched, it's no longer a zero-day.","Zero-days can persist for months or years. 'Zero' refers to zero days of patch availability.","Zero-days are real threats actively bought and sold on black markets for millions."]}},
+{q:"What is a 'man-in-the-middle' (MitM) attack?",opts:["Someone physically standing between servers","An attacker secretly intercepting communication between two parties who think they're talking directly","A type of firewall","A management technique"],c:1,exp:{ok:"The attacker positions between sender and receiver, intercepting or modifying data in real-time. Common on unsecured Wi-Fi.",no:["MitM is digital interception. No physical positioning is involved.","Firewalls filter traffic. MitM actively intercepts and manipulates — completely different.","This is a cyberattack term with no relation to management."]}},
+{q:"What is a 'trojan horse' in cybersecurity?",opts:["A type of strong encryption","Malware disguised as legitimate software that creates a backdoor","A physical security barrier","An intrusion detection system"],c:1,exp:{ok:"Named after the Greek legend, trojans appear useful but secretly install malware or backdoors when executed.",no:["Encryption protects data. Trojans actively compromise systems — they're threats, not tools.","Physical barriers protect facilities. Trojans are software threats that trick users.","IDS detects threats. Trojans ARE threats. Opposite sides of security."]}},
+{q:"What is 'social engineering'?",opts:["Building social media platforms","Manipulating human psychology to trick people into breaking security procedures","Engineering social networks' code","A legitimate HR practice"],c:1,exp:{ok:"Social engineering exploits trust, fear, urgency, and authority. Includes phishing, pretexting, baiting, and tailgating.",no:["Social media development is software engineering. Social engineering targets human behavior.","Network programming is development. Social engineering targets people, not code.","While HR uses persuasion, social engineering specifically refers to malicious security manipulation."]}},
+{q:"What is a 'keylogger'?",opts:["A device that locks your keyboard","Software or hardware that records every keystroke to capture passwords","A key management system","A type of keyboard layout"],c:1,exp:{ok:"Keyloggers capture everything typed — passwords, credit cards, messages. Can be software or physical hardware devices.",no:["Screen/keyboard locks are security features. Keyloggers secretly record keystrokes.","Key management systems handle encryption keys. Completely different from keystroke recording.","Keyboard layouts (QWERTY) define key positions. Keyloggers record what keys you press."]}},
+{q:"What is a 'botnet'?",opts:["A network of factory robots","A network of compromised computers controlled remotely by an attacker","A type of internet service","An automated customer service system"],c:1,exp:{ok:"Botnets consist of millions of infected devices controlled via C2 servers. Used for DDoS, spam, crypto mining, and credential stuffing.",no:["Industrial robots use different networks. Botnets are infected consumer/enterprise devices.","Botnets are malicious attack infrastructure, not internet services.","Chatbots handle service. Botnets are criminal networks — completely different."]}},
+{q:"What is 'spear phishing'?",opts:["Phishing while scuba diving","A highly targeted phishing attack using personalized information about the victim","Mass email spam","A type of fishing game"],c:1,exp:{ok:"Unlike broad phishing, spear phishing uses researched personal details to craft convincing, targeted messages.",no:["Nothing to do with water. 'Spear' refers to the targeted, precise nature of the attack.","Mass spam is regular phishing. Spear phishing is carefully targeted at specific individuals.","Spear phishing is one of the most dangerous attack techniques used by nation-states."]}},
+{q:"What is a 'watering hole' attack?",opts:["Poisoning a water supply","Compromising a website frequently visited by the target group to infect their devices","Flooding a network with spam","A swimming pool protocol"],c:1,exp:{ok:"Like predators waiting at a watering hole, attackers compromise websites their targets regularly visit.",no:["This is a digital attack. The name is a metaphor from nature about predators.","Network flooding is DDoS. Watering hole attacks compromise specific websites.","A cybersecurity term with no relation to physical safety."]}},
+{q:"What is 'pretexting' in social engineering?",opts:["Writing a book preface","Creating a fabricated scenario to manipulate a target into providing information","Pre-testing security systems","Writing preliminary messages"],c:1,exp:{ok:"Attackers create convincing backstories — impersonating IT support, bank officials, or executives — to trick targets.",no:["Book prefaces are literary. Pretexting is a social engineering deception technique.","Pre-testing is legitimate security assessment. Pretexting is malicious impersonation.","Preliminary messaging is normal. Pretexting involves creating false identities to manipulate."]}},
+{q:"What is 'ransomware-as-a-service' (RaaS)?",opts:["A cloud backup solution","A model where ransomware developers sell their tools to other criminals for profit sharing","A legitimate IT service","An insurance product"],c:1,exp:{ok:"RaaS industrialized cybercrime. Developers create ransomware; affiliates deploy it. Groups like LockBit operated this model.",no:["Cloud backup defends against ransomware. RaaS enables criminals.","RaaS is entirely criminal. It mimics SaaS business models but provides attack tools.","Cyber insurance covers breach costs. RaaS creates the need for such insurance."]}}
+]},
+5:{title:"Defense Tools",sub:"Security Technologies",icon:"🔧",color:"#f59e0b",questions:[
+{q:"What is the difference between IDS and IPS?",opts:["They are the same","IDS detects and alerts; IPS detects AND actively blocks threats","IDS is newer than IPS","IPS only works on wireless"],c:1,exp:{ok:"IDS is passive — monitors and alerts. IPS sits inline and actively blocks malicious traffic in real-time.",no:["They serve related but distinct functions. IDS detects; IPS adds prevention.","IDS actually predates IPS. IPS evolved from IDS by adding blocking capabilities.","IPS works on any network — wired, wireless, or virtual."]}},
+{q:"What is EDR (Endpoint Detection and Response)?",opts:["Email Delivery Report","A security solution that continuously monitors endpoints for suspicious behavior","Emergency Disaster Recovery","External Drive Reader"],c:1,exp:{ok:"EDR tools (CrowdStrike, SentinelOne) monitor endpoint activity in real-time, detect threats using behavioral analysis, and enable rapid response.",no:["Email reports are messaging features. EDR is advanced endpoint security technology.","Disaster recovery restores systems after failures. EDR is proactive security monitoring.","External drive readers are hardware. EDR is sophisticated security software."]}},
+{q:"What does a SIEM system do?",opts:["Manages employee schedules","Collects, correlates, and analyzes security logs from across the environment to detect threats","Speeds up internet","Creates website backups"],c:1,exp:{ok:"SIEM aggregates logs from firewalls, servers, endpoints, and applications, correlating events to detect attack patterns.",no:["Scheduling is HR software. SIEM is a security analytics platform.","Network optimization manages speed. SIEM analyzes security data.","Backup solutions protect data. SIEM monitors security events."]}},
+{q:"What is a WAF (Web Application Firewall)?",opts:["A regular firewall","A solution that filters HTTP/HTTPS traffic to protect web apps from XSS and SQL injection","A Wi-Fi access finder","A wide area firewall"],c:1,exp:{ok:"WAFs inspect HTTP requests for attack patterns, blocking SQL injection, XSS, CSRF, and other web-specific attacks.",no:["Traditional firewalls filter at network layer. WAFs operate at application layer (Layer 7).","WAF has nothing to do with finding Wi-Fi. It protects web applications.","WANs use regular firewalls. WAFs specifically protect web applications."]}},
+{q:"What is the principle behind a 'honeypot'?",opts:["Attracting bees","Deploying a decoy system to attract attackers and study their techniques","Storing data in a pot-shaped container","A sweet user interface"],c:1,exp:{ok:"Honeypots are intentionally vulnerable decoys that lure attackers away from real assets and capture their techniques.",no:["'Honey' is a metaphor for something attractive to attackers, like a trap.","Honeypots are live decoy systems, not storage containers.","UI design is unrelated. Honeypots are security deception tools."]}},
+{q:"What is DLP (Data Loss Prevention)?",opts:["A computer display type","Tools that detect and prevent unauthorized transmission of sensitive data outside the organization","A disk loading procedure","Digital Light Processing"],c:1,exp:{ok:"DLP monitors data in motion, at rest, and in use to prevent sensitive information from leaving the organization.",no:["Computer displays use LCD, OLED. DLP in security protects data.","Disk procedures are storage operations. DLP controls data flow.","Digital Light Processing is projector technology. Security DLP prevents data loss."]}},
+{q:"What is a sandbox in cybersecurity?",opts:["A children's play area","An isolated environment where suspicious files can be executed safely","A backup device","A server rack color"],c:1,exp:{ok:"Sandboxes execute suspicious files in isolated virtual environments, observing behavior without risk to production systems.",no:["The name comes from a contained play area concept, but it's a critical malware analysis tool.","Backup devices store data copies. Sandboxes analyze potentially malicious files.","Server racks come in standard colors. Sandboxes are virtual isolated environments."]}},
+{q:"What is the function of a proxy server?",opts:["It replaces your CPU","It acts as an intermediary between users and the internet, providing caching and filtering","It generates electricity","It's another name for DNS"],c:1,exp:{ok:"Proxy servers receive client requests, forward them, and return responses. They can cache, filter, log, and mask IPs.",no:["CPUs are hardware processors. Proxy servers are network intermediaries.","Power generation uses UPS/generators. Proxies manage traffic flow.","DNS resolves names to IPs. Proxies relay requests. Different purposes."]}},
+{q:"What does NAC (Network Access Control) do?",opts:["Controls building air conditioning","Enforces security policies on devices before granting network access","Manages advertising campaigns","Controls audio channels"],c:1,exp:{ok:"NAC evaluates connecting devices — checking antivirus, patches, encryption. Non-compliant devices are quarantined.",no:["HVAC uses different systems. NAC is network security technology.","Advertising is marketing. NAC enforces security policy for network access.","Audio uses different tech. NAC manages which devices can connect to the network."]}},
+{q:"What is threat intelligence?",opts:["Intelligence tests for IT staff","Collected, analyzed information about current and emerging threats used for informed security decisions","AI that replaces security teams","A rating of hacker intelligence"],c:1,exp:{ok:"Threat intel includes IoCs, TTPs, threat actor profiles, and vulnerability data used to proactively defend.",no:["IQ testing is unrelated. Threat intelligence is about understanding the threat landscape.","TI informs human decisions — it doesn't replace analysts.","It's about understanding threats, not rating attackers. It catalogs behaviors and targets."]}}
+]},
+6:{title:"Cryptography",sub:"Encryption & Data Protection",icon:"🔑",color:"#10b981",questions:[
+{q:"What is the key difference between symmetric and asymmetric encryption?",opts:["No difference","Symmetric uses one shared key; asymmetric uses a public/private key pair","Asymmetric is always faster","Symmetric always uses longer keys"],c:1,exp:{ok:"Symmetric (AES) uses one key for both operations — fast but requires secure key exchange. Asymmetric (RSA) uses paired keys — slower but solves key distribution.",no:["They're fundamentally different with different use cases and key management.","Asymmetric is 100-1000x slower. It's used for key exchange; symmetric handles bulk encryption.","Key length depends on algorithm. AES-256 is symmetric; RSA uses 2048-4096 bit keys."]}},
+{q:"What is hashing and how does it differ from encryption?",opts:["They are the same","Hashing is one-way producing a fixed digest; encryption is reversible with a key","Hashing is more secure","Hashing requires a password"],c:1,exp:{ok:"Hashing (SHA-256, bcrypt) creates a fixed-length fingerprint that can't be reversed. Encryption (AES) is reversible with the correct key.",no:["They serve different purposes. Hashing verifies integrity; encryption protects confidentiality.","Neither is inherently 'more secure' — they solve different problems.","Basic hashing doesn't use passwords. Password hashing adds salts and work factors."]}},
+{q:"What is a digital certificate?",opts:["A cybersecurity diploma","An electronic document binding a public key with an identity, verified by a Certificate Authority","A digital copy of your ID","An encrypted email"],c:1,exp:{ok:"Digital certificates (X.509) contain the subject's public key and identity info, signed by a CA. They enable HTTPS and code signing.",no:["Educational certificates are credentials. Digital certificates are cryptographic trust documents.","ID documents are government-issued. Digital certificates bind public keys to identities.","Encrypted emails use certificates but aren't certificates themselves."]}},
+{q:"Why is MD5 considered insecure for password hashing?",opts:["It's too slow","It's vulnerable to collisions and can be brute-forced extremely quickly","Hashes are too long","It was never designed for security"],c:1,exp:{ok:"MD5 has known collision vulnerabilities and is extremely fast — GPUs can compute billions of MD5 hashes per second.",no:["MD5 is actually too FAST for passwords. Secure hashing (bcrypt) is intentionally slow.","MD5 produces a short 128-bit hash. Length isn't its weakness.","MD5 was designed as a cryptographic hash. It's been broken by advances since 1991."]}},
+{q:"What is a 'salt' in password hashing?",opts:["A seasoning for better taste","A random value added before hashing to prevent rainbow table attacks","An encryption algorithm","A network protocol"],c:1,exp:{ok:"Salts are unique random values added to passwords before hashing. Even identical passwords produce different hashes.",no:["Metaphorical name. The 'salt' adds randomness to hashing — not food.","Salts aren't algorithms. They enhance hashing security. Algorithms include AES, RSA.","Network protocols manage communication. Salts are a cryptographic technique."]}},
+{q:"What is end-to-end encryption (E2EE)?",opts:["Encryption at cable endpoints","Encryption where only communicating users can read messages — not even the service provider","Encryption covering every protocol layer","Encryption that never ends"],c:1,exp:{ok:"E2EE (Signal, WhatsApp) encrypts on the sender's device and only decrypts on the recipient's. The platform cannot read messages.",no:["E2EE isn't about cables. It ensures only sender and receiver can decrypt, regardless of infrastructure.","E2EE operates at application layer, not every layer. Lower layers may use separate encryption.","'End-to-end' refers to communication endpoints, not duration."]}},
+{q:"What is PKI (Public Key Infrastructure)?",opts:["A physical key system","A framework of CAs, certificates, and key pairs enabling secure communication and identity verification","Personal Knowledge Index","A programming interface"],c:1,exp:{ok:"PKI provides the trust framework for the internet. CAs issue certificates binding public keys to identities.",no:["Physical keys handle building access. PKI manages cryptographic keys and digital certificates.","PKI has nothing to do with knowledge assessment. It's cryptographic trust infrastructure.","Programming interfaces are APIs. PKI is security infrastructure for managing certificates."]}},
+{q:"What makes AES-256 the gold standard for symmetric encryption?",opts:["It was invented most recently","256-bit key strength with no known practical attacks, fast in hardware/software, approved for top-secret data","It only works on Windows","It uses the most electricity"],c:1,exp:{ok:"AES-256 has withstood 20+ years of cryptanalysis. Brute-forcing 2^256 keys would take longer than the age of the universe.",no:["AES was standardized in 2001. Newer algorithms exist, but AES-256's proven track record makes it the standard.","AES is platform-agnostic — every OS, hardware, and device supports it.","AES is very energy-efficient with hardware acceleration."]}},
+{q:"What is the 'key exchange' problem?",opts:["Exchanging physical office keys","The challenge of securely sharing encryption keys over an insecure channel","A keyboard issue","Trading cryptocurrency keys"],c:1,exp:{ok:"Before symmetric encryption, parties need a shared key. Transmitting it insecurely risks interception. Diffie-Hellman and RSA solve this.",no:["Physical key exchange is facilities. The cryptographic problem is about sharing digital encryption keys.","Keyboard compatibility is hardware. Key exchange is a fundamental cryptographic problem.","Cryptocurrency uses keys, but this refers to establishing shared encryption keys between communicating parties."]}},
+{q:"What is steganography?",opts:["A type of dinosaur","Hiding secret data within ordinary data (images, audio) so its existence is concealed","A medical imaging technique","A type of shorthand writing"],c:1,exp:{ok:"Steganography hides data in carrier files — embedding messages in image pixels or audio. Unlike encryption, it hides the data's existence entirely.",no:["Stegosaurus is a dinosaur. Steganography comes from Greek for 'covered writing'.","Medical imaging uses radiography, MRI. Steganography is an information hiding technique.","Stenography is shorthand. Steganography (with 'a') is the art of hiding secret messages."]}}
+]},
+7:{title:"Incident Response",sub:"When Things Go Wrong",icon:"🚨",color:"#dc2626",questions:[
+{q:"What is the correct NIST incident response phase order?",opts:["Eradication → Detection → Recovery","Preparation → Detection & Analysis → Containment → Eradication → Recovery → Lessons Learned","Recovery → Preparation → Detection","Containment → Detection → Preparation"],c:1,exp:{ok:"NIST SP 800-61 defines this lifecycle. Preparation comes first because you can't respond to incidents you haven't planned for.",no:["Can't eradicate before detecting. This skips preparation entirely.","Recovery before detection makes no sense.","Detection must precede containment. Preparation always comes first."]}},
+{q:"What is 'chain of custody' in digital forensics?",opts:["A blockchain mechanism","A documented trail recording who handled evidence, when, and what they did","A chain of database connections","Supply chain tracking"],c:1,exp:{ok:"Chain of custody ensures evidence integrity and legal admissibility. Every transfer and analysis must be documented.",no:["Blockchain consensus is a ledger mechanism. Chain of custody is legal evidence documentation.","Database connections are technical. Chain of custody is a forensic evidence procedure.","Supply chain tracks products. Chain of custody tracks forensic evidence handling."]}},
+{q:"What is the primary goal during incident 'containment'?",opts:["Deleting all affected files","Limiting scope and impact while preserving evidence","Shutting down the entire network","Emailing all employees"],c:1,exp:{ok:"Containment isolates affected systems to prevent spread while keeping evidence intact for investigation.",no:["Deleting destroys evidence and may not stop the attack. Containment preserves while isolating.","Full shutdown causes massive disruption. Targeted isolation is preferred.","Premature communication can alert attackers. Notification follows proper procedures."]}},
+{q:"What is a forensic image?",opts:["A crime scene photograph","A bit-for-bit exact copy of a storage device including deleted files","An edited forensic photo","A fingerprint scan"],c:1,exp:{ok:"Forensic images capture every bit — including deleted data and slack space. Tools like FTK Imager create exact duplicates.",no:["Crime scene photography is different. Digital forensic images are complete storage copies.","Forensic images aren't edited — they're exact, unmodified copies. Editing compromises integrity.","Biometric scans verify identity. Forensic images are complete digital copies of storage."]}},
+{q:"What are Indicators of Compromise (IoCs)?",opts:["Signs of a slow computer","Observable artifacts indicating a system has been breached — malicious IPs, file hashes, domains","Compromised employee satisfaction","Financial loss calculations"],c:1,exp:{ok:"IoCs include malicious IPs, file hashes, domains, registry changes, and unusual patterns. Shared via threat intelligence feeds.",no:["Slow performance has many causes. IoCs are specific technical artifacts indicating a breach.","Employee satisfaction is HR. IoCs are cybersecurity evidence artifacts.","Financial losses are consequences. IoCs are the technical evidence identifying a breach."]}},
+{q:"What is a 'lessons learned' review?",opts:["A punishment session","A structured post-incident analysis to improve future response","A mandatory exam","A training review"],c:1,exp:{ok:"Lessons learned is a blame-free analysis improving processes, updating playbooks, and strengthening response capabilities.",no:["Blame culture discourages reporting. Lessons learned focuses on systemic improvements.","Post-incident reviews analyze the specific incident, not administer company-wide exams.","While training may be updated, the primary purpose is analyzing the incident response itself."]}},
+{q:"What tool is commonly used for memory forensics?",opts:["Microsoft Paint","Volatility — an open-source RAM analysis framework","Google Chrome","Microsoft Excel"],c:1,exp:{ok:"Volatility analyzes RAM dumps to find malware, network connections, processes, and evidence that disappears when powered off.",no:["Paint is an image editor. Memory forensics needs specialized parsing tools.","Chrome is a browser. Browser artifacts are analyzed in forensics, but Chrome isn't a forensic tool.","Excel handles spreadsheets. Memory forensics requires tools that understand OS memory structures."]}},
+{q:"Why is documentation important during incident response?",opts:["To create busy work","For legal proceedings, compliance, insurance claims, and improving future response","To fill quarterly reports","To satisfy curious employees"],c:1,exp:{ok:"Documentation supports legal action, regulatory reporting (GDPR 72-hour), insurance claims, and continuous improvement.",no:["Documentation is critical operational work, not busywork.","It serves immediate operational and legal needs, not just periodic reporting.","Incident details are shared on need-to-know basis, not for general curiosity."]}},
+{q:"What is containment vs. eradication?",opts:["They're the same","Containment isolates to prevent spread; eradication completely removes the threat","Containment is permanent; eradication temporary","Eradication comes before containment"],c:1,exp:{ok:"Containment is quarantine — stopping spread. Eradication is the cure — removing all traces. Containment must come first.",no:["They're sequential phases with different goals.","It's reversed. Containment is temporary; eradication is permanent removal.","Containment MUST precede eradication. Stop the spread before removing the threat."]}},
+{q:"What is a 'tabletop exercise'?",opts:["Rearranging office furniture","A discussion-based simulation where teams walk through response to a hypothetical incident","A board game","Desk exercises"],c:1,exp:{ok:"Tabletop exercises test plans without technical execution. Teams discuss 'what would you do if...' to identify gaps.",no:["Office furniture is facilities. Tabletop exercises are security preparedness activities.","These are professional exercises, not recreational games.","'Tabletop' refers to discussion format — teams working through scenarios, not physical exercise."]}}
+]},
+8:{title:"Cloud & App Security",sub:"Securing Modern Environments",icon:"☁️",color:"#6366f1",questions:[
+{q:"What is the cloud 'shared responsibility model'?",opts:["Cloud providers handle everything","Provider secures infrastructure; customer secures data, configs, and access","Customers handle all security","Security is split 50/50"],c:1,exp:{ok:"Providers secure physical infra and hypervisor. Customers secure data, IAM, encryption, and configs. The line shifts by service model.",no:["Providers don't secure customer data. Many breaches are from customer misconfiguration.","Customers have significant responsibilities, but providers handle physical security and foundational network.","It's not equal. Responsibilities vary — SaaS providers handle more; IaaS customers handle more."]}},
+{q:"What is OWASP Top 10?",opts:["Top 10 antivirus products","A regularly updated list of the most critical web application security risks","Top 10 security languages","10 most secure websites"],c:1,exp:{ok:"OWASP Top 10 catalogues risks like injection, broken auth, XSS. It's the baseline for web app security testing worldwide.",no:["OWASP is a security org, not antivirus reviewer.","OWASP covers security risks regardless of language.","OWASP identifies risks to warn about, not secure sites to recommend."]}},
+{q:"What is SQL injection?",opts:["A database installation process","An attack inserting malicious SQL through user inputs to manipulate databases","A performance optimization","A method of adding data normally"],c:1,exp:{ok:"Attackers insert SQL commands through input fields. Example: ' OR 1=1-- as a username could bypass authentication entirely.",no:["Installation uses setup wizards. SQL injection exploits poorly written queries.","Optimization uses indexing and tuning. SQL injection is a destructive attack.","Normal insertion uses parameterized queries. SQL injection exploits unsanitized inputs."]}},
+{q:"What is a container security concern?",opts:["Physical shipping containers","Vulnerabilities in container images, insecure configs, and insufficient isolation","Container ships sinking","Storage containers rusting"],c:1,exp:{ok:"Docker/Kubernetes containers can have vulnerabilities in base images, excessive privileges, and exposed secrets. Image scanning is essential.",no:["Software containers are virtual environments. This is about digital security.","Maritime security is unrelated. Container security addresses software isolation.","Physical container maintenance is unrelated to software container security."]}},
+{q:"What is XSS (Cross-Site Scripting)?",opts:["Writing across multiple languages","An attack injecting malicious JavaScript into web pages viewed by other users","A CSS framework","Cross-platform development"],c:1,exp:{ok:"XSS injects malicious scripts into trusted websites. Stored XSS persists in databases; reflected XSS comes via URLs.",no:["Multi-language development is polyglot programming. XSS is a web vulnerability.","CSS handles styling. Despite similar abbreviations, they're unrelated.","Cross-platform uses React Native/Flutter. XSS is a security vulnerability."]}},
+{q:"What is a CASB (Cloud Access Security Broker)?",opts:["A stock broker","A security enforcement point between cloud users and services, monitoring activity and enforcing policies","A cloud backup service","A certificate authority for clouds"],c:1,exp:{ok:"CASBs provide visibility into cloud usage, enforce policies, detect shadow IT, and prevent data leakage.",no:["Financial brokers trade securities. CASBs broker security between orgs and cloud services.","Backup services store copies. CASBs enforce security policies for cloud usage.","CAs issue certificates. CASBs provide security governance for cloud services."]}},
+{q:"What is DevSecOps?",opts:["A developer social platform","Integrating security throughout the entire software development lifecycle","A type of operating system","A developer conference"],c:1,exp:{ok:"DevSecOps shifts security left — embedding SAST, DAST, and security reviews into CI/CD pipelines.",no:["Developer communities exist online, but DevSecOps is a methodology for integrating security.","It's a development methodology, not an OS.","While DevSecOps conferences exist, the term describes an approach to secure development."]}},
+{q:"What is 'infrastructure as code' security?",opts:["Writing security policies on paper","Scanning IaC templates (Terraform, CloudFormation) for misconfigurations before deployment","Building from recycled materials","Coding on secure keyboards"],c:1,exp:{ok:"IaC security tools (Checkov, tfsec) scan for open S3 buckets, permissive security groups, etc. before deployment.",no:["Paper policies are governance. IaC security is automated scanning of code-defined infrastructure.","Physical materials are unrelated. IaC security validates digital infrastructure definitions.","Keyboard security is irrelevant. IaC security ensures code-defined infrastructure meets standards."]}},
+{q:"What is API security?",opts:["Protecting beekeeping equipment","Protecting Application Programming Interfaces from attacks like injection and broken auth","Anti-Piracy Initiatives","Automatic Password Input"],c:1,exp:{ok:"API security involves authentication (OAuth), rate limiting, input validation, and protecting against OWASP API Top 10.",no:["Apiaries house bees. API = Application Programming Interface.","Anti-piracy is IP protection. API security protects technical interfaces.","Password automation is different. API security encompasses auth, rate limiting, and vulnerability protection."]}},
+{q:"What is 'shift left' in security?",opts:["Moving your keyboard left","Integrating security testing earlier in development rather than waiting until deployment","A political term","Shifting server racks"],c:1,exp:{ok:"'Shift left' means moving security from the end to the beginning of development. Finding flaws during coding costs 100x less.",no:["'Left' refers to early stages of the development timeline, not physical position.","This is a technology term about when security activities occur in development.","Server positioning is facilities. 'Shift left' is about embedding security earlier."]}}
+]},
+9:{title:"GRC",sub:"Governance, Risk & Compliance",icon:"📋",color:"#d946ef",questions:[
+{q:"What is the NIST Cybersecurity Framework?",opts:["A type of firewall","A framework of standards and practices to manage cybersecurity risk with five core functions","A scanning tool","A surveillance program"],c:1,exp:{ok:"NIST CSF's five functions — Identify, Protect, Detect, Respond, Recover — help organizations manage cyber risk.",no:["Firewalls filter traffic. NIST CSF is a strategic risk management framework.","Scanning tools probe networks. NIST CSF is a high-level organizational framework.","NIST CSF helps organizations protect themselves — it's a defensive framework."]}},
+{q:"What does GDPR require regarding data breaches?",opts:["No action needed","Notify the supervisory authority within 72 hours; notify individuals without undue delay if high risk","Only annual reporting","Only US companies report"],c:1,exp:{ok:"GDPR Article 33 requires 72-hour authority notification. Article 34 requires individual notification for high-risk breaches.",no:["Failing to report can result in fines up to €20M or 4% of global revenue.","72-hour per-incident notification is required. Annual is far too slow.","GDPR applies to ANY org processing EU/EEA data, regardless of location."]}},
+{q:"What is a risk assessment?",opts:["Guessing which computers break","A systematic process identifying, analyzing, and evaluating security risks","An IT personality test","Counting servers"],c:1,exp:{ok:"Risk assessments identify assets, threats, and vulnerabilities, then evaluate likelihood and impact to prioritize mitigation.",no:["Hardware reliability uses maintenance schedules. Risk assessments evaluate security threats systematically.","Personality assessments are HR tools. Risk assessments analyze organizational security posture.","Asset inventories count resources. Risk assessments evaluate threats and potential business impact."]}},
+{q:"What is SOC 2 compliance?",opts:["Managing a SOC","Demonstrating adequate controls for security, availability, integrity, confidentiality, and privacy","A network socket type","A soccer division"],c:1,exp:{ok:"SOC 2 audits evaluate service providers' controls across five Trust Service Criteria. Essential for SaaS companies.",no:["Security Operations Center and SOC 2 share an acronym but are different concepts.","Network sockets are programming interfaces. SOC 2 is an audit framework.","Soccer is sports. SOC 2 is a rigorous security audit standard."]}},
+{q:"What is the 'principle of least privilege'?",opts:["Everyone gets admin access","Granting only the minimum access necessary for job functions","Removing all access","Only privileged users use computers"],c:1,exp:{ok:"Least privilege is mandated by HIPAA, PCI DSS, GDPR. It limits breach blast radius and meets regulatory requirements.",no:["Universal admin violates every compliance framework and creates maximum attack surface.","Zero access prevents work. Least privilege balances security with productivity.","All authorized users need appropriate access proportional to their role."]}},
+{q:"What is a Business Impact Analysis (BIA)?",opts:["Analyzing business cards","Identifying critical functions and the impact of disruption to prioritize recovery","Advertising impact study","Chemical analysis"],c:1,exp:{ok:"BIA identifies critical processes, maximum tolerable downtime (MTD), RTO, and RPO to drive BCP/DR planning.",no:["Business card design is marketing. BIA is critical risk management.","Advertising analytics is marketing. BIA assesses operational disruption impact.","Chemical analysis is lab science. BIA evaluates operational resilience."]}},
+{q:"What is PCI DSS?",opts:["PC Installation Data Sheet","Payment Card Industry Data Security Standard for organizations handling credit card data","Computer hardware","A programming certification"],c:1,exp:{ok:"PCI DSS mandates 12 requirements including encryption, access control, and vulnerability management for cardholder data.",no:["Installation guides are documentation. PCI DSS is a global payment security standard.","PCI DSS is a compliance framework, not hardware.","Certifications validate skills. PCI DSS is a mandatory security standard."]}},
+{q:"What is the difference between a vulnerability and a risk?",opts:["They're the same","A vulnerability is a weakness; risk is the potential impact considering likelihood and consequences","Vulnerabilities are worse","Risks only exist in finance"],c:1,exp:{ok:"Risk = Vulnerability × Threat × Impact. A vulnerability becomes a risk when a threat actor can exploit it with consequences.",no:["They're related but distinct. Understanding the difference is fundamental to security management.","Neither is inherently 'worse'. Vulnerabilities are technical; risks are business-level assessments.","Risk exists in every domain. Cybersecurity risk assessment is a core discipline."]}},
+{q:"What is an acceptable use policy (AUP)?",opts:["An office supplies policy","Rules defining how employees may use organizational IT resources","A package delivery guide","A dress code policy"],c:1,exp:{ok:"AUPs establish rules for using company networks, devices, email, and data. Required by most compliance frameworks.",no:["Office supplies are procurement. AUPs govern IT resource usage.","Package delivery is logistics. AUPs define acceptable technology use.","Dress codes are HR. AUPs are information security policies."]}},
+{q:"Why is security awareness training important for compliance?",opts:["It's not — technology handles everything","Most frameworks require it, and human error causes the majority of incidents","Only IT staff need training","Training is only needed once"],c:1,exp:{ok:"HIPAA, PCI DSS, GDPR all mandate training. With 82% of breaches involving humans (Verizon DBIR), training is the most cost-effective defense.",no:["Technology can't prevent social engineering. People are the first line of defense.","Every employee with access is a target. Phishing targets all levels.","Threats evolve constantly. Regular training updates are minimum requirement."]}}
+]},
+10:{title:"Expert & Leadership",sub:"Strategic Mastery",icon:"👑",color:"#eab308",questions:[
+{q:"What is the role of a CISO?",opts:["Managing the helpdesk","Providing strategic security leadership, aligning security with business objectives, managing risk","Writing all firewall rules personally","Only responding to incidents"],c:1,exp:{ok:"The CISO translates cyber risk into business terms, manages programs, builds teams, ensures compliance, and communicates with the board.",no:["Helpdesk is IT operations. CISOs operate at the strategic level.","CISOs lead teams who handle technical work. They focus on strategy and governance.","IR is one aspect. CISOs manage the entire security program."]}},
+{q:"What is the Cyber Kill Chain?",opts:["A chain securing servers","A model mapping 7 attack stages, enabling defenders to detect and disrupt at each stage","A cryptocurrency technique","A chain of cybercafes"],c:1,exp:{ok:"Lockheed Martin's Kill Chain: Recon → Weaponization → Delivery → Exploitation → Installation → C2 → Actions. Breaking any link stops the attack.",no:["Physical chains protect equipment. The Kill Chain is a strategic defense framework.","Cryptocurrency mining is unrelated. The Kill Chain models attack stages.","Cybercafes are internet businesses. The Kill Chain is an adversary behavior model."]}},
+{q:"What is Zero Trust architecture?",opts:["Trust nothing, block everything","Eliminate implicit trust — continuously verify every user, device, and connection","Zero bandwidth technology","Only trust people you've met"],c:1,exp:{ok:"Zero Trust: verify explicitly, use least privilege, assume breach. Replaces castle-and-moat with micro-segmentation and continuous auth.",no:["Zero Trust doesn't block everything — it verifies everything. Legitimate requests get appropriate access.","It's a security philosophy, not bandwidth technology.","Physical ID isn't scalable. Zero Trust uses MFA, device health, and behavioral analytics."]}},
+{q:"What is the difference between Red, Blue, and Purple Teams?",opts:["Sports teams","Red attacks (offensive), Blue defends (defensive), Purple bridges both for collaborative improvement","Security software products","Color-coded server rooms"],c:1,exp:{ok:"Red simulates adversaries. Blue detects and responds. Purple facilitates knowledge transfer to create continuous improvement.",no:["These are cybersecurity operational roles, not sports.","They're teams of people with specific roles, not software products.","Server room organization is facilities. These describe security team functions."]}},
+{q:"How should a security leader measure ROI of security investments?",opts:["Just say 'trust me'","Use metrics like risk reduction, MTTD, MTTR, compliance status, and cost avoidance","Security doesn't need budget justification","Only report blocked attacks"],c:1,exp:{ok:"Effective leaders use KPIs: Mean Time to Detect, Mean Time to Respond, patch cadence, phishing rates, and cost-per-incident.",no:["Executives require data-driven justification, not trust.","Every department must justify budgets with measurable value.","Blocked counts lack business context. Executives need risk reduction data."]}},
+{q:"What is an APT (Advanced Persistent Threat)?",opts:["An advanced antivirus","A sophisticated, long-term targeted attack by well-resourced actors with strategic objectives","A temporary network problem","An automated pen test"],c:1,exp:{ok:"APTs (Fancy Bear, Lazarus Group) use custom malware and zero-days for espionage or sabotage, maintaining access for months or years.",no:["Antivirus defends against threats. APTs ARE the threats.","APTs are the opposite of temporary. 'Persistent' means long-term access.","Automated pen tests are assessments. APTs are real attacks by motivated threat actors."]}},
+{q:"What is supply chain security?",opts:["Securing delivery trucks","Protecting the entire ecosystem of vendors, software, and services from compromise","Managing inventory","Logistics optimization"],c:1,exp:{ok:"SolarWinds compromised 18,000+ orgs through one vendor. Supply chain security evaluates vendor risk and validates software integrity.",no:["Physical delivery is logistics. Supply chain security addresses compromised third-party software.","Inventory is operations. Cybersecurity supply chain ensures vendor ecosystem trustworthiness.","Logistics improves delivery. Supply chain security prevents adversary compromise of trusted vendors."]}},
+{q:"What should a security strategy include?",opts:["Just expensive tools","Risk assessment, architecture, IR, compliance, training, metrics, and business alignment","Only perimeter defense","Outsource everything to one vendor"],c:1,exp:{ok:"A mature strategy covers governance, risk, technical controls, people/process/tech balance, compliance, and continuous improvement.",no:["Tools without strategy create expensive shelfware.","Perimeter-only fails with cloud, remote work, and mobile. Defense-in-depth is essential.","Single-vendor creates concentration risk. Diverse, best-of-breed is more resilient."]}},
+{q:"How does threat modeling improve security?",opts:["3D threat visualization","Systematically identifies threats and vulnerabilities during design, enabling proactive security","Predicts exact attack dates","Replaces security testing"],c:1,exp:{ok:"Threat modeling (STRIDE, PASTA) identifies what can go wrong BEFORE building. It's 100x cheaper to fix design flaws than production bugs.",no:["Threat modeling uses diagrams and frameworks, not VR.","No methodology predicts exact dates. It identifies likely scenarios.","It complements testing — ensures testing focuses on highest-risk areas."]}},
+{q:"What's the most effective approach to building security culture?",opts:["Punish every violation","Continuous education, positive reinforcement, executive buy-in, and making security everyone's job","Block all internet and USB","Rely solely on technology"],c:1,exp:{ok:"Security culture requires leadership support, engaging training, positive recognition, clear policies, and integrating security into daily workflows.",no:["Punishment discourages reporting. Positive reinforcement is far more effective.","Excessive restrictions reduce productivity and drive shadow IT.","Technology can't prevent social engineering. People are both the greatest vulnerability and strongest defense."]}}
+]}
+};
+
+var guidance={
+0:{title:"Complete Beginner",color:"#ef4444",msg:"You're at the very start — everyone begins here!",recs:["Take free courses: Cybrary, SANS Cyber Aces, Google Cybersecurity Certificate","Learn basic computing and internet safety","Understand common threats: phishing, malware, social engineering","Practice strong password habits and enable MFA everywhere","Watch: NetworkChuck, Professor Messer, David Bombal","Read 'Cybersecurity for Beginners' by Raef Meeuwisse"],certs:["CompTIA ITF+","Google Cybersecurity Certificate"],time:"3-6 months for solid basics"},
+1:{title:"Awareness Level",color:"#f97316",msg:"You know the basics! Build practical habits.",recs:["Deep dive into password managers, MFA, safe browsing","Learn operating system security (Windows & Linux)","Set up antivirus, firewall, and backups at home","Start studying CompTIA A+ or Security+","Practice identifying phishing and social engineering","Join communities on Reddit and Discord"],certs:["CompTIA A+","ISC2 CC"],time:"3-6 months to practitioner"},
+2:{title:"Digital Citizen",color:"#eab308",msg:"Strong habits! Ready for technical foundations.",recs:["Study networking: OSI model, TCP/IP, DNS","Learn Linux basics in a VM","Understand routers, switches, firewalls","Begin CompTIA Network+ or Security+","Set up a home lab with VirtualBox","Learn command line operations"],certs:["CompTIA Network+","CompTIA Security+"],time:"4-6 months to specialist"},
+3:{title:"Network Aware",color:"#84cc16",msg:"Solid networking! Time to understand threats.",recs:["Study attacks in depth: MitM, DDoS, injection","Learn malware analysis fundamentals","Understand MITRE ATT&CK framework","Practice on TryHackMe","Study social engineering defenses","Begin Python scripting"],certs:["CompTIA Security+","CEH"],time:"4-6 months to defense"},
+4:{title:"Threat Aware",color:"#22c55e",msg:"You understand the enemy! Master defense tools.",recs:["Learn SIEM: Splunk, ELK Stack","Study EDR, IDS/IPS, WAF technologies","Practice with Wireshark","Understand honeypots, DLP, NAC","Build a detection lab","Apply for SOC Analyst Level 1 roles"],certs:["CompTIA CySA+","BTL1","Splunk Core"],time:"4-8 months to mid-level"},
+5:{title:"Defense Specialist",color:"#06b6d4",msg:"Strong defense! Master data protection.",recs:["Deep dive: AES, RSA, ECC encryption","Study PKI and certificate management","Learn hashing algorithms and applications","Understand key management best practices","Practice with OpenSSL and GnuPG","Study cryptographic attacks and defenses"],certs:["CompTIA Security+","CCNA","SSCP"],time:"4-6 months to IR"},
+6:{title:"Crypto Proficient",color:"#8b5cf6",msg:"Data protection mastery! Ready for IR.",recs:["Study NIST IR lifecycle in depth","Learn forensic imaging and evidence handling","Practice memory forensics with Volatility","Study log analysis and timelines","Build IR playbooks","Pursue SOC Level 2 or IR Analyst roles"],certs:["GCIH","BTL1","CySA+"],time:"6-8 months to cloud"},
+7:{title:"IR Specialist",color:"#dc2626",msg:"IR skills locked in! Master modern environments.",recs:["Study cloud security: AWS, Azure, GCP","Learn OWASP Top 10 and web app testing","Understand container security (Docker, K8s)","Study DevSecOps and CI/CD security","Practice on cloud security labs","Learn API security and IaC"],certs:["AWS Security Specialty","Cloud+","CCSK"],time:"6-8 months to GRC"},
+8:{title:"Cloud Defender",color:"#6366f1",msg:"Modern environments secured! Time for governance.",recs:["Study: NIST CSF, ISO 27001, GDPR, PCI DSS, HIPAA","Learn risk assessment: FAIR, NIST RMF","Understand BCP and DR planning","Study security policy development","Learn audit processes","Prepare for leadership discussions"],certs:["CISM","CRISC","ISO 27001 Lead Auditor"],time:"6-12 months to expert"},
+9:{title:"GRC Professional",color:"#d946ef",msg:"Governance mastery! Ready for leadership.",recs:["Pursue CISO or Security Director roles","Study enterprise architecture (TOGAF, SABSA)","Communicate cyber risk to boards","Develop vendor risk management","Build Red/Blue/Purple capabilities","Consider starting a consultancy"],certs:["CISSP","CISM","OSCP"],time:"Ready for senior leadership"},
+10:{title:"🏆 Cybersecurity Master",color:"#eab308",msg:"LEGENDARY! All 10 levels conquered!",recs:["Ready for C-suite (CISO, CSO, CTO)","Research: AI security, quantum cryptography","Speak at BSides, DEF CON, Black Hat","Contribute to industry frameworks","Mentor the next generation","Shape the future through thought leadership"],certs:["You've earned it — keep evolving!"],time:"Continue leading — cybersecurity never stops"}
+};
+
+/* ===== STATE ===== */
+var pName="",cLvl=1,cQ=0,sc=0,strk=0,lvlSc={},sQs=[],tInt=null,tLeft=0,ans=false;
+
+/* ===== UTILS ===== */
+function shuf(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function show(id){var screens=document.querySelectorAll('.screen');for(var i=0;i<screens.length;i++)screens[i].classList.remove('active');document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function pk(a){return a[Math.floor(Math.random()*a.length)];}
+function ts(l){return 35+l*3;}
+function gid(){return 'CDA-'+Date.now().toString(36).toUpperCase()+'-'+Math.random().toString(36).substring(2,6).toUpperCase();}
+function hp(){var h=0;for(var i=1;i<=10;i++){if(lvlSc[i]&&lvlSc[i].p)h=i;else break;}return h;}
+
+var eMsg={
+streak:["🔥 You're on FIRE!","⚡ UNSTOPPABLE!","💪 CRUSHING IT!","🌟 BRILLIANT!","🎯 Sharpshooter!"],
+ok:["✅ Nailed it!","👏 Well done!","💡 Exactly right!","🎯 Correct!","✨ Nice one!"],
+no:["💪 That's how we learn!","📚 You'll get the next!","🔄 Shake it off!","⭐ Closer to mastery!","🚀 Stay focused!"],
+time:["⏱️ Time ran out!","⌛ Clock won this round!"],
+mid:["🏔️ Halfway! Keep climbing!","⚡ 5 down, 5 to go!","💪 Midpoint — amazing!"],
+end:["🏁 Almost done!","🔥 Final stretch!","⭐ So close!"],
+need:["⚠️ Need {n} more to pass!","🎯 {n} more needed. Dig deep!"]
+};
+
+/* ===== WELCOME ===== */
+document.getElementById('pName').addEventListener('input',function(){
+  document.getElementById('startBtn').disabled=this.value.trim().length<2;
+});
+document.getElementById('pName').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&this.value.trim().length>=2)goToLevels();
+});
+document.getElementById('startBtn').addEventListener('click',function(){
+  goToLevels();
+});
+
+function goToLevels(){
+  pName=document.getElementById('pName').value.trim();
+  renderLevels();
+  show('S_levels');
+}
+
+/* ===== LEVELS ===== */
+function renderLevels(){
+  var h2=hp(),tot=0;for(var k in lvlSc)tot++;
+  var g=document.getElementById('greet');
+  if(h2===0&&tot===0)g.innerHTML='Welcome, <strong>'+pName+'</strong>! 🎯 Let\'s discover your cybersecurity level!';
+  else if(h2===10)g.innerHTML='🏆 <strong>'+pName+'</strong>, you CONQUERED all 10 levels! LEGENDARY!';
+  else g.innerHTML=pk(['Great progress, <strong>'+pName+'</strong>! '+h2+' level'+(h2!==1?'s':'')+' passed! 💪','<strong>'+pName+'</strong>, Level '+(h2+1)+' awaits! 🚀','Keep climbing, <strong>'+pName+'</strong>! ⚡']);
+  var m=document.getElementById('motiv');
+  if(h2===0&&tot===0)m.innerHTML='<p>💡 <strong>Pro Tip:</strong> Read each question carefully and learn from the detailed explanations. <strong>You\'ve got this!</strong></p>';
+  else if(h2<10)m.innerHTML=pk(['<p>🔥 <strong>Level '+(h2+1)+' is calling!</strong> Every level proves you belong. <strong>Show it what you\'re made of!</strong></p>','<p>⚡ <strong>Don\'t stop!</strong> Can you collect ALL 10 certificates? <strong>Prove it!</strong></p>','<p>🌟 <strong>Every expert started where you are.</strong> Level '+(h2+1)+' is your next milestone!</p>']);
+  else m.innerHTML='<p>🏆 <strong>LEGENDARY, '+pName+'!</strong> All 10 levels conquered!</p>';
+  var gr=document.getElementById('lvlGrid');gr.innerHTML='';
+  for(var l=1;l<=10;l++){
+    var d=Q[l],r=lvlSc[l],ul=(l===1)||(lvlSc[l-1]&&lvlSc[l-1].p),ps=r&&r.p;
+    var c=document.createElement('div');
+    c.className='lvl-card'+(ps?' passed':'')+(!ul?' locked':'');
+    c.innerHTML='<div class="lvl-top"><span class="lvl-icon">'+d.icon+'</span><span class="lvl-num">Lvl '+l+'</span></div><div class="lvl-name">'+d.title+'</div><div class="lvl-desc">'+d.sub+'</div>'+(r?'<div class="lvl-badge" style="background:'+(ps?'#10b981':'#ef4444')+'">'+r.s+'/10 '+(ps?'✓ PASS':'✗ FAIL')+'</div>':'')+(!ul?'<div class="lvl-lock">🔒 Pass Lvl '+(l-1)+'</div>':'');
+    if(ul){
+      (function(level){
+        c.addEventListener('click',function(){startLvl(level);});
+      })(l);
+    }
+    gr.appendChild(c);
+  }
+  document.getElementById('gWrap').style.display=tot>0?'':'none';
+}
+
+/* ===== QUIZ ===== */
+function startLvl(l){
+  cLvl=l;cQ=0;sc=0;strk=0;ans=false;
+  var baseQs=Q[l].questions;
+  sQs=shuf(baseQs).map(function(q){
+    var idx=q.opts.map(function(_,i){return i;});
+    var si=shuf(idx);
+    var newCorrect=si.indexOf(q.c);
+    var wrongExps=[];
+    for(var i=0;i<si.length;i++){
+      var origI=si[i];
+      if(origI!==q.c){
+        var wIdx=origI<q.c?origI:origI-1;
+        wrongExps.push({opt:q.opts[origI],why:q.exp.no[wIdx],newIdx:i});
+      }
+    }
+    return{q:q.q,opts:si.map(function(i){return q.opts[i];}),c:newCorrect,okExp:q.exp.ok,wrongExps:wrongExps};
+  });
+  document.getElementById('qzTag').textContent=Q[l].icon+' Level '+l+': '+Q[l].title;
+  renderQ();
+  show('S_quiz');
+}
+
+function renderQ(){
+  ans=false;var q=sQs[cQ];
+  document.getElementById('progFill').style.width=(((cQ+1)/10)*100)+'%';
+  document.getElementById('progTxt').textContent='Question '+(cQ+1)+'/10 · Score: '+sc+'/'+cQ;
+  tLeft=ts(cLvl);startTmr();
+  var e=document.getElementById('encBar');
+  if(cQ===0){e.innerHTML='🚀 Let\'s go, <strong>'+pName+'</strong>!';e.style.color='#a5b4fc';}
+  else if(cQ===5){e.innerHTML=pk(eMsg.mid);e.style.color='#fbbf24';}
+  else if(cQ>=8){e.innerHTML=pk(eMsg.end);e.style.color='#34d399';}
+  else{var nd=7-sc,rm=10-cQ;if(nd>rm){e.innerHTML='⚠️ Tough round — finish strong!';e.style.color='#f87171';}else if(nd>0&&nd>=rm-1){e.innerHTML=pk(eMsg.need).replace('{n}',nd);e.style.color='#fbbf24';}else if(strk>=3){e.innerHTML=pk(eMsg.streak);e.style.color='#34d399';}else{e.innerHTML='💪 Keep going, <strong>'+pName+'</strong>!';e.style.color='#a5b4fc';}}
+  var cd=document.getElementById('qCard');cd.style.animation='none';cd.offsetHeight;cd.style.animation='fadeIn .3s ease';
+  var h='<h2 class="q-txt">'+q.q+'</h2><div class="opts">';
+  for(var i=0;i<q.opts.length;i++){
+    h+='<button class="opt" id="o'+i+'" onclick="selAns('+i+')"><span class="opt-ltr">'+String.fromCharCode(65+i)+'</span><span>'+q.opts[i]+'</span></button>';
+  }
+  h+='</div><div id="expArea"></div>';
+  cd.innerHTML=h;
+}
+
+function startTmr(){clearInterval(tInt);updTmr();tInt=setInterval(function(){tLeft--;updTmr();if(tLeft<=0){clearInterval(tInt);selAns(-1);}},1000);}
+function updTmr(){var mx=ts(cLvl),p=(tLeft/mx)*100,c=tLeft<=10?'#ef4444':tLeft<=20?'#f59e0b':'#10b981';document.getElementById('tmrFill').style.width=p+'%';document.getElementById('tmrFill').style.background=c;document.getElementById('tmrTxt').style.color=c;document.getElementById('tmrTxt').textContent=tLeft+'s';}
+
+function selAns(idx){
+  if(ans)return;ans=true;clearInterval(tInt);
+  var q=sQs[cQ],ok=idx===q.c,to=idx===-1;
+  if(ok){sc++;strk++;}else{strk=0;}
+  for(var i=0;i<q.opts.length;i++){
+    var b=document.getElementById('o'+i);b.disabled=true;
+    if(i===q.c){b.classList.add('correct');b.innerHTML+='<span class="opt-mark" style="color:#10b981">✓</span>';}
+    else if(i===idx&&!ok){b.classList.add('wrong');b.innerHTML+='<span class="opt-mark" style="color:#ef4444">✗</span>';}
+    else{b.classList.add('dimmed');}
+  }
+  var fb;if(to)fb=pk(eMsg.time);else if(ok)fb=pk(eMsg.ok);else fb=pk(eMsg.no);
+  var expH='<div class="exp-box"><div class="hd">'+(ok?'✅ Correct!':to?"⏱️ Time's Up!":'❌ Incorrect')+'</div>';
+  expH+='<div class="exp-ok"><div class="lbl">✅ Why the correct answer is right:</div><p>'+q.okExp+'</p></div>';
+  expH+='<div class="exp-wr">';
+  for(var w=0;w<q.wrongExps.length;w++){
+    expH+='<div class="exp-wr-item"><div class="wr-name">❌ "'+q.wrongExps[w].opt+'"</div><p>'+q.wrongExps[w].why+'</p></div>';
+  }
+  expH+='</div><div class="exp-fb">'+fb+'</div>';
+  expH+='<button class="nxt-btn" onclick="nxtQ()">'+(cQ<9?'Next Question →':'🏁 View Results →')+'</button></div>';
+  document.getElementById('expArea').innerHTML=expH;
+  document.getElementById('progTxt').textContent='Question '+(cQ+1)+'/10 · Score: '+sc+'/'+(cQ+1);
+}
+
+function nxtQ(){if(cQ<9){cQ++;renderQ();}else showRes();}
+function backHome(){clearInterval(tInt);renderLevels();show('S_levels');}
+
+/* ===== RESULT ===== */
+function showRes(){
+  clearInterval(tInt);var ps=sc>=7;lvlSc[cLvl]={s:sc,p:ps};var d=Q[cLvl];
+  var msg,mc,mb;
+  if(sc===10){msg='🏆 PERFECT, '+pName+'! Level '+cLvl+' DOMINATED!';mc='#fbbf24';mb='#78350f44';}
+  else if(sc>=9){msg='🌟 Outstanding, '+pName+'! Near-perfect!';mc='#34d399';mb='#064e3b44';}
+  else if(ps){msg='💪 Great work, '+pName+'! Level '+cLvl+' conquered!';mc='#60a5fa';mb='#1e3a5f44';}
+  else if(sc>=5){msg='📚 So close! '+(7-sc)+' more to pass. Try again!';mc='#fbbf24';mb='#78350f33';}
+  else{msg='🚀 Don\'t give up! Learn from the explanations!';mc='#f87171';mb='#450a0a33';}
+  var h='<div class="res-card" style="border-color:'+(ps?'#10b981':'#ef4444')+'"><div class="res-emoji">'+(ps?(sc===10?'🏆':'🎉'):'📚')+'</div><h2 class="res-title">Level '+cLvl+': '+d.title+' — '+(ps?'PASSED!':'NOT YET')+'</h2><div class="res-score" style="color:'+(ps?'#10b981':'#ef4444')+'">'+sc+'/10</div><div class="res-motiv" style="color:'+mc+';background:'+mb+'">'+msg+'</div><div class="res-acts">';
+  if(ps)h+='<button class="act-btn" style="background:#d97706" onclick="showCert('+cLvl+')">🏅 Certificate</button>';
+  if(ps&&cLvl<10)h+='<button class="act-btn" style="background:#10b981" onclick="startLvl('+(cLvl+1)+')">🚀 Level '+(cLvl+1)+'</button>';
+  h+='<button class="act-btn" style="background:#3b82f6" onclick="startLvl('+cLvl+')">🔄 Retry</button><button class="act-btn" style="background:#6366f1" onclick="showGuide()">📊 Guidance</button><button class="act-btn" style="background:#475569" onclick="backHome()">🏠 Home</button></div></div>';
+  document.getElementById('S_result').innerHTML=h;show('S_result');
+}
+
+/* ===== CERTIFICATE ===== */
+function showCert(l){
+  var d=Q[l],r=lvlSc[l],h2=hp(),all=h2===10;
+  var dt=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  var pct=Math.round((r.s/10)*100);
+  var ci='CDA-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*90000+10000));
+  var lt=all?'Cybersecurity Master — All 10 Levels':'Level '+l+': '+d.title;
+  var bc=all?'linear-gradient(135deg,#b45309,#d97706)':'linear-gradient(135deg,'+d.color+','+d.color+'cc)';
+
+  // Skills validated per level
+  var lvlSkills={1:['Phishing','Passwords','MFA','Malware','Firewalls'],2:['Password Managers','2FA','Data Backup','Wi-Fi Security','Privacy'],3:['OSI Model','TCP/UDP','DNS','VLANs','Subnetting'],4:['Zero-Day','MitM','Trojans','Social Engineering','Botnets'],5:['IDS/IPS','EDR','SIEM','WAF','Honeypots'],6:['Symmetric/Asymmetric','Hashing','PKI','AES-256','Steganography'],7:['NIST IR Phases','Chain of Custody','Forensic Imaging','IoCs','Tabletop Exercises'],8:['Shared Responsibility','OWASP Top 10','SQL Injection','DevSecOps','API Security'],9:['NIST CSF','GDPR','Risk Assessment','PCI DSS','Least Privilege'],10:['Zero Trust','Kill Chain','APT','Threat Modeling','Security Culture']};
+  var skills=lvlSkills[l]||[];
+  if(all)skills=['All 10 Domains Mastered'];
+
+  // SVG ornamental corner
+  var corner='<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 36 C4 16 16 4 36 4" stroke="#b45309" stroke-width="1.5" fill="none"/><path d="M4 28 C4 14 14 4 28 4" stroke="#b45309" stroke-width="1" opacity=".5" fill="none"/><circle cx="6" cy="6" r="2.5" fill="#b45309"/><circle cx="4" cy="36" r="1.5" fill="#b45309" opacity=".6"/><circle cx="36" cy="4" r="1.5" fill="#b45309" opacity=".6"/></svg>';
+
+  // SVG shield logo
+  var logo='<svg class="cert-logo" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient></defs><path d="M32 4 L54 16 V34 C54 46 44 56 32 60 C20 56 10 46 10 34 V16 Z" fill="url(#sg)" stroke="#1e3a5f" stroke-width="1.5"/><path d="M32 10 L48 20 V34 C48 43 41 51 32 54 C23 51 16 43 16 34 V20 Z" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/><path d="M24 32 L30 38 L42 26" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+
+  var skillTags='';for(var i=0;i<skills.length;i++){skillTags+='<span class="cert-skill-tag">'+skills[i]+'</span>';}
+
+  var h='<div class="cert-out"><div class="cert-in">';
+  h+='<div class="cert-inner-border"></div><div class="cert-inner-border2"></div>';
+  h+='<div class="cert-corner tl">'+corner+'</div><div class="cert-corner tr">'+corner+'</div><div class="cert-corner bl">'+corner+'</div><div class="cert-corner br">'+corner+'</div>';
+  h+=logo;
+  h+='<div class="cert-heading">Certificate of Achievement</div>';
+  h+='<div class="cert-ttl">Cybersecurity Knowledge Assessment</div>';
+  h+='<div class="cert-org">Powered by Cyber Drill AI</div>';
+  h+='<div class="cert-rule"></div>';
+  h+='<div class="cert-pre">This is to certify that</div>';
+  h+='<div class="cert-name">'+pName+'</div>';
+  h+='<div class="cert-name-line"></div>';
+  h+='<div class="cert-for">has successfully demonstrated competency in</div>';
+  h+='<div class="cert-lvl" style="background:'+bc+'">'+lt+'</div>';
+  h+='<div class="cert-lvl-sub">'+d.sub+'</div>';
+  h+='<div class="cert-score"><span>Score: '+r.s+'/10 · '+pct+'%</span></div>';
+  h+='<div class="cert-skills"><div class="cert-skills-title">Skills Validated</div><div class="cert-skills-tags">'+skillTags+'</div></div>';
+  h+='<div class="cert-ft">';
+  h+='<div class="cert-ft-item"><div class="cert-ft-line"></div><div class="cert-ft-val">'+dt+'</div><div class="cert-ft-lbl">Date Issued</div></div>';
+  h+='<div class="cert-ft-mid"><svg width="28" height="28" viewBox="0 0 28 28"><defs><linearGradient id="sg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#1e40af"/></linearGradient></defs><path d="M14 2 L24 8 V16 C24 21 19 25 14 27 C9 25 4 21 4 16 V8 Z" fill="url(#sg2)"/><path d="M10 14 L13 17 L19 11" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/></svg><div class="cert-ft-val" style="font-size:11px">Cyber Drill AI</div><div class="cert-ft-lbl">Verified</div></div>';
+  h+='<div class="cert-ft-item"><div class="cert-ft-line"></div><div class="cert-ft-val">Program Director</div><div class="cert-ft-lbl">Authorized By</div></div>';
+  h+='</div>';
+  h+='<div class="cert-id">Certificate ID: '+ci+'</div>';
+  h+='</div></div>';
+
+  if(all)h+='<div class="motiv" style="margin-top:20px"><p>🌟 <strong>LEGENDARY, '+pName+'!</strong> All 10 certificates earned!</p></div>';
+  else if(l<10)h+='<div class="motiv" style="margin-top:20px"><p>🔥 <strong>Level '+l+' certified!</strong> Can you collect ALL 10? Level '+(l+1)+' awaits! 💪</p></div>';
+  h+='<div style="text-align:center;margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center"><button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>';
+  if(l<10)h+='<button class="act-btn" style="background:#10b981" onclick="startLvl('+(l+1)+')">🚀 Level '+(l+1)+'</button>';
+  h+='<button class="act-btn" style="background:#6366f1" onclick="showGuide()">📊 Guidance</button><button class="act-btn" style="background:#475569" onclick="backHome()">🏠 Home</button></div>';
+  document.getElementById('S_cert').innerHTML=h;show('S_cert');
+}
+
+/* ===== GUIDANCE ===== */
+function showGuide(){
+  var h2=hp(),g=guidance[h2],rows='';
+  for(var l=1;l<=10;l++){var r=lvlSc[l],p=r?r.s*10:0,c=r?(r.p?'#10b981':'#ef4444'):'#334155';rows+='<div class="sc-row"><span class="sc-lbl">L'+l+'</span><div class="sc-bar"><div class="sc-fill" style="width:'+p+'%;background:'+c+'"></div></div><span class="sc-val">'+(r?r.s+'/10':'—')+'</span></div>';}
+  var recs='';for(var i=0;i<g.recs.length;i++){recs+='<div class="rc-item"><span class="rc-num">'+(i+1)+'</span><span class="rc-txt">'+g.recs[i]+'</span></div>';}
+  var cts='';var ca=Array.isArray(g.certs)?g.certs:[g.certs];for(var j=0;j<ca.length;j++){cts+='<div class="ct-tag">'+ca[j]+'</div>';}
+  document.getElementById('S_guide').innerHTML='<button class="back-btn" onclick="backHome()">← Back</button><div class="gh"><h2 class="sec-title">'+pName+'\'s Career Roadmap</h2><div class="g-badge" style="background:'+g.color+'">'+g.title+'</div><p class="g-msg">'+g.msg+'</p></div><div class="gc"><h3>📈 Results</h3>'+rows+'</div><div class="gc"><h3>🎯 Focus Areas</h3>'+recs+'</div><div class="gc"><h3>🏅 Certifications</h3><div class="ct-grid">'+cts+'</div></div><div class="gc" style="border-color:'+g.color+'44"><h3>⏱ Timeline</h3><p class="tf-txt">'+g.time+'</p></div><div style="margin-top:8px"><button class="g-btn" onclick="backHome()">🔙 Return</button></div>';
+  show('S_guide');
+}
+</script>
+</body>
+</html>
