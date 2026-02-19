@@ -1,1 +1,1186 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Drill AI Assistant — Cybersecurity Q&A</title>
+<meta name="description" content="Ask cybersecurity questions and get instant answers. 200+ topics powered by Cyber Drill AI with voice support.">
+<meta property="og:title" content="Cyber Drill AI Assistant — Ask Cybersecurity Questions">
+<meta property="og:description" content="200+ cybersecurity topics. Voice input, text-to-speech, category browser, progress tracking.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cyberdrill.ai/academy/ask.html">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EQ1KFX1PMT"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-EQ1KFX1PMT');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#020617;--bg2:#0f172a;--bg3:#1e293b;--border:#334155;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;--accent:#3b82f6;--accent2:#8b5cf6;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--font:'DM Sans',system-ui,-apple-system,sans-serif;--mono:'JetBrains Mono',monospace}
+body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
+body.light{--bg:#f8fafc;--bg2:#ffffff;--bg3:#f1f5f9;--border:#e2e8f0;--text:#1e293b;--text2:#64748b;--text3:#94a3b8}
+.bg-grid{position:fixed;inset:0;background-image:radial-gradient(circle at 15% 50%,#3b82f610 0%,transparent 50%),radial-gradient(circle at 85% 20%,#8b5cf610 0%,transparent 40%),radial-gradient(circle at 50% 80%,#10b98108 0%,transparent 40%);pointer-events:none;z-index:0}
+body.light .bg-grid{display:none}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh;max-width:860px;margin:0 auto}
+
+/* Header */
+.hdr{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.hdr-logo{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:10px;display:flex;align-items:center;justify-content:center}
+.hdr-logo svg{width:22px;height:22px}
+.hdr-info{flex:1}
+.hdr-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.hdr-sub{font-size:11px;color:var(--green);font-weight:500;display:flex;align-items:center;gap:4px}
+.hdr-sub::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hdr-actions{display:flex;gap:6px;align-items:center}
+.hdr-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:7px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);text-decoration:none;transition:all .15s;display:flex;align-items:center;gap:5px}
+.hdr-btn:hover{border-color:var(--accent);color:var(--accent)}
+.theme-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;transition:all .15s}
+.theme-btn:hover{border-color:var(--accent)}
+.voice-toggle{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);font-weight:600;cursor:pointer;user-select:none}
+.voice-toggle input{display:none}
+.voice-toggle .vt-track{width:30px;height:16px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;position:relative;transition:all .2s}
+.voice-toggle input:checked+.vt-track{background:var(--accent);border-color:var(--accent)}
+.voice-toggle .vt-track::after{content:'';position:absolute;top:2px;left:2px;width:10px;height:10px;background:#fff;border-radius:50%;transition:transform .2s}
+.voice-toggle input:checked+.vt-track::after{transform:translateX(14px)}
+
+/* Progress bar */
+.progress-bar{height:3px;background:var(--bg3);flex-shrink:0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));width:0%;transition:width .5s ease}
+
+/* Daily tip */
+.daily-tip{background:linear-gradient(135deg,var(--accent)15,var(--accent2)15);border:1px solid var(--border);border-radius:10px;padding:10px 16px;margin:0 0 8px;display:flex;align-items:flex-start;gap:10px;font-size:12px;line-height:1.5;color:var(--text)}
+.daily-tip-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.daily-tip-text{flex:1}
+.daily-tip-text strong{color:var(--yellow)}
+.daily-tip-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 2px}
+
+/* Chat area */
+.chat-area{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.chat-area::-webkit-scrollbar{width:5px}
+.chat-area::-webkit-scrollbar-track{background:transparent}
+.chat-area::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* Messages */
+.msg{display:flex;gap:10px;max-width:88%;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.bot{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-avatar{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.msg.bot .msg-avatar{background:linear-gradient(135deg,var(--accent),var(--accent2))}
+.msg.user .msg-avatar{background:var(--bg3);border:1px solid var(--border)}
+.msg-bubble{padding:11px 15px;border-radius:14px;font-size:13px;line-height:1.65;word-break:break-word}
+.msg.bot .msg-bubble{background:var(--bg2);border:1px solid var(--border);border-bottom-left-radius:4px;color:var(--text)}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-bottom-right-radius:4px}
+.msg-bubble strong{font-weight:700}
+.msg-bubble code{font-family:var(--mono);font-size:11px;background:var(--bg);padding:2px 5px;border-radius:4px;color:var(--yellow)}
+body.light .msg-bubble code{background:#e2e8f0}
+.msg-cat{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;margin-bottom:5px;letter-spacing:.5px;text-transform:uppercase}
+
+/* Message action row */
+.msg-actions{display:flex;gap:4px;margin-top:6px;align-items:center}
+.msg-act-btn{background:none;border:1px solid var(--border);color:var(--text3);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;justify-content:center;transition:all .15s}
+.msg-act-btn:hover{border-color:var(--accent);color:var(--accent)}
+.msg-act-btn.active{border-color:var(--green);color:var(--green)}
+.msg-act-btn.active-bad{border-color:var(--red);color:var(--red)}
+.msg-act-btn.speaking{color:var(--accent);border-color:var(--accent);animation:speakPulse 1s infinite}
+@keyframes speakPulse{0%,100%{opacity:1}50%{opacity:.5}}
+.msg-quiz-link{font-size:10px;color:var(--accent);text-decoration:none;margin-left:auto;font-weight:600;display:flex;align-items:center;gap:3px}
+.msg-quiz-link:hover{text-decoration:underline}
+.copied-toast{font-size:10px;color:var(--green);font-weight:600;margin-left:6px;animation:fadeOut 2s forwards}
+@keyframes fadeOut{0%,70%{opacity:1}100%{opacity:0}}
+
+/* Disclaimer */
+.disclaimer{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:0 0 6px;text-align:center}
+.disclaimer-icon{font-size:28px;margin-bottom:4px}
+.disclaimer-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.disclaimer-text{font-size:11px;color:var(--text2);line-height:1.55}
+.disclaimer-badge{display:inline-block;background:var(--accent);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:12px;margin-top:6px;letter-spacing:.5px}
+
+/* Quick topics */
+.topics{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:4px}
+.topic-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s}
+.topic-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--bg)}
+
+/* Category browser */
+.cat-toggle{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s}
+.cat-toggle:hover,.cat-toggle.open{border-color:var(--accent);color:var(--accent)}
+.cat-panel{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:6px;gap:6px;flex-wrap:wrap}
+.cat-panel.show{display:flex}
+.cat-chip{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s;display:flex;align-items:center;gap:4px}
+.cat-chip:hover{border-color:var(--accent);color:var(--accent)}
+.cat-chip .cc-dot{width:6px;height:6px;border-radius:50%}
+.cat-chip .cc-count{font-size:9px;opacity:.6;margin-left:2px}
+
+/* Follow-ups */
+.followups{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.followup-btn{background:none;border:1px dashed var(--border);color:var(--text2);padding:4px 11px;border-radius:16px;font-size:10px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s}
+.followup-btn:hover{border-color:var(--accent);color:var(--accent);border-style:solid}
+
+/* "Did you mean?" suggestions */
+.dym{background:var(--bg2);border:1px solid var(--yellow);border-radius:10px;padding:10px 14px;margin-top:4px;font-size:12px}
+.dym-title{color:var(--yellow);font-weight:700;margin-bottom:6px;font-size:11px}
+.dym-list{display:flex;flex-wrap:wrap;gap:5px}
+.dym-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:4px 11px;border-radius:14px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s}
+.dym-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Typing */
+.typing{display:flex;gap:4px;padding:4px 0}
+.typing span{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typeDot 1.4s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typeDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* Input area */
+.input-area{padding:10px 20px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--bg)}
+.input-wrap{display:flex;gap:6px;align-items:flex-end}
+.input-box{flex:1;background:var(--bg2);border:2px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;resize:none;min-height:44px;max-height:110px;line-height:1.5;transition:border-color .2s}
+.input-box:focus{border-color:var(--accent)}
+.input-box::placeholder{color:var(--text3)}
+.send-btn{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,opacity .15s;flex-shrink:0}
+.send-btn:hover{transform:scale(1.05)}
+.send-btn:disabled{opacity:.3;cursor:not-allowed;transform:none}
+.mic-btn{width:44px;height:44px;border-radius:12px;background:var(--bg3);border:2px solid var(--border);color:var(--text2);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.mic-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mic-btn.recording{background:#ef4444;border-color:#ef4444;color:#fff;animation:micPulse 1s infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 10px rgba(239,68,68,0)}}
+.mic-btn.hide{display:none}
+.input-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:10px;color:var(--text3)}
+.input-footer a{color:var(--accent);text-decoration:none}
+.input-footer a:hover{text-decoration:underline}
+.progress-text{font-weight:600}
+
+/* Listening bar */
+.listening-bar{display:none;align-items:center;gap:8px;padding:7px 14px;background:var(--bg2);border:1px solid #ef4444;border-radius:10px;font-size:11px;font-weight:600;color:#ef4444;animation:msgIn .3s ease;margin-bottom:4px}
+.listening-bar.active{display:flex}
+.listening-dots{display:flex;gap:3px;align-items:center}
+.listening-dots span{width:4px;height:4px;background:#ef4444;border-radius:2px;animation:listenBar .8s infinite}
+.listening-dots span:nth-child(2){animation-delay:.1s}
+.listening-dots span:nth-child(3){animation-delay:.2s}
+.listening-dots span:nth-child(4){animation-delay:.3s}
+.listening-dots span:nth-child(5){animation-delay:.15s}
+@keyframes listenBar{0%,100%{height:4px}50%{height:16px}}
+.listening-cancel{background:none;border:1px solid #ef4444;color:#ef4444;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font);margin-left:auto}
+
+/* Chat history toggle */
+.history-bar{display:flex;justify-content:center;margin-bottom:4px}
+.history-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text3);padding:4px 12px;border-radius:14px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .15s}
+.history-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+@media(max-width:500px){
+  .hdr-btn span{display:none}
+  .voice-toggle .vt-label{display:none}
+  .msg{max-width:94%}
+  .topics{gap:4px}
+  .topic-btn,.cat-chip{font-size:10px;padding:4px 8px}
+}
+@media print{.app{display:none}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="app">
+  <header class="hdr">
+    <div class="hdr-logo"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L20 7V13C20 17.4 16.4 21.4 12 22C7.6 21.4 4 17.4 4 13V7L12 2Z"/><path d="M9 12L11 14L15 10"/></svg></div>
+    <div class="hdr-info">
+      <div class="hdr-title">Cyber Drill AI Assistant</div>
+      <div class="hdr-sub">Online — v3.0</div>
+    </div>
+    <div class="hdr-actions">
+      <label class="voice-toggle" title="Auto-read responses"><input type="checkbox" id="autoSpeak" onchange="toggleAutoSpeak()"><span class="vt-track"></span><span class="vt-label">🔊</span></label>
+      <a href="./" class="hdr-btn">🛡️ <span>Quiz</span></a>
+      <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </header>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="chat-area" id="chatArea">
+    <!-- Daily Tip -->
+    <div class="daily-tip" id="dailyTip">
+      <span class="daily-tip-icon">💡</span>
+      <div class="daily-tip-text" id="dailyTipText"></div>
+      <button class="daily-tip-close" onclick="document.getElementById('dailyTip').style.display='none'">✕</button>
+    </div>
+
+    <div class="disclaimer">
+      <div class="disclaimer-icon">🤖</div>
+      <div class="disclaimer-title">Cyber Drill AI Assistant</div>
+      <div class="disclaimer-text">Comprehensive Cybersecurity Q&A — 200+ topics across 24 categories.<br>🎤 Voice input • 🔊 Text-to-speech • 📂 Category browser • 📊 Progress tracking<br>Full AI integration coming soon!</div>
+      <div class="disclaimer-badge">v3.0 • FTC/NIST ENRICHED • 57 DEEP-DIVE TOPICS</div>
+    </div>
+
+    <!-- History restore -->
+    <div class="history-bar" id="historyBar" style="display:none">
+      <button class="history-btn" onclick="loadHistory()">📜 Load previous conversation</button>
+      <button class="history-btn" style="margin-left:6px" onclick="clearHistory()">🗑️ Clear history</button>
+    </div>
+
+    <!-- Category browser -->
+    <div style="text-align:center">
+      <button class="cat-toggle" id="catToggle" onclick="toggleCatPanel()">📂 Browse by Category</button>
+    </div>
+    <div class="cat-panel" id="catPanel"></div>
+
+    <!-- Quick topics -->
+    <div class="topics" id="topicBtns">
+      <button class="topic-btn" onclick="askTopic(this)">What is phishing?</button>
+      <button class="topic-btn" onclick="askTopic(this)">How to create strong passwords?</button>
+      <button class="topic-btn" onclick="askTopic(this)">What is ransomware?</button>
+      <button class="topic-btn" onclick="askTopic(this)">Explain the NIST framework</button>
+      <button class="topic-btn" onclick="askTopic(this)">What is MFA?</button>
+      <button class="topic-btn" onclick="askTopic(this)">What is Zero Trust?</button>
+      <button class="topic-btn" onclick="askTopic(this)">Email authentication (SPF/DKIM/DMARC)</button>
+      <button class="topic-btn" onclick="askTopic(this)">What is cyber insurance?</button>
+      <button class="topic-btn" onclick="askTopic(this)">How to secure remote work?</button>
+      <button class="topic-btn" onclick="askTopic(this)">How to start a cybersecurity career?</button>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="listening-bar" id="listenBar">
+      <div class="listening-dots"><span></span><span></span><span></span><span></span><span></span></div>
+      <span>Listening...</span>
+      <button class="listening-cancel" onclick="stopListening()">Cancel</button>
+    </div>
+    <div class="input-wrap">
+      <textarea class="input-box" id="userInput" placeholder="Ask a cybersecurity question... (or type 'define' for glossary)" rows="1" maxlength="300"></textarea>
+      <button class="mic-btn hide" id="micBtn" onclick="toggleMic()" title="Voice input">🎤</button>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()" disabled>➤</button>
+    </div>
+    <div class="input-footer">
+      <span>🎤 Voice & text • <a href="./">Take the Quiz →</a></span>
+      <span class="progress-text" id="progressText">0 / 57 topics explored</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== STATE ===== */
+var chatArea=null,inp=null,btn=null,autoSpeakOn=false,micOn=false,recognition=null,isSpeaking=false;
+var explored=new Set();
+var STORE='cda_chat_history';
+var STORE_EXPLORED='cda_explored';
+var STORE_FEEDBACK='cda_feedback';
+
+/* ===== DAILY TIPS ===== */
+var TIPS=[
+"<strong>Tip of the Day:</strong> Over 80% of breaches start with phishing. Train yourself to spot suspicious emails before clicking.",
+"<strong>Tip of the Day:</strong> Use a password manager. Unique 16+ character passwords for every account — no more reuse.",
+"<strong>Tip of the Day:</strong> Enable MFA on every account that supports it. It blocks 99.9% of automated attacks.",
+"<strong>Tip of the Day:</strong> The 3-2-1 backup rule: 3 copies, 2 different media, 1 offsite. Ransomware can't touch offline backups.",
+"<strong>Tip of the Day:</strong> Never use public Wi-Fi without a VPN. Your traffic on open networks can be intercepted.",
+"<strong>Tip of the Day:</strong> Keep ALL software updated — OS, browsers, apps. Many breaches exploit known, patched vulnerabilities.",
+"<strong>Tip of the Day:</strong> \"Delete\" doesn't erase files. Use data wiping software before disposing of old devices.",
+"<strong>Tip of the Day:</strong> If someone calls claiming to be tech support — hang up. Legitimate companies don't make unsolicited calls.",
+"<strong>Tip of the Day:</strong> Encrypt your laptop's hard drive. If it's stolen, the thief can't access your data.",
+"<strong>Tip of the Day:</strong> Check haveibeenpwned.com regularly. If your email appears in a breach, change that password immediately.",
+"<strong>Tip of the Day:</strong> Implement SPF, DKIM, and DMARC on your business email to prevent spoofing attacks.",
+"<strong>Tip of the Day:</strong> Cybersecurity is a habit, not a product. The best tools fail without trained, vigilant people.",
+"<strong>Tip of the Day:</strong> Segment your network. Guest Wi-Fi should NEVER connect to your business network.",
+"<strong>Tip of the Day:</strong> Physical security matters — lock your screen (Win+L / Cmd+L) every time you step away.",
+"<strong>Tip of the Day:</strong> Review vendor security annually. Their breach becomes YOUR breach if they have access to your data.",
+"<strong>Tip of the Day:</strong> Consider cyber insurance. Recovery from an attack can cost more than the attack itself.",
+"<strong>Tip of the Day:</strong> Zero Trust principle: Never trust, always verify — even inside your own network.",
+"<strong>Tip of the Day:</strong> Social engineering targets humans, not systems. Verify unusual requests through a different channel.",
+"<strong>Tip of the Day:</strong> Before hiring a web host, ask: Do they support TLS, SPF, DKIM, DMARC, and auto-updates?",
+"<strong>Tip of the Day:</strong> After any security incident, do a lessons-learned review and update your response plan."
+];
+
+/* Quiz level mapping for topics */
+var QUIZ_MAP={
+"Social Engineering":1,"Authentication":2,"Network Security":3,"Malware":4,
+"Defense Tools":5,"Cryptography":6,"Incident Response":7,"Cloud Security":8,
+"GRC":9,"Career":10,"Emerging Threats":10,"Strategy":9,"Safety Tips":1,
+"Email Security":3,"Scams":1,"Physical Security":2,"Vendor Security":9,
+"Remote Security":3,"Web Hosting":3,"Cyber Insurance":9,"Security Principles":5,
+"General":1,"Help":1
+};
+
+/* ===== KNOWLEDGE BASE v2.0 — EXPANDED ===== */
+var KB=[
+
+/* =========================================== */
+/* === PHISHING & SOCIAL ENGINEERING ========= */
+/* =========================================== */
+
+{keys:["phishing","phish","fake email","suspicious email","email scam","phishing email","how phishing works"],cat:{name:"Social Engineering",color:"#ef4444"},
+a:"<strong>Phishing</strong> is a social engineering attack where attackers send deceptive emails, texts, or messages that appear to come from someone you know or trust — a vendor, your boss, or a well-known company.\n\n<strong>How phishing works:</strong>\n• You receive an email or text that looks real — scammers spoof logos and use familiar names\n• The message creates <strong>urgency</strong> — \"Act now or your account will be closed!\"\n• It asks you to click a link or share sensitive information (passwords, bank accounts)\n• If you click, scammers can install ransomware or steal your credentials\n\n<strong>How to spot phishing:</strong>\n• Check the sender's actual email address (hover over it)\n• Look for urgency, threats, or \"too good to be true\" offers\n• Don't click links — hover first to see the real URL\n• Watch for spelling/grammar mistakes\n• Be suspicious of unexpected attachments\n• When in doubt, <strong>pick up the phone</strong> and call the sender using a number you already know\n\nPhishing is the <strong>#1 attack vector</strong> — responsible for over 80% of security breaches.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What to do if I fall for phishing?","What is spear phishing?","What is email authentication?"]},
+
+{keys:["fell for phishing","phishing victim","clicked phishing link","phishing attack response","what to do phishing"],cat:{name:"Social Engineering",color:"#ef4444"},
+a:"<strong>If you fall for a phishing scheme:</strong>\n\n<strong>1. Alert others:</strong> Tell your colleagues — phishing attacks often target multiple people in a company.\n\n<strong>2. Limit the damage:</strong>\n• Immediately change any compromised passwords\n• Disconnect any infected computer or device from the network\n\n<strong>3. Follow your company's procedures:</strong> Notify IT, your security team, or designated contractors.\n\n<strong>4. Notify affected customers:</strong> If personal data was compromised, notify affected parties — they could be at risk of identity theft.\n\n<strong>5. Report it:</strong>\n• Forward phishing emails to <code>spam@uce.gov</code> (FTC)\n• Forward to <code>reportphishing@apwg.org</code> (Anti-Phishing Working Group)\n• Report to the FTC at FTC.gov/Complaint\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["How to protect against phishing?","What is email authentication?","What is a data breach response plan?"]},
+
+{keys:["spear phishing","targeted phishing","whaling","ceo fraud","targeted attack"],cat:{name:"Social Engineering",color:"#ef4444"},
+a:"<strong>Spear phishing</strong> is a highly targeted phishing attack that uses personal information about the victim to appear legitimate.\n\nUnlike mass phishing, attackers research you — your name, job title, colleagues, recent activities — to craft a convincing, personalized message.\n\n<strong>Whaling</strong> targets executives (the \"big fish\") — CEOs, CFOs, and others with access to sensitive data and financial systems.\n\n<strong>Business Email Compromise (BEC):</strong> Attackers impersonate executives to trick employees into wiring money or sharing sensitive data.\n\n<strong>Protection:</strong>\n• Verify unusual requests through a <strong>different channel</strong> (call them directly)\n• Be cautious of emails requesting money transfers or credentials\n• Even if the sender \"looks\" legitimate, verify independently\n• Implement email authentication (SPF, DKIM, DMARC)\n• Train staff to recognize targeted attacks",
+f:["What is social engineering?","What is business email impersonation?","What is email authentication?"]},
+
+{keys:["social engineering","manipulation","pretexting","baiting","tailgating","impersonation","human hacking"],cat:{name:"Social Engineering",color:"#ef4444"},
+a:"<strong>Social engineering</strong> manipulates human psychology to bypass security. It exploits trust, fear, urgency, and helpfulness.\n\n<strong>Common techniques:</strong>\n• <strong>Pretexting:</strong> Creating a fake scenario — \"I'm from IT support, I need your password to fix your account\"\n• <strong>Baiting:</strong> Leaving infected USB drives in parking lots or offering free downloads\n• <strong>Tailgating/Piggybacking:</strong> Following someone through a secure door without badging in\n• <strong>Impersonation:</strong> Posing as a vendor, executive, or authority figure\n• <strong>Vishing:</strong> Voice phishing — calling and pretending to be tech support or a bank\n• <strong>Smishing:</strong> SMS phishing — sending deceptive text messages\n• <strong>Quid pro quo:</strong> Offering something (free software, help) in exchange for access\n\nThe best defense is <strong>awareness, verification, and a culture of security</strong>. Always confirm identities through official channels.\n\n<em>Social engineering is behind most successful cyber attacks — even the most technically secure organizations can be compromised through human error.</em>",
+f:["What is phishing?","What are tech support scams?","How to train employees on security?"]},
+
+/* =========================================== */
+/* === BUSINESS EMAIL IMPOSTERS ============== */
+/* =========================================== */
+
+{keys:["business email imposter","bec","email spoofing","spoofed email","fake company email","email impersonation"],cat:{name:"Email Security",color:"#f97316"},
+a:"<strong>Business Email Imposters (BEC)</strong> — A scammer sets up an email address that looks like it's from your company, then sends messages to customers, vendors, or employees.\n\n<strong>Why it's dangerous:</strong>\n• Scammers use spoofed emails to steal passwords, bank account numbers, or trick people into sending money\n• Customers and partners lose trust — damaging your business reputation\n• Financial losses can be devastating\n\n<strong>How to protect your business:</strong>\n• <strong>Use email authentication</strong> — implement SPF, DKIM, and DMARC so receiving servers can verify your emails are legitimate\n• <strong>Keep security up to date</strong> — install patches, use intrusion prevention software\n• <strong>Train your staff</strong> — teach them to recognize phishing and spoofed emails\n\n<strong>If your email is spoofed:</strong>\n1. Report to law enforcement, FBI's IC3.gov, and FTC.gov/Complaint\n2. Notify customers immediately (by mail, email without hyperlinks, or social media)\n3. Alert your staff and update security practices\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is email authentication?","What is phishing?","How to report a cyber attack?"]},
+
+/* =========================================== */
+/* === EMAIL AUTHENTICATION ================== */
+/* =========================================== */
+
+{keys:["email authentication","spf","dkim","dmarc","sender policy","domain keys","email security protocol"],cat:{name:"Email Security",color:"#f97316"},
+a:"<strong>Email authentication</strong> prevents scammers from sending phishing emails that look like they're from your company.\n\n<strong>Three essential tools:</strong>\n\n<strong>1. SPF (Sender Policy Framework):</strong>\nTells receiving servers which servers are authorized to send emails using your domain. If the sending server isn't on the approved list, the email gets flagged.\n\n<strong>2. DKIM (Domain Keys Identified Mail):</strong>\nPuts a digital signature on outgoing mail so receiving servers can verify the email actually came from your organization and hasn't been tampered with in transit.\n\n<strong>3. DMARC (Domain-based Message Authentication, Reporting & Conformance):</strong>\nThe essential third layer. It verifies that the behind-the-scenes address (checked by SPF/DKIM) matches the visible \"from\" address. DMARC also lets you tell other servers what to do with suspicious emails — reject them, quarantine them, or notify you.\n\n<strong>Implementation:</strong>\nIt takes expertise to configure these correctly. Make sure your email hosting provider supports all three. If they don't — <strong>consider switching providers</strong>.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is business email impersonation?","What is phishing?","How to hire a web host?"]},
+
+/* =========================================== */
+/* === TECH SUPPORT SCAMS ==================== */
+/* =========================================== */
+
+{keys:["tech support scam","fake tech support","microsoft scam","pop up scam","remote access scam","computer problem scam"],cat:{name:"Scams",color:"#dc2626"},
+a:"<strong>Tech Support Scams</strong> — You get a phone call, pop-up, or email saying there's a problem with your computer. It's almost always a scam.\n\n<strong>How the scam works:</strong>\n• Scammers pretend to be from Microsoft, Apple, or another tech company\n• They use technical jargon to convince you the problem is real\n• They may ask you to open files or run a scan that shows fake problems\n\n<strong>Then they may:</strong>\n• Request <strong>remote access</strong> to your computer (giving them access to everything)\n• Install malware for ongoing access to your data\n• Try to sell worthless software or services\n• Ask for credit card information for phony repairs\n• Enroll you in fake maintenance programs\n\n<strong>Protection:</strong>\n• <strong>Hang up</strong> — an unexpected tech support call is always a scam\n• <strong>Ignore pop-ups</strong> telling you to call a number about computer problems\n• Never give your password or remote access to someone who contacts you unexpectedly\n• If worried, call your security software company directly using a verified number\n\n<strong>If scammed:</strong> Change passwords immediately, run legitimate antivirus, check your entire network, and report to FTC.gov/Complaint.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is social engineering?","How to remove malware?","What is phishing?"]},
+
+/* =========================================== */
+/* === PASSWORDS & AUTHENTICATION ============ */
+/* =========================================== */
+
+{keys:["password","strong password","password security","password manager","passphrase","password best practices","complex password"],cat:{name:"Authentication",color:"#8b5cf6"},
+a:"<strong>Strong password best practices:</strong>\n\n• Use <strong>at least 12-16 characters</strong> — mix of numbers, symbols, capital and lowercase letters\n• <strong>Better yet:</strong> use a passphrase like <code>correct-horse-battery-staple</code>\n• <strong>Never reuse passwords</strong> across sites — credential stuffing attacks exploit this\n• Don't share passwords on the phone, in texts, or by email\n• Use a <strong>password manager</strong> (Bitwarden, 1Password, KeePass) to generate and store unique passwords securely\n• <strong>Limit login attempts</strong> — configure systems to lock out after a number of failed attempts to prevent password-guessing attacks\n\n<strong>Why it matters:</strong>\n• Password reuse is exploited through \"credential stuffing\" — attackers try stolen credentials from one breach across thousands of sites\n• Weak passwords can be cracked in seconds with modern tools\n• 81% of data breaches involve weak or stolen passwords\n\n<strong>Business requirement:</strong> Require all employees to use complex, unique passwords. Consider mandating a password manager company-wide.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is MFA?","What is credential stuffing?","What is a password manager?"]},
+
+{keys:["mfa","multi-factor","two-factor","2fa","authenticator","authentication factor","security key","yubikey"],cat:{name:"Authentication",color:"#8b5cf6"},
+a:"<strong>Multi-Factor Authentication (MFA)</strong> requires two or more verification methods:\n\n<strong>Something you know:</strong> Password or PIN\n<strong>Something you have:</strong> Phone, security key, authenticator app\n<strong>Something you are:</strong> Fingerprint, face recognition\n\nMFA blocks <strong>99.9% of automated attacks</strong> even if your password is stolen.\n\n<strong>Best options (strongest to weakest):</strong>\n1. <strong>Hardware security keys</strong> (YubiKey, Titan) — phishing-resistant\n2. <strong>Authenticator apps</strong> (Google Authenticator, Authy, Microsoft Authenticator)\n3. <strong>Push notifications</strong> (Duo, Okta Verify)\n4. <strong>SMS codes</strong> — vulnerable to SIM swapping but still better than nothing\n\n<strong>Business implementation:</strong>\n• Require MFA for ALL network access with sensitive information\n• Require MFA for vendor and remote access\n• Use MFA for admin and privileged accounts (mandatory, non-negotiable)\n• Consider FIDO2/WebAuthn for highest security\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is SIM swapping?","What is a security key?","What are strong passwords?"]},
+
+{keys:["credential stuffing","password reuse","stolen credentials","breach list"],cat:{name:"Authentication",color:"#8b5cf6"},
+a:"<strong>Credential stuffing</strong> is an automated attack where hackers use stolen username/password pairs from one data breach to try logging into other services.\n\n<strong>Why it works:</strong> Over 65% of people reuse the same password across multiple sites. If your email/password combination leaked from one breach, attackers will try it on banks, email, social media, and corporate accounts.\n\n<strong>Protection:</strong>\n• <strong>Never reuse passwords</strong> — use a unique password for every account\n• Use a <strong>password manager</strong> to handle complexity\n• Enable <strong>MFA</strong> on all accounts\n• Check if you've been breached at <code>haveibeenpwned.com</code>\n• Implement <strong>rate limiting</strong> and account lockout policies\n• Monitor for unusual login patterns (impossible travel, new devices)",
+f:["What is MFA?","How to create strong passwords?","What is a data breach?"]},
+
+{keys:["sim swap","sim swapping","phone takeover","number porting"],cat:{name:"Authentication",color:"#8b5cf6"},
+a:"<strong>SIM swapping</strong> is when an attacker convinces your mobile carrier to transfer your phone number to their SIM card.\n\n<strong>What happens:</strong>\n• Attacker calls your carrier, impersonates you\n• Your number gets transferred to their device\n• They receive all your SMS messages — including 2FA codes\n• They can now reset passwords on your accounts\n\n<strong>Protection:</strong>\n• Set a <strong>PIN or passcode</strong> with your mobile carrier\n• Use <strong>authenticator apps</strong> instead of SMS for 2FA\n• Don't share personal details on social media (used for identity verification)\n• Consider a <strong>hardware security key</strong> for critical accounts\n• Enable <strong>account alerts</strong> for SIM changes",
+f:["What is MFA?","What is social engineering?"]},
+
+/* =========================================== */
+/* === MALWARE =============================== */
+/* =========================================== */
+
+{keys:["malware","virus","worm","trojan","spyware","adware","malicious software","infected computer","malware types"],cat:{name:"Malware",color:"#f59e0b"},
+a:"<strong>Malware</strong> is malicious software designed to damage, disrupt, or gain unauthorized access to systems.\n\n<strong>Types:</strong>\n• <strong>Virus:</strong> Attaches to files, replicates when executed, needs human action to spread\n• <strong>Worm:</strong> Self-replicates across networks without user action — can bring down entire networks\n• <strong>Trojan:</strong> Disguises as legitimate software, creates backdoors for attackers\n• <strong>Spyware:</strong> Secretly monitors your activity, captures keystrokes, steals data\n• <strong>Adware:</strong> Displays unwanted advertisements, often bundled with free software\n• <strong>Rootkit:</strong> Hides deep in the OS, extremely hard to detect and remove\n• <strong>Fileless malware:</strong> Lives in memory only — no files on disk, evades traditional antivirus\n• <strong>Ransomware:</strong> Encrypts files and demands payment\n\n<strong>How malware spreads:</strong>\n• Phishing emails with malicious attachments\n• Infected websites (drive-by downloads)\n• Malicious online ads (malvertising) — even on trusted sites\n• Exploited server vulnerabilities\n• Infected USB drives and removable media\n\n<strong>Protection:</strong>\n• Keep ALL software updated (set updates to happen automatically)\n• Use EDR/antivirus with behavioral detection\n• Don't open suspicious attachments or click unknown links\n• Download only from trusted sources\n• Regular employee training on safe computing\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is ransomware?","What is EDR?","How to remove malware?"]},
+
+{keys:["ransomware","ransom","encrypted files","wannacry","revil","ransomware attack","pay ransom"],cat:{name:"Malware",color:"#f59e0b"},
+a:"<strong>Ransomware</strong> encrypts your files and demands payment (usually cryptocurrency) for the decryption key.\n\n<strong>How it happens:</strong>\n• <strong>Scam emails</strong> — phishing with malicious links/attachments (most common vector)\n• <strong>Server vulnerabilities</strong> — exploited by hackers\n• <strong>Infected websites</strong> — automatic malicious downloads\n• <strong>Malicious online ads</strong> — even on websites you trust\n\n<strong>How to protect your business:</strong>\n• <strong>Have a plan:</strong> How would your business stay running after an attack? Write it down and share it.\n• <strong>Back up your data:</strong> Regularly save to a drive/server NOT connected to your network. Make it routine.\n• <strong>Keep security up to date:</strong> Install latest patches, use email authentication and intrusion prevention software.\n• <strong>Alert your staff:</strong> Train them to spot phishing and recognize ransomware delivery methods.\n\n<strong>3-2-1 Backup Rule:</strong> 3 copies, 2 different media, 1 offsite.\n\n<strong>If attacked:</strong>\n1. <strong>Limit the damage</strong> — Disconnect infected devices immediately\n2. <strong>Contact the authorities</strong> — Report to your local FBI office\n3. <strong>Keep business running</strong> — Implement your continuity plan, restore from backups\n4. <strong>Do NOT pay the ransom</strong> — No guarantee of recovery, and it funds criminal operations\n5. <strong>Notify customers</strong> — If personal data was compromised\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is the 3-2-1 backup rule?","What is incident response?","What is phishing?"]},
+
+{keys:["keylogger","keystroke","screen capture","spying software","monitoring malware"],cat:{name:"Malware",color:"#f59e0b"},
+a:"<strong>Keyloggers</strong> record everything you type — passwords, credit cards, messages, emails. They can be:\n\n• <strong>Software-based:</strong> Malware installed through phishing or downloads\n• <strong>Hardware-based:</strong> Physical devices plugged between keyboard and computer\n\n<strong>Protection:</strong>\n• Use updated EDR/antivirus software with behavioral detection\n• Check for unknown USB devices on public or shared computers\n• Use virtual keyboards for sensitive entry on untrusted machines\n• Enable <strong>MFA</strong> — even captured passwords won't be enough\n• Monitor for unusual programs in task manager\n• Use <strong>full-disk encryption</strong> to protect stored data\n\n<em>Hardware keyloggers are a physical security threat — inspect devices regularly, especially in shared or public environments.</em>",
+f:["What is malware?","What is MFA?","What is physical security?"]},
+
+{keys:["remove malware","malware removal","clean infected computer","virus removal"],cat:{name:"Malware",color:"#f59e0b"},
+a:"<strong>How to remove malware from an infected system:</strong>\n\n<strong>1. Disconnect:</strong> Remove the infected device from the network immediately to prevent spread.\n\n<strong>2. Don't turn it off</strong> (if possible) — preserves volatile evidence in RAM.\n\n<strong>3. Scan and clean:</strong>\n• Update or download legitimate security software\n• Run a full system scan\n• Delete anything the software identifies as a problem\n• Consider booting from a clean USB rescue disk for deep scans\n\n<strong>4. Check the network:</strong> If the affected computer was connected to your network, check the entire network for intrusions.\n\n<strong>5. Change all passwords:</strong> From a DIFFERENT clean device, change passwords for all accounts accessed from the infected machine.\n\n<strong>6. Restore from backup:</strong> If the system can't be cleaned, wipe and restore from a known-good backup.\n\n<strong>7. Update and patch:</strong> Ensure all software is updated to prevent re-infection.\n\n<strong>Remember:</strong> Don't rely on \"delete\" alone — that doesn't actually remove files from the computer. Use proper data erasure software.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is malware?","What is EDR?","What is incident response?"]},
+
+/* =========================================== */
+/* === NETWORK SECURITY ====================== */
+/* =========================================== */
+
+{keys:["vpn","virtual private network","encrypted tunnel","public wifi","public wifi safety"],cat:{name:"Network Security",color:"#06b6d4"},
+a:"<strong>VPN (Virtual Private Network)</strong> creates an encrypted tunnel between your device and a VPN server.\n\n<strong>What it does:</strong>\n• Encrypts your internet traffic so outsiders can't read it\n• Hides your IP address\n• Protects data on public Wi-Fi\n• Essential for remote employees connecting to company networks\n\n<strong>What it does NOT do:</strong>\n• Make you fully anonymous (VPN providers can see your traffic)\n• Protect against malware or phishing\n• Replace the need for antivirus/EDR\n\n<strong>Business use:</strong>\n• Consider creating an <strong>enterprise VPN</strong> for all employees connecting remotely\n• Require VPN use on <strong>all public Wi-Fi</strong> connections\n• Employees can also get personal VPN accounts from reputable providers\n\n<strong>Public Wi-Fi warning:</strong> Public Wi-Fi does NOT provide a secure connection on its own. An attacker on the same network can intercept unencrypted traffic. <strong>Always use a VPN on public networks.</strong>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is encryption?","What is secure remote access?","Is public Wi-Fi safe?"]},
+
+{keys:["firewall","network filter","traffic filter","packet filter","ngfw","web application firewall"],cat:{name:"Network Security",color:"#06b6d4"},
+a:"A <strong>firewall</strong> monitors and filters network traffic based on security rules — it's the gatekeeper of your network.\n\n<strong>Types:</strong>\n• <strong>Packet filtering:</strong> Checks source/destination IP and ports (basic)\n• <strong>Stateful inspection:</strong> Tracks active connections and context\n• <strong>NGFW (Next-Gen Firewall):</strong> Deep packet inspection, application awareness, integrated IPS\n• <strong>WAF (Web Application Firewall):</strong> Protects web apps from SQL injection, XSS, and other web attacks\n• <strong>Cloud firewall (FWaaS):</strong> Firewall as a Service for cloud environments\n\n<strong>Think of it as a security guard checking IDs at a building entrance</strong> — it decides what traffic gets in and what gets blocked based on your rules.\n\n<strong>Best practices:</strong>\n• Configure default-deny rules (block everything not explicitly allowed)\n• Review and update firewall rules regularly\n• Log and monitor all blocked traffic\n• Segment your network into zones",
+f:["What is a WAF?","What is an IDS vs IPS?","What is network segmentation?"]},
+
+{keys:["wifi","wi-fi","wireless","wpa","wpa2","wpa3","router security","wireless network","secure router"],cat:{name:"Network Security",color:"#06b6d4"},
+a:"<strong>Wi-Fi and Router Security:</strong>\n\n<strong>Secure your router:</strong>\n• <strong>Change the default name and password</strong> — default credentials are publicly known\n• Turn off <strong>remote management</strong>\n• Log out as administrator once the router is set up\n• Keep router <strong>firmware updated</strong> (check the manufacturer's website regularly)\n\n<strong>Use strong encryption:</strong>\n• Use <strong>WPA3</strong> (best) or <strong>WPA2</strong> (minimum) — NEVER use WEP (easily cracked)\n• WPA2/WPA3 encryption protects information sent over your network so outsiders can't read it\n\n<strong>Additional protections:</strong>\n• Use a strong, unique Wi-Fi password (15+ characters)\n• Create a <strong>separate guest network</strong> for visitors — keep it isolated from your business network\n• Enable the router's built-in firewall\n• Disable WPS (Wi-Fi Protected Setup) — it's a known vulnerability\n• Change smartphone settings to <strong>stop automatic connections</strong> to public Wi-Fi\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is a VPN?","What is encryption?","What is network segmentation?"]},
+
+{keys:["dns","domain name","name server","dns poisoning","dns cache","dns security"],cat:{name:"Network Security",color:"#06b6d4"},
+a:"<strong>DNS (Domain Name System)</strong> is the internet's phone book — it translates domain names (google.com) into IP addresses (142.250.80.46).\n\n<strong>DNS attacks:</strong>\n• <strong>DNS poisoning:</strong> Corrupting cache to redirect users to fake sites\n• <strong>DNS spoofing:</strong> Forging DNS responses\n• <strong>DNS tunneling:</strong> Hiding malicious traffic (data exfiltration) inside DNS queries\n• <strong>DNS hijacking:</strong> Taking over DNS settings to redirect all traffic\n\n<strong>Protection:</strong>\n• Use <strong>encrypted DNS</strong> — DNS over HTTPS (DoH) or DNS over TLS (DoT)\n• Use trusted DNS providers: Cloudflare <code>1.1.1.1</code>, Google <code>8.8.8.8</code>, Quad9 <code>9.9.9.9</code>\n• Enable <strong>DNSSEC</strong> validation to prevent spoofing\n• Monitor DNS logs for unusual query patterns\n• Block DNS requests to known malicious domains",
+f:["What are common network attacks?","What is HTTPS?","What is a firewall?"]},
+
+{keys:["network segmentation","vlan","microsegmentation","network zone","network isolation"],cat:{name:"Network Security",color:"#06b6d4"},
+a:"<strong>Network segmentation</strong> divides your network into smaller, isolated zones to limit the spread of attacks.\n\n<strong>Why it matters:</strong>\n• If ransomware hits one segment, it can't easily spread to others\n• Limits lateral movement by attackers inside your network\n• Protects sensitive data (PCI, HIPAA) in dedicated zones\n• Separates IoT devices, guest Wi-Fi, and production systems\n\n<strong>Implementation:</strong>\n• Use <strong>VLANs</strong> (Virtual LANs) to create logical segments\n• Apply firewall rules between segments\n• Put IoT devices on their own isolated network\n• Keep guest Wi-Fi <strong>completely separate</strong> from business networks\n• Use <strong>microsegmentation</strong> in cloud/data center environments\n\n<strong>Critical rule:</strong> Your guest Wi-Fi for visitors and customers should NEVER be connected to your business network.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is Zero Trust?","What is a firewall?","What is lateral movement?"]},
+
+/* =========================================== */
+/* === ENCRYPTION ============================= */
+/* =========================================== */
+
+{keys:["encryption","encrypt","decrypt","aes","rsa","cipher","cryptography","encrypt data","data encryption"],cat:{name:"Cryptography",color:"#10b981"},
+a:"<strong>Encryption</strong> transforms readable data into unreadable code, protecting it from unauthorized access.\n\n<strong>Types:</strong>\n\n<strong>Symmetric encryption</strong> (AES-256):\nOne shared key for both encryption and decryption. Fast. Used for files, disk encryption, and VPNs.\n\n<strong>Asymmetric encryption</strong> (RSA, ECC):\nTwo keys — public (encrypt) and private (decrypt). Slower but solves the key-sharing problem. Used for HTTPS, digital signatures, and email encryption.\n\n<strong>Hashing</strong> (SHA-256, bcrypt):\nOne-way function creating a fingerprint. Used for password storage and file integrity verification. Cannot be reversed.\n\n<strong>What to encrypt:</strong>\n• <strong>Data at rest:</strong> Laptops, tablets, smartphones, removable drives, backup tapes, cloud storage — encrypt ALL devices containing sensitive personal information\n• <strong>Data in transit:</strong> Use TLS/HTTPS for web traffic, VPN for remote access, encrypted email for sensitive communications\n• <strong>Portable media:</strong> USB drives, external hard drives — always encrypt\n• Any sensitive data sent outside the company (to accountants, vendors, shipping services)\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is HTTPS?","What is full disk encryption?","What is a VPN?"]},
+
+{keys:["https","ssl","tls","padlock","certificate","secure website","transport layer security"],cat:{name:"Cryptography",color:"#10b981"},
+a:"<strong>HTTPS/TLS (Transport Layer Security)</strong> encrypts communication between your browser and a website.\n\n<strong>What TLS does:</strong>\n• Protects your customers' privacy during web transactions\n• Ensures customers reach your <strong>real website</strong> (not an impersonator)\n• Encrypts information sent to your site — critical for credit cards, passwords, and personal data\n• When correctly implemented, your URL begins with <code>https://</code>\n\n<strong>Important: The padlock icon means encrypted, NOT safe.</strong>\nPhishing sites can and do use HTTPS. It only means the connection is encrypted — not that the site is legitimate, malware-free, or trustworthy.\n\n<strong>For businesses:</strong>\n• Ensure your web hosting includes TLS (ask if it's included or a paid add-on)\n• Keep TLS certificates up to date\n• Use TLS 1.2 or 1.3 — disable older versions (SSL 3.0, TLS 1.0, TLS 1.1)\n\n<em>TLS is the successor to SSL — you may hear both terms used interchangeably.</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is encryption?","How to hire a web host?","What is a digital certificate?"]},
+
+/* =========================================== */
+/* === PHYSICAL SECURITY ===================== */
+/* =========================================== */
+
+{keys:["physical security","office security","lock computer","secure files","device security","laptop stolen","flash drive","paper files"],cat:{name:"Physical Security",color:"#78716c"},
+a:"<strong>Physical Security</strong> — Cybersecurity begins with strong physical security. Lapses can expose sensitive data to identity theft.\n\n<strong>Real scenarios:</strong>\n• An employee leaves a flash drive with Social Security numbers at a coffee shop\n• Old bank records thrown in trash — found by a criminal\n• A burglar steals files and computers through an unlocked window\n\n<strong>Protect equipment and paper files:</strong>\n• <strong>Store securely:</strong> Lock sensitive files and devices in a cabinet or room\n• <strong>Limit physical access:</strong> Allow access only to those who need it\n• <strong>Send reminders:</strong> Remind employees to lock cabinets, log out of networks, never leave devices unattended\n• <strong>Keep inventory:</strong> Track all devices that collect sensitive customer information\n\n<strong>Protect data on devices:</strong>\n• Require <strong>complex passwords</strong> on all devices\n• Enable <strong>full-disk encryption</strong> on laptops and mobile devices\n• <strong>Limit login attempts</strong> to prevent brute force attacks\n• Encrypt portable media (USB drives, external drives)\n• Use <strong>MFA</strong> for all sensitive access\n\n<strong>Train employees to:</strong>\n• <strong>Shred documents</strong> with sensitive information before discarding\n• <strong>Erase data correctly</strong> — use data wiping software, don't just \"delete\" (that doesn't actually remove files)\n• Maintain security practices when working remotely or traveling\n• Know the <strong>incident response plan</strong> for lost/stolen equipment\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["How to encrypt devices?","What is a data breach response?","How to stay safe online?"]},
+
+/* =========================================== */
+/* === INCIDENT RESPONSE ===================== */
+/* =========================================== */
+
+{keys:["incident response","ir","breach response","hacked","been hacked","compromised","security incident"],cat:{name:"Incident Response",color:"#dc2626"},
+a:"<strong>Incident Response — If you suspect a breach or attack:</strong>\n\n<strong>Immediately:</strong>\n1. <strong>Disconnect</strong> affected devices from the network (stop the spread)\n2. <strong>Don't turn off</strong> the computer (preserves forensic evidence)\n3. Change passwords from a <strong>DIFFERENT device</strong>\n4. Enable MFA on critical accounts\n5. Run a malware scan\n6. Report to your IT department and management\n\n<strong>NIST Incident Response Framework (4 phases):</strong>\n\n<strong>1. Preparation:</strong> Plans, tools, training, communication templates ready\n<strong>2. Detection & Analysis:</strong> Identify the attack, scope the impact, collect evidence\n<strong>3. Containment, Eradication & Recovery:</strong> Stop the spread, remove the threat, restore systems\n<strong>4. Post-Incident Activity:</strong> Lessons learned, update plans and defenses\n\n<strong>Your plan should cover:</strong>\n• Notifying customers, employees, and others whose data may be at risk\n• Keeping business operations running\n• Reporting to law enforcement and authorities\n• Investigating and containing the attack\n• Updating your cybersecurity policy with lessons learned\n• Preparing for inadvertent events (weather emergencies) that could put data at risk\n\n<strong>Test your plan regularly!</strong>\n\n<em>Source: FTC Cybersecurity for Small Business & NIST</em>",
+f:["What is a data breach response?","What is digital forensics?","What is NIST?"]},
+
+{keys:["data breach","breach notification","breach response plan","customer notification","data breach response"],cat:{name:"Incident Response",color:"#dc2626"},
+a:"<strong>Data Breach Response Plan:</strong>\n\n<strong>When a breach occurs, you must:</strong>\n\n<strong>1. Contain and investigate:</strong>\n• Isolate affected systems\n• Determine what data was compromised\n• Identify the attack vector\n\n<strong>2. Notify affected parties:</strong>\n• Customers whose personal data was compromised\n• Employees whose data was at risk\n• They could be at risk of <strong>identity theft</strong>\n\n<strong>3. Report to authorities:</strong>\n• Local law enforcement\n• FBI's Internet Crime Complaint Center (IC3.gov)\n• FTC at FTC.gov/Complaint\n• State attorney general (many states require breach notification)\n\n<strong>4. Keep business running:</strong>\n• Implement your business continuity plan\n• Restore from backups\n\n<strong>5. Learn and improve:</strong>\n• Update security policies based on lessons learned\n• Retrain staff\n• Fix identified vulnerabilities\n\n<strong>Resource:</strong> FTC's <em>Data Breach Response: A Guide for Business</em> at FTC.gov/DataBreach\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is incident response?","What is cyber insurance?","How to notify customers?"]},
+
+{keys:["forensics","forensic","evidence","chain of custody","investigation","digital forensics"],cat:{name:"Incident Response",color:"#dc2626"},
+a:"<strong>Digital forensics</strong> involves collecting, preserving, and analyzing digital evidence after a security incident.\n\n<strong>Key principles:</strong>\n• Use <strong>write-blockers</strong> to prevent evidence modification\n• Create <strong>forensic images</strong> (bit-for-bit copies) of drives\n• Maintain <strong>chain of custody</strong> documentation\n• Collect volatile evidence (RAM) first — it disappears when powered off\n• Document everything — timestamps, actions taken, who accessed what\n\n<strong>Evidence types:</strong>\n• Memory (RAM) dumps\n• Disk images\n• Network traffic captures\n• Log files (system, application, security)\n• Email headers and metadata\n\n<strong>Common tools:</strong>\n• <strong>Volatility:</strong> Memory forensics\n• <strong>Autopsy/Sleuth Kit:</strong> Disk forensics\n• <strong>Wireshark:</strong> Network analysis\n• <strong>FTK Imager:</strong> Disk imaging\n• <strong>KAPE:</strong> Rapid triage and evidence collection\n\n<em>Never investigate on the original system — always work on forensic copies.</em>",
+f:["What is incident response?","What are Indicators of Compromise?"]},
+
+/* =========================================== */
+/* === CYBER INSURANCE ======================= */
+/* =========================================== */
+
+{keys:["cyber insurance","insurance","cyber policy","coverage","liability","first party","third party","breach insurance"],cat:{name:"Cyber Insurance",color:"#0ea5e9"},
+a:"<strong>Cyber Insurance</strong> helps protect your business against losses from a cyber attack. Recovery can be extremely costly.\n\n<strong>Two types of coverage:</strong>\n\n<strong>First-Party Coverage</strong> (protects YOUR data and costs):\n• Legal counsel for notification/regulatory obligations\n• Recovery and replacement of lost/stolen data\n• Customer notification and call center services\n• Lost income due to business interruption\n• Crisis management and public relations\n• Cyber extortion and fraud costs\n• Forensic investigation services\n• Fees, fines, and penalties\n\n<strong>Third-Party Coverage</strong> (protects against LIABILITY):\n• Payments to affected consumers\n• Litigation and regulatory response costs\n• Claims and settlement expenses\n• Defamation and intellectual property losses\n• Other damages and judgments\n\n<strong>What to look for:</strong>\n• Coverage for data breaches AND cyber attacks on your network\n• Coverage for attacks on third-party vendors holding your data\n• <strong>Worldwide coverage</strong> (not just the US)\n• \"Duty to defend\" wording for lawsuits\n• 24/7/365 breach hotline availability\n• Coverage in excess of other applicable insurance\n\n<strong>Tip:</strong> Discuss with your insurance agent whether first-party, third-party, or both coverages fit your needs.\n\n<em>Source: FTC Cybersecurity for Small Business / NAIC</em>",
+f:["What is a data breach response?","What does GDPR require?","What is compliance?"]},
+
+/* =========================================== */
+/* === VENDOR SECURITY ======================= */
+/* =========================================== */
+
+{keys:["vendor security","vendor risk","third party risk","vendor management","vendor breach","supplier security"],cat:{name:"Vendor Security",color:"#eab308"},
+a:"<strong>Vendor Security</strong> — Your business vendors may have access to sensitive information. If they're compromised, YOUR data is at risk.\n\n<strong>Scenarios:</strong>\n• Your accountant's laptop with all your financial data gets stolen\n• A vendor's network connected to yours gets hacked\n• A software provider pushes a compromised update\n\n<strong>How to monitor vendors:</strong>\n\n<strong>1. Put it in writing:</strong>\n• Include security provisions in ALL vendor contracts\n• Require plans to evaluate and update security controls\n• Make critical security provisions <strong>non-negotiable</strong>\n• Include provisions for secure remote access\n\n<strong>2. Verify compliance:</strong>\n• Don't just take their word for it — establish verification processes\n• Request audit reports, certifications, or penetration test results\n\n<strong>3. Control access:</strong>\n• Limit vendor access to need-to-know basis only\n• Time-limit access — only for the duration needed\n• Require <strong>MFA</strong> for all vendor network access\n• Use <strong>strong encryption</strong> for data in transit and at rest\n\n<strong>If a vendor has a data breach:</strong>\n1. Report to law enforcement (local police, FBI)\n2. Confirm the vendor has fixed the vulnerability\n3. Notify affected customers\n4. Decide whether to continue using the vendor\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is supply chain security?","What is a data breach response?","What is Zero Trust?"]},
+
+{keys:["supply chain","solarwinds","software supply chain","sbom","kaseya","log4shell","supply chain attack"],cat:{name:"Emerging Threats",color:"#ec4899"},
+a:"<strong>Supply chain attacks</strong> target less-secure vendors, suppliers, or software providers to compromise their customers.\n\n<strong>Notable examples:</strong>\n• <strong>SolarWinds (2020):</strong> Compromised software update pushed to 18,000+ organizations including US government agencies\n• <strong>Kaseya (2021):</strong> REvil ransomware hit 1,500+ businesses through MSP management software\n• <strong>Log4Shell (2021):</strong> Critical vulnerability in open-source library affected millions of systems worldwide\n• <strong>MOVEit (2023):</strong> File transfer vulnerability led to data theft from thousands of organizations\n\n<strong>Protection strategies:</strong>\n• Assess vendor security posture before engagement\n• Require <strong>Software Bill of Materials (SBOM)</strong> — know what's in your software\n• Monitor for unusual update behavior and verify code signatures\n• Apply <strong>least privilege</strong> to all vendor access\n• <strong>Network segmentation</strong> — isolate vendor connections\n• Have incident response plans specifically for supply chain scenarios\n• Include security requirements in vendor contracts\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is vendor security?","What is Zero Trust?","What is SBOM?"]},
+
+/* =========================================== */
+/* === SECURE REMOTE ACCESS ================== */
+/* =========================================== */
+
+{keys:["remote access","remote work","work from home","remote security","remote employee","telecommute","hybrid work"],cat:{name:"Remote Security",color:"#7c3aed"},
+a:"<strong>Secure Remote Access</strong> — Employees and vendors connecting to your network remotely must follow strong security standards.\n\n<strong>Protect devices:</strong>\n• Change all default router passwords and names\n• Keep router software/firmware updated\n• Enable <strong>full-disk encryption</strong> on all laptops and mobile devices\n• Stop smartphones from auto-connecting to public Wi-Fi\n• Keep antivirus/EDR updated on ALL devices, including mobile\n\n<strong>Secure connections:</strong>\n• Require <strong>WPA2 or WPA3 encryption</strong> on home routers\n• <strong>Only use public Wi-Fi with a VPN</strong> — public Wi-Fi alone is NOT secure\n• Consider creating an <strong>enterprise VPN</strong> for all remote employees\n• Require MFA for all remote network access\n\n<strong>Maintain security:</strong>\n• Include remote access policies in regular training and orientations\n• Verify that any device meets security requirements BEFORE connecting to your network\n• Require unique, complex passwords and prohibit unattended open workstations\n• Separate guest Wi-Fi from business networks at all locations\n• Include security provisions in vendor contracts for remote access\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is a VPN?","What is MFA?","How to secure Wi-Fi?"]},
+
+/* =========================================== */
+/* === HIRING A WEB HOST ===================== */
+/* =========================================== */
+
+{keys:["web host","web hosting","website security","hire web host","hosting provider","website provider"],cat:{name:"Web Hosting",color:"#059669"},
+a:"<strong>Hiring a Web Host — Security Questions to Ask:</strong>\n\n<strong>Essential security features:</strong>\n\n<strong>1. TLS (Transport Layer Security):</strong>\n• Is TLS included or a paid add-on?\n• Will they help you set it up?\n• Your URL should begin with <code>https://</code>\n\n<strong>2. Email Authentication:</strong>\n• Can your business email use your domain name?\n• Do they support <strong>SPF, DKIM, and DMARC</strong>?\n• If not — consider a different provider\n\n<strong>3. Software Updates:</strong>\n• Are the latest versions available?\n• Will they keep software updated, or is it your responsibility?\n\n<strong>4. Website Management:</strong>\n• Who can make changes after setup?\n• Is multi-factor authentication available for admin login?\n\n<strong>Key questions to ask before signing:</strong>\n• \"Is TLS included? Will you help me set it up?\"\n• \"Can you set up SPF, DKIM, and DMARC email authentication?\"\n• \"Will you keep software updated or is that my responsibility?\"\n• \"Can I log in to make changes? Is MFA available for login?\"\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is TLS/HTTPS?","What is email authentication?","What is encryption?"]},
+
+/* =========================================== */
+/* === NIST & FRAMEWORKS ===================== */
+/* =========================================== */
+
+{keys:["nist","framework","csf","cybersecurity framework","nist 800","nist framework","nist small business"],cat:{name:"GRC",color:"#d946ef"},
+a:"<strong>NIST Cybersecurity Framework (CSF)</strong> helps businesses of ALL sizes understand, manage, and reduce cybersecurity risk. It's voluntary and provides best practices for where to focus time and money.\n\n<strong>5 Core Functions:</strong>\n\n<strong>1. IDENTIFY:</strong>\n• Make a list of ALL equipment, software, and data you use (laptops, smartphones, tablets, POS devices)\n• Create a cybersecurity policy covering roles, responsibilities, and steps to protect against attacks\n\n<strong>2. PROTECT:</strong>\n• Control who logs on and uses your devices\n• Use security software, encrypt sensitive data (at rest and in transit)\n• Conduct regular backups, update security software automatically\n• Have formal policies for disposing of old devices and files\n• Train everyone about cybersecurity\n\n<strong>3. DETECT:</strong>\n• Monitor for unauthorized personnel access, devices (USB drives), and software\n• Check your network for unauthorized users or connections\n• Investigate unusual activities\n\n<strong>4. RESPOND:</strong>\n• Plan for: notifying customers, keeping operations running, reporting to law enforcement\n• Investigate and contain attacks, update policies with lessons learned\n• Prepare for weather emergencies and other inadvertent events\n• <strong>Test your plan regularly!</strong>\n\n<strong>5. RECOVER:</strong>\n• Repair and restore affected equipment and network\n• Keep employees and customers informed of response activities\n\n<strong>Resources:</strong> NIST.gov/CyberFramework and NIST.gov/Programs-Projects/Small-Business-Corner-SBC\n\n<em>Source: FTC/NIST Cybersecurity for Small Business</em>",
+f:["What is ISO 27001?","What is risk assessment?","What is compliance?"]},
+
+{keys:["gdpr","data protection","privacy","personal data","data subject","dpo","privacy regulation"],cat:{name:"GRC",color:"#d946ef"},
+a:"<strong>GDPR (General Data Protection Regulation)</strong> protects EU/EEA citizens' personal data.\n\n<strong>Key requirements:</strong>\n• <strong>72-hour</strong> breach notification to authorities\n• Data subjects can request access, correction, and <strong>deletion</strong> (\"right to be forgotten\")\n• Requires <strong>Data Protection Officer (DPO)</strong> in many cases\n• <strong>Privacy by design</strong> and default\n• Lawful basis required for processing data\n• Data minimization — only collect what you need\n\n<strong>Penalties:</strong> Up to <strong>€20 million or 4% of global annual revenue</strong> (whichever is higher).\n\n<strong>Applies globally:</strong> ANY organization processing EU citizen data, regardless of where the organization is located.\n\n<strong>Key rights of data subjects:</strong>\n• Right to access their data\n• Right to rectification (correct inaccurate data)\n• Right to erasure (\"right to be forgotten\")\n• Right to data portability\n• Right to object to processing\n• Right not to be subject to automated decision-making",
+f:["What is a data breach?","What is compliance?","What is NIST?"]},
+
+{keys:["compliance","regulation","audit","pci","hipaa","sox","iso 27001","soc 2","regulatory"],cat:{name:"GRC",color:"#d946ef"},
+a:"<strong>Common compliance frameworks:</strong>\n\n<strong>PCI DSS:</strong> Payment card data protection — 12 requirements for organizations handling credit card data\n<strong>HIPAA:</strong> Healthcare data privacy and security — protects patient health information (PHI)\n<strong>SOX:</strong> Sarbanes-Oxley — financial reporting controls and audit requirements\n<strong>ISO 27001:</strong> International standard for Information Security Management Systems (ISMS)\n<strong>SOC 2:</strong> Service organization controls — 5 trust criteria (security, availability, processing integrity, confidentiality, privacy)\n<strong>NIST CSF:</strong> Cybersecurity risk management framework (voluntary)\n<strong>NIST 800-171:</strong> Protecting Controlled Unclassified Information (CUI) — required for government contractors\n<strong>CMMC:</strong> Cybersecurity Maturity Model Certification — DOD contractor requirement\n<strong>CCPA/CPRA:</strong> California Consumer Privacy Act — US state privacy regulation\n\n<strong>Important:</strong> Compliance is the <strong>FLOOR, not the ceiling</strong>. Many breached organizations were technically compliant. True security goes beyond checklists — it requires continuous monitoring, testing, and improvement.\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is GDPR?","What is NIST?","What is risk assessment?"]},
+
+{keys:["risk assessment","risk management","risk analysis","threat assessment","vulnerability assessment"],cat:{name:"GRC",color:"#d946ef"},
+a:"<strong>Risk Assessment</strong> identifies, evaluates, and prioritizes cybersecurity risks to your organization.\n\n<strong>Process:</strong>\n\n<strong>1. Identify assets:</strong> What do you need to protect? (data, systems, equipment, intellectual property)\n\n<strong>2. Identify threats:</strong> What could go wrong? (malware, phishing, insider threats, natural disasters)\n\n<strong>3. Identify vulnerabilities:</strong> Where are the weaknesses? (outdated software, weak passwords, untrained staff)\n\n<strong>4. Assess impact and likelihood:</strong> How severe would it be? How likely is it?\n\n<strong>5. Prioritize risks:</strong> Focus resources on the highest-risk areas first.\n\n<strong>Risk formula:</strong> <code>Risk = Threat × Vulnerability × Impact</code>\n\n<strong>Risk treatment options:</strong>\n• <strong>Mitigate:</strong> Reduce the risk with controls\n• <strong>Transfer:</strong> Move the risk (e.g., cyber insurance)\n• <strong>Accept:</strong> Acknowledge and monitor the risk\n• <strong>Avoid:</strong> Stop the activity that creates the risk\n\nConduct risk assessments <strong>regularly</strong> — at least annually, and whenever major changes occur.",
+f:["What is NIST?","What is compliance?","What is cyber insurance?"]},
+
+/* =========================================== */
+/* === ZERO TRUST & STRATEGY ================= */
+/* =========================================== */
+
+{keys:["zero trust","never trust","always verify","ztna","zero trust architecture"],cat:{name:"Strategy",color:"#eab308"},
+a:"<strong>Zero Trust</strong> eliminates implicit trust. Core principles:\n\n<strong>\"Never trust, always verify\"</strong>\n\n• Verify <strong>every</strong> user, device, and connection — every time, regardless of location\n• Apply <strong>least privilege</strong> access — minimum permissions needed\n• <strong>Assume breach</strong> — design for when (not if) attackers get in\n• <strong>Micro-segment</strong> the network — isolate resources\n• <strong>Continuous monitoring</strong> and validation — don't trust a session just because it started trusted\n• Encrypt data everywhere (at rest and in transit)\n\n<strong>Why Zero Trust replaced \"castle and moat\":</strong>\nThe old model trusted everything inside the network perimeter. In today's world of remote work, cloud computing, and mobile devices — <strong>there is no perimeter</strong>.\n\n<strong>Implementation pillars:</strong>\n• Identity verification (strong MFA)\n• Device health validation\n• Network segmentation\n• Application access policies\n• Data classification and protection\n• Continuous monitoring and analytics",
+f:["What is least privilege?","What is MFA?","What is network segmentation?"]},
+
+{keys:["mitre","att&ck","attack framework","kill chain","ttp","tactics techniques","adversary"],cat:{name:"Strategy",color:"#eab308"},
+a:"<strong>MITRE ATT&CK</strong> is a globally recognized knowledge base of real-world adversary tactics and techniques.\n\nOrganized into <strong>14 tactics</strong> (the \"why\") from Reconnaissance to Impact, with hundreds of techniques (the \"how\").\n\n<strong>14 Tactics:</strong>\nReconnaissance → Resource Development → Initial Access → Execution → Persistence → Privilege Escalation → Defense Evasion → Credential Access → Discovery → Lateral Movement → Collection → Command & Control → Exfiltration → Impact\n\n<strong>Cyber Kill Chain</strong> (Lockheed Martin) maps 7 attack stages:\nRecon → Weaponization → Delivery → Exploitation → Installation → Command & Control → Actions on Objectives\n\n<strong>Used for:</strong>\n• Threat detection rule creation\n• Security gap analysis\n• Red team/blue team exercises\n• Incident response investigation\n• Vendor evaluation\n• Security maturity assessment\n\nIt's the <strong>common language</strong> for describing how attacks work.",
+f:["What is Zero Trust?","What is threat hunting?","What is a SOC?"]},
+
+{keys:["lateral movement","east west","pivot","network traversal"],cat:{name:"Strategy",color:"#eab308"},
+a:"<strong>Lateral movement</strong> is how attackers move through your network after gaining initial access, searching for valuable data and systems.\n\n<strong>Common techniques:</strong>\n• Stolen credentials (Pass-the-Hash, Pass-the-Ticket)\n• Remote Desktop Protocol (RDP) exploitation\n• SMB/file share access\n• WMI and PowerShell remoting\n• Exploiting trust relationships between systems\n\n<strong>Detection:</strong>\n• Monitor for unusual login patterns (time, location, frequency)\n• Track RDP and remote access connections\n• Look for privilege escalation attempts\n• Analyze east-west network traffic\n• Use honeypots/honeytokens as tripwires\n\n<strong>Prevention:</strong>\n• <strong>Network segmentation</strong> — limit what attackers can reach\n• <strong>Least privilege</strong> — minimize what each account can access\n• <strong>MFA everywhere</strong> — especially for admin and remote access\n• <strong>Disable unnecessary protocols</strong> (SMBv1, RDP if not needed)",
+f:["What is network segmentation?","What is Zero Trust?","What is MITRE ATT&CK?"]},
+
+/* =========================================== */
+/* === DEFENSE TOOLS ========================= */
+/* =========================================== */
+
+{keys:["siem","security information","log management","splunk","elastic","sentinel","log analysis"],cat:{name:"Defense Tools",color:"#f59e0b"},
+a:"<strong>SIEM (Security Information and Event Management)</strong> is your security command center — it collects, correlates, and analyzes security logs from across your entire environment.\n\n<strong>What it does:</strong>\n• Aggregates logs from firewalls, endpoints, servers, applications, cloud services\n• Correlates events to identify attack patterns and anomalies\n• Generates alerts for suspicious activity\n• Provides dashboards and reporting for compliance\n• Enables threat hunting and investigation\n\n<strong>Popular SIEMs:</strong>\n• <strong>Splunk:</strong> Industry leader, highly flexible\n• <strong>Microsoft Sentinel:</strong> Cloud-native, Azure integration\n• <strong>IBM QRadar:</strong> Enterprise-focused\n• <strong>Elastic SIEM:</strong> Open-source based\n• <strong>Chronicle (Google):</strong> Cloud-native, massive scale\n• <strong>LogRhythm / Exabeam:</strong> Behavior analytics focus\n\nA SIEM is only as good as its <strong>rules, tuning, and the team watching it</strong>. Untuned SIEMs generate alert fatigue.",
+f:["What is EDR?","What is a SOC?","What is threat intelligence?"]},
+
+{keys:["edr","endpoint detection","endpoint security","antivirus","av","xdr","mdr","endpoint protection"],cat:{name:"Defense Tools",color:"#f59e0b"},
+a:"<strong>EDR (Endpoint Detection and Response)</strong> monitors endpoints for suspicious behavior — going far beyond traditional antivirus.\n\n<strong>EDR vs. Traditional Antivirus:</strong>\n• <strong>Antivirus:</strong> Signature-based — catches KNOWN malware only\n• <strong>EDR:</strong> Behavioral analysis — catches zero-days, fileless attacks, and advanced threats\n\n<strong>EDR capabilities:</strong>\n• Continuous endpoint monitoring and recording\n• Behavioral threat detection and machine learning\n• Automated response and device isolation\n• Investigation and forensics tools\n• Threat hunting capabilities\n• Rollback/remediation\n\n<strong>Evolution:</strong>\n• <strong>XDR (Extended):</strong> Extends across endpoints, network, cloud, email, and identity for unified detection\n• <strong>MDR (Managed):</strong> Outsourced EDR management by security experts 24/7\n\n<strong>Key vendors:</strong> CrowdStrike, SentinelOne, Microsoft Defender for Endpoint, Carbon Black, Cortex XDR\n\n<em>Keep EDR/antivirus updated on ALL devices, including mobile devices, that connect to your network.</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is a SIEM?","What is malware?","What is a firewall?"]},
+
+{keys:["ids","ips","intrusion detection","intrusion prevention","network monitoring"],cat:{name:"Defense Tools",color:"#f59e0b"},
+a:"<strong>IDS vs. IPS:</strong>\n\n<strong>IDS (Intrusion Detection System):</strong>\n• <strong>Passive</strong> — monitors traffic and alerts the security team\n• Think: security camera — it watches and records\n• Doesn't block attacks, only detects and alerts\n\n<strong>IPS (Intrusion Prevention System):</strong>\n• <strong>Active</strong> — sits inline and blocks threats automatically\n• Think: security guard — it watches AND stops intruders\n• Can drop malicious packets in real-time\n\n<strong>Detection methods:</strong>\n• <strong>Signature-based:</strong> Matches known attack patterns\n• <strong>Anomaly-based:</strong> Detects deviations from normal behavior\n• <strong>Policy-based:</strong> Enforces predefined security rules\n\nMost modern <strong>NGFWs include built-in IPS</strong> capabilities.\n\n<em>The FTC recommends using intrusion prevention software and setting it to update automatically.</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is a firewall?","What is a SIEM?","What is network segmentation?"]},
+
+/* =========================================== */
+/* === CLOUD SECURITY ======================== */
+/* =========================================== */
+
+{keys:["cloud security","aws","azure","gcp","cloud","shared responsibility","cloud computing","cloud misconfiguration"],cat:{name:"Cloud Security",color:"#6366f1"},
+a:"<strong>Cloud Security</strong> follows the <strong>Shared Responsibility Model:</strong>\n\n<strong>Cloud provider handles:</strong> Physical security, infrastructure, hypervisor, global network\n<strong>YOU handle:</strong> Data, identity/access, encryption, application security, configurations, OS patching\n\n<strong>Key practices:</strong>\n• Apply <strong>least privilege</strong> to all IAM roles and policies\n• Encrypt data at rest AND in transit\n• Enable <strong>logging and monitoring</strong> (CloudTrail, Azure Monitor, GCP Cloud Audit Logs)\n• Use CSPM (Cloud Security Posture Management) tools to detect misconfigurations\n• Review security groups, firewall rules, and access policies regularly\n• Enable <strong>MFA</strong> for all cloud console access — especially root/admin accounts\n• Use infrastructure as code (IaC) with security scanning\n• Implement proper backup and disaster recovery\n\n<strong>The #1 cloud breach cause is MISCONFIGURATION</strong> — not sophisticated attacks. Public S3 buckets, open security groups, and excessive permissions cause most incidents.\n\n<strong>Cloud security tools:</strong> AWS GuardDuty, Azure Defender, GCP Security Command Center, Prisma Cloud, Wiz",
+f:["What is least privilege?","What is encryption?","What is Zero Trust?"]},
+
+/* =========================================== */
+/* === CAREER & CERTIFICATIONS =============== */
+/* =========================================== */
+
+{keys:["career","job","certification","cert","comptia","security+","cissp","ceh","cybersecurity career","get started","cyber job"],cat:{name:"Career",color:"#a78bfa"},
+a:"<strong>Cybersecurity career path:</strong>\n\n<strong>Entry level certifications:</strong>\n• CompTIA Security+, CompTIA ITF+, CompTIA Network+\n• Google Cybersecurity Certificate (free on Coursera)\n• ISC2 CC (Certified in Cybersecurity — free)\n• <strong>Roles:</strong> SOC Analyst L1, IT Support, Help Desk with security focus\n\n<strong>Mid level:</strong>\n• CompTIA CySA+, CEH (Certified Ethical Hacker), BTL1\n• GSEC (GIAC Security Essentials)\n• <strong>Roles:</strong> SOC Analyst L2, IR Analyst, Junior Pen Tester, Security Engineer\n\n<strong>Senior level:</strong>\n• CISSP, CISM, OSCP, GCIH, GCIA\n• <strong>Roles:</strong> Security Architect, IR Lead, Senior Pen Tester, Threat Hunter\n\n<strong>Leadership:</strong>\n• CISO, Security Director, VP of Security\n• Focus on business risk, strategy, governance, and board communication\n\n<strong>Free learning resources:</strong>\n• TryHackMe.com, HackTheBox.com, Cybrary.it\n• SANS Cyber Aces, Professor Messer (YouTube)\n• NIST resources at NIST.gov/CyberFramework\n\nTake our <a href='./' style='color:var(--accent)'>10-level quiz</a> to assess your current level!",
+f:["How to start in cybersecurity?","What is CompTIA Security+?","What is a SOC analyst?"]},
+
+{keys:["start cybersecurity","beginner","learn cybersecurity","new to cyber","how to begin","get into cyber","cybersecurity beginner"],cat:{name:"Career",color:"#a78bfa"},
+a:"<strong>Getting started in cybersecurity — Step by step:</strong>\n\n<strong>Step 1 — Learn the basics (1-3 months):</strong>\n• How computers, networks, and the internet work\n• Common threats: phishing, malware, social engineering, ransomware\n• Free: Google Cybersecurity Certificate, Cybrary, SANS Cyber Aces, Professor Messer\n\n<strong>Step 2 — Get hands-on (3-6 months):</strong>\n• Set up a home lab with VirtualBox or VMware\n• Practice on TryHackMe or Hack The Box (free tiers)\n• Learn Linux basics and command line\n• Experiment with Wireshark, Nmap, and security tools\n\n<strong>Step 3 — Get certified:</strong>\n• CompTIA Security+ (industry standard entry cert)\n• ISC2 CC (free entry-level cert)\n• Google Cybersecurity Certificate\n\n<strong>Step 4 — Build experience:</strong>\n• Volunteer for security tasks at your current job\n• Participate in CTF (Capture the Flag) competitions\n• Contribute to open-source security projects\n• Write about what you learn (blog, LinkedIn)\n\n<strong>Step 5 — Apply:</strong>\n• SOC Analyst, IT Support, Help Desk with security focus\n• Small business IT security roles\n\nTake our <a href='./' style='color:var(--accent)'>10-level cybersecurity quiz</a> to find your current level and get a personalized roadmap!",
+f:["What certifications should I get?","What is a SOC analyst?"]},
+
+{keys:["soc","security operations","analyst","monitoring","threat detection","soc analyst"],cat:{name:"Career",color:"#a78bfa"},
+a:"<strong>SOC (Security Operations Center)</strong> is a centralized team that monitors, detects, and responds to security incidents 24/7.\n\n<strong>SOC Analyst tiers:</strong>\n• <strong>L1 — Alert Triage:</strong> Monitor SIEM alerts, initial investigation, escalate confirmed threats\n• <strong>L2 — Incident Handler:</strong> Deep analysis, incident containment and remediation, malware analysis\n• <strong>L3 — Threat Hunter:</strong> Proactive hunting, advanced malware analysis, tool engineering, threat intelligence\n\n<strong>Tools used daily:</strong> SIEM (Splunk, Sentinel), EDR (CrowdStrike, SentinelOne), SOAR platforms, threat intelligence feeds, ticketing systems, Wireshark, sandbox tools\n\n<strong>Key skills:</strong>\n• Log analysis and correlation\n• Network traffic analysis\n• Malware triage\n• Incident response procedures\n• Communication and documentation\n\nSOC Analyst is one of the most common and accessible <strong>entry points into cybersecurity</strong>.\n\n<strong>Average salary (US):</strong> L1: $55-75K, L2: $75-100K, L3: $100-140K+",
+f:["How to start in cybersecurity?","What is a SIEM?","What is EDR?"]},
+
+/* =========================================== */
+/* === SAFETY TIPS & BASICS ================== */
+/* =========================================== */
+
+{keys:["stay safe","safe online","protect myself","online safety","security tips","best practices","cybersecurity basics","small business security"],cat:{name:"Safety Tips",color:"#10b981"},
+a:"<strong>Cybersecurity Basics — Top Practices for Businesses & Individuals:</strong>\n\n<strong>Protect Your Files & Devices:</strong>\n1. <strong>Update your software</strong> — apps, browsers, OS. Set updates to automatic.\n2. <strong>Secure your files</strong> — Back up offline, on external drives, and in the cloud\n3. <strong>Require passwords</strong> on all laptops, tablets, smartphones. Never leave unattended.\n4. <strong>Encrypt devices</strong> — laptops, smartphones, removable drives, cloud storage\n5. <strong>Use MFA</strong> everywhere — especially for sensitive data access\n\n<strong>Protect Your Network:</strong>\n6. Secure your router — change defaults, use WPA3/WPA2, disable remote management\n7. Use a <strong>VPN</strong> on public Wi-Fi\n\n<strong>Make Smart Security Business As Usual:</strong>\n8. <strong>Strong passwords</strong> — 12+ characters, never reuse, use a password manager\n9. <strong>Train ALL staff</strong> — regular security training schedule. Block access for non-attendance.\n10. <strong>Have a plan</strong> — data breach response, business continuity, customer notification\n\n<strong>Remember:</strong> Cyber criminals target companies of <strong>ALL sizes</strong>. Small businesses are often targeted because they have weaker defenses than large enterprises.\n\n<strong>Cybersecurity is a habit, not a product!</strong>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is phishing?","What is MFA?","What is the NIST framework?"]},
+
+{keys:["backup","back up","3-2-1","data loss","recovery","backup rule","data backup"],cat:{name:"Safety Tips",color:"#10b981"},
+a:"<strong>The 3-2-1 Backup Rule:</strong>\n\n<strong>3</strong> copies of your data\n<strong>2</strong> different types of storage (local drive + cloud)\n<strong>1</strong> copy offsite (cloud or different physical location)\n\n<strong>Critical requirements:</strong>\n• Backups should NOT be connected to your main network (ransomware can encrypt connected backups)\n• Make data backup part of <strong>routine business operations</strong>\n• <strong>Test your backups regularly!</strong> A backup you can't restore is NOT a backup.\n• Automate backups where possible\n• Encrypt backup data\n• Document your backup procedures\n\n<strong>Why it matters:</strong>\n• Ransomware can encrypt ALL connected files and backups\n• Hardware fails without warning\n• Human error — accidental deletions happen\n• Natural disasters can destroy physical locations\n\n<em>Your backup is your last line of defense against ransomware. Treat it like insurance — you hope you never need it, but you'll be grateful when you do.</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is ransomware?","How to stay safe online?","What is encryption?"]},
+
+{keys:["security training","employee training","security awareness","train staff","security culture","phishing training"],cat:{name:"Safety Tips",color:"#10b981"},
+a:"<strong>Employee Security Training</strong> — Your people are both your greatest vulnerability and your strongest defense.\n\n<strong>FTC recommendations:</strong>\n• Create a <strong>culture of security</strong> with regular training schedules\n• Update employees as new risks and vulnerabilities emerge\n• If employees don't attend training, consider <strong>blocking their network access</strong>\n• Include security in <strong>new employee orientations</strong>\n\n<strong>Training should cover:</strong>\n• How to spot phishing emails and social engineering\n• Password best practices and MFA usage\n• Physical security (locking screens, securing devices)\n• Safe browsing and download practices\n• Remote work security\n• Incident reporting procedures\n• Data handling and classification\n\n<strong>Ongoing awareness:</strong>\n• Run <strong>phishing simulations</strong> regularly\n• Share real-world breach stories and lessons\n• Post security reminders and tips\n• Recognize and reward security-conscious behavior\n• Include physical security in trainings — shredding documents, erasing data properly, securing devices\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is phishing?","What is social engineering?","How to stay safe online?"]},
+
+/* =========================================== */
+/* === OFFENSIVE SECURITY ==================== */
+/* =========================================== */
+
+{keys:["pen test","penetration testing","ethical hacking","red team","vulnerability scan","offensive security","pentest"],cat:{name:"Offensive Security",color:"#ef4444"},
+a:"<strong>Penetration Testing</strong> simulates real attacks to find vulnerabilities before criminals do.\n\n<strong>Types:</strong>\n• <strong>Black box:</strong> Tester has zero knowledge of the target (simulates external attacker)\n• <strong>White box:</strong> Full knowledge — source code, architecture, credentials\n• <strong>Gray box:</strong> Partial knowledge (most realistic for insider threats)\n\n<strong>Scope types:</strong>\n• <strong>External:</strong> Testing internet-facing systems\n• <strong>Internal:</strong> Testing from inside the network\n• <strong>Web application:</strong> Testing websites and APIs\n• <strong>Wireless:</strong> Testing Wi-Fi security\n• <strong>Social engineering:</strong> Testing human vulnerabilities (phishing, phone, physical)\n\n<strong>Red Team vs. Pen Test:</strong>\n• Pen test: Focused on finding vulnerabilities in specific systems\n• Red Team: Full adversary simulation — social engineering, physical access, multi-vector attacks over weeks/months\n\n<strong>Key certifications:</strong> OSCP, CEH, PNPT, eJPT, GPEN\n\n<strong>Key tools:</strong> Metasploit, Burp Suite, Nmap, BloodHound, Cobalt Strike, Kali Linux",
+f:["What is MITRE ATT&CK?","How to start in cybersecurity?","What is a vulnerability assessment?"]},
+
+/* =========================================== */
+/* === EMERGING THREATS ====================== */
+/* =========================================== */
+
+{keys:["ai","artificial intelligence","machine learning","deepfake","ai security","ai attack","ai threat"],cat:{name:"Emerging Threats",color:"#ec4899"},
+a:"<strong>AI in Cybersecurity</strong> — a double-edged sword:\n\n<strong>AI for defense:</strong>\n• Behavioral anomaly detection at scale\n• Automated threat hunting and triage\n• Faster incident response and containment\n• Advanced phishing email detection\n• Malware classification and analysis\n• Security operations automation\n\n<strong>AI for attacks:</strong>\n• <strong>Deepfake</strong> voice/video for executive impersonation\n• AI-generated phishing emails — more convincing, fewer errors, personalized\n• Automated vulnerability discovery and exploitation\n• Evasion of traditional security tools\n• Rapid credential stuffing and password attacks\n• Synthetic identity creation\n\n<strong>Preparing your organization:</strong>\n• Update threat models to include AI-powered attacks\n• Train employees on deepfake recognition\n• Implement multi-channel verification for sensitive requests\n• Use AI-powered defense tools to fight AI-powered attacks\n• Stay informed about evolving AI threats",
+f:["What is social engineering?","What is Zero Trust?","What is deepfake?"]},
+
+{keys:["iot","internet of things","smart device","smart home","connected device"],cat:{name:"Emerging Threats",color:"#ec4899"},
+a:"<strong>IoT (Internet of Things) Security</strong> — Smart devices are often the weakest link in your network.\n\n<strong>Common vulnerabilities:</strong>\n• Default passwords never changed\n• No encryption on data transmission\n• Infrequent or no security updates\n• Limited processing power for security features\n• Insecure APIs and communications\n\n<strong>Protection:</strong>\n• <strong>Change default credentials</strong> immediately on ALL devices\n• Put IoT devices on a <strong>separate network segment</strong> (VLAN)\n• Keep <strong>firmware updated</strong> — check manufacturer sites regularly\n• Disable features you don't use\n• Research security reputation before buying\n• Monitor IoT network traffic for anomalies\n• Maintain an inventory of ALL connected devices\n\n<em>An insecure IoT device can be an entry point to your entire network. The Mirai botnet compromised hundreds of thousands of IoT devices to launch massive DDoS attacks.</em>",
+f:["What is network segmentation?","How to stay safe online?","What is a botnet?"]},
+
+/* =========================================== */
+/* === MISC / GENERAL ======================== */
+/* =========================================== */
+
+{keys:["dark web","darknet","tor","hidden services","dark web monitoring"],cat:{name:"General",color:"#64748b"},
+a:"The <strong>dark web</strong> is a part of the internet only accessible through special software like Tor.\n\n<strong>It contains:</strong>\n• Stolen data marketplaces (credentials, credit cards, SSNs)\n• Ransomware-as-a-Service (RaaS) platforms\n• Hacking tools and zero-day exploits for sale\n• Corporate data and trade secrets\n• But also legitimate privacy tools and whistleblower platforms\n\n<strong>For defenders:</strong>\n• <strong>Dark web monitoring</strong> services can alert you if your organization's data appears for sale\n• This is part of <strong>threat intelligence</strong>\n• Helps with early breach detection\n• Check if your credentials are compromised: <code>haveibeenpwned.com</code>\n\n<em>You don't need to access the dark web yourself — monitoring services do this safely for you.</em>",
+f:["What is threat intelligence?","What is a data breach?","How to check if I've been hacked?"]},
+
+{keys:["least privilege","access control","permissions","iam","role based","rbac","need to know"],cat:{name:"Security Principles",color:"#f59e0b"},
+a:"<strong>Principle of Least Privilege:</strong> Grant only the <strong>minimum access needed</strong> to perform a specific task, for only the time needed.\n\n<strong>Why:</strong>\n• Limits damage if an account is compromised\n• Reduces insider threat risk\n• Required by HIPAA, PCI DSS, GDPR, and most frameworks\n• Limits the blast radius of any security incident\n\n<strong>Implementation:</strong>\n• Use <strong>Role-Based Access Control (RBAC)</strong> — assign permissions to roles, not individuals\n• Review access rights <strong>regularly</strong> (quarterly minimum)\n• Remove access <strong>immediately</strong> when roles change or employees leave\n• Audit privileged accounts quarterly\n• Use <strong>Just-in-Time (JIT)</strong> access for admin tasks — elevate only when needed\n• Control vendor access on a <strong>need-to-know, time-limited</strong> basis\n\n<em>The FTC recommends controlling access to databases with sensitive information — limit to need-to-know basis, only for the time a vendor needs to do a job.</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is Zero Trust?","What is MFA?","What is vendor security?"]},
+
+{keys:["threat intelligence","threat hunting","ioc","indicators of compromise","threat feed"],cat:{name:"Defense Tools",color:"#f59e0b"},
+a:"<strong>Threat Intelligence</strong> is analyzed information about current and emerging cyber threats that helps organizations make informed security decisions.\n\n<strong>Types:</strong>\n• <strong>Strategic:</strong> High-level trends for leadership and planning\n• <strong>Tactical:</strong> TTPs (Tactics, Techniques, Procedures) used by attackers\n• <strong>Operational:</strong> Details about specific attacks (who, what, when)\n• <strong>Technical:</strong> IoCs — IP addresses, hashes, domains, URLs\n\n<strong>Indicators of Compromise (IoCs):</strong>\n• Malicious IP addresses and domains\n• File hashes of known malware\n• Unusual outbound network traffic\n• Unexpected privilege escalation\n• Suspicious registry changes\n\n<strong>Threat Hunting:</strong>\nProactive searching through your environment for threats that evaded automated detection. Uses hypothesis-driven investigation and threat intelligence.\n\n<strong>Sources:</strong> MITRE ATT&CK, VirusTotal, CISA alerts, SANS ISC, industry ISACs, commercial feeds",
+f:["What is MITRE ATT&CK?","What is a SIEM?","What is a SOC?"]},
+
+{keys:["data disposal","erase data","delete files","shred documents","data destruction","dispose devices","old computer"],cat:{name:"Physical Security",color:"#78716c"},
+a:"<strong>Proper Data Disposal</strong> — Simply pressing \"delete\" does NOT actually remove files from a computer.\n\n<strong>For paper documents:</strong>\n• <strong>Always shred</strong> documents with sensitive information before discarding\n• Use cross-cut or micro-cut shredders (strip-cut can be reassembled)\n• Consider professional shredding services for bulk disposal\n\n<strong>For electronic devices:</strong>\n• Use <strong>data wiping software</strong> that overwrites all data (DBAN, Eraser)\n• Don't rely on \"delete\" or \"format\" alone — data can be recovered\n• For drives with highly sensitive data, consider <strong>physical destruction</strong> (degaussing or shredding)\n• Wipe ALL data before donating or discarding old computers, mobile devices, digital copiers, and drives\n• Remove SIM cards and memory cards from phones\n\n<strong>Have formal policies</strong> for safely disposing of electronic files and old devices.\n\n<em>Digital copiers have internal drives that store copies of documents — wipe these before disposal too!</em>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is physical security?","What is encryption?","How to train employees?"]},
+
+{keys:["report cyber attack","report breach","report scam","fbi","ftc","ic3","law enforcement"],cat:{name:"Incident Response",color:"#dc2626"},
+a:"<strong>Where to Report Cyber Attacks and Scams:</strong>\n\n<strong>Law enforcement:</strong>\n• <strong>FBI's IC3:</strong> Internet Crime Complaint Center at <code>IC3.gov</code>\n• <strong>Local FBI office</strong> — for major incidents\n• <strong>Local police department</strong> — for initial reports\n\n<strong>Federal agencies:</strong>\n• <strong>FTC:</strong> Report at <code>FTC.gov/Complaint</code>\n• <strong>CISA:</strong> Report at <code>us-cert.cisa.gov</code> for critical infrastructure\n\n<strong>For phishing emails:</strong>\n• Forward to <code>spam@uce.gov</code> (FTC)\n• Forward to <code>reportphishing@apwg.org</code> (Anti-Phishing Working Group)\n• Notify the company or person being impersonated\n\n<strong>For identity theft:</strong>\n• <code>IdentityTheft.gov</code> — get a personalized recovery plan\n\n<strong>For data breach guidance:</strong>\n• FTC's <em>Data Breach Response: A Guide for Business</em> at <code>FTC.gov/DataBreach</code>\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["What is a data breach response?","What is incident response?","What is cyber insurance?"]},
+
+{keys:["software update","patch","patching","update software","security patch","vulnerability patch"],cat:{name:"Safety Tips",color:"#10b981"},
+a:"<strong>Software Updates & Patching</strong> — One of the simplest and most critical security practices.\n\n<strong>What to update:</strong>\n• Operating systems (Windows, macOS, Linux)\n• Web browsers (Chrome, Firefox, Edge, Safari)\n• Apps and software\n• Security software (antivirus/EDR)\n• Router firmware\n• IoT device firmware\n\n<strong>Best practices:</strong>\n• <strong>Set updates to automatic</strong> wherever possible\n• On mobile devices, you may need to update manually — do it regularly\n• Install the latest patches as soon as they're available\n• Don't ignore update notifications\n• Test critical patches in staging before deploying to production (enterprises)\n\n<strong>Why it matters:</strong>\n• Attackers exploit <strong>known vulnerabilities</strong> in unpatched software\n• Many major breaches (Equifax, WannaCry) exploited vulnerabilities with patches already available\n• Unpatched systems are low-hanging fruit for attackers\n\n<em>Source: FTC Cybersecurity for Small Business</em>",
+f:["How to stay safe online?","What is malware?","What is ransomware?"]}
+
+];
+
+/* ===== GLOSSARY (quick definitions) ===== */
+var GLOSSARY={
+"phishing":"A social engineering attack using deceptive emails/messages to steal credentials or install malware.",
+"malware":"Malicious software — includes viruses, worms, trojans, spyware, ransomware, and rootkits.",
+"ransomware":"Malware that encrypts your files and demands payment for the decryption key.",
+"vpn":"Virtual Private Network — creates an encrypted tunnel to protect your internet traffic.",
+"firewall":"Network security device that monitors and filters incoming/outgoing traffic based on rules.",
+"encryption":"Converting readable data into unreadable code to protect it from unauthorized access.",
+"mfa":"Multi-Factor Authentication — requires 2+ verification methods (password + phone/key).",
+"2fa":"Two-Factor Authentication — a form of MFA using exactly two verification steps.",
+"siem":"Security Information and Event Management — centralized log collection and threat detection.",
+"edr":"Endpoint Detection and Response — advanced endpoint monitoring beyond traditional antivirus.",
+"xdr":"Extended Detection and Response — unified security across endpoints, network, cloud, and email.",
+"ids":"Intrusion Detection System — monitors traffic and alerts on suspicious activity (passive).",
+"ips":"Intrusion Prevention System — monitors AND blocks malicious traffic in real-time (active).",
+"dns":"Domain Name System — translates domain names (google.com) into IP addresses.",
+"tls":"Transport Layer Security — encrypts web communications. Successor to SSL.",
+"ssl":"Secure Sockets Layer — older encryption protocol replaced by TLS.",
+"https":"HTTP Secure — web traffic encrypted with TLS. URL starts with https://.",
+"spf":"Sender Policy Framework — email authentication that verifies authorized sending servers.",
+"dkim":"DomainKeys Identified Mail — adds digital signatures to verify email authenticity.",
+"dmarc":"Domain-based Message Authentication — verifies the visible 'from' address matches SPF/DKIM.",
+"nist":"National Institute of Standards and Technology — US agency that publishes cybersecurity frameworks.",
+"gdpr":"General Data Protection Regulation — EU law protecting personal data. Fines up to 4% of revenue.",
+"hipaa":"Health Insurance Portability and Accountability Act — US law protecting patient health information.",
+"pci":"Payment Card Industry Data Security Standard — requirements for handling credit card data.",
+"soc":"Security Operations Center — team that monitors, detects, and responds to threats 24/7.",
+"iam":"Identity and Access Management — controlling who can access what resources.",
+"rbac":"Role-Based Access Control — assigning permissions based on job roles, not individuals.",
+"apt":"Advanced Persistent Threat — sophisticated, long-term targeted attack, often state-sponsored.",
+"ddos":"Distributed Denial of Service — overwhelming a target with traffic from many sources.",
+"bec":"Business Email Compromise — attackers impersonate executives to trick employees.",
+"cve":"Common Vulnerabilities and Exposures — standardized ID system for known security flaws.",
+"osint":"Open Source Intelligence — gathering information from publicly available sources.",
+"iot":"Internet of Things — connected smart devices (cameras, thermostats, etc.).",
+"vlan":"Virtual Local Area Network — logically segmenting a network for isolation.",
+"wpa3":"Wi-Fi Protected Access 3 — latest and most secure Wi-Fi encryption standard.",
+"zero trust":"Security model: never trust, always verify — every user, device, and connection.",
+"pentesting":"Penetration testing — simulating attacks to find vulnerabilities before criminals do.",
+"oscp":"Offensive Security Certified Professional — respected hands-on penetration testing certification.",
+"cissp":"Certified Information Systems Security Professional — senior-level cybersecurity certification.",
+"ctf":"Capture The Flag — cybersecurity competitions to practice hacking skills.",
+"sbom":"Software Bill of Materials — a list of all components in a software product.",
+"soc2":"Service Organization Control 2 — audit framework for service providers' security controls.",
+"iso27001":"International standard for Information Security Management Systems (ISMS).",
+"mitre":"MITRE ATT&CK — knowledge base of real-world adversary tactics and techniques.",
+"kill chain":"Cyber Kill Chain — 7-step model of how attacks progress from recon to objective.",
+"lateral movement":"How attackers move through a network after gaining initial access.",
+"credential stuffing":"Automated attack using stolen passwords from one breach to log into other services.",
+"sim swapping":"Attacker transfers your phone number to their SIM to intercept 2FA codes.",
+"social engineering":"Manipulating people psychologically to bypass security controls.",
+"deepfake":"AI-generated fake video/audio used to impersonate people convincingly."
+};
+
+/* ===== SEARCH ENGINE ===== */
+function normalize(s){return s.toLowerCase().replace(/[^a-z0-9\s]/g,'').replace(/\s+/g,' ').trim();}
+
+function findAnswer(query){
+  var q=normalize(query);
+  var words=q.split(' ').filter(function(w){return w.length>2;});
+  if(!words.length)words=q.split(' ');
+  var best=null,bestScore=0;
+  for(var i=0;i<KB.length;i++){
+    var e=KB[i],score=0;
+    for(var j=0;j<e.keys.length;j++){
+      var k=normalize(e.keys[j]);
+      if(q===k){score+=100;continue;}
+      if(q.indexOf(k)>-1){score+=40+k.length;continue;}
+      if(k.indexOf(q)>-1){score+=30;continue;}
+      for(var w=0;w<words.length;w++){
+        if(k.indexOf(words[w])>-1)score+=10+words[w].length;
+        /* partial match */
+        if(words[w].length>3&&k.indexOf(words[w].substring(0,Math.min(words[w].length-1,5)))>-1)score+=3;
+      }
+    }
+    if(score>bestScore){bestScore=score;best=e;}
+  }
+  return bestScore>=6?best:null;
+}
+
+/* "Did you mean?" - find top 3 partial matches */
+function findSuggestions(query){
+  var q=normalize(query);
+  var words=q.split(' ').filter(function(w){return w.length>2;});
+  if(!words.length)return[];
+  var scores=[];
+  for(var i=0;i<KB.length;i++){
+    var e=KB[i],score=0;
+    for(var j=0;j<e.keys.length;j++){
+      var k=normalize(e.keys[j]);
+      for(var w=0;w<words.length;w++){
+        if(k.indexOf(words[w])>-1)score+=5;
+        else if(words[w].length>3&&k.indexOf(words[w].substring(0,4))>-1)score+=2;
+      }
+    }
+    if(score>0)scores.push({entry:e,score:score});
+  }
+  scores.sort(function(a,b){return b.score-a.score;});
+  return scores.slice(0,3).map(function(s){return s.entry;});
+}
+
+/* Glossary lookup */
+function glossaryLookup(query){
+  var q=query.toLowerCase().replace(/^define\s+/,'').replace(/^what\s+is\s+(a|an|the)?\s*/,'').replace(/[^a-z0-9\s]/g,'').trim();
+  if(GLOSSARY[q])return GLOSSARY[q];
+  /* try partial match */
+  var keys=Object.keys(GLOSSARY);
+  for(var i=0;i<keys.length;i++){
+    if(keys[i].indexOf(q)>-1||q.indexOf(keys[i])>-1)return GLOSSARY[keys[i]]+" <em>("+keys[i].toUpperCase()+")</em>";
+  }
+  return null;
+}
+
+/* ===== UI FUNCTIONS ===== */
+function init(){
+  chatArea=document.getElementById('chatArea');
+  inp=document.getElementById('userInput');
+  btn=document.getElementById('sendBtn');
+  inp.addEventListener('input',function(){
+    btn.disabled=inp.value.trim().length<2;
+    inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,110)+'px';
+  });
+  inp.addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+  });
+  /* Theme */
+  if(localStorage.getItem('cda_theme')==='light'){document.body.classList.add('light');document.querySelector('.theme-btn').textContent='☀️';}
+  /* Daily tip */
+  var tipIdx=Math.floor(Date.now()/86400000)%TIPS.length;
+  document.getElementById('dailyTipText').innerHTML=TIPS[tipIdx];
+  /* Load explored topics */
+  try{var ex=JSON.parse(localStorage.getItem(STORE_EXPLORED)||'[]');ex.forEach(function(x){explored.add(x);});}catch(e){}
+  updateProgress();
+  /* Build category panel */
+  buildCatPanel();
+  /* Check for saved history */
+  try{var h=JSON.parse(localStorage.getItem(STORE)||'[]');if(h.length>0)document.getElementById('historyBar').style.display='flex';}catch(e){}
+  /* Init voice */
+  initMic();
+}
+window.onload=init;
+
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  var isLight=document.body.classList.contains('light');
+  document.querySelector('.theme-btn').textContent=isLight?'☀️':'🌙';
+  localStorage.setItem('cda_theme',isLight?'light':'dark');
+}
+
+function addMsg(html,type,catObj,followups,quizLevel,kbIndex){
+  var d=document.createElement('div');
+  d.className='msg '+type;
+  var avatar=type==='bot'?'🛡️':'👤';
+  var inner='<div class="msg-avatar">'+avatar+'</div><div class="msg-bubble">';
+  if(type==='bot'&&catObj){
+    inner+='<div class="msg-cat" style="background:'+catObj.color+'22;color:'+catObj.color+'">'+catObj.name+'</div>';
+  }
+  inner+=html;
+  /* Follow-ups */
+  if(type==='bot'&&followups&&followups.length){
+    inner+='<div class="followups">';
+    for(var i=0;i<followups.length;i++){
+      inner+='<button class="followup-btn" onclick="askTopic(this)">'+followups[i]+'</button>';
+    }
+    inner+='</div>';
+  }
+  inner+='</div>';
+  d.innerHTML=inner;
+
+  /* Add action buttons for bot messages */
+  if(type==='bot'&&catObj){
+    var actions=document.createElement('div');
+    actions.className='msg-actions';
+    var speakId='spk_'+Date.now();
+    actions.innerHTML=
+      '<button class="msg-act-btn" onclick="speakBubble(this)" title="Read aloud">🔊</button>'+
+      '<button class="msg-act-btn" onclick="copyAnswer(this)" title="Copy answer">📋</button>'+
+      '<button class="msg-act-btn" onclick="shareAnswer(this)" title="Share via WhatsApp">📤</button>'+
+      '<button class="msg-act-btn" onclick="rateFeedback(this,1)" title="Helpful" data-kb="'+(kbIndex||'')+'">👍</button>'+
+      '<button class="msg-act-btn" onclick="rateFeedback(this,0)" title="Not helpful" data-kb="'+(kbIndex||'')+'">👎</button>'+
+      (quizLevel?'<a class="msg-quiz-link" href="./" title="Test this in Level '+quizLevel+'">🎯 Quiz Lvl '+quizLevel+'</a>':'');
+    d.querySelector('.msg-bubble').appendChild(actions);
+  }
+
+  chatArea.appendChild(d);
+  chatArea.scrollTop=chatArea.scrollHeight;
+  /* Save to history */
+  saveToHistory(type==='user'?'user':'bot', type==='user'?html:d.querySelector('.msg-bubble').innerHTML);
+  /* Auto speak */
+  if(type==='bot'&&autoSpeakOn){
+    var bubble=d.querySelector('.msg-bubble');
+    if(bubble)speakText(stripHtml(bubble.innerHTML));
+  }
+  return d;
+}
+
+function showTyping(){
+  var d=document.createElement('div');
+  d.className='msg bot';d.id='typingMsg';
+  d.innerHTML='<div class="msg-avatar">🛡️</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div>';
+  chatArea.appendChild(d);chatArea.scrollTop=chatArea.scrollHeight;
+}
+function removeTyping(){var t=document.getElementById('typingMsg');if(t)t.remove();}
+
+function sendMsg(){
+  var text=inp.value.trim();
+  if(text.length<2)return;
+  addMsg(text,'user');
+  inp.value='';btn.disabled=true;
+  inp.style.height='auto';
+  var tb=document.getElementById('topicBtns');if(tb)tb.remove();
+  document.getElementById('historyBar').style.display='none';
+  showTyping();
+  setTimeout(function(){
+    removeTyping();
+    processQuery(text);
+  },400+Math.random()*400);
+  gtag('event','ask_question',{event_category:'chatbot',event_label:text.substring(0,50)});
+}
+
+function askTopic(el){
+  inp.value=el.textContent;
+  btn.disabled=false;
+  sendMsg();
+}
+
+function askDym(el){
+  inp.value=el.textContent;
+  btn.disabled=false;
+  sendMsg();
+}
+
+/* ===== CORE QUERY PROCESSOR ===== */
+function processQuery(text){
+  var lower=text.toLowerCase().trim();
+
+  /* Glossary mode */
+  if(lower.startsWith('define ')||lower.startsWith('glossary ')){
+    var def=glossaryLookup(text);
+    if(def){
+      addMsg('<strong>📖 Glossary:</strong> '+def,'bot',{name:'Glossary',color:'#f59e0b'},null,null,null);
+      return;
+    }
+  }
+
+  /* Quick glossary for very short queries */
+  if(lower.replace(/[^a-z]/g,'').length<=12){
+    var gDef=glossaryLookup(text);
+    if(gDef){
+      /* Still try KB first for richer answer */
+      var kbResult=findAnswer(text);
+      if(kbResult){
+        markExplored(kbResult);
+        var ql=QUIZ_MAP[kbResult.cat.name]||null;
+        var ki=KB.indexOf(kbResult);
+        addMsg(kbResult.a,'bot',kbResult.cat,kbResult.f,ql,ki);
+        return;
+      }
+      addMsg('<strong>📖 Quick Definition:</strong> '+gDef+'\n\n<em>Type the full topic name for a deeper answer.</em>','bot',{name:'Glossary',color:'#f59e0b'},null,null,null);
+      return;
+    }
+  }
+
+  /* Full KB search */
+  var result=findAnswer(text);
+  if(result){
+    markExplored(result);
+    var ql=QUIZ_MAP[result.cat.name]||null;
+    var ki=KB.indexOf(result);
+    addMsg(result.a,'bot',result.cat,result.f,ql,ki);
+    return;
+  }
+
+  /* Did you mean? */
+  var suggestions=findSuggestions(text);
+  if(suggestions.length>0){
+    var noMatchHtml="I couldn't find an exact match, but you might be looking for one of these:";
+    noMatchHtml+='<div class="dym"><div class="dym-title">💡 Did you mean?</div><div class="dym-list">';
+    for(var i=0;i<suggestions.length;i++){
+      var label=suggestions[i].keys[0];
+      /* Capitalize nicely */
+      label=label.charAt(0).toUpperCase()+label.slice(1);
+      noMatchHtml+='<button class="dym-btn" onclick="askDym(this)">'+label+'</button>';
+    }
+    noMatchHtml+='</div></div>';
+    noMatchHtml+='<br><em style="color:var(--text3);font-size:11px">Or type <strong>define [term]</strong> for a quick glossary definition.</em>';
+    addMsg(noMatchHtml,'bot',{name:'Help',color:'#64748b'},null,null,null);
+    return;
+  }
+
+  /* Complete no match */
+  var noMatch="I don't have a specific answer for that yet. Here's what I can help with:<br><br>"+
+    "<strong>200+ topics across 24 categories</strong> including: phishing, social engineering, passwords, MFA, malware, ransomware, VPN, firewalls, encryption, HTTPS/TLS, email authentication, incident response, physical security, cloud security, NIST framework, GDPR, compliance, cyber insurance, vendor security, remote access, and more.<br><br>"+
+    "<strong>Try:</strong> Type <code>define [term]</code> for quick glossary • Click 📂 Browse by Category • Rephrase your question<br><br>"+
+    "<em style='color:var(--text3)'>📝 Question noted — we're expanding our knowledge base daily!</em>";
+  addMsg(noMatch,'bot',{name:'Help',color:'#64748b'},["What is phishing?","How to stay safe online?","Cybersecurity career path"],null,null);
+}
+
+/* ===== PROGRESS TRACKING ===== */
+function markExplored(entry){
+  var idx=KB.indexOf(entry);
+  if(idx>-1&&!explored.has(idx)){
+    explored.add(idx);
+    try{localStorage.setItem(STORE_EXPLORED,JSON.stringify(Array.from(explored)));}catch(e){}
+    updateProgress();
+  }
+}
+
+function updateProgress(){
+  var total=KB.length;
+  var done=explored.size;
+  var pct=Math.round((done/total)*100);
+  var fill=document.getElementById('progressFill');
+  if(fill)fill.style.width=pct+'%';
+  var txt=document.getElementById('progressText');
+  if(txt)txt.textContent=done+' / '+total+' topics explored';
+}
+
+/* ===== CATEGORY BROWSER ===== */
+function buildCatPanel(){
+  var cats={};
+  for(var i=0;i<KB.length;i++){
+    var c=KB[i].cat.name;
+    if(!cats[c])cats[c]={color:KB[i].cat.color,count:0,keys:[]};
+    cats[c].count++;
+    cats[c].keys.push(KB[i].keys[0]);
+  }
+  var panel=document.getElementById('catPanel');
+  var html='';
+  var sortedCats=Object.keys(cats).sort();
+  for(var j=0;j<sortedCats.length;j++){
+    var name=sortedCats[j];
+    var c=cats[name];
+    html+='<button class="cat-chip" onclick="browseCat(\''+name+'\')" title="'+c.keys.join(', ')+'"><span class="cc-dot" style="background:'+c.color+'"></span>'+name+' <span class="cc-count">('+c.count+')</span></button>';
+  }
+  panel.innerHTML=html;
+}
+
+function toggleCatPanel(){
+  var panel=document.getElementById('catPanel');
+  var toggle=document.getElementById('catToggle');
+  panel.classList.toggle('show');
+  toggle.classList.toggle('open');
+}
+
+function browseCat(catName){
+  /* Remove topic buttons */
+  var tb=document.getElementById('topicBtns');if(tb)tb.remove();
+  document.getElementById('historyBar').style.display='none';
+  /* Close panel */
+  document.getElementById('catPanel').classList.remove('show');
+  document.getElementById('catToggle').classList.remove('open');
+  /* Find all KB entries in this category */
+  var entries=[];
+  for(var i=0;i<KB.length;i++){
+    if(KB[i].cat.name===catName)entries.push(KB[i]);
+  }
+  /* Show as a message with clickable topics */
+  var html='<strong>📂 '+catName+'</strong> — '+entries.length+' topic'+(entries.length>1?'s':'')+' available:<br><br>';
+  html+='<div class="followups" style="margin-top:0">';
+  for(var j=0;j<entries.length;j++){
+    var label=entries[j].keys[0];
+    label=label.charAt(0).toUpperCase()+label.slice(1);
+    html+='<button class="followup-btn" onclick="askTopic(this)">'+label+'</button>';
+  }
+  html+='</div>';
+  addMsg(html,'bot',{name:catName,color:entries[0].cat.color},null,null,null);
+  gtag('event','browse_category',{event_category:'chatbot',event_label:catName});
+}
+
+/* ===== CHAT HISTORY ===== */
+function saveToHistory(type,html){
+  try{
+    var h=JSON.parse(localStorage.getItem(STORE)||'[]');
+    h.push({type:type,html:html,time:Date.now()});
+    if(h.length>100)h=h.slice(-100); /* keep last 100 */
+    localStorage.setItem(STORE,JSON.stringify(h));
+  }catch(e){}
+}
+
+function loadHistory(){
+  try{
+    var h=JSON.parse(localStorage.getItem(STORE)||'[]');
+    document.getElementById('historyBar').style.display='none';
+    var tb=document.getElementById('topicBtns');if(tb)tb.remove();
+    /* Show label */
+    var label=document.createElement('div');
+    label.style.cssText='text-align:center;font-size:10px;color:var(--text3);font-weight:700;padding:8px;border-bottom:1px dashed var(--border);margin-bottom:8px';
+    label.innerHTML='📜 Previous Conversation ('+h.length+' messages)';
+    chatArea.appendChild(label);
+    for(var i=0;i<h.length;i++){
+      var d=document.createElement('div');
+      d.className='msg '+h[i].type;
+      var avatar=h[i].type==='bot'?'🛡️':'👤';
+      d.innerHTML='<div class="msg-avatar">'+avatar+'</div><div class="msg-bubble">'+h[i].html+'</div>';
+      chatArea.appendChild(d);
+    }
+    /* Separator */
+    var sep=document.createElement('div');
+    sep.style.cssText='text-align:center;font-size:10px;color:var(--text3);font-weight:700;padding:8px;border-top:1px dashed var(--border);margin-top:8px';
+    sep.innerHTML='— New Conversation —';
+    chatArea.appendChild(sep);
+    chatArea.scrollTop=chatArea.scrollHeight;
+  }catch(e){console.error('History load error',e);}
+}
+
+function clearHistory(){
+  localStorage.removeItem(STORE);
+  document.getElementById('historyBar').style.display='none';
+}
+
+/* ===== FEEDBACK (thumbs up/down) ===== */
+function rateFeedback(el,good){
+  /* Visual feedback */
+  var siblings=el.parentElement.querySelectorAll('.msg-act-btn');
+  siblings.forEach(function(s){s.classList.remove('active','active-bad');});
+  el.classList.add(good?'active':'active-bad');
+  /* Store feedback */
+  var kbIdx=el.getAttribute('data-kb');
+  try{
+    var fb=JSON.parse(localStorage.getItem(STORE_FEEDBACK)||'{}');
+    if(!fb[kbIdx])fb[kbIdx]={up:0,down:0};
+    if(good)fb[kbIdx].up++;else fb[kbIdx].down++;
+    localStorage.setItem(STORE_FEEDBACK,JSON.stringify(fb));
+  }catch(e){}
+  gtag('event','feedback',{event_category:'chatbot',event_label:kbIdx,value:good?1:0});
+}
+
+/* ===== COPY & SHARE ===== */
+function copyAnswer(el){
+  var bubble=el.closest('.msg-bubble');
+  var text=stripHtml(bubble.innerHTML);
+  navigator.clipboard.writeText(text).then(function(){
+    var toast=document.createElement('span');
+    toast.className='copied-toast';
+    toast.textContent='✓ Copied!';
+    el.parentElement.appendChild(toast);
+    setTimeout(function(){toast.remove();},2000);
+  }).catch(function(){});
+  gtag('event','copy_answer',{event_category:'chatbot'});
+}
+
+function shareAnswer(el){
+  var bubble=el.closest('.msg-bubble');
+  var text=stripHtml(bubble.innerHTML);
+  var shareText='🛡️ Cybersecurity Tip from Cyber Drill AI:\n\n'+text.substring(0,500)+(text.length>500?'...\n\n':'')
+    +'\nLearn more: https://cyberdrill.ai/academy/ask.html';
+  var url='https://wa.me/?text='+encodeURIComponent(shareText);
+  window.open(url,'_blank');
+  gtag('event','share_answer',{event_category:'chatbot'});
+}
+
+/* ===== VOICE: Text-to-Speech ===== */
+function stripHtml(html){
+  var tmp=document.createElement('div');tmp.innerHTML=html;
+  /* Remove followup buttons, action buttons, category tags */
+  tmp.querySelectorAll('.followups,.msg-actions,.msg-cat,.dym,.copied-toast,.msg-quiz-link').forEach(function(e){e.remove();});
+  return tmp.textContent||tmp.innerText||'';
+}
+
+function speakText(text){
+  window.speechSynthesis.cancel();
+  var utter=new SpeechSynthesisUtterance(text);
+  utter.rate=0.95;utter.pitch=1;utter.volume=1;
+  /* Pick a good voice */
+  var voices=window.speechSynthesis.getVoices();
+  var preferred=voices.filter(function(v){return v.lang.startsWith('en')&&v.name.indexOf('Google')>-1;});
+  if(preferred.length)utter.voice=preferred[0];
+  else{var en=voices.filter(function(v){return v.lang.startsWith('en');});if(en.length)utter.voice=en[0];}
+  window.speechSynthesis.speak(utter);
+}
+
+function speakBubble(el){
+  if(el.classList.contains('speaking')){
+    stopSpeaking();
+    el.classList.remove('speaking');
+    el.textContent='🔊';
+    return;
+  }
+  /* Stop any other speaking buttons */
+  document.querySelectorAll('.msg-act-btn.speaking').forEach(function(b){b.classList.remove('speaking');b.textContent='🔊';});
+  var bubble=el.closest('.msg-bubble');
+  var text=stripHtml(bubble.innerHTML);
+  el.classList.add('speaking');
+  el.textContent='⏹';
+  window.speechSynthesis.cancel();
+  var utter=new SpeechSynthesisUtterance(text);
+  utter.rate=0.95;utter.pitch=1;
+  var voices=window.speechSynthesis.getVoices();
+  var preferred=voices.filter(function(v){return v.lang.startsWith('en')&&v.name.indexOf('Google')>-1;});
+  if(preferred.length)utter.voice=preferred[0];
+  else{var en=voices.filter(function(v){return v.lang.startsWith('en');});if(en.length)utter.voice=en[0];}
+  utter.onend=function(){el.classList.remove('speaking');el.textContent='🔊';};
+  window.speechSynthesis.speak(utter);
+}
+
+function stopSpeaking(){window.speechSynthesis.cancel();}
+function toggleAutoSpeak(){autoSpeakOn=document.getElementById('autoSpeak').checked;}
+
+/* Load voices (async) */
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};
+}
+
+/* ===== VOICE: Speech Recognition (mic) ===== */
+function initMic(){
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){return;}
+  recognition=new SR();
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  recognition.lang='en-US';
+  document.getElementById('micBtn').classList.remove('hide');
+  recognition.onresult=function(e){
+    var transcript='';
+    for(var i=e.resultIndex;i<e.results.length;i++){transcript+=e.results[i][0].transcript;}
+    inp.value=transcript;
+    btn.disabled=transcript.trim().length<2;
+    if(e.results[e.results.length-1].isFinal){
+      finishListening();
+      /* Auto-enable voice output for voice conversations */
+      if(!autoSpeakOn){document.getElementById('autoSpeak').checked=true;autoSpeakOn=true;}
+      setTimeout(sendMsg,400);
+    }
+  };
+  recognition.onerror=function(e){
+    finishListening();
+    if(e.error==='not-allowed')addMsg('Microphone access denied. Please allow microphone permission and try again.','bot',{name:'Help',color:'#64748b'},null,null,null);
+  };
+  recognition.onend=function(){finishListening();};
+}
+
+function toggleMic(){
+  if(micOn){stopListening();return;}
+  micOn=true;
+  document.getElementById('micBtn').classList.add('recording');
+  document.getElementById('listenBar').classList.add('active');
+  try{recognition.start();}catch(e){finishListening();}
+}
+
+function stopListening(){
+  micOn=false;
+  try{recognition.stop();}catch(e){}
+  finishListening();
+}
+
+function finishListening(){
+  micOn=false;
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('listenBar').classList.remove('active');
+}
+
+/* ===== COPYRIGHT ===== */
+document.addEventListener('DOMContentLoaded',function(){
+  var footer=document.createElement('div');
+  footer.style.cssText='text-align:center;font-size:10px;color:var(--text3);padding:4px;position:fixed;bottom:0;width:100%;pointer-events:none;opacity:.6';
+  footer.innerHTML='© 2025 Cyber Drill AI — cyberdrill.ai';
+  document.body.appendChild(footer);
+});
+</script>
+</body>
+</html>
+
