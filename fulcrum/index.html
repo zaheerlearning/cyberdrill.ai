@@ -1,1 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FULCRUM — AI Tools Directory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #1c2128;
+    --border: rgba(255,255,255,0.08);
+    --text: #e6edf3; --text2: #8b949e; --text3: #484f58;
+    --accent: #4f8ef7;
+    --gold: #f0b429;
+    --green: #22c55e;
+    --orange: #f97316;
+    --red: #ef4444;
+    --purple: #a78bfa;
+    --teal: #14b8a6;
+    --mono: 'JetBrains Mono', monospace;
+    --font: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.6; }
+
+  /* ── Header ── */
+  .header {
+    background: var(--bg2); border-bottom: 1px solid var(--border);
+    padding: 20px 40px; display: flex; align-items: center; gap: 16px;
+  }
+  .header-logo { font-family: var(--mono); font-size: 18px; font-weight: 600; color: var(--accent); letter-spacing: 3px; }
+  .header-sub { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 2px; text-transform: uppercase; }
+  .header-badge { margin-left: auto; font-family: var(--mono); font-size: 10px; color: var(--text3); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; }
+
+  /* ── Layout ── */
+  .container { max-width: 1300px; margin: 0 auto; padding: 40px; }
+
+  .page-title { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .page-sub { font-size: 13px; color: var(--text2); margin-bottom: 32px; }
+
+  /* ── Legend ── */
+  .legend { display: flex; gap: 32px; margin-bottom: 40px; flex-wrap: wrap; }
+  .legend-group { }
+  .legend-label { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .legend-items { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: var(--mono); font-size: 10px; font-weight: 600;
+    padding: 3px 10px; border-radius: 4px; border: 1px solid; white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  /* Trust badges */
+  .trust-verified   { color: #22c55e; background: rgba(34,197,94,0.1);  border-color: rgba(34,197,94,0.25); }
+  .trust-high       { color: #4f8ef7; background: rgba(79,142,247,0.1); border-color: rgba(79,142,247,0.25); }
+  .trust-moderate   { color: #f0b429; background: rgba(240,180,41,0.1); border-color: rgba(240,180,41,0.25); }
+  .trust-caution    { color: #f97316; background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.25); }
+
+  /* Recommendation tiers */
+  .rec-essential  { color: #a78bfa; background: rgba(167,139,250,0.1); border-color: rgba(167,139,250,0.25); }
+  .rec-recommended{ color: #22c55e; background: rgba(34,197,94,0.1);   border-color: rgba(34,197,94,0.25); }
+  .rec-useful     { color: #4f8ef7; background: rgba(79,142,247,0.1);  border-color: rgba(79,142,247,0.25); }
+  .rec-specialist { color: #f0b429; background: rgba(240,180,41,0.1);  border-color: rgba(240,180,41,0.25); }
+  .rec-optional   { color: #8b949e; background: rgba(139,148,158,0.1); border-color: rgba(139,148,158,0.2); }
+
+  /* Cost badges */
+  .cost-free    { color: #22c55e; background: rgba(34,197,94,0.08);   border-color: rgba(34,197,94,0.2); }
+  .cost-freemium{ color: #f0b429; background: rgba(240,180,41,0.08);  border-color: rgba(240,180,41,0.2); }
+  .cost-paid    { color: #ef4444; background: rgba(239,68,68,0.08);   border-color: rgba(239,68,68,0.2); }
+  .cost-open    { color: #14b8a6; background: rgba(20,184,166,0.08);  border-color: rgba(20,184,166,0.2); }
+
+  /* ── Section ── */
+  .section { margin-bottom: 48px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px; background: var(--bg3);
+    border: 1px solid var(--border); border-radius: 8px 8px 0 0;
+    border-bottom: 2px solid var(--accent);
+  }
+  .section-icon { font-size: 20px; }
+  .section-name { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; color: var(--text); }
+  .section-desc { font-size: 12px; color: var(--text2); margin-left: auto; font-style: italic; }
+
+  /* ── Tool Table ── */
+  .tool-table { width: 100%; border-collapse: collapse; background: var(--bg2); border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .tool-table thead tr { background: var(--bg3); }
+  .tool-table th {
+    padding: 10px 16px; font-family: var(--mono); font-size: 10px;
+    color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px;
+    font-weight: 600; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .tool-table td { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+  .tool-table tr:last-child td { border-bottom: none; }
+  .tool-table tr:hover td { background: rgba(79,142,247,0.03); }
+
+  .tool-name-cell { min-width: 160px; }
+  .tool-link { color: var(--accent); font-weight: 600; font-size: 14px; text-decoration: none; }
+  .tool-link:hover { text-decoration: underline; }
+  .tool-domain { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 2px; }
+  .tool-maker { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  .tool-purpose { font-size: 13px; color: var(--text); line-height: 1.5; max-width: 380px; }
+  .tool-purpose-secondary { font-size: 11px; color: var(--text2); margin-top: 4px; }
+
+  .tool-badges { display: flex; flex-direction: column; gap: 5px; min-width: 110px; }
+  .tool-notes { font-size: 11px; color: var(--text2); line-height: 1.5; max-width: 200px; }
+  .tool-notes strong { color: var(--gold); font-weight: 600; }
+
+  /* ── Tier indicator ── */
+  .tier-bar { display: flex; gap: 3px; margin-top: 6px; }
+  .tier-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+  .tier-dot.filled-purple { background: #a78bfa; }
+  .tier-dot.filled-green  { background: #22c55e; }
+  .tier-dot.filled-blue   { background: #4f8ef7; }
+  .tier-dot.filled-gold   { background: #f0b429; }
+  .tier-dot.filled-grey   { background: #6b7280; }
+
+  /* ── Print / export ── */
+  @media print {
+    body { background: #fff; color: #000; }
+    .header { background: #f5f5f5; }
+    .tool-table { border: 1px solid #ccc; }
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .container { padding: 16px; }
+    .tool-table th:nth-child(4), .tool-table td:nth-child(4) { display: none; }
+  }
+
+  .divider { height: 1px; background: var(--border); margin: 8px 0; }
+  .top-picks-banner {
+    background: linear-gradient(135deg, rgba(167,139,250,0.1) 0%, rgba(79,142,247,0.1) 100%);
+    border: 1px solid rgba(167,139,250,0.3); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 32px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .top-pick-item { display: flex; align-items: center; gap: 8px; }
+  .top-pick-name { font-weight: 600; color: var(--text); }
+  .top-pick-why { font-size: 11px; color: var(--text2); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-logo">⊕ FULCRUM</div>
+    <div class="header-sub">AI Tools Directory</div>
+  </div>
+  <div class="header-badge">LAST UPDATED: FEB 2026 · 50+ TOOLS</div>
+</div>
+
+<div class="container">
+
+  <div class="page-title">🤖 Complete AI Tools Directory</div>
+  <div class="page-sub">All tools grouped by purpose — with trust level, recommendation tier, cost, and notes for cybersecurity & industrial professionals</div>
+
+  <!-- TOP PICKS BANNER -->
+  <div class="top-picks-banner">
+    <span style="font-family:var(--mono);font-size:10px;color:#a78bfa;letter-spacing:2px;text-transform:uppercase;min-width:80px;">⭐ Top Picks</span>
+    <div class="top-pick-item">
+      <div><div class="top-pick-name">Claude (Anthropic)</div><div class="top-pick-why">Best for analysis, long docs, FULCRUM briefings</div></div>
+    </div>
+    <div style="color:var(--border)">|</div>
+    <div class="top-pick-item">
+      <div><div class="top-pick-name">Perplexity AI</div><div class="top-pick-why">Best for cited research & current events</div></div>
+    </div>
+    <div style="color:var(--border)">|</div>
+    <div class="top-pick-item">
+      <div><div class="top-pick-name">Cursor</div><div class="top-pick-why">Best AI coding environment</div></div>
+    </div>
+    <div style="color:var(--border)">|</div>
+    <div class="top-pick-item">
+      <div><div class="top-pick-name">Ollama</div><div class="top-pick-why">Best for private/offline use — OT environments</div></div>
+    </div>
+    <div style="color:var(--border)">|</div>
+    <div class="top-pick-item">
+      <div><div class="top-pick-name">Hugging Face</div><div class="top-pick-why">Best model hub for security research</div></div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-group">
+      <div class="legend-label">Trust Level</div>
+      <div class="legend-items">
+        <span class="badge trust-verified">✓ VERIFIED</span>
+        <span class="badge trust-high">◈ HIGH</span>
+        <span class="badge trust-moderate">◉ MODERATE</span>
+        <span class="badge trust-caution">⚠ CAUTION</span>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-label">Recommendation Tier</div>
+      <div class="legend-items">
+        <span class="badge rec-essential">★ ESSENTIAL</span>
+        <span class="badge rec-recommended">✦ RECOMMENDED</span>
+        <span class="badge rec-useful">◆ USEFUL</span>
+        <span class="badge rec-specialist">◇ SPECIALIST</span>
+        <span class="badge rec-optional">○ OPTIONAL</span>
+      </div>
+    </div>
+    <div class="legend-group">
+      <div class="legend-label">Cost</div>
+      <div class="legend-items">
+        <span class="badge cost-free">FREE</span>
+        <span class="badge cost-freemium">FREEMIUM</span>
+        <span class="badge cost-paid">PAID</span>
+        <span class="badge cost-open">OPEN SOURCE</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 1. AI ASSISTANTS & GENERAL PURPOSE LLMs               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">💬</div>
+      <div class="section-name">AI Assistants & General Purpose LLMs</div>
+      <div class="section-desc">Conversational AI for analysis, writing, reasoning, and problem-solving</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes for Cybersecurity / OT</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://claude.ai" target="_blank" class="tool-link">Claude</a>
+            <div class="tool-domain">claude.ai · anthropic.com</div>
+            <div class="tool-maker">Anthropic</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Long-document analysis, nuanced reasoning, code review, research synthesis. Powers FULCRUM's AI Briefing.</div>
+            <div class="tool-purpose-secondary">Best for: reading lengthy CVE reports, policy documents, ICS manuals, threat intel</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>No training on your data</strong> (Pro/API). Use Projects to keep OT context. Constitutional AI safety focus. Best choice for sensitive analysis.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://chatgpt.com" target="_blank" class="tool-link">ChatGPT</a>
+            <div class="tool-domain">chatgpt.com</div>
+            <div class="tool-maker">OpenAI</div>
+          </td>
+          <td>
+            <div class="tool-purpose">General assistant, image generation (DALL-E), web browsing, code interpreter, plugin ecosystem.</div>
+            <div class="tool-purpose-secondary">Best for: visual outputs, data analysis, Python scripting, broad knowledge tasks</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">GPT-4o model. <strong>May use free-tier data for training</strong> — use Teams/Enterprise for confidential work. Best plugin ecosystem.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://gemini.google.com" target="_blank" class="tool-link">Gemini</a>
+            <div class="tool-domain">gemini.google.com</div>
+            <div class="tool-maker">Google DeepMind</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Deep Google Workspace integration (Docs, Gmail, Sheets), 1M token context window, multimodal reasoning.</div>
+            <div class="tool-purpose-secondary">Best for: Google ecosystem users, analyzing large codebases, long video/audio</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Gemini 2.0 Flash/Pro. Strong multimodal. <strong>Google data policies apply</strong> — review before using with sensitive OT/ICS data.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.perplexity.ai" target="_blank" class="tool-link">Perplexity AI</a>
+            <div class="tool-domain">perplexity.ai</div>
+            <div class="tool-maker">Perplexity AI Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-powered search with real-time web results and cited sources. Best for current threat intelligence and research.</div>
+            <div class="tool-purpose-secondary">Best for: CVE research, vendor advisories, threat actor tracking, current news</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Every answer is cited</strong> — critical for security work where accuracy matters. Pro adds GPT-4/Claude models. No hallucinated sources.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://ollama.ai" target="_blank" class="tool-link">Ollama</a>
+            <div class="tool-domain">ollama.ai</div>
+            <div class="tool-maker">Ollama Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Run LLMs (Llama 3, Mistral, Phi-3, Gemma) locally on your own machine. Fully private, offline, zero cost after setup.</div>
+            <div class="tool-purpose-secondary">Best for: air-gapped/OT networks, sensitive data, no-internet environments</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-open">OPEN SOURCE</span></td>
+          <td class="tool-notes"><strong>Perfect for OT/ICS environments.</strong> Data never leaves your machine. Run on a laptop for Aviva Metals OT network analysis. Needs GPU for best performance.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://groq.com" target="_blank" class="tool-link">Groq</a>
+            <div class="tool-domain">groq.com</div>
+            <div class="tool-maker">Groq Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Runs open-source models (Llama 3, Mixtral) at extreme speed — 10–20x faster than standard inference. Great for rapid Q&A.</div>
+            <div class="tool-purpose-secondary">Best for: fast responses when latency matters, bulk text processing</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Fastest free LLM API available. Good for automation pipelines. Uses LPU chips, not GPUs.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://mistral.ai" target="_blank" class="tool-link">Mistral AI</a>
+            <div class="tool-domain">mistral.ai · chat.mistral.ai</div>
+            <div class="tool-maker">Mistral AI (France)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">European AI lab — strong open-weight models, GDPR-compliant API, multilingual. Le Chat is their consumer interface.</div>
+            <div class="tool-purpose-secondary">Best for: European data compliance, multilingual work, open-weight flexibility</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>EU-based = stronger GDPR compliance</strong>. Mistral Large rivals GPT-4. Good alternative if EU data residency matters.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 2. AI CODING & DEVELOPER TOOLS                        -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">💻</div>
+      <div class="section-name">AI Coding & Developer Tools</div>
+      <div class="section-desc">Tools that write, review, explain, and debug code using AI</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes for Cybersecurity / OT</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://cursor.sh" target="_blank" class="tool-link">Cursor</a>
+            <div class="tool-domain">cursor.sh</div>
+            <div class="tool-maker">Anysphere Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-first code editor built on VS Code. Full codebase awareness — ask questions about your entire project, auto-edit, debug.</div>
+            <div class="tool-purpose-secondary">Best for: web apps, Python scripts, FULCRUM dashboard development</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Best AI coding environment available.</strong> Uses Claude/GPT-4 internally. Privacy mode available — code doesn't leave machine. Free tier very generous.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://github.com/features/copilot" target="_blank" class="tool-link">GitHub Copilot</a>
+            <div class="tool-domain">github.com/features/copilot</div>
+            <div class="tool-maker">GitHub / Microsoft</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Inline code autocomplete and chat inside VS Code, JetBrains, Vim. Trained on billions of lines of public code.</div>
+            <div class="tool-purpose-secondary">Best for: day-to-day coding assistance, boilerplate generation, code review</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">$10/month. Free for students/OSS. <strong>Business tier has no code retention</strong>. Deeply integrated with GitHub for security scanning.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.tabnine.com" target="_blank" class="tool-link">Tabnine</a>
+            <div class="tool-domain">tabnine.com</div>
+            <div class="tool-maker">Tabnine Ltd.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI code completion with a focus on privacy — can run entirely on-premises. Trains on your own codebase.</div>
+            <div class="tool-purpose-secondary">Best for: enterprises needing private AI coding with no cloud data sharing</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Best choice if code must stay on-premises.</strong> Enterprise plan runs fully air-gapped. Good for OT/ICS code environments.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://claude.ai/code" target="_blank" class="tool-link">Claude Code</a>
+            <div class="tool-domain">claude.ai/code</div>
+            <div class="tool-maker">Anthropic</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Agentic command-line coding assistant — reads your codebase, writes and edits files, runs commands, fixes bugs autonomously.</div>
+            <div class="tool-purpose-secondary">Best for: complex multi-file refactors, automated fixes, building tools like FULCRUM</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">Requires Anthropic API key. Runs in terminal. Can edit entire projects in one session. Best for power users.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://codeium.com" target="_blank" class="tool-link">Codeium</a>
+            <div class="tool-domain">codeium.com</div>
+            <div class="tool-maker">Exafunction Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Free alternative to GitHub Copilot — AI autocomplete for 70+ languages, VS Code, JetBrains, Neovim. Chat included.</div>
+            <div class="tool-purpose-secondary">Best for: developers who want Copilot-style help at zero cost</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Completely free for individuals. Enterprise has SSO/on-prem options. Good Copilot substitute with no cost.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 3. AI FOR CYBERSECURITY                               -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #ef4444;">
+      <div class="section-icon">🛡</div>
+      <div class="section-name">AI Tools for Cybersecurity</div>
+      <div class="section-desc">Purpose-built or heavily applied AI in security operations, threat detection, and training</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes for Cybersecurity / OT</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.virustotal.com" target="_blank" class="tool-link">VirusTotal Intelligence</a>
+            <div class="tool-domain">virustotal.com</div>
+            <div class="tool-maker">Google (Alphabet)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-augmented malware scanning — 70+ AV engines + ML behavioral analysis. File, URL, domain, IP reputation checks.</div>
+            <div class="tool-purpose-secondary">Best for: incident response, IOC enrichment, malware triage</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Do not upload confidential files</strong> — free tier makes files public to subscribers. Use hash lookups only for sensitive samples. API access on free tier.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.darktrace.com" target="_blank" class="tool-link">Darktrace</a>
+            <div class="tool-domain">darktrace.com</div>
+            <div class="tool-maker">Darktrace plc (UK)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-powered network detection & response (NDR). Self-learning AI detects anomalies without signatures. OT/ICS module available.</div>
+            <div class="tool-purpose-secondary">Best for: manufacturing networks, detecting novel attacks, autonomous response</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-specialist">◇ SPECIALIST</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes"><strong>Directly relevant to Aviva Metals OT environment.</strong> DETECT/OT module designed for Modbus, DNP3, EtherNet/IP. Enterprise pricing.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.microsoft.com/en-us/security/business/ai-machine-learning/microsoft-copilot-security" target="_blank" class="tool-link">Microsoft Copilot for Security</a>
+            <div class="tool-domain">microsoft.com/security</div>
+            <div class="tool-maker">Microsoft</div>
+          </td>
+          <td>
+            <div class="tool-purpose">GPT-4 integrated into Microsoft Defender, Sentinel, Entra. Natural language threat hunting, incident summaries, script analysis.</div>
+            <div class="tool-purpose-secondary">Best for: Microsoft security stack users, SOC analysts, incident response</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">Pay-as-you-go SCUs. If you use Microsoft 365/Defender, this is the natural AI extension. Strong for KQL query generation in Sentinel.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.recorded-future.com" target="_blank" class="tool-link">Recorded Future AI</a>
+            <div class="tool-domain">recorded-future.com</div>
+            <div class="tool-maker">Recorded Future (Mastercard)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-powered threat intelligence platform. Tracks threat actors, TTPs, dark web, geopolitical risk. Natural language threat briefings.</div>
+            <div class="tool-purpose-secondary">Best for: threat intel teams, executive briefings, proactive defence</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-specialist">◇ SPECIALIST</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">Industry gold standard for TI. AI Insights feature summarises actor profiles. <strong>Acquired by Mastercard 2023</strong> — enterprise pricing.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.cyber-drill.ai" target="_blank" class="tool-link">Cyber Drill AI</a>
+            <div class="tool-domain">qurancompanion.ai (current host)</div>
+            <div class="tool-maker">Zaheer — Aviva Metals</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI-powered phishing detection training platform. Simulates attacks, trains employees 8–80+ years, covers manufacturing and ICS environments.</div>
+            <div class="tool-purpose-secondary">Best for: industrial workforce security awareness, OT-specific phishing training</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Built in-house — fully trusted.</strong> Covers manufacturing, healthcare, finance sectors. Multi-age modules. OT-context aware training unique in market.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.shodan.io" target="_blank" class="tool-link">Shodan AI</a>
+            <div class="tool-domain">shodan.io</div>
+            <div class="tool-maker">Shodan LLC</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Search engine for internet-connected devices. AI features summarise exposure risk. Find exposed ICS/OT devices, cameras, SCADA systems.</div>
+            <div class="tool-purpose-secondary">Best for: attack surface management, OT exposure checks, asset discovery</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Critical for OT exposure checks.</strong> Search for your own IP ranges and Modbus/EtherNet/IP exposures. Free account = limited results. API for automation.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 4. AI MODEL PLATFORMS & INFRASTRUCTURE                -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #14b8a6;">
+      <div class="section-icon">🤗</div>
+      <div class="section-name">AI Model Platforms & Infrastructure</div>
+      <div class="section-desc">Hubs for finding, running, and deploying AI models — the GitHub of AI</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes for Cybersecurity / OT</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://huggingface.co" target="_blank" class="tool-link">Hugging Face</a>
+            <div class="tool-domain">huggingface.co</div>
+            <div class="tool-maker">Hugging Face Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">The GitHub of AI — 500,000+ models, datasets, and Spaces. Deploy, fine-tune, and share ML models. Hosts Llama, Mistral, Falcon, and thousands more.</div>
+            <div class="tool-purpose-secondary">Best for: finding security-specific models, NLP pipelines, running inference</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Industry standard model hub. <strong>Security-specific models available</strong> — malware classifiers, log parsers, CVE summarisers. Free Spaces hosting for demos.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://replicate.com" target="_blank" class="tool-link">Replicate</a>
+            <div class="tool-domain">replicate.com</div>
+            <div class="tool-maker">Replicate Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Run any AI model via a simple API — image generation, speech-to-text, video, LLMs. Pay per second of compute used.</div>
+            <div class="tool-purpose-secondary">Best for: rapid prototyping, running models without GPU setup</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">Pay-as-you-go. Easy API. Good for testing specialist models (document OCR, anomaly detection) before committing to deployment.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.langchain.com" target="_blank" class="tool-link">LangChain</a>
+            <div class="tool-domain">langchain.com</div>
+            <div class="tool-maker">LangChain Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Python/JS framework for building LLM apps — chains, agents, RAG (retrieval-augmented generation), tool use, memory management.</div>
+            <div class="tool-purpose-secondary">Best for: building AI apps that query your own documents (OT manuals, CVEs)</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-open">OPEN SOURCE</span></td>
+          <td class="tool-notes">Use to build RAG systems over your ICS documentation — ask Claude questions about your Rockwell/Siemens manuals. Steep learning curve.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://openai.com/api" target="_blank" class="tool-link">OpenAI API</a>
+            <div class="tool-domain">platform.openai.com</div>
+            <div class="tool-maker">OpenAI</div>
+          </td>
+          <td>
+            <div class="tool-purpose">API access to GPT-4o, o1, o3, DALL-E, Whisper, embeddings. Foundation for thousands of AI applications and integrations.</div>
+            <div class="tool-purpose-secondary">Best for: building AI features into existing apps, batch processing</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">Pay per token. Zero-data-retention option available. o1/o3 models excel at complex reasoning. Widely documented — easiest API to get started with.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://console.anthropic.com" target="_blank" class="tool-link">Anthropic API</a>
+            <div class="tool-domain">console.anthropic.com</div>
+            <div class="tool-maker">Anthropic</div>
+          </td>
+          <td>
+            <div class="tool-purpose">API access to Claude models (Haiku, Sonnet, Opus). Powers FULCRUM's AI Morning Briefing. Strong safety guarantees, 200K context.</div>
+            <div class="tool-purpose-secondary">Best for: production AI apps where safety and reliability matter</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes"><strong>Already integrated into FULCRUM.</strong> Haiku = ~$0.01/briefing. No training on API data. Best for sensitive security automation.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 5. AI RESEARCH & BENCHMARKING                         -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #f0b429;">
+      <div class="section-icon">📊</div>
+      <div class="section-name">AI Research & Benchmarking</div>
+      <div class="section-desc">Track the state of the art, compare models, read the latest research</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" class="tool-link">arXiv — CS.AI</a>
+            <div class="tool-domain">arxiv.org</div>
+            <div class="tool-maker">Cornell University</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Daily AI research preprints — where every major paper (GPT, Claude, Llama, AlphaFold) appears before peer review. The source of truth.</div>
+            <div class="tool-purpose-secondary">Best for: staying ahead of AI capabilities, reading original research</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Academic preprint server. Papers not peer-reviewed — quality varies. Use Semantic Scholar or Papers With Code to find the best ones.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://paperswithcode.com" target="_blank" class="tool-link">Papers With Code</a>
+            <div class="tool-domain">paperswithcode.com</div>
+            <div class="tool-maker">Meta AI Research</div>
+          </td>
+          <td>
+            <div class="tool-purpose">ML research papers + working code implementations + live benchmark leaderboards. Tracks state-of-the-art across every AI task.</div>
+            <div class="tool-purpose-secondary">Best for: finding implementations, tracking SOTA, reproducible research</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Best way to find working code for an AI technique. Security ML category has anomaly detection, intrusion detection papers with code.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://lmarena.ai" target="_blank" class="tool-link">LMArena (Chatbot Arena)</a>
+            <div class="tool-domain">lmarena.ai</div>
+            <div class="tool-maker">LMSYS / UC Berkeley</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Live human-voted LLM benchmarks — blind head-to-head comparisons across 100+ models. Elo ratings updated in real time.</div>
+            <div class="tool-purpose-secondary">Best for: knowing which model is actually best right now, not just on paper</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Most honest benchmark — based on real user preferences, not lab tests. Use before deciding which LLM to use for a new task.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://artificialanalysis.ai" target="_blank" class="tool-link">Artificial Analysis</a>
+            <div class="tool-domain">artificialanalysis.ai</div>
+            <div class="tool-maker">Artificial Analysis Ltd.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Independent benchmarks for speed, quality, and cost across all major LLMs and providers. Tracks tokens/second, latency, price per million.</div>
+            <div class="tool-purpose-secondary">Best for: choosing the right model for cost/performance tradeoffs in production</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Use when deciding which API to call for automation — shows if GPT-4o or Sonnet is faster/cheaper for your use case.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.alignmentforum.org" target="_blank" class="tool-link">AI Alignment Forum</a>
+            <div class="tool-domain">alignmentforum.org</div>
+            <div class="tool-maker">Centre for Human-Compatible AI</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Technical AI safety research — interpretability, RLHF, deceptive alignment, AI governance. Written by Anthropic, DeepMind, MIRI researchers.</div>
+            <div class="tool-purpose-secondary">Best for: understanding AI risks, safety-conscious AI deployment</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-specialist">◇ SPECIALIST</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Dense academic content. Essential reading if you're deploying AI in critical infrastructure (OT/ICS). Understanding risks = better decisions.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 6. AI IMAGE, AUDIO & CREATIVE TOOLS                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #a78bfa;">
+      <div class="section-icon">🎨</div>
+      <div class="section-name">AI Image, Audio & Creative Tools</div>
+      <div class="section-desc">Generate and edit images, voices, video — useful for training materials and presentations</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.midjourney.com" target="_blank" class="tool-link">Midjourney</a>
+            <div class="tool-domain">midjourney.com</div>
+            <div class="tool-maker">Midjourney Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Best-in-class AI image generation. Produces professional, artistic images from text prompts. Used for presentations, training materials, reports.</div>
+            <div class="tool-purpose-secondary">Best for: security awareness posters, LinkedIn graphics, training materials</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-paid">PAID</span></td>
+          <td class="tool-notes">$10–$30/month. Requires Discord. <strong>Avoid generating images of real people or sensitive facility imagery.</strong> Best quality for professional visuals.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://openai.com/dall-e-3" target="_blank" class="tool-link">DALL-E 3</a>
+            <div class="tool-domain">openai.com (via ChatGPT)</div>
+            <div class="tool-maker">OpenAI</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Text-to-image generation integrated directly into ChatGPT. No separate app — generate images mid-conversation. Good for quick visuals.</div>
+            <div class="tool-purpose-secondary">Best for: quick image generation without leaving ChatGPT workflow</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-optional">○ OPTIONAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Included in ChatGPT Plus. Less artistically strong than Midjourney but more accessible. Good for diagrams and concept visuals.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://elevenlabs.io" target="_blank" class="tool-link">ElevenLabs</a>
+            <div class="tool-domain">elevenlabs.io</div>
+            <div class="tool-maker">ElevenLabs Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Best AI text-to-speech and voice cloning. Ultra-realistic voices in 29 languages. Used for narrating training videos and e-learning content.</div>
+            <div class="tool-purpose-secondary">Best for: security awareness video narration, Cyber Drill AI audio content</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Free tier: 10k chars/month. <strong>Voice cloning can be misused</strong> — be aware of deepfake risks in security training (teach staff to verify voices). Perfect for Cyber Drill AI narration.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.runwayml.com" target="_blank" class="tool-link">Runway Gen-3</a>
+            <div class="tool-domain">runwayml.com</div>
+            <div class="tool-maker">Runway AI Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI video generation and editing — text-to-video, image-to-video, inpainting, background removal. Best for creating training video content.</div>
+            <div class="tool-purpose-secondary">Best for: security awareness video production, animated explainers</div>
+          </td>
+          <td><span class="badge trust-moderate">◉ MODERATE</span></td>
+          <td><span class="badge rec-optional">○ OPTIONAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Useful for Cyber Drill AI training video content. Free tier limited. <strong>AI video can create convincing deepfakes</strong> — include in security awareness training.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 7. AI PRODUCTIVITY & AUTOMATION                       -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #22c55e;">
+      <div class="section-icon">⚡</div>
+      <div class="section-name">AI Productivity & Automation</div>
+      <div class="section-desc">Automate workflows, summarise meetings, manage tasks with AI</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Notes</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.notion.so/product/ai" target="_blank" class="tool-link">Notion AI</a>
+            <div class="tool-domain">notion.so</div>
+            <div class="tool-maker">Notion Labs Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI writing, summarisation, and Q&A built into Notion workspaces. Ask questions across your entire knowledge base. Draft docs, meeting notes, reports.</div>
+            <div class="tool-purpose-secondary">Best for: security policy documentation, incident runbooks, team knowledge bases</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Good for teams already using Notion. AI add-on $8/user/month. <strong>Review data storage location</strong> for sensitive security documentation.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://zapier.com/ai" target="_blank" class="tool-link">Zapier AI</a>
+            <div class="tool-domain">zapier.com</div>
+            <div class="tool-maker">Zapier Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">No-code AI automation — connect 6,000+ apps with AI logic. Build workflows that trigger on CVE alerts, send briefings, update spreadsheets automatically.</div>
+            <div class="tool-purpose-secondary">Best for: automating FULCRUM alerts to Slack/email, linking tools together</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">Use to auto-send CVE alerts from CISA to your email. Build AI workflows without writing code. <strong>Review what data passes through Zapier</strong> for sensitive automations.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://otter.ai" target="_blank" class="tool-link">Otter.ai</a>
+            <div class="tool-domain">otter.ai</div>
+            <div class="tool-maker">AISense Inc.</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI meeting transcription, summarisation, and action item extraction. Integrates with Zoom, Teams, Google Meet. Auto-generates meeting summaries.</div>
+            <div class="tool-purpose-secondary">Best for: security steering committee meetings, vendor calls, incident debriefs</div>
+          </td>
+          <td><span class="badge trust-moderate">◉ MODERATE</span></td>
+          <td><span class="badge rec-optional">○ OPTIONAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Do not record classified or sensitive meetings</strong> — transcripts stored in cloud. Use only for general business meetings. Free tier: 300 min/month.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.make.com" target="_blank" class="tool-link">Make (Integromat)</a>
+            <div class="tool-domain">make.com</div>
+            <div class="tool-maker">Make (Celonis)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Visual automation platform — more powerful than Zapier for complex workflows. Supports AI modules, JSON, HTTP, and custom integrations.</div>
+            <div class="tool-purpose-secondary">Best for: complex multi-step security automations, data pipelines</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-useful">◆ USEFUL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes">More technical than Zapier but more capable. Free tier: 1,000 operations/month. Good for building threat-feed-to-ticket automations.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- 8. AI LEARNING & TRAINING PLATFORMS                   -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header" style="border-bottom-color: #f97316;">
+      <div class="section-icon">🎓</div>
+      <div class="section-name">AI Learning & Training Platforms</div>
+      <div class="section-desc">Learn AI/ML — from complete beginner to advanced researcher</div>
+    </div>
+    <table class="tool-table">
+      <thead><tr>
+        <th>Tool</th><th>Purpose</th><th>Trust</th><th>Rec. Tier</th><th>Cost</th><th>Best Starting Point</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.deeplearning.ai/courses/" target="_blank" class="tool-link">DeepLearning.AI</a>
+            <div class="tool-domain">deeplearning.ai</div>
+            <div class="tool-maker">Andrew Ng</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Andrew Ng's comprehensive AI/ML courses — from zero to advanced. ML Specialization, Deep Learning Specialization, short courses on LLMs, RAG, agents.</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-freemium">FREEMIUM</span></td>
+          <td class="tool-notes"><strong>Start here if new to ML.</strong> "AI for Everyone" course takes 6 hours and covers AI strategy — perfect for security management level.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.fast.ai" target="_blank" class="tool-link">fast.ai</a>
+            <div class="tool-domain">fast.ai</div>
+            <div class="tool-maker">fast.ai (Jeremy Howard)</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Practical deep learning for coders — top-down hands-on approach, no PhD required. Builds neural networks from day one. Best free deep learning course.</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes"><strong>Needs Python knowledge.</strong> Teaches by doing — build real models immediately. Used by professionals who want to apply AI, not just theorise.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://huggingface.co/learn" target="_blank" class="tool-link">Hugging Face Courses</a>
+            <div class="tool-domain">huggingface.co/learn</div>
+            <div class="tool-maker">Hugging Face</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Free hands-on courses: NLP, diffusion models, RL, LLMs, computer vision. All use real models — you run actual code from day one.</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-recommended">✦ RECOMMENDED</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Best for learning how to actually use models. NLP course is the best intro to transformers available for free.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://www.anthropic.com/courses" target="_blank" class="tool-link">Anthropic Courses</a>
+            <div class="tool-domain">anthropic.com/courses</div>
+            <div class="tool-maker">Anthropic</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Official prompt engineering and Claude API courses. Teaches effective Claude usage, tool use, system prompts — directly relevant to FULCRUM.</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-essential">★ ESSENTIAL</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes"><strong>Directly relevant to FULCRUM AI Briefing.</strong> Takes 2–3 hours. Learn to write better prompts = better briefings and automation.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://aivillage.org" target="_blank" class="tool-link">AI Village (DEF CON)</a>
+            <div class="tool-domain">aivillage.org</div>
+            <div class="tool-maker">AI Village</div>
+          </td>
+          <td>
+            <div class="tool-purpose">AI security research — adversarial ML, red teaming LLMs, prompt injection attacks, AI model vulnerabilities. Annual DEF CON AI challenge.</div>
+          </td>
+          <td><span class="badge trust-verified">✓ VERIFIED</span></td>
+          <td><span class="badge rec-specialist">◇ SPECIALIST</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes"><strong>Critical for security professionals using AI.</strong> Understand how AI tools can be attacked or misused — before deploying in your environment.</td>
+        </tr>
+        <tr>
+          <td class="tool-name-cell">
+            <a href="https://llmsecurity.net" target="_blank" class="tool-link">LLM Security</a>
+            <div class="tool-domain">llmsecurity.net</div>
+            <div class="tool-maker">Community</div>
+          </td>
+          <td>
+            <div class="tool-purpose">Curated database of LLM vulnerabilities — prompt injection, jailbreaks, model extraction, data poisoning. Essential for secure AI deployment.</div>
+          </td>
+          <td><span class="badge trust-high">◈ HIGH</span></td>
+          <td><span class="badge rec-specialist">◇ SPECIALIST</span></td>
+          <td><span class="badge cost-free">FREE</span></td>
+          <td class="tool-notes">Before deploying any LLM in your OT or business environment, understand these attack vectors. Include in Cyber Drill AI training content.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top:40px;padding:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:gap;">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);">FULCRUM AI Tools Directory · 50+ tools · Feb 2026</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);">⊕ FULCRUM — Cybersecurity Intelligence Platform</div>
+  </div>
+
+</div>
+</body>
+</html>
 
