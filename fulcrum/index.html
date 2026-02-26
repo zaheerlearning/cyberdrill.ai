@@ -1310,6 +1310,77 @@
   .reel-recommended{ border-left:3px solid #22c55e; }
   .reel-useful     { border-left:3px solid #4f8ef7; }
 
+
+  /* ── Halal Toggle ── */
+  .halal-toggle { width:42px;height:22px;background:var(--bg3);border:1px solid var(--border);border-radius:11px;position:relative;cursor:pointer;transition:background .2s; }
+  .halal-toggle.on { background:#22c55e;border-color:#22c55e; }
+  .halal-knob { width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:left .2s; }
+  .halal-toggle.on .halal-knob { left:22px; }
+
+  /* ── Signal Confidence Badges ── */
+  .sig-signal { font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;letter-spacing:0.5px;white-space:nowrap; }
+  .sig-signal-buy    { background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3); }
+  .sig-signal-watch  { background:rgba(240,180,41,0.12);color:#f0b429;border:1px solid rgba(240,180,41,0.25); }
+  .sig-signal-hold   { background:rgba(79,142,247,0.12);color:#4f8ef7;border:1px solid rgba(79,142,247,0.25); }
+  .sig-signal-avoid  { background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.25); }
+
+  /* ── Halal Status Badges ── */
+  .halal-yes   { font-family:var(--mono);font-size:10px;font-weight:700;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);padding:2px 7px;border-radius:3px; }
+  .halal-mixed { font-family:var(--mono);font-size:10px;font-weight:700;color:#f0b429;background:rgba(240,180,41,0.1);border:1px solid rgba(240,180,41,0.2);padding:2px 7px;border-radius:3px; }
+  .halal-no    { font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text3);background:var(--bg3);border:1px solid var(--border);padding:2px 7px;border-radius:3px; }
+
+  /* ── Top 100 table reason column ── */
+  #top100-table td { font-size:12px; }
+  .top100-reason { font-size:11px;color:var(--text3);max-width:180px;line-height:1.4; }
+  .top100-add-btn { background:var(--sig);color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10px;font-weight:700; }
+  .top100-add-btn:hover { filter:brightness(1.15); }
+  .top100-add-btn.added { background:var(--bg3);color:var(--text3);cursor:default; }
+
+  /* ── AI Stock Analyst ── */
+  .wl-ai-btn { background:rgba(79,142,247,0.1);border:1px solid rgba(79,142,247,0.25);color:#4f8ef7;cursor:pointer;padding:3px 8px;border-radius:4px;font-size:12px;transition:all .2s; }
+  .wl-ai-btn:hover { background:rgba(79,142,247,0.25); }
+  .stock-modal-box { background:var(--bg2);border:1px solid var(--border);border-radius:12px;width:min(720px,95vw);max-height:85vh;overflow-y:auto;padding:0; }
+  .stock-modal-header { padding:18px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;position:sticky;top:0;background:var(--bg2);z-index:1; }
+  .stock-modal-sym { font-family:var(--mono);font-size:22px;font-weight:700;color:var(--sig); }
+  .stock-modal-name { font-size:14px;color:var(--text2); }
+  .stock-modal-body { padding:20px 24px; }
+  .ai-analysis-output { font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;min-height:200px; }
+  .ai-analysis-output.loading { color:var(--text3);font-family:var(--mono);font-size:12px; }
+  .analysis-section { margin-bottom:16px;padding:14px 16px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--sig); }
+  .analysis-section-title { font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;margin-bottom:8px; }
+  .analysis-section-body { font-size:13px;color:var(--text);line-height:1.7; }
+  .analysis-signal-row { display:flex;gap:12px;flex-wrap:wrap;margin:16px 0; }
+  .analysis-signal-block { flex:1;min-width:120px;background:var(--bg3);border-radius:8px;padding:12px 14px;text-align:center; }
+  .analysis-signal-label { font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px;margin-bottom:6px; }
+  .analysis-signal-value { font-family:var(--mono);font-size:16px;font-weight:700; }
+  .analysis-tabs { display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px; }
+  .analysis-tab { padding:8px 18px;font-family:var(--mono);font-size:11px;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s; }
+  .analysis-tab.active { color:var(--sig);border-bottom-color:var(--sig); }
+  .analysis-tab-panel { display:none; }
+  .analysis-tab-panel.active { display:block; }
+  .analysis-watchlist-header { display:flex;gap:12px;align-items:center;margin-bottom:16px;padding:14px 16px;background:rgba(79,142,247,0.05);border:1px solid rgba(79,142,247,0.15);border-radius:8px; }
+  .analysis-watchlist-title { font-family:var(--mono);font-size:11px;color:var(--text2); }
+  .btn-analyse-all { background:linear-gradient(135deg,#4f8ef7,#7c3aed);color:#fff;border:none;padding:7px 16px;border-radius:6px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.5px; }
+  .btn-analyse-all:hover { filter:brightness(1.1); }
+  .stock-analysis-card { background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:12px;border-left:3px solid var(--border); }
+  .stock-analysis-card.signal-buy   { border-left-color:#22c55e; }
+  .stock-analysis-card.signal-hold  { border-left-color:#4f8ef7; }
+  .stock-analysis-card.signal-watch { border-left-color:#f0b429; }
+  .stock-analysis-card.signal-avoid { border-left-color:#ef4444; }
+  .sac-header { display:flex;align-items:center;gap:10px;margin-bottom:8px; }
+  .sac-sym { font-family:var(--mono);font-size:15px;font-weight:700;color:var(--sig); }
+  .sac-name { font-size:12px;color:var(--text2); }
+  .sac-body { font-size:12px;color:var(--text);line-height:1.6;white-space:pre-wrap; }
+  .sac-loading { font-family:var(--mono);font-size:11px;color:var(--text3);padding:8px 0; }
+  /* ── Halal badge in analysis modal ── */
+  .sma-halal-badge { display:inline-block;font-family:var(--mono);font-size:13px;font-weight:700;padding:5px 14px;border-radius:20px;letter-spacing:0.5px; }
+  .sma-halal-badge.halal-pill    { background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.4); }
+  .sma-halal-badge.halal-mixed   { background:rgba(240,180,41,0.15);color:#f0b429;border:1px solid rgba(240,180,41,0.4); }
+  .sma-halal-badge.halal-not     { background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.3); }
+  /* ── Row number in watchlist ── */
+  .wl-row-num { font-family:var(--mono);font-size:11px;color:var(--text3);font-weight:400;min-width:24px;text-align:right; }
+  /* ── Portfolio card number ── */
+  .sac-num { font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px;flex-shrink:0; }
 </style>
 </head>
 <body>
@@ -1330,7 +1401,7 @@
 
     <div class="a11y-controls">
       <!-- AI Briefing button -->
-      <button class="font-btn ai-btn" onclick="openAIBriefing()" title="AI Morning Briefing">⚡ BRIEFING</button>
+      <button class="font-btn ai-btn" onclick="openAIBriefing()" title="AI Morning Briefing">⚡ AI Morning Briefing</button>
 
       <!-- Keyword Alert button -->
       <button class="font-btn kw-btn" onclick="openKeywordPanel()" title="Keyword Alerts" id="kw-alert-btn">🔍 ALERTS</button>
@@ -3353,8 +3424,10 @@
       <input type="password" class="api-key-input" id="anthropic-api-key" placeholder="Enter Anthropic API key (stored locally, never transmitted)" />
       <button class="btn-primary" id="briefing-btn" onclick="generateBriefing()">GENERATE</button>
     </div>
-    <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:16px;">
-      Key saved to localStorage. ~$0.01 per briefing. <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);">Get key →</a>
+    <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:16px;line-height:1.8;">
+      🔒 Key stored in <strong style="color:var(--text2);">your browser only</strong> — never sent anywhere except Anthropic's API directly. ~$0.01 per briefing.
+      <span style="color:#f5a623;"> ⚠ Do not share your FULCRUM file with others if your key is saved.</span>
+      <a href="https://console.anthropic.com" target="_blank" style="color:var(--accent);display:block;margin-top:4px;">→ Get your Anthropic API key at console.anthropic.com</a>
     </div>
     
     <div class="briefing-output" id="briefing-output">Your daily intelligence briefing will appear here. FULCRUM will synthesize the latest threats, CVEs, and ICS advisories into a 3-minute actionable brief.
@@ -3398,7 +3471,11 @@ Click GENERATE to produce today's briefing.</div>
 // Clock
 function updateClock() {
   const now = new Date();
-  document.getElementById('clock').textContent = now.toUTCString().slice(17, 25) + ' UTC';
+  const localTime = now.toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  const utcH = String(now.getUTCHours()).padStart(2,'0');
+  const utcM = String(now.getUTCMinutes()).padStart(2,'0');
+  const utcS = String(now.getUTCSeconds()).padStart(2,'0');
+  document.getElementById('clock').textContent = localTime + '  ·  ' + utcH + ':' + utcM + ':' + utcS + ' UTC';
 }
 setInterval(updateClock, 1000);
 updateClock();
@@ -4228,6 +4305,7 @@ function stopSpeaking() {
   <div class="signal-subnav">
     <div class="signal-subtab active" onclick="showSignalTab('sig-watchlist')">⭐ Watchlist</div>
     <div class="signal-subtab" onclick="showSignalTab('sig-sectors')">🏭 Sectors</div>
+    <div class="signal-subtab" onclick="showSignalTab('sig-top100')">📈 Top 100</div>
     <div class="signal-subtab" onclick="showSignalTab('sig-cyber')">🛡 Cyber Stocks</div>
     <div class="signal-subtab" onclick="showSignalTab('sig-industrial')">⚙ Industrial</div>
     <div class="signal-subtab" onclick="showSignalTab('sig-ai-stocks')">🤖 AI & Tech</div>
@@ -4255,11 +4333,17 @@ function stopSpeaking() {
       <button class="btn-signal-add" onclick="addWatchlistItem()">+ ADD</button>
     </div>
     <div class="card" style="overflow:hidden;">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+        <button class="btn-primary" onclick="openStockAnalysis()" style="font-size:11px;padding:6px 14px;background:linear-gradient(135deg,#4f8ef7,#7c3aed);">
+          🤖 AI Stock Analyst
+        </button>
+      </div>
       <table class="wl-table" id="watchlist-table">
         <thead>
           <tr>
+            <th style="text-align:right;color:var(--text3);width:32px;">#</th>
             <th>TICKER</th><th>COMPANY</th><th>SECTOR</th>
-            <th>PRICE</th><th>CHANGE</th><th>% CHG</th><th>MKT CAP</th><th></th>
+            <th>PRICE</th><th>CHANGE</th><th>% CHG</th><th>MKT CAP</th><th>AI</th><th></th>
           </tr>
         </thead>
         <tbody id="watchlist-body">
@@ -4271,6 +4355,30 @@ function stopSpeaking() {
       ℹ Prices from Yahoo Finance public API (15min delay). Watchlist saved locally.
       <a href="https://finance.yahoo.com" target="_blank" style="color:var(--sig);margin-left:8px;">Open Yahoo Finance →</a>
     </div>
+  </div>
+
+  <!-- ===== TOP 100 STOCKS ===== -->
+  <div id="sig-top100" class="signal-subpanel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3);">100 largest US stocks by market cap</span>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto;">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text2);">🌙 HALAL ONLY</span>
+        <div class="halal-toggle" id="halal-toggle" onclick="toggleHalal()" title="Show only Sharia-compliant stocks">
+          <div class="halal-knob" id="halal-knob"></div>
+        </div>
+      </label>
+      <span id="halal-count" style="font-family:var(--mono);font-size:10px;color:#22c55e;display:none;"></span>
+    </div>
+    <div id="top100-info" style="display:none;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text2);line-height:1.6;">
+      🌙 <strong style="color:#22c55e;">Sharia-compliant stocks</strong> shown. Halal status based on business activity screening (no interest-based finance, alcohol, tobacco, weapons, gambling, pork). Always verify with a qualified Islamic finance advisor. Stocks marked ✓ HALAL pass general screening; ◑ MIXED have minor permissible revenue from haram activities (&lt;5%).
+    </div>
+    <table class="wl-table" id="top100-table">
+      <thead><tr>
+        <th>TICKER</th><th>COMPANY</th><th>SECTOR</th><th>PRICE</th><th>CHG</th><th>% CHG</th>
+        <th>MKT CAP</th><th>HALAL</th><th>SIGNAL</th><th>REASON</th><th>+ ADD</th>
+      </tr></thead>
+      <tbody id="top100-body"><tr><td colspan="11" style="text-align:center;padding:20px;font-family:var(--mono);color:var(--text3);">Click to load prices — requires Finnhub key</td></tr></tbody>
+    </table>
   </div>
 
   <!-- ===== SECTORS ===== -->
@@ -4433,6 +4541,7 @@ function showSignalTab(tabId) {
   if (tabId === 'sig-cyber' && !signalLoaded.has('cyber')) { signalLoaded.add('cyber'); loadIndustryStocks('cyber'); }
   if (tabId === 'sig-industrial' && !signalLoaded.has('industrial')) { signalLoaded.add('industrial'); loadIndustryStocks('industrial'); }
   if (tabId === 'sig-ai-stocks' && !signalLoaded.has('ai')) { signalLoaded.add('ai'); loadIndustryStocks('ai'); }
+  if (tabId === 'sig-top100' && !signalLoaded.has('top100')) { signalLoaded.add('top100'); loadTop100(); }
 }
 const signalLoaded = new Set();
 
@@ -4609,6 +4718,7 @@ async function renderWatchlist() {
     const q = qMap[item.sym] || {};
     const up = (q.regularMarketChange || 0) >= 0;
     return `<tr>
+      <td class="wl-row-num">${i + 1}</td>
       <td><span class="wl-sym">${item.sym}</span></td>
       <td><span class="wl-name">${item.name || q.shortName || item.sym}</span></td>
       <td><span class="wl-sector-tag">${item.sector}</span></td>
@@ -4616,6 +4726,7 @@ async function renderWatchlist() {
       <td class="${up?'sig-up':'sig-dn'}">${fmtChg(q.regularMarketChange)}</td>
       <td class="${up?'sig-up':'sig-dn'}">${fmtPct(q.regularMarketChangePercent)}</td>
       <td style="color:var(--text3)">${fmtMktCap(q.marketCap)}</td>
+      <td><button class="wl-ai-btn" onclick="analyseStock('${item.sym}','${item.name || item.sym}')" title="AI Analysis">🤖</button></td>
       <td><button class="wl-del" onclick="removeWatchlistItem(${i})" title="Remove">×</button></td>
     </tr>`;
   }).join('');
@@ -4741,6 +4852,7 @@ async function loadIndustryStocks(industry) {
     const q = qMap[s.sym] || {};
     const up = (q.regularMarketChange || 0) >= 0;
     return `<tr>
+      <td class="wl-row-num">${i + 1}</td>
       <td><span class="wl-sym">${s.sym}</span></td>
       <td><span class="wl-name">${s.name}</span></td>
       <td style="font-size:11px;color:var(--text3);">${s.desc}</td>
@@ -4753,6 +4865,423 @@ async function loadIndustryStocks(industry) {
 }
 
 // Signal case added directly to loadSectionContent above
+
+// ── TOP 100 STOCKS DATA ──────────────────────────────────────
+// halal: true=fully halal, 'mixed'=minor haram revenue <5%, false=not halal
+// signal: 'buy','hold','watch','avoid' | reason: short rationale
+const TOP100_STOCKS = [
+  // MEGA CAP TECH
+  {sym:'AAPL',  name:'Apple',               sector:'Technology',    halal:true,    signal:'hold',  reason:'Overvalued vs earnings growth; strong brand moat'},
+  {sym:'MSFT',  name:'Microsoft',            sector:'Technology',    halal:true,    signal:'buy',   reason:'Azure AI growth accelerating; Copilot monetising'},
+  {sym:'NVDA',  name:'NVIDIA',               sector:'Technology',    halal:true,    signal:'watch', reason:'Priced for perfection; AI demand real but volatile'},
+  {sym:'GOOGL', name:'Alphabet',             sector:'Technology',    halal:true,    signal:'buy',   reason:'Cheapest mega-cap; Gemini catching up to GPT'},
+  {sym:'AMZN',  name:'Amazon',               sector:'Consumer',      halal:true,    signal:'buy',   reason:'AWS reaccelerating; retail margins expanding'},
+  {sym:'META',  name:'Meta Platforms',       sector:'Technology',    halal:true,    signal:'buy',   reason:'Ad revenue strong; Llama open-source strategy pays off'},
+  {sym:'TSLA',  name:'Tesla',                sector:'Consumer',      halal:true,    signal:'watch', reason:'EV margin pressure; autonomous optionality priced in'},
+  {sym:'AVGO',  name:'Broadcom',             sector:'Technology',    halal:true,    signal:'hold',  reason:'AI networking chips in demand; integration risk'},
+  {sym:'ORCL',  name:'Oracle',               sector:'Technology',    halal:true,    signal:'buy',   reason:'Cloud database dominant; AI training contracts growing'},
+  {sym:'ADBE',  name:'Adobe',                sector:'Technology',    halal:true,    signal:'hold',  reason:'Firefly AI not yet monetised at scale; fair value'},
+  // SEMICONDUCTORS
+  {sym:'TSM',   name:'TSMC',                 sector:'Technology',    halal:true,    signal:'buy',   reason:'Only advanced node foundry; geopolitical risk priced in'},
+  {sym:'AMD',   name:'AMD',                  sector:'Technology',    halal:true,    signal:'watch', reason:'MI300 gaining vs NVIDIA; execution risk remains'},
+  {sym:'QCOM',  name:'Qualcomm',             sector:'Technology',    halal:true,    signal:'hold',  reason:'AI edge chips opportunity; smartphone cycle recovery'},
+  {sym:'INTC',  name:'Intel',                sector:'Technology',    halal:true,    signal:'avoid', reason:'Foundry losses continue; turnaround multi-year'},
+  {sym:'TXN',   name:'Texas Instruments',    sector:'Technology',    halal:true,    signal:'hold',  reason:'Industrial cycle recovery; consistent dividend grower'},
+  {sym:'ARM',   name:'ARM Holdings',         sector:'Technology',    halal:true,    signal:'hold',  reason:'IP licensing model solid; valuation stretched'},
+  {sym:'MU',    name:'Micron Technology',    sector:'Technology',    halal:true,    signal:'buy',   reason:'HBM memory for AI in severe shortage through 2026'},
+  {sym:'AMAT',  name:'Applied Materials',    sector:'Technology',    halal:true,    signal:'hold',  reason:'Chip equipment essential; China restrictions headwind'},
+  {sym:'LRCX',  name:'Lam Research',         sector:'Technology',    halal:true,    signal:'hold',  reason:'Etch/deposition tools critical; similar China exposure'},
+  {sym:'KLAC',  name:'KLA Corporation',      sector:'Technology',    halal:true,    signal:'hold',  reason:'Inspection tools monopoly position; steady compounder'},
+  // ENTERPRISE SOFTWARE
+  {sym:'CRM',   name:'Salesforce',           sector:'Technology',    halal:true,    signal:'hold',  reason:'Agentforce AI promising; growth decelerating'},
+  {sym:'NOW',   name:'ServiceNow',           sector:'Technology',    halal:true,    signal:'buy',   reason:'Enterprise AI workflows; government expansion strong'},
+  {sym:'INTU',  name:'Intuit',               sector:'Technology',    halal:mixed,   signal:'hold',  reason:'Mixed: minor lending products; core tax software solid'},
+  {sym:'PLTR',  name:'Palantir',             sector:'Technology',    halal:true,    signal:'watch', reason:'Government AI contracts growing; commercial adoption key'},
+  {sym:'SNOW',  name:'Snowflake',            sector:'Technology',    halal:true,    signal:'watch', reason:'Data cloud leader; AI Cortex differentiator; unprofitable'},
+  {sym:'WDAY',  name:'Workday',              sector:'Technology',    halal:true,    signal:'hold',  reason:'HR/finance SaaS dominant; AI features in roadmap'},
+  // CYBERSECURITY
+  {sym:'CRWD',  name:'CrowdStrike',          sector:'Cybersecurity', halal:true,    signal:'buy',   reason:'Falcon platform dominant; AI-native architecture wins'},
+  {sym:'PANW',  name:'Palo Alto Networks',   sector:'Cybersecurity', halal:true,    signal:'buy',   reason:'Platformisation strategy paying off; free cash flow strong'},
+  {sym:'ZS',    name:'Zscaler',              sector:'Cybersecurity', halal:true,    signal:'hold',  reason:'Zero trust leader; growth rate normalising post-COVID'},
+  {sym:'FTNT',  name:'Fortinet',             sector:'Cybersecurity', halal:true,    signal:'buy',   reason:'OT/ICS security leader; undervalued vs peers'},
+  {sym:'S',     name:'SentinelOne',          sector:'Cybersecurity', halal:true,    signal:'watch', reason:'AI-native endpoint; still unprofitable; high churn risk'},
+  {sym:'OKTA',  name:'Okta',                 sector:'Cybersecurity', halal:true,    signal:'hold',  reason:'IAM leader recovering from breach; margin improvement'},
+  // HEALTHCARE
+  {sym:'LLY',   name:'Eli Lilly',            sector:'Healthcare',    halal:true,    signal:'hold',  reason:'GLP-1 dominance; Mounjaro exceptional but priced in'},
+  {sym:'UNH',   name:'UnitedHealth Group',   sector:'Healthcare',    halal:false,   signal:'avoid', reason:'Not halal — insurance (risk-pooling with interest elements)'},
+  {sym:'JNJ',   name:'Johnson & Johnson',    sector:'Healthcare',    halal:true,    signal:'hold',  reason:'MedTech spinoff complete; pharma pipeline solid'},
+  {sym:'ABBV',  name:'AbbVie',               sector:'Healthcare',    halal:true,    signal:'hold',  reason:'Humira cliff passed; Skyrizi/Rinvoq growing strongly'},
+  {sym:'MRK',   name:'Merck',                sector:'Healthcare',    halal:true,    signal:'buy',   reason:'Keytruda cancer platform; Winrevair pulmonary opportunity'},
+  {sym:'TMO',   name:'Thermo Fisher',        sector:'Healthcare',    halal:true,    signal:'hold',  reason:'Lab equipment leader; biotech funding recovery key'},
+  {sym:'ABT',   name:'Abbott Laboratories',  sector:'Healthcare',    halal:true,    signal:'hold',  reason:'Diabetes devices (Libre) growing; diagnostics normalised'},
+  {sym:'DHR',   name:'Danaher',              sector:'Healthcare',    halal:true,    signal:'hold',  reason:'Life science tools recovery; bioprocessing key metric'},
+  {sym:'ISRG',  name:'Intuitive Surgical',   sector:'Healthcare',    halal:true,    signal:'buy',   reason:'Da Vinci monopoly; next-gen Ion platform expanding'},
+  {sym:'VRTX',  name:'Vertex Pharmaceuticals',sector:'Healthcare',   halal:true,    signal:'buy',   reason:'CF franchise unassailable; pain/kidney pipeline next'},
+  // FINANCIALS - most excluded for halal
+  {sym:'JPM',   name:'JPMorgan Chase',       sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — interest-based banking (riba)'},
+  {sym:'BAC',   name:'Bank of America',      sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — interest-based banking (riba)'},
+  {sym:'GS',    name:'Goldman Sachs',        sector:'Finance',       halal:false,   signal:'avoid', reason:'Not halal — interest-based banking and trading'},
+  {sym:'MS',    name:'Morgan Stanley',       sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — investment banking with interest exposure'},
+  {sym:'BRK.B', name:'Berkshire Hathaway',   sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — owns banks, insurance, and leveraged holdings'},
+  {sym:'V',     name:'Visa',                 sector:'Finance',       halal:'mixed', signal:'hold',  reason:'Mixed: payment processing halal; late fees/interest exposure'},
+  {sym:'MA',    name:'Mastercard',           sector:'Finance',       halal:'mixed', signal:'hold',  reason:'Mixed: network fees halal; some interest-adjacent revenue'},
+  {sym:'PYPL',  name:'PayPal',               sector:'Finance',       halal:'mixed', signal:'watch', reason:'Mixed: BNPL interest concern; core P2P transfers halal'},
+  {sym:'SPGI',  name:'S&P Global',           sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — debt ratings and bond market infrastructure'},
+  {sym:"MCO",   name:"Moody's",             sector:'Finance',       halal:false,   signal:'hold',  reason:'Not halal — credit ratings enable interest-based debt'},
+  // HALAL SHARIA-SCREENED ETFs / STOCKS
+  {sym:'SPUS',  name:'SP Funds S&P 500 Sharia ETF',sector:'Halal ETF',halal:true,  signal:'buy',   reason:'Pure halal S&P500 exposure; full Sharia screening process'},
+  {sym:'SPRE',  name:'SP Funds S&P Global REIT ETF',sector:'Halal ETF',halal:true, signal:'hold',  reason:'Halal real estate; REIT structures screened for interest'},
+  {sym:'HLAL',  name:'Wahed FTSE USA Shariah ETF',  sector:'Halal ETF',halal:true, signal:'buy',   reason:'Broad halal US equity; low expense ratio 0.50%'},
+  {sym:'UMMA',  name:'Saturna Sustainable ETF',     sector:'Halal ETF',halal:true, signal:'hold',  reason:'ESG + Sharia screened; smaller cap exposure'},
+  {sym:'AMANX', name:'Amana Income Fund',           sector:'Halal ETF',halal:true, signal:'hold',  reason:'Dividend-focused halal fund; conservative equity screen'},
+  // CONSUMER
+  {sym:'AMZN',  name:'Amazon (Consumer)',    sector:'Consumer',      halal:true,    signal:'buy',   reason:'E-commerce + AWS; logistics moat deepening'},
+  {sym:'HD',    name:'Home Depot',           sector:'Consumer',      halal:true,    signal:'hold',  reason:'Housing cycle sensitive; Pro segment resilient'},
+  {sym:'COST',  name:'Costco',               sector:'Consumer',      halal:true,    signal:'hold',  reason:'Membership model exceptional; premium valuation'},
+  {sym:'WMT',   name:'Walmart',              sector:'Consumer',      halal:true,    signal:'hold',  reason:'Advertising and fintech offsetting low retail margins'},
+  {sym:'MCD',   name:"McDonald's",          sector:'Consumer',      halal:'mixed', signal:'hold',  reason:'Mixed: pork products on menu but stock itself screenable'},
+  {sym:'SBUX',  name:'Starbucks',            sector:'Consumer',      halal:true,    signal:'watch', reason:'Traffic recovery in China uncertain; margin pressure'},
+  {sym:'NKE',   name:'Nike',                 sector:'Consumer',      halal:true,    signal:'watch', reason:'Brand erosion risk; China recovery key; new CEO'},
+  {sym:'LOW',   name:"Lowe's",              sector:'Consumer',      halal:true,    signal:'hold',  reason:'DIY housing demand; Pro customer growth strategy'},
+  {sym:'TJX',   name:'TJX Companies',        sector:'Consumer',      halal:true,    signal:'hold',  reason:'Off-price retail thriving; value consumer resilient'},
+  // INDUSTRIALS
+  {sym:'CAT',   name:'Caterpillar',          sector:'Industrials',   halal:true,    signal:'hold',  reason:'Infrastructure cycle peaking; mining demand resilient'},
+  {sym:'DE',    name:'John Deere',           sector:'Industrials',   halal:true,    signal:'hold',  reason:'Precision ag tech leader; farm income cyclical'},
+  {sym:'HON',   name:'Honeywell',            sector:'Industrials',   halal:true,    signal:'hold',  reason:'Automation and process controls; spinoffs creating value'},
+  {sym:'GE',    name:'GE Vernova',           sector:'Industrials',   halal:true,    signal:'buy',   reason:'Grid/energy infrastructure supercycle; backlog record'},
+  {sym:'ROK',   name:'Rockwell Automation',  sector:'Industrials',   halal:true,    signal:'hold',  reason:'OT automation leader; inventory digestion phase'},
+  {sym:'EMR',   name:'Emerson Electric',     sector:'Industrials',   halal:true,    signal:'hold',  reason:'Process automation; AspenTech integration ongoing'},
+  {sym:'RTX',   name:'Raytheon Technologies',sector:'Defense',       halal:false,   signal:'hold',  reason:'Not halal — primary weapons manufacturer (screened out)'},
+  {sym:'LMT',   name:'Lockheed Martin',      sector:'Defense',       halal:false,   signal:'hold',  reason:'Not halal — primary weapons manufacturer'},
+  {sym:'BA',    name:'Boeing',               sector:'Industrials',   halal:true,    signal:'avoid', reason:'Commercial aerospace halal; safety/quality crisis ongoing'},
+  {sym:'GD',    name:'General Dynamics',     sector:'Defense',       halal:false,   signal:'hold',  reason:'Not halal — defense systems'},
+  // ENERGY
+  {sym:'XOM',   name:'ExxonMobil',           sector:'Energy',        halal:true,    signal:'hold',  reason:'O&G halal; earnings tied to oil price; Pioneer integration'},
+  {sym:'CVX',   name:'Chevron',              sector:'Energy',        halal:true,    signal:'hold',  reason:'Hess acquisition adds Guyana growth; buyback commitment'},
+  {sym:'COP',   name:'ConocoPhillips',       sector:'Energy',        halal:true,    signal:'hold',  reason:'Low-cost E&P; Marathon Oil adds Permian scale'},
+  {sym:'SLB',   name:'SLB (Schlumberger)',   sector:'Energy',        halal:true,    signal:'hold',  reason:'Oilfield services leader; international mix helps'},
+  {sym:'OXY',   name:'Occidental Petroleum', sector:'Energy',        halal:true,    signal:'hold',  reason:'Buffett backed; DAC carbon capture optionality'},
+  // MATERIALS / METALS
+  {sym:'FCX',   name:'Freeport-McMoRan',     sector:'Metals',        halal:true,    signal:'buy',   reason:'Copper demand electrification tailwind; best operator'},
+  {sym:'SCCO',  name:'Southern Copper',      sector:'Metals',        halal:true,    signal:'buy',   reason:'Lowest cost copper producer; 5%+ dividend yield'},
+  {sym:'NUE',   name:'Nucor Steel',          sector:'Metals',        halal:true,    signal:'hold',  reason:'US steel leader; infrastructure spend supports demand'},
+  {sym:'APD',   name:'Air Products',         sector:'Materials',     halal:true,    signal:'hold',  reason:'Green hydrogen megaprojects; execution risk elevated'},
+  {sym:'LIN',   name:'Linde',                sector:'Materials',     halal:true,    signal:'hold',  reason:'Industrial gas oligopoly; steady compounder'},
+  // REAL ESTATE (REITs - mixed for halal due to debt structures)
+  {sym:'PLD',   name:'Prologis',             sector:'Real Estate',   halal:'mixed', signal:'hold',  reason:'Mixed: REIT debt structures; logistics demand strong'},
+  {sym:'AMT',   name:'American Tower',       sector:'Real Estate',   halal:'mixed', signal:'hold',  reason:'Mixed: cell tower REIT; leverage concern for halal'},
+  {sym:'EQIX',  name:'Equinix',              sector:'Real Estate',   halal:'mixed', signal:'hold',  reason:'Mixed: data center REIT; AI infrastructure demand high'},
+  // COMMUNICATIONS
+  {sym:'NFLX',  name:'Netflix',              sector:'Technology',    halal:'mixed', signal:'buy',   reason:'Mixed: some content concern; business model halal'},
+  {sym:'DIS',   name:'Walt Disney',          sector:'Entertainment', halal:'mixed', signal:'watch', reason:'Mixed: streaming profitable; parks strong; debt high'},
+  {sym:'SPOT',  name:'Spotify',              sector:'Entertainment', halal:true,    signal:'buy',   reason:'Audio platform monetising well; podcast + audiobooks'},
+  // UTILITIES  
+  {sym:'NEE',   name:'NextEra Energy',       sector:'Utilities',     halal:true,    signal:'hold',  reason:'Renewable energy leader; rate-sensitive; grid demand AI'},
+  {sym:'SO',    name:'Southern Company',     sector:'Utilities',     halal:true,    signal:'hold',  reason:'Nuclear + renewable mix; Vogtle online stabilising'},
+  {sym:'DUK',   name:'Duke Energy',          sector:'Utilities',     halal:true,    signal:'hold',  reason:'Regulated utility; steady; data center load growth'},
+  // TRANSPORT / LOGISTICS
+  {sym:'UPS',   name:'UPS',                  sector:'Industrials',   halal:true,    signal:'watch', reason:'Volume recovery slow; cost cuts progressing; yield play'},
+  {sym:'FDX',   name:'FedEx',                sector:'Industrials',   halal:true,    signal:'hold',  reason:'DRIVE cost programme; B2B mix improving'},
+  {sym:'UBER',  name:'Uber',                 sector:'Technology',    halal:true,    signal:'buy',   reason:'First profitable year; autonomous taxi partnership key'},
+];
+
+// Remove duplicate AMZN
+const seenSyms = new Set();
+const TOP100 = TOP100_STOCKS.filter(s => {
+  if (seenSyms.has(s.sym)) return false;
+  seenSyms.add(s.sym);
+  return true;
+});
+
+let halalFilterOn = false;
+
+function toggleHalal() {
+  halalFilterOn = !halalFilterOn;
+  const tog = document.getElementById('halal-toggle');
+  if (tog) tog.classList.toggle('on', halalFilterOn);
+  const info = document.getElementById('top100-info');
+  const cnt  = document.getElementById('halal-count');
+  if (info) info.style.display = halalFilterOn ? 'block' : 'none';
+  renderTop100Table();
+  const halalCount = TOP100.filter(s => s.halal === true || s.halal === 'mixed').length;
+  if (cnt) { cnt.textContent = halalCount + ' halal/mixed stocks'; cnt.style.display = halalFilterOn ? 'inline' : 'none'; }
+}
+
+async function loadTop100() {
+  const body = document.getElementById('top100-body');
+  if (!body) return;
+  body.innerHTML = '<tr><td colspan="11" style="text-align:center;padding:20px;font-family:var(--mono);color:var(--sig);">◌ Fetching prices...</td></tr>';
+  const syms = [...new Set(TOP100.map(s => s.sym))];
+  // Fetch in batches of 30 (Finnhub rate limit)
+  const allQuotes = {};
+  const batches = [];
+  for (let i = 0; i < syms.length; i += 25) batches.push(syms.slice(i, i+25));
+  for (const batch of batches) {
+    const results = await Promise.allSettled(batch.map(s => finnhubQuote(s)));
+    results.forEach((r, i) => {
+      if (r.status === 'fulfilled' && r.value) allQuotes[batch[i]] = r.value;
+    });
+    if (batches.length > 1) await new Promise(r => setTimeout(r, 1200)); // rate limit gap
+  }
+  window._top100Quotes = allQuotes;
+  renderTop100Table();
+}
+
+function renderTop100Table() {
+  const body = document.getElementById('top100-body');
+  if (!body) return;
+  const quotes = window._top100Quotes || {};
+  const wl = getWatchlist();
+  const wlSyms = new Set(wl.map(w => w.sym));
+  const filtered = halalFilterOn ? TOP100.filter(s => s.halal === true || s.halal === 'mixed') : TOP100;
+
+  if (!window._top100Quotes) {
+    loadTop100();
+    return;
+  }
+
+  body.innerHTML = filtered.map((s, i) => {
+    const q = quotes[s.sym] || {};
+    const price = q.regularMarketPrice;
+    const chg   = q.regularMarketChange;
+    const pct   = q.regularMarketChangePercent;
+    const up    = (chg || 0) >= 0;
+
+    // Halal badge
+    let halalBadge = '';
+    if (s.halal === true)      halalBadge = '<span class="halal-yes">✓ HALAL</span>';
+    else if (s.halal === 'mixed') halalBadge = '<span class="halal-mixed">◑ MIXED</span>';
+    else                       halalBadge = '<span class="halal-no">✗</span>';
+
+    // Signal badge
+    const sigClass = {buy:'sig-signal-buy', hold:'sig-signal-hold', watch:'sig-signal-watch', avoid:'sig-signal-avoid'}[s.signal] || 'sig-signal-hold';
+    const sigLabel = {buy:'▲ BUY', hold:'◆ HOLD', watch:'◉ WATCH', avoid:'▼ AVOID'}[s.signal] || s.signal.toUpperCase();
+    const signalBadge = `<span class="sig-signal ${sigClass}">${sigLabel}</span>`;
+
+    const inWL = wlSyms.has(s.sym);
+    const addBtn = inWL
+      ? `<button class="top100-add-btn added" disabled>✓ Added</button>`
+      : `<button class="top100-add-btn" onclick="addFromTop100('${s.sym}','${s.name.replace(/'/g,"\'")}','${s.sector}')">+ WL</button>`;
+
+    return `<tr>
+      <td class="wl-row-num">${i + 1}</td>
+      <td><span class="wl-sym">${s.sym}</span></td>
+      <td><span class="wl-name">${s.name}</span></td>
+      <td><span class="wl-sector-tag">${s.sector.toUpperCase()}</span></td>
+      <td class="wl-price">${price != null ? '$'+price.toFixed(2) : '—'}</td>
+      <td class="${up?'sig-up':'sig-dn'}">${chg != null ? (up?'+':'')+chg.toFixed(2) : '—'}</td>
+      <td class="${up?'sig-up':'sig-dn'}">${pct != null ? (up?'+':'')+pct.toFixed(2)+'%' : '—'}</td>
+      <td class="wl-price" style="font-weight:400;color:var(--text2);">${fmtMktCap(q.marketCap)}</td>
+      <td>${halalBadge}</td>
+      <td>${signalBadge}</td>
+      <td class="top100-reason">${s.reason}</td>
+      <td>${addBtn}</td>
+    </tr>`;
+  }).join('');
+}
+
+function addFromTop100(sym, name, sector) {
+  const wl = getWatchlist();
+  if (wl.some(w => w.sym === sym)) return;
+  wl.push({sym, name, sector: sector.toUpperCase()});
+  saveWatchlist(wl);
+  renderTop100Table(); // refresh add buttons
+  // Also refresh watchlist if it's visible
+  if (document.getElementById('sig-watchlist')?.classList.contains('active')) renderWatchlist();
+}
+
+// Signal case added directly to loadSectionContent above
+
+// ─── AI STOCK ANALYST ────────────────────────────────────────
+function openStockAnalysis() {
+  document.getElementById('sma-sym').textContent  = 'Watchlist';
+  document.getElementById('sma-name').textContent = 'Select a stock or run full watchlist analysis';
+  showAnalysisTab('tab-portfolio');
+  document.getElementById('modal-stock-analysis').style.display = 'flex';
+}
+
+function analyseStock(sym, name) {
+  const apiKey = localStorage.getItem('fulcrum_api_key');
+  if (!apiKey) {
+    alert('Please enter your Anthropic API key first — click ⚡ AI Morning Briefing in the header to save it.');
+    return;
+  }
+  document.getElementById('sma-sym').textContent  = sym;
+  document.getElementById('sma-name').textContent = name;
+  document.getElementById('sma-signal-row').style.display = 'none';
+  document.getElementById('sma-output').className = 'ai-analysis-output loading';
+  document.getElementById('sma-output').textContent = '◌ Analysing ' + sym + ' with Claude...';
+  showAnalysisTab('tab-single');
+  document.getElementById('modal-stock-analysis').style.display = 'flex';
+
+  // Get current price data for context
+  const quotes = window._top100Quotes || {};
+  const q = quotes[sym] || {};
+  const priceCtx = q.regularMarketPrice
+    ? `Current price: $${q.regularMarketPrice.toFixed(2)}, Change today: ${q.regularMarketChangePercent?.toFixed(2)}%`
+    : 'Price data not available.';
+
+  const prompt = `You are a professional financial analyst. Provide a concise but thorough analysis of ${sym} (${name}).
+
+Market data context: ${priceCtx}
+
+Please structure your response EXACTLY as follows (use these exact headers):
+
+SIGNAL: [BUY / HOLD / WATCH / AVOID]
+CONFIDENCE: [HIGH / MEDIUM / LOW]
+HALAL STATUS: [HALAL / MIXED / NOT HALAL] — brief reason
+TIME HORIZON: [SHORT / MEDIUM / LONG TERM]
+
+BUSINESS OVERVIEW
+2-3 sentences on what the company does and its market position.
+
+INVESTMENT THESIS
+3-4 sentences on the key reasons to be bullish or bearish right now.
+
+KEY RISKS
+3 bullet points of the main risks an investor should know.
+
+RECENT DEVELOPMENTS
+2-3 sentences on the most significant recent news or events affecting this stock.
+
+HALAL ANALYSIS
+Explain whether this stock is permissible for Muslim investors, covering: core business activity, revenue sources, debt levels (ideally debt/assets < 33%), and any screening concerns. Be specific.
+
+BOTTOM LINE
+One sentence summary with your overall view.`;
+
+  callClaudeAPI(prompt, apiKey).then(result => {
+    document.getElementById('sma-output').className = 'ai-analysis-output';
+    document.getElementById('sma-output').textContent = result;
+
+    // Parse signal line from response
+    const sigMatch = result.match(/SIGNAL:\s*(BUY|HOLD|WATCH|AVOID)/i);
+    const confMatch = result.match(/CONFIDENCE:\s*(HIGH|MEDIUM|LOW)/i);
+    const halalMatch = result.match(/HALAL STATUS:\s*(HALAL|MIXED|NOT HALAL)/i);
+    const horizMatch = result.match(/TIME HORIZON:\s*(SHORT|MEDIUM|LONG[^\\n]*)/i);
+
+    if (sigMatch) {
+      const sig = sigMatch[1].toUpperCase();
+      const sigColors = {BUY:'#22c55e', HOLD:'#4f8ef7', WATCH:'#f0b429', AVOID:'#ef4444'};
+      const el = document.getElementById('sma-signal-val');
+      el.textContent = sig; el.style.color = sigColors[sig] || '#fff';
+    }
+    if (confMatch) document.getElementById('sma-confidence-val').textContent = confMatch[1].toUpperCase();
+    if (halalMatch) {
+      const h = halalMatch[1].toUpperCase();
+      const el = document.getElementById('sma-halal-val');
+      const pillClass = h === 'HALAL' ? 'halal-pill' : h === 'MIXED' ? 'halal-mixed' : 'halal-not';
+      const pillIcon  = h === 'HALAL' ? '✓ HALAL' : h === 'MIXED' ? '◑ MIXED' : '✗ NOT HALAL';
+      el.innerHTML = `<span class="sma-halal-badge ${pillClass}">${pillIcon}</span>`;
+    }
+    if (horizMatch) document.getElementById('sma-horizon-val').textContent = horizMatch[1].split(' ')[0].toUpperCase();
+    document.getElementById('sma-signal-row').style.display = 'flex';
+  }).catch(err => {
+    document.getElementById('sma-output').textContent = '✗ Error: ' + err.message + '\n\nPlease check your API key is valid.';
+  });
+}
+
+async function analyseWatchlist() {
+  const apiKey = localStorage.getItem('fulcrum_api_key');
+  if (!apiKey) {
+    alert('Please enter your Anthropic API key first — click ⚡ AI Morning Briefing in the header.');
+    return;
+  }
+  const wl = getWatchlist();
+  if (!wl.length) { alert('Your watchlist is empty. Add some stocks first.'); return; }
+
+  const container = document.getElementById('portfolio-output');
+  container.innerHTML = '';
+
+  const quotes = window._top100Quotes || {};
+
+  // Analyse each stock with a small delay between calls
+  for (const item of wl) {
+    const card = document.createElement('div');
+    card.className = 'stock-analysis-card';
+    card.id = 'sac-' + item.sym;
+    card.innerHTML = `<div class="sac-header">
+      <span class="sac-num">#${i + 1}</span>
+      <span class="sac-sym">${item.sym}</span>
+      <span class="sac-name">${item.name || item.sym}</span>
+    </div>
+    <div class="sac-body sac-loading">◌ Analysing with Claude...</div>`;
+    container.appendChild(card);
+  }
+
+  for (let i = 0; i < wl.length; i++) {
+    const item = wl[i];
+    const q = quotes[item.sym] || {};
+    const priceCtx = q.regularMarketPrice
+      ? `$${q.regularMarketPrice.toFixed(2)}, ${q.regularMarketChangePercent?.toFixed(2)}% today`
+      : 'price unavailable';
+
+    const prompt = `Analyse ${item.sym} (${item.name || item.sym}) for a Muslim investor.
+Price context: ${priceCtx}
+
+Respond in exactly this format (be concise, 2-3 sentences per section):
+
+SIGNAL: [BUY/HOLD/WATCH/AVOID] | CONFIDENCE: [HIGH/MEDIUM/LOW] | HALAL: [HALAL/MIXED/NOT HALAL]
+
+THESIS: Your key investment reasoning in 2 sentences.
+
+RISKS: Top 2 risks in 1 sentence each.
+
+HALAL NOTE: Is this permissible for Muslim investors? Key consideration in 1-2 sentences.`;
+
+    try {
+      const result = await callClaudeAPI(prompt, apiKey);
+      const card = document.getElementById('sac-' + item.sym);
+      if (card) {
+        // Parse signal for card colour
+        const sigMatch = result.match(/SIGNAL:\s*(BUY|HOLD|WATCH|AVOID)/i);
+        if (sigMatch) card.className = 'stock-analysis-card signal-' + sigMatch[1].toLowerCase();
+        card.querySelector('.sac-body').className = 'sac-body';
+        card.querySelector('.sac-body').textContent = result;
+      }
+    } catch(err) {
+      const card = document.getElementById('sac-' + item.sym);
+      if (card) card.querySelector('.sac-body').textContent = '✗ Error: ' + err.message;
+    }
+
+    // Small delay to respect rate limits
+    if (i < wl.length - 1) await new Promise(r => setTimeout(r, 800));
+  }
+}
+
+// Generic Claude API call (reused by briefing + stock analyst)
+async function callClaudeAPI(prompt, apiKey) {
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 800,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'API error ' + response.status);
+  }
+  const data = await response.json();
+  return data.content?.[0]?.text || 'No response received.';
+}
+
+function showAnalysisTab(tabId) {
+  document.querySelectorAll('.analysis-tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.analysis-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(tabId);
+  if (panel) panel.classList.add('active');
+  document.querySelectorAll('.analysis-tab').forEach(t => {
+    if (t.getAttribute('onclick')?.includes(tabId)) t.classList.add('active');
+  });
+}
 </script>
 
 
@@ -5439,6 +5968,72 @@ async function loadIndustryStocks(industry) {
   </div>
 
 </div><!-- end section-reel -->
+
+
+<!-- AI STOCK ANALYSIS MODAL -->
+<div class="modal-overlay" id="modal-stock-analysis" onclick="if(event.target===this)closeModal('modal-stock-analysis')">
+  <div class="stock-modal-box">
+    <div class="stock-modal-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span id="sma-sym" class="stock-modal-sym">AAPL</span>
+          <span id="sma-name" class="stock-modal-name">Apple Inc.</span>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:4px;">🤖 AI Stock Analyst · Powered by Claude</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-stock-analysis')" style="margin-left:auto;">✕</button>
+    </div>
+    <div class="stock-modal-body">
+      <div class="analysis-tabs">
+        <div class="analysis-tab active" onclick="showAnalysisTab('tab-single')">📊 Single Stock</div>
+        <div class="analysis-tab" onclick="showAnalysisTab('tab-portfolio')">📈 Full Watchlist</div>
+      </div>
+
+      <!-- Single stock analysis -->
+      <div id="tab-single" class="analysis-tab-panel active">
+        <div id="sma-signal-row" class="analysis-signal-row" style="display:none;">
+          <!-- SIGNAL -->
+          <div class="analysis-signal-block">
+            <div class="analysis-signal-label">📊 SIGNAL</div>
+            <div class="analysis-signal-value" id="sma-signal-val">—</div>
+          </div>
+          <!-- CONFIDENCE — clearly separated with its own icon -->
+          <div class="analysis-signal-block">
+            <div class="analysis-signal-label">🎯 CONFIDENCE</div>
+            <div class="analysis-signal-value" id="sma-confidence-val">—</div>
+          </div>
+          <!-- HALAL — visually isolated as a green badge, NOT inline text -->
+          <div class="analysis-signal-block" style="border:2px solid rgba(34,197,94,0.3);background:rgba(34,197,94,0.05);">
+            <div class="analysis-signal-label" style="color:#22c55e;">🌙 HALAL STATUS</div>
+            <div id="sma-halal-val" style="margin-top:6px;">
+              <span class="sma-halal-badge">—</span>
+            </div>
+          </div>
+          <!-- TIME HORIZON -->
+          <div class="analysis-signal-block">
+            <div class="analysis-signal-label">⏱ HORIZON</div>
+            <div class="analysis-signal-value" id="sma-horizon-val">—</div>
+          </div>
+        </div>
+        <div id="sma-output" class="ai-analysis-output loading">Loading analysis...</div>
+      </div>
+
+      <!-- Full watchlist analysis -->
+      <div id="tab-portfolio" class="analysis-tab-panel">
+        <div class="analysis-watchlist-header">
+          <div>
+            <div class="analysis-watchlist-title">Analyse your entire watchlist at once</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:2px;">Claude will review each stock and give you a consolidated view. ~$0.03–0.08 per full analysis.</div>
+          </div>
+          <button class="btn-analyse-all" onclick="analyseWatchlist()">▶ Analyse All</button>
+        </div>
+        <div id="portfolio-output">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--text3);text-align:center;padding:30px;">Click "Analyse All" to get AI insights on every stock in your watchlist</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 </body>
