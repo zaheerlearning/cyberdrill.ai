@@ -1,1 +1,1646 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Drill AI — Career Hub</title>
+<meta name="description" content="Complete IT & Cybersecurity career guide. Salaries, skills, certifications, roadmaps and live job search for every major IT role.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090e;
+  --surface: #0d1117;
+  --surface2: #131922;
+  --surface3: #192030;
+  --border: #1c2a3d;
+  --border2: #253548;
+  --text: #dde6f5;
+  --text2: #7a96bb;
+  --text3: #3d5470;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Sora', sans-serif;
+
+  /* Category colors */
+  --cyber:   #00e5ff;
+  --ai:      #a855f7;
+  --cloud:   #22d3ee;
+  --network: #34d399;
+  --dev:     #f59e0b;
+  --data:    #fb7185;
+  --it:      #94a3b8;
+
+  /* Level colors */
+  --entry:  #34d399;
+  --mid:    #60a5fa;
+  --senior: #f59e0b;
+  --lead:   #f87171;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* scanline texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,229,255,0.012) 2px,
+    rgba(0,229,255,0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,128,255,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── HEADER ─── */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(7,9,14,0.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  gap: 24px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.logo-box {
+  width: 30px; height: 30px;
+  background: linear-gradient(135deg, #0080ff, #00e5ff);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+.logo-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 0.5px;
+}
+.logo-name span { color: #00e5ff; }
+.header-divider { width: 1px; height: 24px; background: var(--border2); }
+.header-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.header-stat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.header-stat span { color: var(--cyber); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 52px 24px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 32px;
+}
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--cyber);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 2px;
+  background: var(--cyber);
+  border-radius: 1px;
+}
+.hero-title {
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+.hero-title em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--cyber), #0080ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 560px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.hero-stat-box {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 18px 22px;
+  text-align: center;
+  min-width: 110px;
+}
+.hero-stat-num {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+.hero-stat-lbl { font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ─── SEARCH + FILTER BAR ─── */
+.filter-bar {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 240px;
+  max-width: 360px;
+}
+.search-icon {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: var(--text3);
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 11px 14px 11px 40px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--cyber); }
+.search-input::placeholder { color: var(--text3); }
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill {
+  padding: 8px 14px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--text2);
+  transition: all .15s;
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.pill:hover { border-color: var(--text2); color: var(--text); }
+.pill.active { color: #fff; }
+.pill[data-cat="all"].active  { background: rgba(255,255,255,0.08); border-color: var(--text2); }
+.pill[data-cat="cyber"].active  { background: rgba(0,229,255,0.1);  border-color: var(--cyber);  color: var(--cyber); }
+.pill[data-cat="ai"].active     { background: rgba(168,85,247,0.1); border-color: var(--ai);     color: var(--ai); }
+.pill[data-cat="cloud"].active  { background: rgba(34,211,238,0.1); border-color: var(--cloud);  color: var(--cloud); }
+.pill[data-cat="network"].active{ background: rgba(52,211,153,0.1); border-color: var(--network);color: var(--network); }
+.pill[data-cat="dev"].active    { background: rgba(245,158,11,0.1); border-color: var(--dev);    color: var(--dev); }
+.pill[data-cat="data"].active   { background: rgba(251,113,133,0.1);border-color: var(--data);   color: var(--data); }
+.pill[data-cat="it"].active     { background: rgba(148,163,184,0.1);border-color: var(--it);     color: var(--it); }
+.results-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: auto;
+  padding: 8px 0;
+}
+
+/* ─── MAIN CONTENT ─── */
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* ─── CATEGORY GROUP ─── */
+.cat-group { margin-bottom: 48px; }
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.cat-icon { font-size: 22px; }
+.cat-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+.cat-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-left: 2px;
+}
+.cat-desc { font-size: 13px; color: var(--text3); margin-left: auto; }
+
+/* ─── JOBS GRID ─── */
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 14px;
+}
+
+/* ─── JOB CARD ─── */
+.job-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform .2s, border-color .2s, box-shadow .2s;
+  cursor: pointer;
+}
+.job-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+}
+.job-card-top {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.job-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.level-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.lv-entry  { background: rgba(52,211,153,0.1);  color: var(--entry);  border: 1px solid rgba(52,211,153,0.2); }
+.lv-mid    { background: rgba(96,165,250,0.1);   color: var(--mid);    border: 1px solid rgba(96,165,250,0.2); }
+.lv-senior { background: rgba(245,158,11,0.1);   color: var(--senior); border: 1px solid rgba(245,158,11,0.2); }
+.lv-lead   { background: rgba(248,113,113,0.1);  color: var(--lead);   border: 1px solid rgba(248,113,113,0.2); }
+.demand-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  margin-left: auto;
+}
+.dem-hot  { background: rgba(248,113,113,0.1); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+.dem-high { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+.dem-good { background: rgba(96,165,250,0.1);  color: #60a5fa; border: 1px solid rgba(96,165,250,0.2); }
+.job-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+.job-salary {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.job-location { font-size: 11px; color: var(--text3); }
+
+/* Expandable body */
+.job-card-body {
+  display: none;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  animation: fadeDown .2s ease;
+}
+@keyframes fadeDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+.job-card.expanded .job-card-body { display: block; }
+.job-card.expanded .job-card-top { border-bottom-color: var(--border2); }
+
+.body-section { margin-bottom: 14px; }
+.body-section:last-child { margin-bottom: 0; }
+.body-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text3);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.skills-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.skill-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+}
+.certs-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.cert-chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #fff;
+}
+
+/* roadmap steps */
+.roadmap-steps { display: flex; flex-direction: column; gap: 0; }
+.rm-step {
+  display: flex;
+  gap: 12px;
+  position: relative;
+}
+.rm-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 24px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--border2);
+}
+.rm-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 1px;
+  border: 2px solid;
+}
+.rm-step:nth-child(1) .rm-dot { border-color: var(--entry); color: var(--entry); background: rgba(52,211,153,0.1); }
+.rm-step:nth-child(2) .rm-dot { border-color: var(--mid);   color: var(--mid);   background: rgba(96,165,250,0.1); }
+.rm-step:nth-child(3) .rm-dot { border-color: var(--senior);color: var(--senior);background: rgba(245,158,11,0.1); }
+.rm-step:nth-child(4) .rm-dot { border-color: var(--lead);  color: var(--lead);  background: rgba(248,113,113,0.1); }
+.rm-content { padding-bottom: 12px; flex: 1; }
+.rm-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.rm-time  { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+.rm-desc  { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+/* job links */
+.job-card-links {
+  padding: 12px 16px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity .15s, transform .15s;
+  font-family: var(--sans);
+  white-space: nowrap;
+}
+.search-btn:hover { opacity: .85; transform: translateY(-1px); }
+.btn-li       { background: #0a66c2; color: #fff; }
+.btn-indeed   { background: #2164f3; color: #fff; }
+.btn-dice     { background: #eb1c26; color: #fff; }
+.btn-glassdoor{ background: #0caa41; color: #fff; }
+.btn-cyber    { background: rgba(0,229,255,0.12); color: var(--cyber); border: 1px solid rgba(0,229,255,0.2); }
+.btn-ai       { background: rgba(168,85,247,0.12);color: var(--ai);   border: 1px solid rgba(168,85,247,0.2); }
+.expand-btn {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text3);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--sans);
+}
+.expand-btn:hover { border-color: var(--text2); color: var(--text); }
+.job-card.expanded .expand-btn { border-color: var(--cyber); color: var(--cyber); }
+
+/* no results */
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text3);
+  font-size: 15px;
+  display: none;
+}
+.no-results.visible { display: block; }
+
+/* ─── FOOTER ─── */
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text3);
+}
+.footer a { color: var(--cyber); text-decoration: none; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 720px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-stats { display: none; }
+  .hero-title { font-size: 28px; }
+  .jobs-grid { grid-template-columns: 1fr; }
+  .cat-desc { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-box">🛡</div>
+      <div class="logo-name"><span>CYBER DRILL</span> AI</div>
+    </a>
+    <div class="header-divider"></div>
+    <div class="header-title">Career Hub</div>
+    <div class="header-right">
+      <div class="header-stat"><span id="visibleCount">42</span> Roles</div>
+      <div class="header-stat">7 Categories</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Career Intelligence</div>
+    <h1 class="hero-title">Find Your Next<br><em>IT Career Move</em></h1>
+    <p class="hero-sub">Salaries, skills, certifications and step-by-step roadmaps for every major IT role — from help desk to CISO. Click any role to see the full career path and live job search links.</p>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat-box">
+      <div class="hero-stat-num" style="color:var(--cyber)">42</div>
+      <div class="hero-stat-lbl">Roles</div>
+    </div>
+    <div class="hero-stat-box">
+      <div class="hero-stat-num" style="color:var(--ai)">7</div>
+      <div class="hero-stat-lbl">Categories</div>
+    </div>
+    <div class="hero-stat-box">
+      <div class="hero-stat-num" style="color:var(--entry)">$45K</div>
+      <div class="hero-stat-lbl">Starting</div>
+    </div>
+    <div class="hero-stat-box">
+      <div class="hero-stat-num" style="color:var(--senior)">$280K</div>
+      <div class="hero-stat-lbl">Top End</div>
+    </div>
+  </div>
+</section>
+
+<div class="filter-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search roles, skills, certs..." oninput="filterJobs()">
+  </div>
+  <div class="filter-pills">
+    <button class="pill active" data-cat="all"     onclick="setFilter('all')">All Roles</button>
+    <button class="pill" data-cat="cyber"   onclick="setFilter('cyber')">🛡 Cybersecurity</button>
+    <button class="pill" data-cat="ai"      onclick="setFilter('ai')">🤖 AI &amp; ML</button>
+    <button class="pill" data-cat="cloud"   onclick="setFilter('cloud')">☁️ Cloud &amp; DevOps</button>
+    <button class="pill" data-cat="network" onclick="setFilter('network')">🌐 Networking</button>
+    <button class="pill" data-cat="dev"     onclick="setFilter('dev')">💻 Development</button>
+    <button class="pill" data-cat="data"    onclick="setFilter('data')">📊 Data</button>
+    <button class="pill" data-cat="it"      onclick="setFilter('it')">🖥 IT &amp; Systems</button>
+  </div>
+  <div class="results-count" id="resultsCount">Showing 42 of 42 roles</div>
+</div>
+
+<div class="content" id="mainContent"></div>
+<div class="no-results" id="noResults">No roles match your search. Try different keywords.</div>
+
+<footer class="footer">
+  Powered by <a href="#">Cyber Drill AI</a> · Salary ranges reflect U.S. market data (2024–2025) · Always verify current rates on LinkedIn Salary, Glassdoor, and Levels.fyi
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+//  JOB DATA
+// ══════════════════════════════════════════════
+
+const JOBS = [
+
+// ─────────────────────────────────────
+//  CYBERSECURITY
+// ─────────────────────────────────────
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'SOC Analyst (Level 1)',
+  level: 'entry', levelLabel: 'Entry Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$55K – $80K',
+  location: 'Remote-friendly · Nationwide',
+  skills: ['SIEM (Splunk/Elastic)', 'Alert Triage', 'Incident Response Basics', 'Network Protocols', 'Log Analysis', 'Ticketing Systems'],
+  certs: [
+    { name: 'CompTIA Security+', color: '#e63946' },
+    { name: 'CompTIA CySA+', color: '#2a9d8f' },
+    { name: 'ISC2 CC', color: '#264653' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT Fundamentals', time: '0–6 months', desc: 'A+, Network+, basic scripting, understand OSI model and common protocols.' },
+    { step: '2', title: 'SOC Level 1', time: '6–18 months', desc: 'Security+, learn SIEM tools, triage alerts, write incident reports, develop playbook habits.' },
+    { step: '3', title: 'SOC Level 2', time: '18–36 months', desc: 'CySA+ or BTL1, begin threat hunting, handle complex incidents, mentor L1 analysts.' },
+    { step: '4', title: 'Specialist / Engineer', time: '3–5 years', desc: 'GCIH/GCIA, specialize in IR, threat hunting, detection engineering, or cloud security.' }
+  ],
+  li: 'SOC+Analyst',
+  indeed: 'SOC+Analyst+Level+1',
+  dice: 'SOC Analyst',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'Incident Response Analyst',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$85K – $130K',
+  location: 'Hybrid / Remote · Nationwide',
+  skills: ['DFIR', 'Memory Forensics', 'Log Analysis', 'Malware Triage', 'EDR Platforms', 'Chain of Custody', 'Volatility'],
+  certs: [
+    { name: 'GCIH', color: '#3a86ff' },
+    { name: 'BTL1', color: '#8338ec' },
+    { name: 'SANS FOR508', color: '#ff006e' }
+  ],
+  roadmap: [
+    { step: '1', title: 'SOC Foundation', time: '0–2 years', desc: 'Build SOC experience, learn IR lifecycle (NIST 800-61), practice log and alert triage.' },
+    { step: '2', title: 'IR Analyst', time: '2–4 years', desc: 'GCIH certification, memory forensics with Volatility, malware triage, IR playbook development.' },
+    { step: '3', title: 'Senior IR / Lead', time: '4–6 years', desc: 'Lead incident investigations, coordinate cross-functional response, build IR capability programs.' },
+    { step: '4', title: 'IR Manager / Consultant', time: '6+ years', desc: 'Manage IR teams, develop enterprise IR programs, advise clients, pursue CISSP.' }
+  ],
+  li: 'Incident+Response+Analyst',
+  indeed: 'Incident+Response+Analyst',
+  dice: 'Incident Response',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'Penetration Tester',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$90K – $150K',
+  location: 'Remote-friendly · Nationwide',
+  skills: ['Kali Linux', 'Metasploit', 'Burp Suite', 'Network Scanning', 'OWASP Top 10', 'Active Directory Attacks', 'Report Writing'],
+  certs: [
+    { name: 'OSCP', color: '#e63946' },
+    { name: 'CEH', color: '#457b9d' },
+    { name: 'GPEN', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Hacking Fundamentals', time: '0–1 year', desc: 'TryHackMe, HackTheBox, learn networking, web apps, basic scripting, Kali Linux tools.' },
+    { step: '2', title: 'Junior Pentester', time: '1–3 years', desc: 'CEH or eJPT, assist senior testers, conduct supervised assessments, learn methodology.' },
+    { step: '3', title: 'Penetration Tester', time: '3–5 years', desc: 'OSCP certification, lead full-scope assessments, specialize in web, network, or AD.' },
+    { step: '4', title: 'Senior / Red Team Lead', time: '5+ years', desc: 'CRTO or OSED, lead red team operations, adversary simulation, build tooling.' }
+  ],
+  li: 'Penetration+Tester',
+  indeed: 'Penetration+Tester',
+  dice: 'Penetration Tester',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'Threat Hunter',
+  level: 'senior', levelLabel: 'Senior',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$110K – $160K',
+  location: 'Remote · Nationwide',
+  skills: ['Hypothesis-Driven Hunting', 'MITRE ATT&CK', 'KQL / SPL', 'Behavioral Analytics', 'Sysmon', 'UEBA', 'Python Scripting'],
+  certs: [
+    { name: 'GCIA', color: '#3a86ff' },
+    { name: 'GCIH', color: '#8338ec' },
+    { name: 'SANS FOR508', color: '#ff006e' }
+  ],
+  roadmap: [
+    { step: '1', title: 'SOC Analyst', time: '0–3 years', desc: 'Build SIEM experience, deep log analysis skills, understand normal vs anomalous behavior.' },
+    { step: '2', title: 'Detection Engineer', time: '3–5 years', desc: 'Write advanced SIEM rules, understand ATT&CK techniques, start structured hunting exercises.' },
+    { step: '3', title: 'Threat Hunter', time: '5–7 years', desc: 'GCIA or FOR508, lead hypothesis-driven hunts, build hunting program from scratch.' },
+    { step: '4', title: 'Principal Hunter / Manager', time: '7+ years', desc: 'Develop enterprise hunting programs, lead teams, publish research, speak at conferences.' }
+  ],
+  li: 'Threat+Hunter',
+  indeed: 'Threat+Hunter',
+  dice: 'Threat Hunter',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'Security Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$95K – $155K',
+  location: 'Hybrid / Remote · Nationwide',
+  skills: ['Python / Bash Scripting', 'SIEM Engineering', 'Firewall / WAF Config', 'Zero Trust Architecture', 'API Security', 'CI/CD Security'],
+  certs: [
+    { name: 'CompTIA Security+', color: '#e63946' },
+    { name: 'SSCP', color: '#2a9d8f' },
+    { name: 'CISSP (Sr)', color: '#457b9d' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT / Dev Background', time: '0–2 years', desc: 'Build software development or sysadmin foundation, learn scripting and networking.' },
+    { step: '2', title: 'Security Engineer I', time: '2–4 years', desc: 'Security+, build security tooling, integrate security into CI/CD pipelines, SIEM management.' },
+    { step: '3', title: 'Security Engineer II', time: '4–7 years', desc: 'Lead architecture reviews, design security controls, mentor junior engineers.' },
+    { step: '4', title: 'Principal / Staff Engineer', time: '7+ years', desc: 'Define security standards, drive zero-trust adoption, contribute to company-wide security strategy.' }
+  ],
+  li: 'Security+Engineer',
+  indeed: 'Security+Engineer',
+  dice: 'Security Engineer',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'Malware Analyst',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$85K – $135K',
+  location: 'Remote-friendly · Nationwide',
+  skills: ['Static Analysis', 'Dynamic Analysis', 'Ghidra / IDA Pro', 'x64dbg', 'YARA Rules', 'Sandbox Analysis', 'Assembly Basics'],
+  certs: [
+    { name: 'GREM', color: '#e63946' },
+    { name: 'SANS FOR610', color: '#3a86ff' },
+    { name: 'CEH', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Security Foundations', time: '0–2 years', desc: 'SOC experience, learn networking, Windows internals, basic scripting.' },
+    { step: '2', title: 'Junior Malware Analyst', time: '2–4 years', desc: 'FOR610 or equivalent, static/dynamic analysis with any.run, Ghidra basics, write YARA rules.' },
+    { step: '3', title: 'Malware Analyst', time: '4–6 years', desc: 'GREM certification, reverse-engineer complex samples, debug with x64dbg, author technical reports.' },
+    { step: '4', title: 'Senior / Researcher', time: '6+ years', desc: 'Research novel malware families, publish threat intelligence, develop automated analysis pipelines.' }
+  ],
+  li: 'Malware+Analyst',
+  indeed: 'Malware+Analyst',
+  dice: 'Malware Analyst',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'GRC Analyst',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$75K – $120K',
+  location: 'Hybrid · Nationwide',
+  skills: ['NIST CSF', 'ISO 27001', 'Risk Assessment', 'Policy Writing', 'Audit Management', 'HIPAA / PCI DSS', 'GDPR Basics'],
+  certs: [
+    { name: 'CISM', color: '#e63946' },
+    { name: 'CRISC', color: '#3a86ff' },
+    { name: 'CISSP', color: '#8338ec' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT / Compliance Background', time: '0–2 years', desc: 'Learn security frameworks (NIST, ISO), understand audit processes, regulatory basics.' },
+    { step: '2', title: 'GRC Analyst', time: '2–4 years', desc: 'CISM or CRISC, conduct risk assessments, write policies, support compliance audits.' },
+    { step: '3', title: 'Senior GRC / Manager', time: '4–7 years', desc: 'Lead compliance programs, manage vendor risk, present to leadership, build GRC tools.' },
+    { step: '4', title: 'CISO / Director', time: '7+ years', desc: 'CISSP, lead enterprise security governance, board-level risk communication, M&A security diligence.' }
+  ],
+  li: 'GRC+Analyst',
+  indeed: 'GRC+Analyst',
+  dice: 'GRC Analyst',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cyber', icon: '🛡️',
+  title: 'CISO',
+  level: 'lead', levelLabel: 'Executive',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$180K – $350K+',
+  location: 'On-site / Hybrid · Major Markets',
+  skills: ['Security Strategy', 'Board Communication', 'Enterprise Risk Management', 'Budget Management', 'Team Leadership', 'Crisis Management', 'Vendor Management'],
+  certs: [
+    { name: 'CISSP', color: '#e63946' },
+    { name: 'CISM', color: '#3a86ff' },
+    { name: 'CISA', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Technical Foundation', time: '0–7 years', desc: 'Build deep technical expertise in security engineering, IR, or architecture.' },
+    { step: '2', title: 'Security Manager / Director', time: '7–12 years', desc: 'Lead security teams, manage budgets, develop programs, earn CISSP and CISM.' },
+    { step: '3', title: 'VP Security / Deputy CISO', time: '12–15 years', desc: 'Drive enterprise-wide security strategy, executive relationships, board presentations.' },
+    { step: '4', title: 'CISO', time: '15+ years', desc: 'Own enterprise security posture, report to CEO/Board, set organizational risk appetite.' }
+  ],
+  li: 'CISO',
+  indeed: 'Chief+Information+Security+Officer',
+  dice: 'CISO',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+
+// ─────────────────────────────────────
+//  AI & MACHINE LEARNING
+// ─────────────────────────────────────
+{
+  cat: 'ai', icon: '🤖',
+  title: 'AI/ML Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$130K – $200K',
+  location: 'Remote / Hybrid · Tech Hubs',
+  skills: ['Python', 'PyTorch / TensorFlow', 'MLOps', 'Model Training & Fine-tuning', 'Feature Engineering', 'Docker / Kubernetes', 'SQL'],
+  certs: [
+    { name: 'AWS ML Specialty', color: '#ff9900' },
+    { name: 'Google ML Engineer', color: '#4285f4' },
+    { name: 'TensorFlow Developer', color: '#ff6f00' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Programming & Math', time: '0–1 year', desc: 'Python, linear algebra, statistics, calculus basics, intro ML courses (fast.ai, Coursera).' },
+    { step: '2', title: 'ML Engineer I', time: '1–3 years', desc: 'Build and train models, work with real datasets, learn PyTorch, deploy basic models.' },
+    { step: '3', title: 'ML Engineer II', time: '3–6 years', desc: 'MLOps pipelines, model optimization, distributed training, AWS/GCP ML services.' },
+    { step: '4', title: 'Staff / Principal ML Engineer', time: '6+ years', desc: 'Define ML architecture, lead research projects, mentor teams, publish papers.' }
+  ],
+  li: 'Machine+Learning+Engineer',
+  indeed: 'AI+ML+Engineer',
+  dice: 'Machine Learning Engineer',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+{
+  cat: 'ai', icon: '🤖',
+  title: 'LLM / Generative AI Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$140K – $250K',
+  location: 'Remote · Tech Hubs',
+  skills: ['LLM Fine-tuning (LoRA, PEFT)', 'RAG Architecture', 'LangChain / LlamaIndex', 'Prompt Engineering', 'Vector Databases', 'Python', 'OpenAI / Anthropic APIs'],
+  certs: [
+    { name: 'DeepLearning.AI Certs', color: '#0d96d4' },
+    { name: 'AWS Bedrock Specialty', color: '#ff9900' },
+    { name: 'Hugging Face Courses', color: '#ffca28' }
+  ],
+  roadmap: [
+    { step: '1', title: 'ML Fundamentals', time: '0–1 year', desc: 'Python, transformers architecture basics, prompt engineering, OpenAI API integration.' },
+    { step: '2', title: 'LLM Engineer I', time: '1–2 years', desc: 'Build RAG pipelines, fine-tune open-source models, vector DB (Pinecone, Weaviate), LangChain.' },
+    { step: '3', title: 'LLM Engineer II', time: '2–4 years', desc: 'Production LLM deployment, evaluation frameworks, RLHF basics, safety alignment awareness.' },
+    { step: '4', title: 'AI Architect / Principal', time: '4+ years', desc: 'Design enterprise AI platforms, lead model strategy, build evaluation and safety pipelines.' }
+  ],
+  li: 'LLM+Engineer+Generative+AI',
+  indeed: 'Generative+AI+Engineer',
+  dice: 'LLM Engineer',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+{
+  cat: 'ai', icon: '🤖',
+  title: 'Data Scientist',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$100K – $165K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['Python (pandas, scikit-learn)', 'Statistical Modeling', 'A/B Testing', 'SQL', 'Data Visualization', 'Machine Learning', 'Jupyter Notebooks'],
+  certs: [
+    { name: 'Google Data Analytics', color: '#4285f4' },
+    { name: 'IBM Data Science', color: '#0062ff' },
+    { name: 'AWS ML Specialty', color: '#ff9900' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Analytics Foundation', time: '0–1 year', desc: 'Python or R, statistics, SQL, data wrangling with pandas, basic visualizations.' },
+    { step: '2', title: 'Data Scientist I', time: '1–3 years', desc: 'Build predictive models, A/B testing, work with business stakeholders, communicate insights.' },
+    { step: '3', title: 'Data Scientist II', time: '3–6 years', desc: 'Lead experiments, deep learning applications, mentor analysts, drive data strategy.' },
+    { step: '4', title: 'Principal / Director', time: '6+ years', desc: 'Define data science vision, lead research teams, partner with C-suite on data-driven decisions.' }
+  ],
+  li: 'Data+Scientist',
+  indeed: 'Data+Scientist',
+  dice: 'Data Scientist',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+{
+  cat: 'ai', icon: '🤖',
+  title: 'AI Security Engineer',
+  level: 'senior', levelLabel: 'Senior',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$140K – $220K',
+  location: 'Remote · Nationwide',
+  skills: ['LLM Security Testing', 'Prompt Injection Defense', 'Model Red Teaming', 'AI Risk Assessment', 'Python', 'Security Engineering', 'OWASP LLM Top 10'],
+  certs: [
+    { name: 'CISSP', color: '#e63946' },
+    { name: 'OSCP', color: '#3a86ff' },
+    { name: 'AI Security (emerging)', color: '#8338ec' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Cybersecurity Foundation', time: '0–3 years', desc: 'Traditional AppSec or pentesting background, Security+, Python scripting skills.' },
+    { step: '2', title: 'AI/ML Security Analyst', time: '3–5 years', desc: 'Study OWASP LLM Top 10, adversarial ML, prompt injection, model evaluation.' },
+    { step: '3', title: 'AI Security Engineer', time: '5–7 years', desc: 'Lead AI red teaming, build safety evaluations, advise on model deployment security.' },
+    { step: '4', title: 'Principal AI Safety / Red Team Lead', time: '7+ years', desc: 'Define enterprise AI security standards, publish research, lead AI governance programs.' }
+  ],
+  li: 'AI+Security+Engineer',
+  indeed: 'AI+Security+Engineer',
+  dice: 'AI Security',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+{
+  cat: 'ai', icon: '🤖',
+  title: 'MLOps Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$120K – $180K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['Kubeflow / MLflow', 'Docker / Kubernetes', 'CI/CD for ML', 'Data Pipelines', 'Model Monitoring', 'Python', 'Cloud (AWS/GCP/Azure)'],
+  certs: [
+    { name: 'AWS DevOps Pro', color: '#ff9900' },
+    { name: 'GCP Professional Data Engineer', color: '#4285f4' },
+    { name: 'CKA (Kubernetes)', color: '#326ce5' }
+  ],
+  roadmap: [
+    { step: '1', title: 'DevOps + ML Basics', time: '0–2 years', desc: 'Learn Docker, Kubernetes, CI/CD, and basic ML workflows. Python scripting essential.' },
+    { step: '2', title: 'MLOps Engineer I', time: '2–4 years', desc: 'Build ML pipelines with MLflow or Kubeflow, model serving infrastructure, monitoring.' },
+    { step: '3', title: 'MLOps Engineer II', time: '4–6 years', desc: 'Design enterprise ML platforms, feature stores, automated retraining systems.' },
+    { step: '4', title: 'Staff MLOps / ML Platform Lead', time: '6+ years', desc: 'Lead ML infrastructure strategy, mentor teams, drive cross-org ML standardization.' }
+  ],
+  li: 'MLOps+Engineer',
+  indeed: 'MLOps+Engineer',
+  dice: 'MLOps',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+{
+  cat: 'ai', icon: '🤖',
+  title: 'AI Product Manager',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$120K – $190K',
+  location: 'Hybrid / Remote · Tech Hubs',
+  skills: ['Product Strategy', 'AI/ML Basics', 'User Research', 'Roadmap Planning', 'Stakeholder Communication', 'Data Analysis', 'Agile / Scrum'],
+  certs: [
+    { name: 'AWS ML Specialty', color: '#ff9900' },
+    { name: 'Google PM Certificate', color: '#4285f4' },
+    { name: 'CSPO (Scrum)', color: '#6c757d' }
+  ],
+  roadmap: [
+    { step: '1', title: 'PM Foundation', time: '0–2 years', desc: 'Learn product management fundamentals, agile methodologies, user research, and basic SQL.' },
+    { step: '2', title: 'AI PM I', time: '2–4 years', desc: 'Partner with ML teams, understand model tradeoffs, define evaluation metrics, ship AI features.' },
+    { step: '3', title: 'AI PM II / Senior', time: '4–7 years', desc: 'Own AI product strategy, manage 0-to-1 AI initiatives, drive responsible AI frameworks.' },
+    { step: '4', title: 'Director / Group PM', time: '7+ years', desc: 'Lead AI product org, define platform strategy, represent AI products to executives and board.' }
+  ],
+  li: 'AI+Product+Manager',
+  indeed: 'AI+Product+Manager',
+  dice: 'AI Product Manager',
+  specialty: { label: 'AIJobs.net', url: 'https://aijobs.net/' }
+},
+
+// ─────────────────────────────────────
+//  CLOUD & DEVOPS
+// ─────────────────────────────────────
+{
+  cat: 'cloud', icon: '☁️',
+  title: 'Cloud Security Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$110K – $175K',
+  location: 'Remote · Nationwide',
+  skills: ['AWS / Azure / GCP Security', 'IAM Hardening', 'CloudTrail / Defender for Cloud', 'CSPM Tools', 'Terraform', 'Container Security', 'Zero Trust'],
+  certs: [
+    { name: 'AWS Security Specialty', color: '#ff9900' },
+    { name: 'AZ-500', color: '#0078d4' },
+    { name: 'CCSP', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Cloud Foundations', time: '0–2 years', desc: 'AWS Solutions Architect Associate, learn cloud-native IAM, VPC, logging and monitoring.' },
+    { step: '2', title: 'Cloud Security Engineer I', time: '2–4 years', desc: 'AWS Security Specialty or AZ-500, implement security controls, CSPM tools, cloud IR.' },
+    { step: '3', title: 'Cloud Security Engineer II', time: '4–6 years', desc: 'Design cloud security architectures, zero-trust networking, DevSecOps integration.' },
+    { step: '4', title: 'Principal / Cloud Security Architect', time: '6+ years', desc: 'CCSP or CISSP, lead enterprise cloud security strategy, multi-cloud governance.' }
+  ],
+  li: 'Cloud+Security+Engineer',
+  indeed: 'Cloud+Security+Engineer',
+  dice: 'Cloud Security',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'cloud', icon: '☁️',
+  title: 'DevOps Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$100K – $160K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['CI/CD (GitHub Actions/Jenkins)', 'Docker / Kubernetes', 'Terraform / Ansible', 'Linux', 'Python / Bash', 'Monitoring (Datadog/Grafana)', 'Git'],
+  certs: [
+    { name: 'AWS DevOps Professional', color: '#ff9900' },
+    { name: 'CKA (Kubernetes)', color: '#326ce5' },
+    { name: 'HashiCorp Terraform', color: '#7b42bc' }
+  ],
+  roadmap: [
+    { step: '1', title: 'SysAdmin / Dev Background', time: '0–2 years', desc: 'Linux administration, scripting, basic networking, git workflows, basic cloud.' },
+    { step: '2', title: 'DevOps Engineer I', time: '2–4 years', desc: 'Build CI/CD pipelines, containerization with Docker, Kubernetes basics, IaC with Terraform.' },
+    { step: '3', title: 'DevOps Engineer II', time: '4–7 years', desc: 'Design platform infrastructure, site reliability engineering, observability, security integration.' },
+    { step: '4', title: 'Staff / Principal DevOps', time: '7+ years', desc: 'Lead platform strategy, drive developer experience, architect enterprise-scale platforms.' }
+  ],
+  li: 'DevOps+Engineer',
+  indeed: 'DevOps+Engineer',
+  dice: 'DevOps Engineer',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-DevOps-jobs' }
+},
+{
+  cat: 'cloud', icon: '☁️',
+  title: 'Cloud Architect',
+  level: 'senior', levelLabel: 'Senior',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$140K – $220K',
+  location: 'Hybrid / Remote · Nationwide',
+  skills: ['Multi-Cloud Design', 'AWS / Azure / GCP', 'Networking (VPC, Transit Gateway)', 'Cost Optimization', 'High Availability Design', 'Security Architecture', 'Terraform'],
+  certs: [
+    { name: 'AWS Solutions Architect Pro', color: '#ff9900' },
+    { name: 'Google Cloud Professional Architect', color: '#4285f4' },
+    { name: 'Azure Solutions Architect', color: '#0078d4' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Cloud Practitioner', time: '0–2 years', desc: 'AWS/Azure foundational certs, understand core services, basic architecture patterns.' },
+    { step: '2', title: 'Cloud Engineer', time: '2–5 years', desc: 'Solutions Architect Associate, design workloads, implement networking, cost management.' },
+    { step: '3', title: 'Cloud Architect', time: '5–8 years', desc: 'Solutions Architect Pro, design enterprise cloud strategies, multi-account governance.' },
+    { step: '4', title: 'Principal / Distinguished Architect', time: '8+ years', desc: 'Define technology direction, influence engineering orgs, contribute to cloud strategy at scale.' }
+  ],
+  li: 'Cloud+Architect',
+  indeed: 'Cloud+Architect',
+  dice: 'Cloud Architect',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-Cloud+Architect-jobs' }
+},
+{
+  cat: 'cloud', icon: '☁️',
+  title: 'Site Reliability Engineer (SRE)',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$120K – $185K',
+  location: 'Remote · Nationwide',
+  skills: ['SLO / SLA Management', 'Kubernetes', 'Observability (Prometheus/Grafana)', 'Incident Management', 'Python / Go', 'Capacity Planning', 'Chaos Engineering'],
+  certs: [
+    { name: 'CKA', color: '#326ce5' },
+    { name: 'AWS DevOps Pro', color: '#ff9900' },
+    { name: 'Google SRE Foundation', color: '#4285f4' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Software / Ops Background', time: '0–3 years', desc: 'Strong programming skills, Linux systems, on-call experience, distributed systems basics.' },
+    { step: '2', title: 'SRE I', time: '3–5 years', desc: 'Define SLOs, build monitoring and alerting, automate toil, incident response and post-mortems.' },
+    { step: '3', title: 'SRE II / Senior', time: '5–8 years', desc: 'Lead reliability programs, chaos engineering, capacity planning, cross-org reliability culture.' },
+    { step: '4', title: 'Staff SRE / Engineering Manager', time: '8+ years', desc: 'Drive reliability strategy, manage SRE teams, influence engineering practices org-wide.' }
+  ],
+  li: 'Site+Reliability+Engineer',
+  indeed: 'Site+Reliability+Engineer',
+  dice: 'SRE',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-SRE-jobs' }
+},
+{
+  cat: 'cloud', icon: '☁️',
+  title: 'Platform Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$110K – $170K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['Internal Developer Platforms', 'Kubernetes / Helm', 'GitOps (ArgoCD/Flux)', 'Terraform', 'Service Mesh (Istio)', 'Developer Experience', 'Go / Python'],
+  certs: [
+    { name: 'CKA / CKAD', color: '#326ce5' },
+    { name: 'HashiCorp Terraform', color: '#7b42bc' },
+    { name: 'AWS Solutions Architect', color: '#ff9900' }
+  ],
+  roadmap: [
+    { step: '1', title: 'DevOps Foundation', time: '0–2 years', desc: 'Kubernetes, CI/CD, IaC fundamentals, cloud provider services, scripting.' },
+    { step: '2', title: 'Platform Engineer I', time: '2–4 years', desc: 'Build self-service developer platforms, GitOps workflows, internal tooling, golden paths.' },
+    { step: '3', title: 'Platform Engineer II', time: '4–7 years', desc: 'Lead platform team, design service catalog, drive developer productivity metrics.' },
+    { step: '4', title: 'Principal Platform Engineer', time: '7+ years', desc: 'Define platform strategy, measure developer experience, influence engineering culture.' }
+  ],
+  li: 'Platform+Engineer',
+  indeed: 'Platform+Engineer',
+  dice: 'Platform Engineer',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-Platform+Engineer-jobs' }
+},
+
+// ─────────────────────────────────────
+//  NETWORKING & INFRASTRUCTURE
+// ─────────────────────────────────────
+{
+  cat: 'network', icon: '🌐',
+  title: 'Network Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$75K – $130K',
+  location: 'On-site / Hybrid · Nationwide',
+  skills: ['Cisco IOS / Juniper', 'BGP / OSPF / EIGRP', 'VLANs / Spanning Tree', 'Firewall Configuration', 'Network Troubleshooting', 'SD-WAN', 'IPv6'],
+  certs: [
+    { name: 'CCNA', color: '#1ba0d7' },
+    { name: 'CCNP', color: '#005073' },
+    { name: 'CompTIA Network+', color: '#e63946' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT Fundamentals', time: '0–1 year', desc: 'Network+ or CCNA study, OSI model, TCP/IP, subnetting, basic switch/router config.' },
+    { step: '2', title: 'Network Technician / Jr Engineer', time: '1–3 years', desc: 'CCNA certified, configure LANs/WANs, troubleshoot connectivity, VPN basics.' },
+    { step: '3', title: 'Network Engineer', time: '3–6 years', desc: 'CCNP, design enterprise networks, BGP routing, SD-WAN deployment, performance tuning.' },
+    { step: '4', title: 'Senior / Network Architect', time: '6+ years', desc: 'CCIE or similar, design large-scale networks, cloud networking, security integration.' }
+  ],
+  li: 'Network+Engineer',
+  indeed: 'Network+Engineer',
+  dice: 'Network Engineer',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-Network+Engineer-jobs' }
+},
+{
+  cat: 'network', icon: '🌐',
+  title: 'Systems Administrator',
+  level: 'entry', levelLabel: 'Entry/Mid',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$55K – $95K',
+  location: 'On-site / Hybrid · Nationwide',
+  skills: ['Windows Server / Active Directory', 'Linux Administration', 'PowerShell / Bash', 'Virtualization (VMware/Hyper-V)', 'Backup & Recovery', 'Group Policy', 'DNS / DHCP'],
+  certs: [
+    { name: 'CompTIA Server+', color: '#e63946' },
+    { name: 'MCSA / AZ-104', color: '#0078d4' },
+    { name: 'RHCSA (Linux)', color: '#cc0000' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Help Desk / IT Support', time: '0–2 years', desc: 'CompTIA A+, Windows/Linux basics, AD user management, basic troubleshooting.' },
+    { step: '2', title: 'Jr Sysadmin', time: '2–4 years', desc: 'Server+, manage Windows Server, configure AD/GPO, basic VMware, scripting with PowerShell.' },
+    { step: '3', title: 'Systems Administrator', time: '4–7 years', desc: 'AZ-104 or RHCSA, manage hybrid cloud environments, automate with scripts, mentor support staff.' },
+    { step: '4', title: 'Sr Sysadmin / Infrastructure Architect', time: '7+ years', desc: 'Design infrastructure strategy, cloud migration projects, security hardening programs.' }
+  ],
+  li: 'Systems+Administrator',
+  indeed: 'Systems+Administrator',
+  dice: 'Systems Administrator',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-Systems+Administrator-jobs' }
+},
+{
+  cat: 'network', icon: '🌐',
+  title: 'Network Security Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$90K – $145K',
+  location: 'Hybrid / On-site · Nationwide',
+  skills: ['Firewall (Palo Alto/Fortinet/Cisco)', 'IDS/IPS', 'Zero Trust Networking', 'VPN Architecture', 'Network Forensics', 'Wireshark', 'Cloud Networking'],
+  certs: [
+    { name: 'PCNSE (Palo Alto)', color: '#fa582d' },
+    { name: 'CCNP Security', color: '#005073' },
+    { name: 'CompTIA Security+', color: '#e63946' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Network Foundation', time: '0–2 years', desc: 'CCNA, Security+, understand firewall concepts, basic IDS/IPS, VPN configuration.' },
+    { step: '2', title: 'Jr Network Security Engineer', time: '2–4 years', desc: 'Manage enterprise firewalls, implement security policies, investigate network anomalies.' },
+    { step: '3', title: 'Network Security Engineer', time: '4–7 years', desc: 'CCNP Security or PCNSE, design secure network architectures, zero trust implementation.' },
+    { step: '4', title: 'Senior / Network Security Architect', time: '7+ years', desc: 'Design enterprise security architectures, advise on cloud networking strategy, lead security teams.' }
+  ],
+  li: 'Network+Security+Engineer',
+  indeed: 'Network+Security+Engineer',
+  dice: 'Network Security Engineer',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'network', icon: '🌐',
+  title: 'IT Director / Infrastructure Manager',
+  level: 'lead', levelLabel: 'Director',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$110K – $180K',
+  location: 'On-site / Hybrid · Nationwide',
+  skills: ['Team Management', 'IT Strategy', 'Vendor Management', 'Budgeting', 'ITIL / ITSM', 'Risk Management', 'Change Management'],
+  certs: [
+    { name: 'ITIL 4 Foundation', color: '#6c47a8' },
+    { name: 'PMP', color: '#2c4770' },
+    { name: 'CISSP (for IT directors)', color: '#e63946' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Technical Background', time: '0–5 years', desc: 'Hands-on IT experience (sysadmin, networking, or engineering) with strong technical foundation.' },
+    { step: '2', title: 'Team Lead / Senior Engineer', time: '5–8 years', desc: 'Lead small technical teams, ITIL Foundation, project management basics, budget experience.' },
+    { step: '3', title: 'IT Manager', time: '8–12 years', desc: 'Manage IT department, vendor contracts, major projects, align IT with business goals.' },
+    { step: '4', title: 'IT Director / CTO', time: '12+ years', desc: 'Drive IT strategy, executive partnerships, digital transformation, board-level communication.' }
+  ],
+  li: 'IT+Director',
+  indeed: 'IT+Director',
+  dice: 'IT Director',
+  specialty: { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT%20Director' }
+},
+
+// ─────────────────────────────────────
+//  SOFTWARE DEVELOPMENT
+// ─────────────────────────────────────
+{
+  cat: 'dev', icon: '💻',
+  title: 'Software Engineer (Backend)',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$100K – $180K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['Python / Java / Go / Node.js', 'REST / GraphQL APIs', 'SQL + NoSQL Databases', 'Microservices', 'Git', 'Docker', 'System Design'],
+  certs: [
+    { name: 'AWS Developer Associate', color: '#ff9900' },
+    { name: 'Oracle Java SE', color: '#f80000' },
+    { name: 'MongoDB Developer', color: '#47a248' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Programming Fundamentals', time: '0–1 year', desc: 'One language deeply (Python/Java/Go), data structures, algorithms, basic databases, Git.' },
+    { step: '2', title: 'Software Engineer I', time: '1–3 years', desc: 'Build production APIs, database design, code review, testing, agile development.' },
+    { step: '3', title: 'Software Engineer II', time: '3–6 years', desc: 'Lead feature development, system design, mentor junior engineers, architecture contributions.' },
+    { step: '4', title: 'Staff / Principal Engineer', time: '6+ years', desc: 'Define technical direction, cross-team architecture, developer productivity, technical strategy.' }
+  ],
+  li: 'Backend+Software+Engineer',
+  indeed: 'Backend+Software+Engineer',
+  dice: 'Backend Engineer',
+  specialty: { label: 'Levels.fyi', url: 'https://www.levels.fyi/jobs' }
+},
+{
+  cat: 'dev', icon: '💻',
+  title: 'Application Security Engineer (AppSec)',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$105K – $170K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['OWASP Top 10', 'SAST / DAST Tools', 'Code Review', 'Threat Modeling', 'Burp Suite', 'Python / Scripting', 'DevSecOps / CI/CD Security'],
+  certs: [
+    { name: 'GWEB (GIAC)', color: '#3a86ff' },
+    { name: 'OSWE', color: '#e63946' },
+    { name: 'CEH', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Dev or Security Background', time: '0–3 years', desc: 'Coding experience OR security background, learn OWASP Top 10, basic web vulnerabilities.' },
+    { step: '2', title: 'AppSec Analyst', time: '3–5 years', desc: 'SAST/DAST tool integration, penetration testing web apps, security code review.' },
+    { step: '3', title: 'AppSec Engineer', time: '5–7 years', desc: 'GWEB or OSWE, lead security design reviews, build SDLC security gates, developer training.' },
+    { step: '4', title: 'Principal AppSec / Head of AppSec', time: '7+ years', desc: 'Define application security program, influence secure coding standards, mentor engineers.' }
+  ],
+  li: 'Application+Security+Engineer',
+  indeed: 'Application+Security+Engineer',
+  dice: 'AppSec Engineer',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'dev', icon: '💻',
+  title: 'DevSecOps Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$110K – $175K',
+  location: 'Remote · Nationwide',
+  skills: ['SAST/DAST in CI/CD', 'Container Security (Trivy/Snyk)', 'IaC Security (Checkov)', 'Secret Management (Vault)', 'SBOM', 'GitHub Actions', 'Policy as Code'],
+  certs: [
+    { name: 'AWS Security Specialty', color: '#ff9900' },
+    { name: 'CKS (Kubernetes Security)', color: '#326ce5' },
+    { name: 'GIAC GCSA', color: '#3a86ff' }
+  ],
+  roadmap: [
+    { step: '1', title: 'DevOps Foundation', time: '0–2 years', desc: 'CI/CD pipelines, Docker, Kubernetes, scripting. Add security awareness to your toolkit.' },
+    { step: '2', title: 'DevSecOps Engineer I', time: '2–4 years', desc: 'Integrate SAST/DAST in pipelines, container scanning, secrets management, IaC security.' },
+    { step: '3', title: 'DevSecOps Engineer II', time: '4–7 years', desc: 'Build security guardrails org-wide, policy-as-code, SBOM programs, developer security training.' },
+    { step: '4', title: 'Principal / Head of DevSecOps', time: '7+ years', desc: 'Define security engineering culture, advise executives, contribute to engineering standards.' }
+  ],
+  li: 'DevSecOps+Engineer',
+  indeed: 'DevSecOps+Engineer',
+  dice: 'DevSecOps',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+{
+  cat: 'dev', icon: '💻',
+  title: 'Full Stack Developer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$85K – $155K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['React / Vue / Angular', 'Node.js / Python', 'SQL + NoSQL', 'REST APIs', 'Git', 'CSS / Tailwind', 'Cloud Deployment'],
+  certs: [
+    { name: 'AWS Developer Associate', color: '#ff9900' },
+    { name: 'Meta Front-End Developer', color: '#1877f2' },
+    { name: 'Google UX Design', color: '#4285f4' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Frontend Basics', time: '0–1 year', desc: 'HTML, CSS, JavaScript, React basics, version control with Git, basic SQL.' },
+    { step: '2', title: 'Jr Full Stack Developer', time: '1–3 years', desc: 'Build full-stack apps, REST API design, authentication, database modeling, deployment basics.' },
+    { step: '3', title: 'Full Stack Developer', time: '3–6 years', desc: 'Lead feature development, system design, performance optimization, security basics in code.' },
+    { step: '4', title: 'Senior / Tech Lead', time: '6+ years', desc: 'Architect full-stack systems, define technology choices, mentor team, code quality leadership.' }
+  ],
+  li: 'Full+Stack+Developer',
+  indeed: 'Full+Stack+Developer',
+  dice: 'Full Stack Developer',
+  specialty: { label: 'Levels.fyi', url: 'https://www.levels.fyi/jobs' }
+},
+
+// ─────────────────────────────────────
+//  DATA & ANALYTICS
+// ─────────────────────────────────────
+{
+  cat: 'data', icon: '📊',
+  title: 'Data Engineer',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'hot', demandLabel: '🔥 HOT',
+  salary: '$110K – $170K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['Python / Scala', 'Apache Spark', 'dbt (data build tool)', 'Airflow / Prefect', 'Data Warehousing (Snowflake/BigQuery)', 'SQL', 'ETL/ELT Pipelines'],
+  certs: [
+    { name: 'Google Professional Data Engineer', color: '#4285f4' },
+    { name: 'dbt Certification', color: '#ff6641' },
+    { name: 'Databricks Certified', color: '#ff3621' }
+  ],
+  roadmap: [
+    { step: '1', title: 'SQL + Python', time: '0–1 year', desc: 'Strong SQL, Python scripting, understand ETL concepts, basic cloud (AWS/GCP).' },
+    { step: '2', title: 'Data Engineer I', time: '1–3 years', desc: 'Build data pipelines, Airflow orchestration, data warehouse design, dbt transformations.' },
+    { step: '3', title: 'Data Engineer II', time: '3–6 years', desc: 'Architect data platforms, streaming data (Kafka), data quality frameworks, lead projects.' },
+    { step: '4', title: 'Staff / Principal Data Engineer', time: '6+ years', desc: 'Define data architecture strategy, build data mesh or lakehouse platforms, cross-org data leadership.' }
+  ],
+  li: 'Data+Engineer',
+  indeed: 'Data+Engineer',
+  dice: 'Data Engineer',
+  specialty: { label: 'Levels.fyi', url: 'https://www.levels.fyi/jobs' }
+},
+{
+  cat: 'data', icon: '📊',
+  title: 'Business Intelligence Analyst',
+  level: 'entry', levelLabel: 'Entry/Mid',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$60K – $110K',
+  location: 'Hybrid / Remote · Nationwide',
+  skills: ['SQL', 'Tableau / Power BI', 'Excel (Advanced)', 'Data Storytelling', 'ETL Basics', 'Python (pandas)', 'KPI Definition'],
+  certs: [
+    { name: 'Microsoft PL-300 (Power BI)', color: '#f2c811' },
+    { name: 'Tableau Desktop Specialist', color: '#e97627' },
+    { name: 'Google Data Analytics', color: '#4285f4' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Data Literacy', time: '0–1 year', desc: 'Excel, basic SQL, data visualization concepts, business domain knowledge.' },
+    { step: '2', title: 'BI Analyst I', time: '1–3 years', desc: 'PL-300 or Tableau cert, build dashboards, write complex SQL queries, stakeholder reporting.' },
+    { step: '3', title: 'BI Analyst II / Senior', time: '3–6 years', desc: 'Lead BI strategy, data modeling, self-service analytics enablement, mentor analysts.' },
+    { step: '4', title: 'BI Manager / Analytics Lead', time: '6+ years', desc: 'Define analytics roadmap, manage BI team, drive data culture, executive presentations.' }
+  ],
+  li: 'Business+Intelligence+Analyst',
+  indeed: 'Business+Intelligence+Analyst',
+  dice: 'BI Analyst',
+  specialty: { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=BI%20Analyst' }
+},
+{
+  cat: 'data', icon: '📊',
+  title: 'Database Administrator (DBA)',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$80K – $135K',
+  location: 'Hybrid / On-site · Nationwide',
+  skills: ['SQL Server / Oracle / PostgreSQL', 'Performance Tuning', 'Backup & Recovery', 'Query Optimization', 'High Availability / Replication', 'Cloud Databases (RDS/Azure SQL)', 'Security Hardening'],
+  certs: [
+    { name: 'Oracle OCP DBA', color: '#f80000' },
+    { name: 'Microsoft DP-300', color: '#0078d4' },
+    { name: 'AWS Database Specialty', color: '#ff9900' }
+  ],
+  roadmap: [
+    { step: '1', title: 'SQL Fundamentals', time: '0–2 years', desc: 'SQL basics, relational database concepts, basic administration tasks, backup/restore.' },
+    { step: '2', title: 'Junior DBA', time: '2–4 years', desc: 'Microsoft DP-300 or equivalent, performance monitoring, query tuning, HA configuration.' },
+    { step: '3', title: 'DBA', time: '4–8 years', desc: 'Oracle OCP or AWS Database Specialty, lead database strategy, disaster recovery design.' },
+    { step: '4', title: 'Senior DBA / Data Architect', time: '8+ years', desc: 'Define data platform architecture, cloud database migration strategy, team leadership.' }
+  ],
+  li: 'Database+Administrator',
+  indeed: 'Database+Administrator',
+  dice: 'DBA',
+  specialty: { label: 'Dice.com', url: 'https://www.dice.com/jobs/q-DBA-jobs' }
+},
+{
+  cat: 'data', icon: '📊',
+  title: 'Security Data Analyst',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$85K – $135K',
+  location: 'Remote / Hybrid · Nationwide',
+  skills: ['SIEM Query Languages (KQL/SPL)', 'Python / pandas', 'Anomaly Detection', 'Security Metrics', 'Data Visualization', 'Log Analysis', 'Threat Intelligence'],
+  certs: [
+    { name: 'Splunk Core Power User', color: '#65a637' },
+    { name: 'Microsoft SC-200', color: '#0078d4' },
+    { name: 'CompTIA CySA+', color: '#e63946' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Security + Analytics Foundation', time: '0–2 years', desc: 'Security basics (Security+), SQL or SPL/KQL, log analysis fundamentals.' },
+    { step: '2', title: 'Security Data Analyst I', time: '2–4 years', desc: 'Build security dashboards, trend analysis, KPI reporting, SIEM query optimization.' },
+    { step: '3', title: 'Security Data Analyst II', time: '4–6 years', desc: 'Anomaly detection models, UEBA integration, security metrics program development.' },
+    { step: '4', title: 'Security Analytics Manager', time: '6+ years', desc: 'Lead security data strategy, integrate ML into detection, present risk metrics to CISO.' }
+  ],
+  li: 'Security+Data+Analyst',
+  indeed: 'Security+Data+Analyst',
+  dice: 'Security Data Analyst',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+},
+
+// ─────────────────────────────────────
+//  IT SUPPORT & SYSTEMS
+// ─────────────────────────────────────
+{
+  cat: 'it', icon: '🖥️',
+  title: 'IT Help Desk / Support Technician',
+  level: 'entry', levelLabel: 'Entry Level',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$38K – $60K',
+  location: 'On-site / Hybrid · Nationwide',
+  skills: ['Windows 10/11 Troubleshooting', 'Active Directory User Management', 'Ticketing Systems (ServiceNow/Jira)', 'Hardware Support', 'Basic Networking', 'Remote Support Tools', 'Communication Skills'],
+  certs: [
+    { name: 'CompTIA A+', color: '#e63946' },
+    { name: 'Google IT Support', color: '#4285f4' },
+    { name: 'HDI Support Center Analyst', color: '#2a9d8f' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT Fundamentals', time: '0–6 months', desc: 'CompTIA A+, Windows/Mac basics, ticketing workflow, customer service skills.' },
+    { step: '2', title: 'Help Desk Analyst', time: '6 months–2 years', desc: 'Handle L1/L2 tickets, AD user management, hardware troubleshooting, remote support.' },
+    { step: '3', title: 'Sr. Support / Team Lead', time: '2–4 years', desc: 'Network+, mentor new technicians, handle escalations, document knowledge base.' },
+    { step: '4', title: 'SysAdmin / IT Engineer', time: '4+ years', desc: 'Specialize in cloud, networking, or cybersecurity — your help desk foundation opens every door.' }
+  ],
+  li: 'IT+Help+Desk',
+  indeed: 'IT+Help+Desk+Support+Technician',
+  dice: 'Help Desk',
+  specialty: { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT%20Help%20Desk' }
+},
+{
+  cat: 'it', icon: '🖥️',
+  title: 'IT Project Manager',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$80K – $130K',
+  location: 'Hybrid · Nationwide',
+  skills: ['Agile / Scrum / Waterfall', 'Risk Management', 'Stakeholder Communication', 'JIRA / MS Project', 'Budget Tracking', 'Change Management', 'IT Service Management'],
+  certs: [
+    { name: 'PMP (PMI)', color: '#2c4770' },
+    { name: 'CSM (Scrum Master)', color: '#009FDA' },
+    { name: 'ITIL 4 Foundation', color: '#6c47a8' }
+  ],
+  roadmap: [
+    { step: '1', title: 'IT Background', time: '0–3 years', desc: 'Technical IT experience in any area, understand IT workflows, stakeholder exposure.' },
+    { step: '2', title: 'Jr Project Manager / Coordinator', time: '3–5 years', desc: 'Agile certifications, manage small projects, tracking, risk registers, team coordination.' },
+    { step: '3', title: 'IT Project Manager', time: '5–8 years', desc: 'PMP certified, lead complex IT programs, manage cross-functional teams, vendor oversight.' },
+    { step: '4', title: 'Program Director / PMO Lead', time: '8+ years', desc: 'Define PMO standards, portfolio management, executive reporting, transformation programs.' }
+  ],
+  li: 'IT+Project+Manager',
+  indeed: 'IT+Project+Manager',
+  dice: 'IT Project Manager',
+  specialty: { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT%20Project%20Manager' }
+},
+{
+  cat: 'it', icon: '🖥️',
+  title: 'IT Auditor',
+  level: 'mid', levelLabel: 'Mid Level',
+  demand: 'good', demandLabel: '✓ STEADY',
+  salary: '$70K – $120K',
+  location: 'Hybrid · Nationwide',
+  skills: ['IT General Controls (ITGC)', 'SOX Compliance', 'Risk Assessment', 'Audit Methodology', 'COBIT Framework', 'Evidence Collection', 'Audit Report Writing'],
+  certs: [
+    { name: 'CISA (ISACA)', color: '#0065bd' },
+    { name: 'CIA (IIA)', color: '#c8102e' },
+    { name: 'CRISC', color: '#e63946' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Accounting / IT Foundation', time: '0–2 years', desc: 'Finance or IT background, understand controls concepts, compliance frameworks basics.' },
+    { step: '2', title: 'IT Audit Associate', time: '2–4 years', desc: 'Execute audit procedures, document findings, SOX ITGC testing, present to management.' },
+    { step: '3', title: 'IT Auditor / Senior', time: '4–7 years', desc: 'CISA certification, lead audit engagements, risk assessment, remediation tracking.' },
+    { step: '4', title: 'Audit Manager / Director', time: '7+ years', desc: 'Lead audit department, advise executives, risk committee involvement, external auditor liaison.' }
+  ],
+  li: 'IT+Auditor',
+  indeed: 'IT+Auditor',
+  dice: 'IT Auditor',
+  specialty: { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/search/?keywords=IT%20Auditor' }
+},
+{
+  cat: 'it', icon: '🖥️',
+  title: 'Endpoint Security Administrator',
+  level: 'entry', levelLabel: 'Entry/Mid',
+  demand: 'high', demandLabel: '⬆ HIGH',
+  salary: '$55K – $95K',
+  location: 'Hybrid / On-site · Nationwide',
+  skills: ['EDR Platforms (CrowdStrike/Defender)', 'Mobile Device Management (MDM)', 'Patch Management', 'Antivirus Management', 'Windows / macOS Hardening', 'Group Policy', 'SCCM / Intune'],
+  certs: [
+    { name: 'CompTIA Security+', color: '#e63946' },
+    { name: 'CrowdStrike CCFA', color: '#e62e21' },
+    { name: 'Microsoft MD-102', color: '#0078d4' }
+  ],
+  roadmap: [
+    { step: '1', title: 'Help Desk / Sysadmin', time: '0–2 years', desc: 'Windows administration, Active Directory, Group Policy, patch management basics.' },
+    { step: '2', title: 'Endpoint Security Admin', time: '2–4 years', desc: 'Security+, deploy and manage EDR, MDM/Intune, endpoint hardening, CIS benchmarks.' },
+    { step: '3', title: 'Sr. Endpoint Security Specialist', time: '4–6 years', desc: 'CCFA or equivalent, advanced EDR tuning, respond to endpoint-based incidents, policy design.' },
+    { step: '4', title: 'Security Engineer / SOC Analyst', time: '6+ years', desc: 'Bridge into broader security engineering or SOC roles using your deep endpoint knowledge.' }
+  ],
+  li: 'Endpoint+Security+Administrator',
+  indeed: 'Endpoint+Security+Administrator',
+  dice: 'Endpoint Security',
+  specialty: { label: 'CyberSecJobs', url: 'https://www.cybersecjobs.com/' }
+}
+
+]; // end JOBS array
+
+// ══════════════════════════════════════════════
+//  RENDER ENGINE
+// ══════════════════════════════════════════════
+
+const CAT_META = {
+  cyber:   { icon: '🛡️', name: 'Cybersecurity',              color: 'var(--cyber)',   desc: 'Blue team · Red team · GRC · Leadership' },
+  ai:      { icon: '🤖', name: 'AI & Machine Learning',       color: 'var(--ai)',      desc: 'Engineering · Research · Product · Safety' },
+  cloud:   { icon: '☁️', name: 'Cloud & DevOps',              color: 'var(--cloud)',   desc: 'Architecture · SRE · Platform · Engineering' },
+  network: { icon: '🌐', name: 'Networking & Infrastructure', color: 'var(--network)', desc: 'Network · Systems · Management' },
+  dev:     { icon: '💻', name: 'Software Development',        color: 'var(--dev)',     desc: 'Backend · Full Stack · AppSec · DevSecOps' },
+  data:    { icon: '📊', name: 'Data & Analytics',            color: 'var(--data)',    desc: 'Engineering · Science · BI · DBA' },
+  it:      { icon: '🖥️', name: 'IT Support & Systems',        color: 'var(--it)',      desc: 'Help Desk · Audit · Project Management' }
+};
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function buildJobCard(job) {
+  const certsHTML = job.certs.map(c =>
+    `<span class="cert-chip" style="background:${c.color}22;border:1px solid ${c.color}44;color:${c.color}">${c.name}</span>`
+  ).join('');
+
+  const skillsHTML = job.skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+
+  const roadmapHTML = job.roadmap.map((step, i) =>
+    `<div class="rm-step">
+      <div class="rm-dot">${i+1}</div>
+      <div class="rm-content">
+        <div class="rm-title">${step.title}</div>
+        <div class="rm-time">${step.time}</div>
+        <div class="rm-desc">${step.desc}</div>
+      </div>
+    </div>`
+  ).join('');
+
+  const cat = CAT_META[job.cat];
+  const catColor = `var(--${job.cat})`;
+  const liUrl = `https://www.linkedin.com/jobs/search/?keywords=${job.li}`;
+  const indeedUrl = `https://www.indeed.com/jobs?q=${job.indeed}`;
+  const diceUrl = `https://www.dice.com/jobs/q-${encodeURIComponent(job.dice)}-jobs`;
+  const glUrl = `https://www.glassdoor.com/Job/jobs.htm?sc.keyword=${encodeURIComponent(job.title)}`;
+
+  const specialtyBtn = job.specialty
+    ? `<a class="search-btn btn-${job.cat === 'cyber' ? 'cyber' : 'ai'}" href="${job.specialty.url}" target="_blank" rel="noopener">${job.specialty.label}</a>`
+    : '';
+
+  return `<div class="job-card" data-cat="${job.cat}" data-title="${job.title.toLowerCase()}" data-skills="${job.skills.join(' ').toLowerCase()}" data-certs="${job.certs.map(c=>c.name).join(' ').toLowerCase()}">
+    <div class="job-card-top">
+      <div class="job-card-meta">
+        <span class="level-badge lv-${job.level}">${job.levelLabel}</span>
+        <span class="demand-badge dem-${job.demand}">${job.demandLabel}</span>
+      </div>
+      <div class="job-title" style="border-left:3px solid ${catColor};padding-left:10px;margin-left:-10px">${job.icon} ${job.title}</div>
+      <div class="job-salary" style="color:${catColor}">${job.salary}</div>
+      <div class="job-location">${job.location}</div>
+    </div>
+
+    <div class="job-card-body">
+      <div class="body-section">
+        <div class="body-label">Core Skills</div>
+        <div class="skills-wrap">${skillsHTML}</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Certifications</div>
+        <div class="certs-wrap">${certsHTML}</div>
+      </div>
+      <div class="body-section">
+        <div class="body-label">Career Roadmap</div>
+        <div class="roadmap-steps">${roadmapHTML}</div>
+      </div>
+    </div>
+
+    <div class="job-card-links">
+      <a class="search-btn btn-li"        href="${liUrl}"      target="_blank" rel="noopener">LinkedIn</a>
+      <a class="search-btn btn-indeed"    href="${indeedUrl}"  target="_blank" rel="noopener">Indeed</a>
+      <a class="search-btn btn-dice"      href="${diceUrl}"    target="_blank" rel="noopener">Dice</a>
+      <a class="search-btn btn-glassdoor" href="${glUrl}"      target="_blank" rel="noopener">Glassdoor</a>
+      ${specialtyBtn}
+      <button class="expand-btn" onclick="toggleCard(this)">Details ▼</button>
+    </div>
+  </div>`;
+}
+
+function renderAll() {
+  const search = currentSearch.toLowerCase().trim();
+  const content = document.getElementById('mainContent');
+  const noRes = document.getElementById('noResults');
+  let total = 0;
+
+  let grouped = {};
+  Object.keys(CAT_META).forEach(cat => { grouped[cat] = []; });
+
+  JOBS.forEach(job => {
+    const catMatch = currentFilter === 'all' || job.cat === currentFilter;
+    const searchMatch = !search ||
+      job.title.toLowerCase().includes(search) ||
+      job.skills.some(s => s.toLowerCase().includes(search)) ||
+      job.certs.some(c => c.name.toLowerCase().includes(search)) ||
+      job.salary.toLowerCase().includes(search) ||
+      job.cat.includes(search);
+    if (catMatch && searchMatch) {
+      grouped[job.cat].push(job);
+      total++;
+    }
+  });
+
+  let html = '';
+  Object.entries(grouped).forEach(([cat, jobs]) => {
+    if (!jobs.length) return;
+    const meta = CAT_META[cat];
+    const countStyle = `background:${meta.color}18;border:1px solid ${meta.color}33;color:${meta.color}`;
+    html += `<div class="cat-group" data-cat="${cat}">
+      <div class="cat-header">
+        <span class="cat-icon">${meta.icon}</span>
+        <span class="cat-name">${meta.name}</span>
+        <span class="cat-count" style="${countStyle}">${jobs.length} role${jobs.length !== 1 ? 's' : ''}</span>
+        <span class="cat-desc">${meta.desc}</span>
+      </div>
+      <div class="jobs-grid">${jobs.map(buildJobCard).join('')}</div>
+    </div>`;
+  });
+
+  if (total === 0) {
+    content.innerHTML = '';
+    noRes.classList.add('visible');
+  } else {
+    content.innerHTML = html;
+    noRes.classList.remove('visible');
+  }
+
+  document.getElementById('visibleCount').textContent = total;
+  document.getElementById('resultsCount').textContent = `Showing ${total} of ${JOBS.length} roles`;
+}
+
+function setFilter(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.pill[data-cat="${cat}"]`).classList.add('active');
+  renderAll();
+}
+
+function filterJobs() {
+  currentSearch = document.getElementById('searchInput').value;
+  renderAll();
+}
+
+function toggleCard(btn) {
+  const card = btn.closest('.job-card');
+  const isExpanded = card.classList.toggle('expanded');
+  btn.textContent = isExpanded ? 'Details ▲' : 'Details ▼';
+}
+
+// Init
+renderAll();
+</script>
+</body>
+</html>
+
