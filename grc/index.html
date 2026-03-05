@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyberdrill GRC — CMMC Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c0f;
+    --surface: #0d1318;
+    --surface2: #111920;
+    --surface3: #162030;
+    --border: #1e3040;
+    --border2: #2a4560;
+    --accent: #00d4ff;
+    --accent2: #00ff88;
+    --accent3: #ff6b35;
+    --warn: #ffcc00;
+    --danger: #ff3b3b;
+    --text: #c8dde8;
+    --text2: #6a8fa8;
+    --text3: #3d5f75;
+    --mono: 'Share Tech Mono', monospace;
+    --head: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body.locked header, body.locked .main { display: none !important; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 60px;
+    background: rgba(8,12,15,0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: rgba(0,212,255,0.1);
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; }
+
+  .logo-text {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    margin-top: 2px;
+  }
+
+  .header-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .nav-btn {
+    font-family: var(--head);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    background: none;
+    border: none;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .nav-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; right: 50%;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--accent);
+  }
+
+  .nav-btn.active::after, .nav-btn:hover::after {
+    left: 16px; right: 16px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .org-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+
+  .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 8px var(--accent2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    margin-top: 60px;
+    display: flex;
+    height: calc(100vh - 60px);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--text3);
+    padding: 0 16px 8px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    font-family: var(--head);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--text2);
+    text-transform: uppercase;
+  }
+
+  .sidebar-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+    border-left-color: var(--border2);
+  }
+
+  .sidebar-item.active {
+    background: rgba(0,212,255,0.06);
+    color: var(--accent);
+    border-left-color: var(--accent);
+  }
+
+  .sidebar-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  .level-indicator {
+    margin: 16px;
+    padding: 12px;
+    border: 1px solid var(--border2);
+    background: rgba(0,212,255,0.04);
+  }
+
+  .level-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .level-val {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .level-desc {
+    font-family: var(--body);
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  .score-ring-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+  }
+
+  .score-ring {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+
+  .score-ring svg {
+    transform: rotate(-90deg);
+    width: 100px; height: 100px;
+  }
+
+  .score-ring-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .score-val {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--accent2);
+    line-height: 1;
+  }
+
+  .score-unit {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+  }
+
+  /* CONTENT AREA */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: none;
+  }
+
+  .content.active { display: block; }
+
+  /* PAGE TITLE */
+  .page-title {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-title h1 {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 36px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .page-title h1 span { color: var(--accent); }
+
+  .page-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    padding: 3px 8px;
+    border: 1px solid var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  /* STAT CARDS ROW */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .stat-card.cyan::before { background: var(--accent); }
+  .stat-card.green::before { background: var(--accent2); }
+  .stat-card.orange::before { background: var(--accent3); }
+  .stat-card.yellow::before { background: var(--warn); }
+
+  .stat-card:hover { border-color: var(--border2); }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-val {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 40px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card.cyan .stat-val { color: var(--accent); }
+  .stat-card.green .stat-val { color: var(--accent2); }
+  .stat-card.orange .stat-val { color: var(--accent3); }
+  .stat-card.yellow .stat-val { color: var(--warn); }
+
+  .stat-sub {
+    font-family: var(--body);
+    font-size: 11px;
+    color: var(--text2);
+  }
+
+  /* GRID PANELS */
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .panel.full { grid-column: 1 / -1; }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .panel-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .panel-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  .panel-body { padding: 16px; }
+
+  /* DOMAIN BARS */
+  .domain-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .domain-item {}
+
+  .domain-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+
+  .domain-name {
+    font-family: var(--head);
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .domain-score {
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .domain-bar {
+    height: 4px;
+    background: var(--surface3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .domain-fill {
+    height: 100%;
+    transition: width 1s ease;
+    position: relative;
+  }
+
+  .domain-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: rgba(255,255,255,0.6);
+    filter: blur(2px);
+  }
+
+  /* RISK HEATMAP */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+  }
+
+  .heatmap-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .heatmap-cell:hover { transform: scale(1.1); z-index: 2; }
+
+  .heat-0 { background: rgba(0,255,136,0.15); color: var(--accent2); }
+  .heat-1 { background: rgba(0,255,136,0.08); color: var(--accent2); opacity: 0.6; }
+  .heat-2 { background: rgba(255,204,0,0.15); color: var(--warn); }
+  .heat-3 { background: rgba(255,107,53,0.2); color: var(--accent3); }
+  .heat-4 { background: rgba(255,59,59,0.25); color: var(--danger); }
+
+  /* CONTROL TABLE */
+  .ctrl-table { width: 100%; border-collapse: collapse; }
+
+  .ctrl-table th {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
+  }
+
+  .ctrl-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(30,48,64,0.5);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .ctrl-table tr:hover td { background: rgba(0,212,255,0.03); }
+
+  .ctrl-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .ctrl-name {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  .ctrl-domain {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .status-badge.pass { color: var(--accent2); background: rgba(0,255,136,0.08); border: 1px solid rgba(0,255,136,0.2); }
+  .status-badge.fail { color: var(--danger); background: rgba(255,59,59,0.08); border: 1px solid rgba(255,59,59,0.2); }
+  .status-badge.partial { color: var(--warn); background: rgba(255,204,0,0.08); border: 1px solid rgba(255,204,0,0.2); }
+  .status-badge.na { color: var(--text3); background: rgba(100,100,100,0.08); border: 1px solid var(--border); }
+
+  .status-dot-sm {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pass .status-dot-sm { background: var(--accent2); }
+  .fail .status-dot-sm { background: var(--danger); }
+  .partial .status-dot-sm { background: var(--warn); }
+  .na .status-dot-sm { background: var(--text3); }
+
+  /* AI ADVISOR */
+  .ai-terminal {
+    background: #060a0d;
+    border: 1px solid var(--border2);
+    font-family: var(--mono);
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  .ai-terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .term-dot.r { background: #ff5f57; }
+  .term-dot.y { background: #febc2e; }
+  .term-dot.g { background: #28c840; }
+
+  .term-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    margin-left: 8px;
+  }
+
+  .ai-chat {
+    padding: 16px;
+    min-height: 280px;
+    max-height: 340px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ai-chat::-webkit-scrollbar { width: 4px; }
+  .ai-chat::-webkit-scrollbar-track { background: transparent; }
+  .ai-chat::-webkit-scrollbar-thumb { background: var(--border2); }
+
+  .chat-msg {
+    display: flex;
+    gap: 10px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chat-role {
+    font-size: 9px;
+    letter-spacing: 2px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    width: 48px;
+    text-align: right;
+  }
+
+  .chat-msg.user .chat-role { color: var(--accent); }
+  .chat-msg.ai .chat-role { color: var(--accent2); }
+
+  .chat-text {
+    font-size: 13px;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .chat-msg.user .chat-text { color: var(--text); }
+  .chat-msg.ai .chat-text { color: #a8d8b0; }
+
+  .chat-text .highlight { color: var(--accent); }
+  .chat-text .warn-text { color: var(--warn); }
+  .chat-text .danger-text { color: var(--danger); }
+
+  .ai-input-row {
+    display: flex;
+    gap: 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .ai-prompt-prefix {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent2);
+    padding: 12px 8px 12px 16px;
+    background: #060a0d;
+    flex-shrink: 0;
+  }
+
+  .ai-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    padding: 12px 8px;
+    caret-color: var(--accent);
+  }
+
+  .ai-input::placeholder { color: var(--text3); }
+
+  .ai-send {
+    padding: 10px 20px;
+    background: rgba(0,212,255,0.1);
+    border: none;
+    border-left: 1px solid var(--border);
+    color: var(--accent);
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .ai-send:hover { background: rgba(0,212,255,0.2); }
+  .ai-send:disabled { opacity: 0.4; cursor: default; }
+
+  /* ASSESSMENT */
+  .assess-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+  .domain-section {}
+
+  .domain-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 1px;
+  }
+
+  .domain-header:hover { border-color: var(--border2); }
+
+  .domain-chevron {
+    font-size: 10px;
+    color: var(--text3);
+    transition: transform 0.2s;
+  }
+
+  .domain-section.open .domain-chevron { transform: rotate(90deg); }
+
+  .domain-h-name {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .domain-h-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+  }
+
+  .domain-h-score {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 2px 8px;
+    border: 1px solid var(--border2);
+  }
+
+  .domain-controls {
+    display: none;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .domain-section.open .domain-controls { display: flex; }
+
+  .ctrl-row {
+    background: var(--surface);
+    border: 1px solid rgba(30,48,64,0.5);
+    border-top: none;
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 12px;
+    align-items: start;
+    transition: background 0.1s;
+  }
+
+  .ctrl-row:hover { background: var(--surface2); }
+
+  .ctrl-row-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  .ctrl-row-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .ctrl-row-desc {
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 3px;
+  }
+
+  .ctrl-status-select {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .status-opt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    transition: color 0.15s;
+  }
+
+  .status-opt input { accent-color: var(--accent); }
+  .status-opt:hover { color: var(--text); }
+
+  /* REPORT */
+  .report-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .btn-primary {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: rgba(0,212,255,0.2); }
+
+  .btn-secondary {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--text2); color: var(--text); }
+
+  .report-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+
+  .report-section-title {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .poam-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(30,48,64,0.5);
+    display: grid;
+    grid-template-columns: 90px 1fr 120px 100px;
+    gap: 12px;
+    align-items: center;
+    font-size: 13px;
+  }
+
+  .poam-item:last-child { border-bottom: none; }
+
+  .poam-id { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .poam-name { color: var(--text); }
+  .poam-date { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+
+  .priority-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+    text-align: center;
+  }
+
+  .priority-badge.high { color: var(--danger); border: 1px solid rgba(255,59,59,0.3); background: rgba(255,59,59,0.08); }
+  .priority-badge.med { color: var(--warn); border: 1px solid rgba(255,204,0,0.3); background: rgba(255,204,0,0.08); }
+  .priority-badge.low { color: var(--accent2); border: 1px solid rgba(0,255,136,0.3); background: rgba(0,255,136,0.08); }
+
+  /* LOADING */
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: 4px 0;
+  }
+
+  .typing-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: typing 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.2; transform: scale(0.8); }
+    30% { opacity: 1; transform: scale(1); }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* ANIMATIONS */
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .content.active { animation: slideIn 0.3s ease; }
+
+  /* ORG SETUP MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4,8,12,0.92);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    width: 560px;
+    max-width: 90vw;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .modal-title {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .modal-title span { color: var(--accent); }
+
+  .modal-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .form-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .form-input {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+
+  .form-select {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 10px 12px;
+    outline: none;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .form-select option { background: var(--surface2); }
+
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* TOOLTIP */
+  [data-tip] { position: relative; cursor: help; }
+  [data-tip]:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface3);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    z-index: 100;
+    pointer-events: none;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body class="locked">
+<div id="loginScreen" style="position:fixed;inset:0;background:#080c0f;z-index:9999;overflow-y:auto;">
+<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 20px 48px;gap:18px;">
+
+  <div style="text-align:center;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;">
+      <div style="width:54px;height:54px;border:2px solid #00d4ff;display:flex;align-items:center;justify-content:center;background:rgba(0,212,255,0.08);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,212,255,0.7);letter-spacing:4px;margin-top:3px;">GOVERNANCE &nbsp;&middot;&nbsp; RISK &nbsp;&middot;&nbsp; COMPLIANCE</div>
+      </div>
+    </div>
+    <div style="width:320px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);margin:8px auto;"></div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#3d5f75;letter-spacing:3px;">CMMC COMPLIANCE NAVIGATOR &mdash; VERSION 1.0.0</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a3d4f;letter-spacing:2px;margin-top:2px;">&copy; 2025 CYBERDRILL AI. ALL RIGHTS RESERVED.</div>
+  </div>
+
+  <div style="background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.25);padding:12px 16px;width:560px;max-width:96vw;">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-bottom:5px;">&#9888; PROPRIETARY SOFTWARE &mdash; LEGAL NOTICE</div>
+    <div style="font-family:'Barlow',sans-serif;font-size:11px;color:#c8dde8;line-height:1.7;">This software is the exclusive property of <strong>Cyberdrill AI</strong>. Unauthorized copying, distribution, reverse engineering, or public sharing is strictly prohibited under Texas law and U.S. federal law (TUTSA, Defend Trade Secrets Act, U.S. Copyright Act).</div>
+  </div>
+
+  <div style="background:#0d1318;border:1px solid #2a4560;width:560px;max-width:96vw;">
+    <div style="padding:14px 22px;border-bottom:1px solid #1e3040;background:#111920;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:3px;color:#fff;">SECURE ACCESS</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#3d5f75;margin-top:3px;letter-spacing:1px;">Complete all fields &mdash; all activity is monitored and logged.</div>
+    </div>
+    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:16px;">
+
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">1</div>
+          YOUR INFORMATION
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">FIRST NAME *</div>
+            <input id="lFirstName" type="text" placeholder="First name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">LAST NAME *</div>
+            <input id="lLastName" type="text" placeholder="Last name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">JOB TITLE *</div>
+            <input id="lTitle" type="text" placeholder="e.g. IT Security Manager" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">EMAIL ADDRESS *</div>
+            <input id="lEmail" type="email" placeholder="you@company.com" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:#1e3040;"></div>
+
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">2</div>
+          END USER LICENSE AGREEMENT
+        </div>
+        <div style="border:1px solid #1e3040;background:#080c0f;">
+          <div style="padding:9px 14px;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;background:#0d1318;">
+            <span style="font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;">Read the full EULA before accepting.</span>
+            <div style="display:flex;gap:6px;">
+              <button id="eulaToggleBtn" type="button" onclick="eulaToggle()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 12px;background:rgba(0,212,255,0.08);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">&#128196; READ EULA &#9660;</button>
+              <button type="button" onclick="eulaOpenTab()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;background:none;border:1px solid #1e3040;color:#6a8fa8;cursor:pointer;">OPEN IN TAB &#8599;</button>
+            </div>
+          </div>
+          <div id="eulaPanel" style="display:none;max-height:280px;overflow-y:auto;border-bottom:1px solid #1e3040;">
+            <div id="eulaContent" style="padding:16px 18px;font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;line-height:1.8;">
+              <div style="text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #1e3040;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:4px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div>
+                <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-top:4px;">END USER LICENSE AGREEMENT &mdash; PROPRIETARY &amp; CONFIDENTIAL</div>
+                <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;margin-top:2px;">v1.0.0 &mdash; Cyberdrill AI &mdash; cyberdrill.ai &mdash; State of Texas, USA</div>
+              </div>
+              <div style="background:rgba(255,204,0,0.05);border:1px solid rgba(255,204,0,0.2);padding:8px 12px;margin-bottom:12px;font-size:11px;color:#ffcc00;">&#9888; Legally binding agreement. Checking the box constitutes acceptance of all terms.</div>
+              <p><strong style="color:#00d4ff;">1. GRANT OF LICENSE</strong><br>Cyberdrill AI grants you a limited, non-exclusive, non-transferable, revocable license to use Cyberdrill GRC solely for internal CMMC compliance assessment. You may NOT copy, distribute, sell, reverse engineer, decompile, or create derivative works.</p><br>
+              <p><strong style="color:#00d4ff;">2. INTELLECTUAL PROPERTY</strong><br>Source code, interface design, assessment methodologies and scoring algorithms are the exclusive property of Cyberdrill AI, protected by U.S. Copyright Law (17 U.S.C.), TUTSA, and the Defend Trade Secrets Act (18 U.S.C. &#167;1836).</p><br>
+              <p><strong style="color:#00d4ff;">3. PROHIBITED SHARING</strong><br>You may NOT post screenshots on social media. You may NOT copy or share source code. You may NOT discuss proprietary features publicly without prior written consent.</p><br>
+              <p><strong style="color:#00d4ff;">4. CONFIDENTIALITY</strong><br>Restrict access to authorized personnel only. Immediately notify Cyberdrill AI of any unauthorized use or disclosure.</p><br>
+              <p><strong style="color:#00d4ff;">5. DATA &amp; PRIVACY</strong><br>Assessment data remains your property. AI features via Anthropic API are governed by Anthropic terms. You are responsible for credential confidentiality.</p><br>
+              <p><strong style="color:#00d4ff;">6. DISCLAIMER OF WARRANTIES</strong><br>THE SOFTWARE IS PROVIDED AS IS WITHOUT WARRANTY. Cyberdrill GRC is a preparatory tool. CMMC certification requires a C3PAO authorized assessor.</p><br>
+              <p><strong style="color:#00d4ff;">7. LIMITATION OF LIABILITY</strong><br>CYBERDRILL AI SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES. Total liability shall not exceed amounts paid in the preceding 12 months.</p><br>
+              <p><strong style="color:#00d4ff;">8. ENFORCEMENT &amp; REMEDIES</strong><br>Unauthorized use constitutes irreparable harm. Cyberdrill AI may seek injunctive relief, statutory copyright damages up to $150,000 per willful infringement, attorney fees, and DMCA takedowns.</p><br>
+              <p><strong style="color:#00d4ff;">9. GOVERNING LAW</strong><br>Governed by the laws of the State of Texas, USA. Applicable: TUTSA, U.S. Copyright Act, Defend Trade Secrets Act (18 U.S.C. &#167;1836), CFAA (18 U.S.C. &#167;1030), DMCA.</p><br>
+              <p><strong style="color:#00d4ff;">10. TERMINATION</strong><br>Terminates immediately upon breach. You must cease all use and destroy all copies. Sections 2, 3, 4, 7, 8, 9 survive termination.</p><br>
+              <p><strong style="color:#00d4ff;">11. GENERAL PROVISIONS</strong><br>This is the entire agreement. Cyberdrill AI may modify it. Continued use constitutes acceptance. Contact: cyberdrill.ai</p>
+              <div style="text-align:center;padding-top:12px;margin-top:10px;border-top:1px solid #1e3040;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;line-height:2;">&copy; 2025 Cyberdrill AI. All Rights Reserved. State of Texas, USA. CONFIDENTIAL.</div>
+            </div>
+            <div style="padding:10px 14px;display:flex;justify-content:center;gap:8px;background:#0a0f14;border-top:1px solid #1e3040;">
+              <button type="button" onclick="eulaAccept()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;padding:10px 22px;background:rgba(0,255,136,0.08);border:1px solid #00ff88;color:#00ff88;cursor:pointer;">I ACCEPT THE EULA &#10003;</button>
+              <button type="button" onclick="eulaClose()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;padding:10px 16px;background:none;border:1px solid #2a4560;color:#6a8fa8;cursor:pointer;">CLOSE</button>
+            </div>
+          </div>
+          <div id="eulaCheckWrap" style="padding:10px 14px;display:flex;align-items:flex-start;gap:10px;">
+            <input type="checkbox" id="eulaCheck" style="margin-top:3px;accent-color:#00d4ff;width:15px;height:15px;flex-shrink:0;cursor:pointer;">
+            <label for="eulaCheck" style="font-family:'Barlow',sans-serif;font-size:11px;color:#6a8fa8;line-height:1.7;cursor:pointer;">I have read, understood, and agree to the <strong style="color:#00d4ff;">End User License Agreement</strong>. I acknowledge this is proprietary software governed by the laws of the <strong style="color:#c8dde8;">State of Texas, USA</strong>.</label>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:1px;background:#1e3040;"></div>
+
+      <div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">3</div>
+          LOGIN CREDENTIALS
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">USERNAME *</div>
+            <input id="lUser" type="text" placeholder="Username" autocomplete="username" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">PASSWORD *</div>
+            <input id="lPass" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()">
+          </div>
+        </div>
+      </div>
+
+      <div id="loginErr" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;color:#ff3b3b;padding:8px 12px;border:1px solid rgba(255,59,59,0.3);background:rgba(255,59,59,0.05);"></div>
+
+    </div>
+    <div style="padding:14px 22px;border-top:1px solid #1e3040;background:#111920;">
+      <button type="button" onclick="doLogin()" style="width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:3px;padding:13px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">LOGIN TO CYBERDRILL GRC &nbsp;&#8594;</button>
+    </div>
+  </div>
+
+  <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#2a3d4f;text-align:center;line-height:2;letter-spacing:1px;">&copy; 2025 Cyberdrill AI. All Rights Reserved. &mdash; cyberdrill.ai<br>Governed by the Laws of the State of Texas, United States of America.</div>
+
+</div>
+</div>
+
+
+<!-- SETUP MODAL -->
+<div class="modal-overlay" id="setupModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">CYBERDRILL <span>GRC</span></div>
+      <div class="modal-sub">CMMC NAVIGATOR — ORGANIZATION SETUP</div>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <div class="form-label">Organization Name</div>
+        <input class="form-input" id="orgName" type="text" placeholder="e.g. Acme Defense Solutions LLC" />
+      </div>
+      <div class="form-group">
+        <div class="form-label">Industry Sector</div>
+        <select class="form-select" id="orgIndustry">
+          <option value="">— Select Sector —</option>
+          <option value="manufacturing">Manufacturing / Industrial</option>
+          <option value="defense">Defense Contractor (DIB)</option>
+          <option value="healthcare">Healthcare</option>
+          <option value="finance">Financial Services</option>
+          <option value="energy">Energy / Utilities</option>
+          <option value="government">Government / Public Sector</option>
+          <option value="tech">Technology / MSP</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Target CMMC Level</div>
+        <select class="form-select" id="orgLevel">
+          <option value="1">Level 1 — Foundational (15 controls)</option>
+          <option value="2" selected>Level 2 — Advanced (110 controls)</option>
+          <option value="3">Level 3 — Expert (130+ controls)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>Anthropic API Key <span style="color:var(--text3);font-size:9px;">(Optional — for AI Advisor)</span></span>
+          <span id="apiKeyToggle" onclick="toggleApiVis()" style="font-family:var(--mono);font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;">SHOW</span>
+        </div>
+        <div style="position:relative;">
+          <input class="form-input" id="apiKey" type="password" placeholder="sk-ant-..." style="padding-right:90px;" />
+          <span onclick="saveApiKey()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;border:1px solid var(--accent);padding:3px 8px;">SAVE</span>
+        </div>
+        <div id="apiKeySaved" style="display:none;font-family:var(--mono);font-size:9px;color:#00ff88;margin-top:4px;letter-spacing:1px;">&#10003; API key saved for this session</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px;letter-spacing:0.5px;">Key is stored in memory only — never sent anywhere except Anthropic API calls.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="startApp()">INITIALIZE PLATFORM →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">CYBERDRILL <span>GRC</span></div>
+      <div class="logo-sub">CMMC NAVIGATOR v1.0</div>
+    </div>
+  </div>
+
+  <div class="header-center">
+    <button class="nav-btn active" onclick="showPage('dashboard', this)">Dashboard</button>
+    <button class="nav-btn" onclick="showPage('assessment', this)">Assessment</button>
+    <button class="nav-btn" onclick="showPage('advisor', this)">AI Advisor</button>
+    <button class="nav-btn" onclick="showPage('reports', this)">Reports</button>
+  </div>
+
+  <div class="header-right">
+    <div class="org-badge" id="orgBadge">ORG: —</div>
+    <div class="status-dot" data-tip="System Online"></div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="score-ring-wrap">
+      <div class="score-ring">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#1e3040" stroke-width="8"/>
+          <circle cx="50" cy="50" r="42" fill="none" stroke="#00ff88" stroke-width="8"
+            stroke-dasharray="263.9" id="scoreCircle"
+            stroke-dashoffset="200" stroke-linecap="square"
+            style="transition: stroke-dashoffset 1.5s ease"/>
+        </svg>
+        <div class="score-ring-text">
+          <div class="score-val" id="sidebarScore">24%</div>
+          <div class="score-unit">SCORE</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="level-indicator">
+      <div class="level-label">TARGET LEVEL</div>
+      <div class="level-val" id="sidebarLevel">L2</div>
+      <div class="level-desc" id="sidebarLevelDesc">Advanced — 110 Controls</div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <div class="sidebar-item active" onclick="showPage('dashboard', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="sidebar-item" onclick="showPage('assessment', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        Assessment
+      </div>
+      <div class="sidebar-item" onclick="showPage('advisor', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        AI Advisor
+      </div>
+      <div class="sidebar-item" onclick="showPage('reports', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Reports
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Compliance</div>
+      <div class="sidebar-item" onclick="showPage('assessment', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        CMMC L1
+      </div>
+      <div class="sidebar-item" onclick="showPage('assessment', null, this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        CMMC L2
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD PAGE -->
+  <div class="content active" id="page-dashboard">
+    <div class="page-title">
+      <div>
+        <div class="page-tag">COMPLIANCE OVERVIEW</div>
+        <h1>COMMAND <span>CENTER</span></h1>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card cyan">
+        <div class="stat-label">Overall Score</div>
+        <div class="stat-val" id="dashScore">24%</div>
+        <div class="stat-sub">CMMC Level 2 Readiness</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-label">Controls Passing</div>
+        <div class="stat-val" id="dashPass">26</div>
+        <div class="stat-sub">of 110 assessed</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-label">Gaps Identified</div>
+        <div class="stat-val" id="dashFail">71</div>
+        <div class="stat-sub">require remediation</div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-label">Partial Controls</div>
+        <div class="stat-val" id="dashPartial">13</div>
+        <div class="stat-sub">in progress</div>
+      </div>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Domain Scores</div>
+          <div class="panel-badge">NIST 800-171</div>
+        </div>
+        <div class="panel-body">
+          <div class="domain-list" id="domainBars"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Risk Heatmap</div>
+          <div class="panel-badge">110 CONTROLS</div>
+        </div>
+        <div class="panel-body">
+          <div class="heatmap-grid" id="heatmapGrid"></div>
+          <div style="display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;">
+            <span style="font-family:var(--mono);font-size:10px;color:var(--accent2)">■ PASS</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--warn)">■ PARTIAL</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--danger)">■ FAIL</span>
+            <span style="font-family:var(--mono);font-size:10px;color:var(--text3)">■ NOT ASSESSED</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel full">
+        <div class="panel-header">
+          <div class="panel-title">Control Status — Recent</div>
+          <div class="panel-badge" id="recentCount">SHOWING 15</div>
+        </div>
+        <div class="panel-body" style="padding:0;">
+          <table class="ctrl-table">
+            <thead>
+              <tr>
+                <th>Control ID</th>
+                <th>Control Name</th>
+                <th>Domain</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentControls"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT PAGE -->
+  <div class="content" id="page-assessment">
+    <div class="page-title">
+      <div>
+        <div class="page-tag">CMMC LEVEL 2</div>
+        <h1>CONTROL <span>ASSESSMENT</span></h1>
+      </div>
+    </div>
+    <div class="assess-wrap" id="assessWrap"></div>
+  </div>
+
+  <!-- AI ADVISOR PAGE -->
+  <div class="content" id="page-advisor">
+    <div class="page-title">
+      <div>
+        <div class="page-tag">POWERED BY CLAUDE</div>
+        <h1>AI COMPLIANCE <span>ADVISOR</span></h1>
+      </div>
+    </div>
+
+    <div class="panel full" style="margin-bottom:16px;">
+      <div class="panel-header">
+        <div class="panel-title">Infrastructure Intelligence</div>
+        <div class="panel-badge">CMMC GAP ANALYSIS</div>
+      </div>
+      <div class="panel-body">
+        <p style="font-size:13px;color:var(--text2);margin-bottom:12px;line-height:1.6;">
+          Describe your organization's IT infrastructure in plain language. The AI Advisor will analyze your environment, estimate CMMC readiness, identify control gaps, and generate a prioritized remediation roadmap.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--text3)">EXAMPLE PROMPTS:</div>
+          <span class="example-prompt" onclick="setPrompt(this)" style="font-family:var(--mono);font-size:10px;color:var(--accent);cursor:pointer;padding:2px 6px;border:1px solid var(--border2);">Active Directory + SonicWall + NinjaOne</span>
+          <span class="example-prompt" onclick="setPrompt(this)" style="font-family:var(--mono);font-size:10px;color:var(--accent);cursor:pointer;padding:2px 6px;border:1px solid var(--border2);">Microsoft 365 + no MFA + no SIEM</span>
+          <span class="example-prompt" onclick="setPrompt(this)" style="font-family:var(--mono);font-size:10px;color:var(--accent);cursor:pointer;padding:2px 6px;border:1px solid var(--border2);">AWS cloud + GitHub + Okta SSO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-terminal">
+      <div class="ai-terminal-header">
+        <div class="term-dot r"></div>
+        <div class="term-dot y"></div>
+        <div class="term-dot g"></div>
+        <div class="term-title">CYBERDRILL AI — COMPLIANCE ADVISOR &mdash; CMMC NAVIGATOR</div>
+      </div>
+      <div class="ai-chat" id="aiChat">
+        <div class="chat-msg ai">
+          <div class="chat-role">SYS</div>
+          <div class="chat-text">Cyberdrill AI Compliance Advisor initialized. I analyze your IT infrastructure and map it against <span class="highlight">CMMC Level 2</span> controls (NIST SP 800-171). Describe your environment — tools, systems, security controls in place — and I will generate a detailed gap analysis and remediation roadmap.</div>
+        </div>
+      </div>
+      <div class="ai-input-row">
+        <div class="ai-prompt-prefix">❯</div>
+        <input class="ai-input" id="aiInput" type="text" placeholder="Describe your infrastructure... (e.g. We use Active Directory, no MFA enforced, SonicWall firewall, Veeam backups)" />
+        <button class="ai-send" id="aiSend" onclick="sendToAdvisor()">ANALYZE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS PAGE -->
+  <div class="content" id="page-reports">
+    <div class="page-title">
+      <div>
+        <div class="page-tag">AUDIT READY</div>
+        <h1>COMPLIANCE <span>REPORTS</span></h1>
+      </div>
+    </div>
+
+    <div class="report-actions">
+      <button class="btn-primary" onclick="exportReport()">⬇ EXPORT FULL REPORT</button>
+      <button class="btn-secondary" onclick="generatePOAM()">⬇ GENERATE POA&amp;M</button>
+    </div>
+
+    <div class="report-panel">
+      <div class="report-section-title">EXECUTIVE SUMMARY</div>
+      <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:6px;">ORGANIZATION</div>
+          <div style="font-family:var(--head);font-size:18px;font-weight:700;color:var(--text)" id="rptOrg">—</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:6px;">TARGET LEVEL</div>
+          <div style="font-family:var(--head);font-size:18px;font-weight:700;color:var(--accent)" id="rptLevel">CMMC L2</div>
+        </div>
+        <div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-bottom:6px;">ASSESSMENT DATE</div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--text2)" id="rptDate">—</div>
+        </div>
+      </div>
+      <div style="padding:0 16px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
+        <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);text-align:center;">
+          <div style="font-family:var(--head);font-size:32px;font-weight:900;color:var(--accent2)" id="rptScore">24%</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:4px;">READINESS</div>
+        </div>
+        <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);text-align:center;">
+          <div style="font-family:var(--head);font-size:32px;font-weight:900;color:var(--accent2)" id="rptPass2">26</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:4px;">PASSING</div>
+        </div>
+        <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);text-align:center;">
+          <div style="font-family:var(--head);font-size:32px;font-weight:900;color:var(--danger)" id="rptFail2">71</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:4px;">FAILING</div>
+        </div>
+        <div style="padding:12px;background:var(--surface2);border:1px solid var(--border);text-align:center;">
+          <div style="font-family:var(--head);font-size:32px;font-weight:900;color:var(--warn)" id="rptPartial2">13</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;margin-top:4px;">PARTIAL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-panel">
+      <div class="report-section-title">PLAN OF ACTION &amp; MILESTONES (POA&amp;M)</div>
+      <div style="padding:0;">
+        <div style="display:grid;grid-template-columns:90px 1fr 120px 100px;gap:12px;padding:8px 16px;border-bottom:1px solid var(--border);background:var(--surface2);">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;">CONTROL</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;">WEAKNESS / GAP</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;">TARGET DATE</div>
+          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:2px;">PRIORITY</div>
+        </div>
+        <div id="poamList"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<script>
+// ==========================================
+// CMMC LEVEL 2 CONTROL DATABASE
+// NIST SP 800-171 — 14 Domains, 110 Controls
+// ==========================================
+const CMMC_CONTROLS = [
+  // ACCESS CONTROL (AC) — 22 controls
+  { id: 'AC.L2-3.1.1', name: 'Authorized Access Control', domain: 'ACCESS CONTROL', desc: 'Limit system access to authorized users, processes, and devices.' },
+  { id: 'AC.L2-3.1.2', name: 'Transaction & Function Control', domain: 'ACCESS CONTROL', desc: 'Limit access to types of transactions authorized users are permitted to execute.' },
+  { id: 'AC.L2-3.1.3', name: 'Control CUI Flow', domain: 'ACCESS CONTROL', desc: 'Control the flow of CUI in accordance with approved authorizations.' },
+  { id: 'AC.L2-3.1.4', name: 'Separation of Duties', domain: 'ACCESS CONTROL', desc: 'Separate duties of individuals to reduce risk of malevolent activity.' },
+  { id: 'AC.L2-3.1.5', name: 'Least Privilege', domain: 'ACCESS CONTROL', desc: 'Employ the principle of least privilege, including for specific security functions.' },
+  { id: 'AC.L2-3.1.6', name: 'Non-Privileged Account Use', domain: 'ACCESS CONTROL', desc: 'Use non-privileged accounts when accessing non-security functions.' },
+  { id: 'AC.L2-3.1.7', name: 'Privileged Function Restrictions', domain: 'ACCESS CONTROL', desc: 'Prevent non-privileged users from executing privileged functions.' },
+  { id: 'AC.L2-3.1.8', name: 'Unsuccessful Login Attempts', domain: 'ACCESS CONTROL', desc: 'Limit unsuccessful logon attempts.' },
+  { id: 'AC.L2-3.1.9', name: 'Privacy & Security Notices', domain: 'ACCESS CONTROL', desc: 'Provide privacy and security notices consistent with CUI rules.' },
+  { id: 'AC.L2-3.1.10', name: 'Session Lock', domain: 'ACCESS CONTROL', desc: 'Use session lock with pattern-hiding displays after period of inactivity.' },
+  { id: 'AC.L2-3.1.11', name: 'Session Termination', domain: 'ACCESS CONTROL', desc: 'Terminate sessions after defined conditions.' },
+  { id: 'AC.L2-3.1.12', name: 'Remote Access Monitoring', domain: 'ACCESS CONTROL', desc: 'Monitor and control remote access sessions.' },
+  { id: 'AC.L2-3.1.13', name: 'Remote Access Cryptography', domain: 'ACCESS CONTROL', desc: 'Employ cryptographic mechanisms to protect confidentiality of remote access.' },
+  { id: 'AC.L2-3.1.14', name: 'Remote Access Routing', domain: 'ACCESS CONTROL', desc: 'Route remote access via managed access control points.' },
+  { id: 'AC.L2-3.1.15', name: 'Privileged Remote Access', domain: 'ACCESS CONTROL', desc: 'Authorize remote execution of privileged commands via remote access.' },
+  { id: 'AC.L2-3.1.16', name: 'Wireless Access Authorization', domain: 'ACCESS CONTROL', desc: 'Authorize wireless access prior to allowing connections.' },
+  { id: 'AC.L2-3.1.17', name: 'Wireless Access Protection', domain: 'ACCESS CONTROL', desc: 'Protect wireless access using authentication and encryption.' },
+  { id: 'AC.L2-3.1.18', name: 'Mobile Device Connection', domain: 'ACCESS CONTROL', desc: 'Control connection of mobile devices.' },
+  { id: 'AC.L2-3.1.19', name: 'Encrypt CUI on Mobile', domain: 'ACCESS CONTROL', desc: 'Encrypt CUI on mobile devices and mobile computing platforms.' },
+  { id: 'AC.L2-3.1.20', name: 'External System Connections', domain: 'ACCESS CONTROL', desc: 'Verify and control/limit connections to external information systems.' },
+  { id: 'AC.L2-3.1.21', name: 'Portable Storage Use', domain: 'ACCESS CONTROL', desc: 'Limit use of portable storage devices on external systems.' },
+  { id: 'AC.L2-3.1.22', name: 'Control CUI Posted Publicly', domain: 'ACCESS CONTROL', desc: 'Control CUI posted or processed on publicly accessible systems.' },
+
+  // AWARENESS & TRAINING (AT) — 3 controls
+  { id: 'AT.L2-3.2.1', name: 'Role-Based Risk Awareness', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are aware of security risks associated with their activities.' },
+  { id: 'AT.L2-3.2.2', name: 'Role-Based Training', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are trained to carry out assigned security responsibilities.' },
+  { id: 'AT.L2-3.2.3', name: 'Insider Threat Awareness', domain: 'AWARENESS & TRAINING', desc: 'Provide security awareness training on recognizing and reporting threats.' },
+
+  // AUDIT & ACCOUNTABILITY (AU) — 9 controls
+  { id: 'AU.L2-3.3.1', name: 'System Auditing', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Create and retain system audit logs to enable monitoring and investigation.' },
+  { id: 'AU.L2-3.3.2', name: 'User Accountability', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Ensure actions of individual users can be traced to those users.' },
+  { id: 'AU.L2-3.3.3', name: 'Event Review', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Review and update logged events.' },
+  { id: 'AU.L2-3.3.4', name: 'Audit Failure Alerting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Alert in the event of an audit logging process failure.' },
+  { id: 'AU.L2-3.3.5', name: 'Audit Correlation', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Correlate audit record review, analysis, and reporting processes.' },
+  { id: 'AU.L2-3.3.6', name: 'Reduction & Reporting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide audit record reduction and report generation to support analysis.' },
+  { id: 'AU.L2-3.3.7', name: 'Authoritative Time Source', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide system capability that compares and synchronizes clocks.' },
+  { id: 'AU.L2-3.3.8', name: 'Audit Protection', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Protect audit information and tools from unauthorized access.' },
+  { id: 'AU.L2-3.3.9', name: 'Audit Management', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Limit management of audit logging to subset of privileged users.' },
+
+  // CONFIGURATION MANAGEMENT (CM) — 9 controls
+  { id: 'CM.L2-3.4.1', name: 'System Baselining', domain: 'CONFIGURATION MGMT', desc: 'Establish and maintain baseline configurations for systems.' },
+  { id: 'CM.L2-3.4.2', name: 'Security Configuration', domain: 'CONFIGURATION MGMT', desc: 'Establish and enforce security configuration settings.' },
+  { id: 'CM.L2-3.4.3', name: 'Configuration Change Control', domain: 'CONFIGURATION MGMT', desc: 'Track, review, approve, and log changes to systems.' },
+  { id: 'CM.L2-3.4.4', name: 'Security Impact Analysis', domain: 'CONFIGURATION MGMT', desc: 'Analyze security impact of changes prior to implementation.' },
+  { id: 'CM.L2-3.4.5', name: 'Access Restrictions for Change', domain: 'CONFIGURATION MGMT', desc: 'Define, document and enforce access restrictions for changes.' },
+  { id: 'CM.L2-3.4.6', name: 'Least Functionality', domain: 'CONFIGURATION MGMT', desc: 'Employ principle of least functionality by configuring to provide only essential capabilities.' },
+  { id: 'CM.L2-3.4.7', name: 'Nonessential Functionality', domain: 'CONFIGURATION MGMT', desc: 'Restrict, disable, or prevent use of nonessential programs and functions.' },
+  { id: 'CM.L2-3.4.8', name: 'Application Execution Policy', domain: 'CONFIGURATION MGMT', desc: 'Apply deny-by-exception policy to prevent use of unauthorized software.' },
+  { id: 'CM.L2-3.4.9', name: 'User-Installed Software', domain: 'CONFIGURATION MGMT', desc: 'Control and monitor user-installed software.' },
+
+  // IDENTIFICATION & AUTHENTICATION (IA) — 11 controls
+  { id: 'IA.L2-3.5.1', name: 'Identification', domain: 'IDENTIFICATION & AUTH', desc: 'Identify system users, processes, and devices.' },
+  { id: 'IA.L2-3.5.2', name: 'Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Authenticate identities of users, processes, and devices before access.' },
+  { id: 'IA.L2-3.5.3', name: 'Multifactor Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Use multifactor authentication for local and network access.' },
+  { id: 'IA.L2-3.5.4', name: 'Replay-Resistant Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Employ replay-resistant authentication mechanisms.' },
+  { id: 'IA.L2-3.5.5', name: 'Identifier Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Employ the following measures to manage identifier reuse.' },
+  { id: 'IA.L2-3.5.6', name: 'Identifier Handling', domain: 'IDENTIFICATION & AUTH', desc: 'Disable identifiers after defined period of inactivity.' },
+  { id: 'IA.L2-3.5.7', name: 'Password Complexity', domain: 'IDENTIFICATION & AUTH', desc: 'Enforce minimum password complexity and change requirements.' },
+  { id: 'IA.L2-3.5.8', name: 'Password Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Prohibit password reuse for a specified number of generations.' },
+  { id: 'IA.L2-3.5.9', name: 'Temporary Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Allow temporary password use with immediate change requirement.' },
+  { id: 'IA.L2-3.5.10', name: 'Cryptographically-Protected Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Store and transmit only cryptographically-protected passwords.' },
+  { id: 'IA.L2-3.5.11', name: 'Obscure Feedback', domain: 'IDENTIFICATION & AUTH', desc: 'Obscure feedback of authentication information during authentication.' },
+
+  // INCIDENT RESPONSE (IR) — 3 controls
+  { id: 'IR.L2-3.6.1', name: 'Incident Handling', domain: 'INCIDENT RESPONSE', desc: 'Establish operational incident-handling capability including preparation and analysis.' },
+  { id: 'IR.L2-3.6.2', name: 'Incident Reporting', domain: 'INCIDENT RESPONSE', desc: 'Track, document, and report incidents to appropriate officials.' },
+  { id: 'IR.L2-3.6.3', name: 'Incident Response Testing', domain: 'INCIDENT RESPONSE', desc: 'Test the organizational incident response capability.' },
+
+  // MAINTENANCE (MA) — 6 controls
+  { id: 'MA.L2-3.7.1', name: 'Perform Maintenance', domain: 'MAINTENANCE', desc: 'Perform maintenance on organizational systems.' },
+  { id: 'MA.L2-3.7.2', name: 'System Maintenance Control', domain: 'MAINTENANCE', desc: 'Provide controls on the tools, techniques, and personnel for maintenance.' },
+  { id: 'MA.L2-3.7.3', name: 'Equipment Sanitization', domain: 'MAINTENANCE', desc: 'Ensure equipment removed for maintenance is sanitized.' },
+  { id: 'MA.L2-3.7.4', name: 'Media Inspection', domain: 'MAINTENANCE', desc: 'Check media containing diagnostic programs for malicious code.' },
+  { id: 'MA.L2-3.7.5', name: 'Nonlocal Maintenance', domain: 'MAINTENANCE', desc: 'Require MFA for remote maintenance sessions.' },
+  { id: 'MA.L2-3.7.6', name: 'Maintenance Personnel', domain: 'MAINTENANCE', desc: 'Supervise maintenance activities of personnel without required access.' },
+
+  // MEDIA PROTECTION (MP) — 9 controls
+  { id: 'MP.L2-3.8.1', name: 'Media Protection', domain: 'MEDIA PROTECTION', desc: 'Protect system media containing CUI, both paper and digital.' },
+  { id: 'MP.L2-3.8.2', name: 'Media Access', domain: 'MEDIA PROTECTION', desc: 'Limit access to CUI on digital media to authorized users.' },
+  { id: 'MP.L2-3.8.3', name: 'Media Sanitization', domain: 'MEDIA PROTECTION', desc: 'Sanitize or destroy media before disposal or reuse.' },
+  { id: 'MP.L2-3.8.4', name: 'Media Markings', domain: 'MEDIA PROTECTION', desc: 'Mark media with necessary CUI markings and distribution limitations.' },
+  { id: 'MP.L2-3.8.5', name: 'Media Accountability', domain: 'MEDIA PROTECTION', desc: 'Control access to media containing CUI and maintain accountability.' },
+  { id: 'MP.L2-3.8.6', name: 'Portable Storage Encryption', domain: 'MEDIA PROTECTION', desc: 'Implement cryptographic mechanisms to protect CUI on portable storage.' },
+  { id: 'MP.L2-3.8.7', name: 'Removable Media Control', domain: 'MEDIA PROTECTION', desc: 'Control the use of removable media on system components.' },
+  { id: 'MP.L2-3.8.8', name: 'Shared Media', domain: 'MEDIA PROTECTION', desc: 'Prohibit use of portable storage without identifiable owner.' },
+  { id: 'MP.L2-3.8.9', name: 'Media Protection During Transport', domain: 'MEDIA PROTECTION', desc: 'Protect CUI during transport using cryptographic mechanisms.' },
+
+  // PERSONNEL SECURITY (PS) — 2 controls
+  { id: 'PS.L2-3.9.1', name: 'Screen Individuals', domain: 'PERSONNEL SECURITY', desc: 'Screen individuals prior to authorizing access to systems.' },
+  { id: 'PS.L2-3.9.2', name: 'Termination & Transfer', domain: 'PERSONNEL SECURITY', desc: 'Ensure CUI is protected during and after personnel actions.' },
+
+  // PHYSICAL PROTECTION (PE) — 6 controls
+  { id: 'PE.L2-3.10.1', name: 'Limit Physical Access', domain: 'PHYSICAL PROTECTION', desc: 'Limit physical access to systems to authorized individuals.' },
+  { id: 'PE.L2-3.10.2', name: 'Monitor Facility', domain: 'PHYSICAL PROTECTION', desc: 'Protect and monitor physical facility and support infrastructure.' },
+  { id: 'PE.L2-3.10.3', name: 'Visitor Control', domain: 'PHYSICAL PROTECTION', desc: 'Escort visitors and monitor visitor activity.' },
+  { id: 'PE.L2-3.10.4', name: 'Physical Access Logs', domain: 'PHYSICAL PROTECTION', desc: 'Maintain audit logs of physical access.' },
+  { id: 'PE.L2-3.10.5', name: 'Manage Physical Access Devices', domain: 'PHYSICAL PROTECTION', desc: 'Control and manage physical access devices.' },
+  { id: 'PE.L2-3.10.6', name: 'Alternative Work Sites', domain: 'PHYSICAL PROTECTION', desc: 'Enforce safeguarding measures at alternative work sites.' },
+
+  // RISK ASSESSMENT (RA) — 3 controls
+  { id: 'RA.L2-3.11.1', name: 'Risk Assessments', domain: 'RISK ASSESSMENT', desc: 'Periodically assess risk to operations from system vulnerabilities.' },
+  { id: 'RA.L2-3.11.2', name: 'Vulnerability Scanning', domain: 'RISK ASSESSMENT', desc: 'Scan for vulnerabilities in systems periodically and upon identification of new vulnerabilities.' },
+  { id: 'RA.L2-3.11.3', name: 'Vulnerability Remediation', domain: 'RISK ASSESSMENT', desc: 'Remediate vulnerabilities in accordance with risk assessments.' },
+
+  // SECURITY ASSESSMENT (CA) — 4 controls
+  { id: 'CA.L2-3.12.1', name: 'Security Assessments', domain: 'SECURITY ASSESSMENT', desc: 'Periodically assess security controls to determine effectiveness.' },
+  { id: 'CA.L2-3.12.2', name: 'Plan of Action', domain: 'SECURITY ASSESSMENT', desc: 'Develop and implement plans of action to correct deficiencies.' },
+  { id: 'CA.L2-3.12.3', name: 'Continuous Monitoring', domain: 'SECURITY ASSESSMENT', desc: 'Monitor security controls on an ongoing basis.' },
+  { id: 'CA.L2-3.12.4', name: 'System Security Plan', domain: 'SECURITY ASSESSMENT', desc: 'Develop, document, and periodically update system security plans.' },
+
+  // SYSTEM & COMM PROTECTION (SC) — 16 controls
+  { id: 'SC.L2-3.13.1', name: 'Boundary Protection', domain: 'SYSTEM & COMM PROTECTION', desc: 'Monitor, control, and protect communications at external boundaries.' },
+  { id: 'SC.L2-3.13.2', name: 'Security Engineering', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ security engineering principles in system development.' },
+  { id: 'SC.L2-3.13.3', name: 'Role Separation', domain: 'SYSTEM & COMM PROTECTION', desc: 'Separate user functionality from system management functionality.' },
+  { id: 'SC.L2-3.13.4', name: 'Shared Resource Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent unauthorized and unintended information transfer.' },
+  { id: 'SC.L2-3.13.5', name: 'Public Access Denial', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement subnetworks for publicly accessible system components.' },
+  { id: 'SC.L2-3.13.6', name: 'Network Communication by Exception', domain: 'SYSTEM & COMM PROTECTION', desc: 'Deny network communications traffic by default.' },
+  { id: 'SC.L2-3.13.7', name: 'Split Tunneling', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent split tunneling for remote devices.' },
+  { id: 'SC.L2-3.13.8', name: 'Data in Transit', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement cryptographic mechanisms to prevent unauthorized disclosure during transmission.' },
+  { id: 'SC.L2-3.13.9', name: 'Connections Termination', domain: 'SYSTEM & COMM PROTECTION', desc: 'Terminate network connections after defined period of inactivity.' },
+  { id: 'SC.L2-3.13.10', name: 'Key Management', domain: 'SYSTEM & COMM PROTECTION', desc: 'Establish and manage cryptographic keys for cryptography in systems.' },
+  { id: 'SC.L2-3.13.11', name: 'CUI Encryption', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ FIPS-validated cryptography when protecting CUI.' },
+  { id: 'SC.L2-3.13.12', name: 'Collaborative Device Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prohibit remote activation of collaborative computing devices.' },
+  { id: 'SC.L2-3.13.13', name: 'Mobile Code', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of mobile code.' },
+  { id: 'SC.L2-3.13.14', name: 'VoIP', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of VoIP technologies.' },
+  { id: 'SC.L2-3.13.15', name: 'Communications Authenticity', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect authenticity of communications sessions.' },
+  { id: 'SC.L2-3.13.16', name: 'Data at Rest', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect CUI at rest.' },
+
+  // SYSTEM & INFO INTEGRITY (SI) — 7 controls
+  { id: 'SI.L2-3.14.1', name: 'Flaw Remediation', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify, report, and correct system flaws in a timely manner.' },
+  { id: 'SI.L2-3.14.2', name: 'Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Provide protection from malicious code at appropriate locations.' },
+  { id: 'SI.L2-3.14.3', name: 'Security Alerts', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor system security alerts and advisories.' },
+  { id: 'SI.L2-3.14.4', name: 'Update Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Update malicious code protection mechanisms when new releases are available.' },
+  { id: 'SI.L2-3.14.5', name: 'System & File Scanning', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Perform periodic scans and real-time scans of files from external sources.' },
+  { id: 'SI.L2-3.14.6', name: 'Security Monitoring', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor systems to detect attacks and indicators of potential attacks.' },
+  { id: 'SI.L2-3.14.7', name: 'Identify Unauthorized Use', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify unauthorized use of organizational systems.' },
+];
+
+// ==========================================
+// APP STATE
+// ==========================================
+const STATE = {
+  org: '',
+  industry: '',
+  level: 2,
+  apiKey: '',
+  controls: {},     // controlId -> 'pass' | 'fail' | 'partial' | 'na' | ''
+  chatHistory: [],
+};
+
+function initDemoData() {
+  CMMC_CONTROLS.forEach(c => { STATE.controls[c.id] = ''; });
+}
+
+// ==========================================
+// SCORING ENGINE
+// ==========================================
+function calcScore() {
+  let pass = 0, fail = 0, partial = 0, na = 0;
+  CMMC_CONTROLS.forEach(c => {
+    const s = STATE.controls[c.id] || 'fail';
+    if (s === 'pass') pass++;
+    else if (s === 'fail') fail++;
+    else if (s === 'partial') partial++;
+    else if (s === 'na') na++;
+  });
+  const total = CMMC_CONTROLS.length - na;
+  const score = total > 0 ? Math.round(((pass + partial * 0.5) / total) * 100) : 0;
+  return { pass, fail, partial, na, score, total };
+}
+
+function getDomainScores() {
+  const domains = {};
+  CMMC_CONTROLS.forEach(c => {
+    if (!domains[c.domain]) domains[c.domain] = { pass: 0, fail: 0, partial: 0, total: 0 };
+    domains[c.domain].total++;
+    const s = STATE.controls[c.id] || 'fail';
+    if (s === 'pass') domains[c.domain].pass++;
+    else if (s === 'partial') domains[c.domain].partial++;
+    else domains[c.domain].fail++;
+  });
+  return domains;
+}
+
+// ==========================================
+// UI FUNCTIONS
+// ==========================================
+function startApp() {
+  const name = document.getElementById('orgName').value.trim();
+  const industry = document.getElementById('orgIndustry').value;
+  const level = document.getElementById('orgLevel').value;
+  const key = document.getElementById('apiKey').value.trim();
+
+  if (!name) { alert('Please enter your organization name.'); return; }
+  if (!industry) { alert('Please select your industry sector.'); return; }
+
+  STATE.org = name || 'My Organization';
+  STATE.industry = industry;
+  STATE.level = parseInt(level);
+  STATE.apiKey = key;
+
+  document.getElementById('orgBadge').textContent = 'ORG: ' + STATE.org.substring(0, 16).toUpperCase();
+  document.getElementById('rptOrg').textContent = STATE.org;
+  document.getElementById('rptDate').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric'});
+
+  const levelDescs = { 1: 'Foundational — 15 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 130+ Controls' };
+  document.getElementById('sidebarLevel').textContent = 'L' + STATE.level;
+  document.getElementById('sidebarLevelDesc').textContent = levelDescs[STATE.level];
+  document.getElementById('rptLevel').textContent = 'CMMC L' + STATE.level;
+
+  initDemoData();
+  document.getElementById('setupModal').style.display = 'none';
+  renderAll();
+}
+
+function renderAll() {
+  const s = calcScore();
+  updateScores(s);
+  renderDomainBars();
+  renderHeatmap();
+  renderRecentControls();
+  renderAssessment();
+  renderPOAM();
+}
+
+function updateScores(s) {
+  const pct = s.score;
+  document.getElementById('sidebarScore').textContent = pct + '%';
+  document.getElementById('dashScore').textContent = pct + '%';
+  document.getElementById('dashPass').textContent = s.pass;
+  document.getElementById('dashFail').textContent = s.fail;
+  document.getElementById('dashPartial').textContent = s.partial;
+  document.getElementById('rptScore').textContent = pct + '%';
+  document.getElementById('rptPass2').textContent = s.pass;
+  document.getElementById('rptFail2').textContent = s.fail;
+  document.getElementById('rptPartial2').textContent = s.partial;
+
+  // Ring
+  const circumference = 263.9;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('scoreCircle').style.strokeDashoffset = offset;
+
+  // Color ring by score
+  const circle = document.getElementById('scoreCircle');
+  if (pct >= 70) circle.style.stroke = '#00ff88';
+  else if (pct >= 40) circle.style.stroke = '#ffcc00';
+  else circle.style.stroke = '#ff6b35';
+}
+
+function renderDomainBars() {
+  const domains = getDomainScores();
+  const container = document.getElementById('domainBars');
+  container.innerHTML = '';
+  Object.entries(domains).forEach(([name, d]) => {
+    const pct = Math.round(((d.pass + d.partial * 0.5) / d.total) * 100);
+    const color = pct >= 70 ? 'var(--accent2)' : pct >= 40 ? 'var(--warn)' : 'var(--accent3)';
+    container.innerHTML += `
+      <div class="domain-item">
+        <div class="domain-top">
+          <div class="domain-name" style="font-size:11px">${name}</div>
+          <div class="domain-score" style="color:${color}">${pct}%</div>
+        </div>
+        <div class="domain-bar">
+          <div class="domain-fill" style="width:${pct}%;background:${color}"></div>
+        </div>
+      </div>`;
+  });
+}
+
+function renderHeatmap() {
+  const container = document.getElementById('heatmapGrid');
+  container.innerHTML = '';
+  CMMC_CONTROLS.forEach((c, i) => {
+    const s = STATE.controls[c.id] || '';
+    let heatClass = 'heat-4';
+    if (s === 'pass') heatClass = 'heat-0';
+    else if (s === 'partial') heatClass = 'heat-2';
+    else if (s === 'na') heatClass = 'heat-1';
+    else heatClass = 'heat-4';
+    container.innerHTML += `<div class="heatmap-cell ${heatClass}" data-tip="${c.id}: ${c.name}" title="${c.id}">${i+1}</div>`;
+  });
+}
+
+function renderRecentControls() {
+  const tbody = document.getElementById('recentControls');
+  const shown = CMMC_CONTROLS.slice(0, 15);
+  tbody.innerHTML = shown.map(c => {
+    const s = STATE.controls[c.id] || 'fail';
+    const labels = { pass: 'PASS', fail: 'FAIL', partial: 'PARTIAL', na: 'N/A', '': 'FAIL' };
+    return `
+      <tr>
+        <td class="ctrl-id">${c.id}</td>
+        <td class="ctrl-name">${c.name}</td>
+        <td class="ctrl-domain">${c.domain}</td>
+        <td><span class="status-badge ${s}"><span class="status-dot-sm"></span>${labels[s]||'FAIL'}</span></td>
+      </tr>`;
+  }).join('');
+}
+
+function renderAssessment() {
+  const domains = {};
+  CMMC_CONTROLS.forEach(c => {
+    if (!domains[c.domain]) domains[c.domain] = [];
+    domains[c.domain].push(c);
+  });
+
+  const container = document.getElementById('assessWrap');
+  container.innerHTML = '';
+
+  Object.entries(domains).forEach(([dname, controls]) => {
+    const dScore = getDomainScores()[dname];
+    const pct = Math.round(((dScore.pass + dScore.partial * 0.5) / dScore.total) * 100);
+    const color = pct >= 70 ? 'var(--accent2)' : pct >= 40 ? 'var(--warn)' : 'var(--danger)';
+    const id = 'domain-' + dname.replace(/\s/g,'');
+
+    const ctrlsHTML = controls.map(c => {
+      const s = STATE.controls[c.id] || 'fail';
+      return `
+        <div class="ctrl-row">
+          <div class="ctrl-row-id">${c.id}</div>
+          <div>
+            <div class="ctrl-row-text">${c.name}</div>
+            <div class="ctrl-row-desc">${c.desc}</div>
+          </div>
+          <div class="ctrl-status-select">
+            ${['pass','partial','fail','na'].map(opt => `
+              <label class="status-opt">
+                <input type="radio" name="${c.id}" value="${opt}" ${s===opt?'checked':''} onchange="setControl('${c.id}', '${opt}')">
+                ${opt.toUpperCase()}
+              </label>`).join('')}
+          </div>
+        </div>`;
+    }).join('');
+
+    container.innerHTML += `
+      <div class="domain-section open" id="${id}">
+        <div class="domain-header" onclick="toggleDomain('${id}')">
+          <div class="domain-chevron">▶</div>
+          <div class="domain-h-name">${dname}</div>
+          <div class="domain-h-count">${controls.length} controls</div>
+          <div class="domain-h-score" style="color:${color}">${pct}%</div>
+        </div>
+        <div class="domain-controls">${ctrlsHTML}</div>
+      </div>`;
+  });
+}
+
+function toggleDomain(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+function setControl(id, status) {
+  STATE.controls[id] = status;
+  const s = calcScore();
+  updateScores(s);
+  renderDomainBars();
+  renderHeatmap();
+  renderRecentControls();
+  renderPOAM();
+}
+
+function renderPOAM() {
+  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
+  const container = document.getElementById('poamList');
+  const months = ['2025-06-30','2025-07-31','2025-08-31','2025-09-30','2025-10-31','2025-12-31'];
+  
+  container.innerHTML = failing.slice(0, 20).map((c, i) => {
+    const priority = i < 5 ? 'high' : i < 12 ? 'med' : 'low';
+    const date = months[Math.min(i, months.length-1)];
+    const s = STATE.controls[c.id];
+    return `
+      <div class="poam-item">
+        <div class="poam-id">${c.id}</div>
+        <div class="poam-name">${c.name} — ${s === 'partial' ? 'Partially implemented, requires completion' : 'Not implemented'}</div>
+        <div class="poam-date">${date}</div>
+        <div><span class="priority-badge ${priority}">${priority.toUpperCase()}</span></div>
+      </div>`;
+  }).join('');
+}
+
+// ==========================================
+// PAGE NAVIGATION
+// ==========================================
+function showPage(page, headerBtn, sidebarItem) {
+  document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+
+  if (headerBtn) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    headerBtn.classList.add('active');
+  }
+
+  if (sidebarItem) {
+    document.querySelectorAll('.sidebar-item').forEach(b => b.classList.remove('active'));
+    sidebarItem.classList.add('active');
+  }
+}
+
+// ==========================================
+// AI ADVISOR
+// ==========================================
+function setPrompt(el) {
+  document.getElementById('aiInput').value = 'We use ' + el.textContent + ' in our environment.';
+  document.getElementById('aiInput').focus();
+}
+
+async function sendToAdvisor() {
+  const input = document.getElementById('aiInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  if (!STATE.apiKey) {
+    addChatMsg('sys', 'No API key configured. Please restart and enter your Anthropic API key in the setup screen.');
+    return;
+  }
+
+  input.value = '';
+  addChatMsg('user', msg);
+  STATE.chatHistory.push({ role: 'user', content: msg });
+
+  document.getElementById('aiSend').disabled = true;
+  const loadingId = addLoadingMsg();
+
+  const systemPrompt = `You are a CMMC (Cybersecurity Maturity Model Certification) compliance expert and AI Advisor embedded in a platform called Cyberdrill GRC.
+
+The organization is: ${STATE.org || 'the client organization'} (${STATE.industry || 'general industry'}).
+Target CMMC Level: ${STATE.level}
+
+When a user describes their IT infrastructure, you must:
+1. Identify which CMMC Level 2 domains and specific controls their infrastructure addresses
+2. Identify critical GAPS — controls clearly NOT met based on their description
+3. Estimate an overall CMMC readiness percentage
+4. Provide a prioritized TOP 5 ACTIONS they should take immediately
+5. Note any specific NIST 800-171 control IDs (format: AC.L2-3.1.x) that are most at risk
+
+Be specific, technical, and direct. Use the control IDs. Format your response clearly with sections:
+- ENVIRONMENT ANALYSIS
+- ESTIMATED READINESS: X%  
+- CRITICAL GAPS (list top gaps with control IDs)
+- IMMEDIATE ACTIONS (numbered, prioritized)
+- RISK SUMMARY
+
+Keep the tone professional, authoritative, and actionable. You are helping a real organization improve their cybersecurity posture.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: STATE.chatHistory
+      })
+    });
+
+    const data = await response.json();
+    removeLoadingMsg(loadingId);
+
+    if (data.error) {
+      addChatMsg('sys', 'API Error: ' + data.error.message);
+    } else {
+      const reply = data.content[0].text;
+      STATE.chatHistory.push({ role: 'assistant', content: reply });
+      addChatMsg('ai', reply);
+    }
+  } catch (err) {
+    removeLoadingMsg(loadingId);
+    addChatMsg('sys', 'Connection error. Check your API key and network.');
+  }
+
+  document.getElementById('aiSend').disabled = false;
+}
+
+function addChatMsg(role, text) {
+  const chat = document.getElementById('aiChat');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role === 'user' ? 'user' : 'ai'}`;
+
+  const roleLabels = { user: 'USER', ai: 'AI', sys: 'SYS' };
+
+  // Format the text - bold control IDs
+  const formatted = text
+    .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--text)">$1</strong>')
+    .replace(/(AC|AT|AU|CM|IA|IR|MA|MP|PS|PE|RA|CA|SC|SI)\.(L[123]-[\d.]+)/g, '<span class="highlight">$1.$2</span>')
+    .replace(/\n/g, '<br>');
+
+  div.innerHTML = `
+    <div class="chat-role">${roleLabels[role] || 'AI'}</div>
+    <div class="chat-text">${formatted}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return div.id;
+}
+
+function addLoadingMsg() {
+  const chat = document.getElementById('aiChat');
+  const div = document.createElement('div');
+  div.className = 'chat-msg ai';
+  div.id = 'loading-msg';
+  div.innerHTML = `
+    <div class="chat-role">AI</div>
+    <div class="chat-text"><div class="typing-indicator">
+      <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+    </div></div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+  return 'loading-msg';
+}
+
+function removeLoadingMsg(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// Enter key for AI
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('aiInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendToAdvisor();
+  });
+});
+
+// ==========================================
+// EXPORT / REPORTS
+// ==========================================
+function exportReport() {
+  const s = calcScore();
+  const domains = getDomainScores();
+  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail');
+  const partial = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'partial');
+
+  let report = `CYBERDRILL GRC — CMMC COMPLIANCE REPORT
+==========================================
+Organization: ${STATE.org}
+Assessment Date: ${new Date().toLocaleDateString()}
+Target Level: CMMC Level ${STATE.level}
+==========================================
+
+EXECUTIVE SUMMARY
+-----------------
+Overall Readiness Score: ${s.score}%
+Controls Passing: ${s.pass} / ${CMMC_CONTROLS.length}
+Controls Failing: ${s.fail}
+Controls Partial: ${s.partial}
+
+DOMAIN SCORES
+-------------
+`;
+  Object.entries(domains).forEach(([d, data]) => {
+    const pct = Math.round(((data.pass + data.partial * 0.5) / data.total) * 100);
+    report += `${d.padEnd(28)} ${pct}% (${data.pass}/${data.total} passing)\n`;
+  });
+
+  report += `\nCRITICAL GAPS (FAILING CONTROLS)\n---------------------------------\n`;
+  failing.slice(0, 30).forEach(c => {
+    report += `${c.id.padEnd(20)} ${c.name}\n`;
+  });
+
+  report += `\nPARTIAL CONTROLS\n----------------\n`;
+  partial.forEach(c => {
+    report += `${c.id.padEnd(20)} ${c.name}\n`;
+  });
+
+  const blob = new Blob([report], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `CyberdrillGRC_CMMC_Report_${STATE.org.replace(/\s/g,'_')}_${new Date().toISOString().split('T')[0]}.txt`;
+  a.click();
+}
+
+function generatePOAM() {
+  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
+  let csv = 'Control ID,Control Name,Domain,Status,Priority,Target Date,Notes\n';
+  const months = ['2025-06-30','2025-07-31','2025-08-31','2025-09-30','2025-10-31','2025-12-31'];
+  failing.forEach((c, i) => {
+    const priority = i < 5 ? 'HIGH' : i < 15 ? 'MEDIUM' : 'LOW';
+    const date = months[Math.min(i, months.length-1)];
+    const s = STATE.controls[c.id] === 'partial' ? 'PARTIAL' : 'FAIL';
+    csv += `"${c.id}","${c.name}","${c.domain}","${s}","${priority}","${date}","Remediation required"\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `CyberdrillGRC_POAM_${STATE.org.replace(/\s/g,'_')}_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+</script>
+
+<div id="floatChat" style="position:fixed;bottom:24px;right:20px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+  <div id="floatWindow" style="display:none;width:340px;height:460px;background:#0d1318;border:1px solid #2a4560;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+    <div style="padding:10px 14px;background:#111920;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">AI</span> ASSISTANT</div>
+      <button type="button" onclick="toggleChat()" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#6a8fa8;border:none;background:none;cursor:pointer;padding:2px 6px;">&#x2715;</button>
+    </div>
+    <div id="fcMsgs" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+    <div style="display:flex;gap:6px;padding:10px;border-top:1px solid #1e3040;flex-shrink:0;">
+      <input id="fcInput" type="text" placeholder="Ask a CMMC question..." style="flex:1;background:#111920;border:1px solid #1e3040;color:#c8dde8;font-family:'Barlow',sans-serif;font-size:12px;padding:7px 10px;outline:none;" onkeydown="if(event.key==='Enter')sendChat()">
+      <button type="button" onclick="sendChat()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:7px 12px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">SEND</button>
+    </div>
+    <div style="padding:4px 10px 6px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;letter-spacing:1px;border-top:1px solid #1e3040;">POWERED BY CLAUDE AI &mdash; CYBERDRILL GRC v1.0.0</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div id="chatTooltip" onclick="toggleChat()" style="background:#0d1318;border:1px solid #00d4ff;padding:5px 12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#00d4ff;letter-spacing:1px;cursor:pointer;white-space:nowrap;animation:fcPulse 2s ease-in-out infinite;">ASK AI &#8594;</div>
+    <button id="chatBtn" type="button" onclick="toggleChat()" style="width:48px;height:48px;background:linear-gradient(135deg,#00a8cc,#0066aa);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,168,204,0.4);">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    </button>
+  </div>
+</div>
+<style>@keyframes fcPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }</style>
+
+<script>
+// ── EULA ──────────────────────────────────────────────
+function eulaToggle() {
+  var panel = document.getElementById('eulaPanel');
+  var btn   = document.getElementById('eulaToggleBtn');
+  var open  = (panel.style.display === 'block');
+  panel.style.display = open ? 'none' : 'block';
+  btn.innerHTML = open ? '&#128196; READ EULA &#9660;' : '&#128196; CLOSE EULA &#9650;';
+}
+function eulaClose() {
+  document.getElementById('eulaPanel').style.display = 'none';
+  document.getElementById('eulaToggleBtn').innerHTML = '&#128196; READ EULA &#9660;';
+}
+function eulaAccept() {
+  document.getElementById('eulaCheck').checked = true;
+  eulaClose();
+  var wrap = document.getElementById('eulaCheckWrap');
+  wrap.style.outline = '2px solid #00ff88';
+  setTimeout(function(){ wrap.style.outline = ''; }, 2500);
+}
+function eulaOpenTab() {
+  var content = document.getElementById('eulaContent');
+  if (!content) return;
+  var w = window.open('', '_blank', 'width=860,height=700');
+  w.document.write('<!DOCTYPE html><html><head><title>Cyberdrill GRC EULA v1.0.0</title>'
+    + '<style>body{background:#080c0f;color:#c8dde8;font-family:Arial,sans-serif;padding:40px;max-width:820px;margin:0 auto;line-height:1.8}'
+    + 'strong{color:#00d4ff;}</style></head><body>' + content.innerHTML + '</body></html>');
+  w.document.close();
+}
+
+// ── LOGIN ─────────────────────────────────────────────
+function showLoginErr(msg) {
+  var e = document.getElementById('loginErr');
+  e.textContent = msg;
+  e.style.display = 'block';
+}
+function doLogin() {
+  var fn    = (document.getElementById('lFirstName').value || '').trim();
+  var ln    = (document.getElementById('lLastName').value  || '').trim();
+  var title = (document.getElementById('lTitle').value     || '').trim();
+  var email = (document.getElementById('lEmail').value     || '').trim();
+  var user  = (document.getElementById('lUser').value      || '').trim();
+  var pass  = (document.getElementById('lPass').value      || '').trim();
+  var eula  = document.getElementById('eulaCheck').checked;
+  if (!fn || !ln)               { showLoginErr('Please enter your first and last name.'); return; }
+  if (!title)                   { showLoginErr('Please enter your job title.'); return; }
+  if (!email || !email.includes('@')) { showLoginErr('Please enter a valid email address.'); return; }
+  if (!eula)                    { showLoginErr('You must read and accept the End User License Agreement before proceeding.'); return; }
+  if (!user || !pass)           { showLoginErr('Please enter your username and password.'); return; }
+  if (user !== 'admin' || pass !== 'cyberdrill2026#') { showLoginErr('Invalid username or password.'); return; }
+  document.getElementById('loginErr').style.display = 'none';
+  document.body.classList.remove('locked');
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('setupModal').style.display = 'flex'; document.getElementById('setupModal').style.alignItems = 'center'; document.getElementById('setupModal').style.justifyContent = 'center';
+}
+
+// ── FLOAT CHAT ────────────────────────────────────────
+var chatOpen   = false;
+var fcHistory  = [];
+function toggleChat() {
+  chatOpen = !chatOpen;
+  var win = document.getElementById('floatWindow');
+  var tip = document.getElementById('chatTooltip');
+  win.style.display = chatOpen ? 'flex' : 'none';
+  if (win.style.display === 'flex') win.style.flexDirection = 'column';
+  if (tip) tip.style.display = chatOpen ? 'none' : 'block';
+  if (chatOpen && document.getElementById('fcMsgs').children.length === 0) {
+    fcAddMsg('ai', 'Hello! I am your CMMC compliance assistant. Ask me anything about controls, evidence, remediation priorities, or how to explain gaps to management.');
+    setTimeout(function(){ document.getElementById('fcInput').focus(); }, 80);
+  }
+}
+function fcAddMsg(role, text) {
+  var msgs = document.getElementById('fcMsgs');
+  var d = document.createElement('div');
+  d.style.cssText = 'padding:8px 10px;font-size:12px;line-height:1.6;border:1px solid;max-width:92%;word-break:break-word;';
+  if (role === 'user') {
+    d.style.cssText += 'background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.15);color:#c8dde8;margin-left:auto;';
+    d.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00d4ff;margin-bottom:4px;">YOU</div>' + text;
+  } else {
+    d.style.cssText += 'background:#111920;border-color:#1e3040;color:#c8dde8;';
+    d.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>' + text;
+  }
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
+}
+async function sendChat() {
+  var input = document.getElementById('fcInput');
+  var msg   = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  fcAddMsg('user', msg);
+  fcHistory.push({ role: 'user', content: msg });
+  var key = (typeof STATE !== 'undefined' && STATE.apiKey) ? STATE.apiKey : '';
+  if (!key) { fcAddMsg('ai', 'No API key set. Enter it in Organization Setup.'); return; }
+  var loading = fcAddMsg('ai', '<em style="opacity:.5">Thinking...</em>');
+  try {
+    var r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514', max_tokens: 800,
+        system: 'You are a CMMC Level 2 compliance expert assistant in Cyberdrill GRC. Be concise, specific, and practical. Reference NIST 800-171 control IDs (e.g. AC.L2-3.1.1) where relevant.',
+        messages: fcHistory
+      })
+    });
+    var data = await r.json();
+    var reply = (data.content && data.content[0]) ? data.content[0].text : ('Error: ' + (data.error ? data.error.message : 'Unknown'));
+    fcHistory.push({ role: 'assistant', content: reply });
+    var safe = reply.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    loading.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>' + safe;
+  } catch(e) {
+    loading.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>Connection error. Check API key.';
+  }
+  document.getElementById('fcMsgs').scrollTop = 99999;
+}
+
+function toggleApiVis() {
+  var inp = document.getElementById('apiKey');
+  var btn = document.getElementById('apiKeyToggle');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    btn.textContent = 'HIDE';
+  } else {
+    inp.type = 'password';
+    btn.textContent = 'SHOW';
+  }
+}
+function saveApiKey() {
+  var key = document.getElementById('apiKey').value.trim();
+  if (!key) { alert('Please enter an API key first.'); return; }
+  STATE.apiKey = key;
+  document.getElementById('apiKeySaved').style.display = 'block';
+  setTimeout(function(){ document.getElementById('apiKeySaved').style.display = 'none'; }, 3000);
+}
+</script>
+
+</body>
+</html>
