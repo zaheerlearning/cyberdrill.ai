@@ -28,6 +28,7 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body.locked header, body.locked .main { display: none !important; }
+  @keyframes fcPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
   body {
     background: var(--bg);
@@ -957,6 +958,297 @@
     30% { opacity: 1; transform: scale(1); }
   }
 
+
+  /* CONTROL EXPLANATION PANEL */
+  .ctrl-explain-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 5px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 2px 6px;
+    border: 1px solid rgba(0,212,255,0.2);
+    background: rgba(0,212,255,0.04);
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .ctrl-explain-toggle:hover { background: rgba(0,212,255,0.1); border-color: var(--accent); }
+  .ctrl-explain-toggle .arrow { font-size: 8px; transition: transform 0.2s; display: inline-block; }
+  .ctrl-explain-toggle.open .arrow { transform: rotate(90deg); }
+
+  .ctrl-explain-panel {
+    display: none;
+    margin-top: 8px;
+    border: 1px solid var(--border2);
+    background: #0a1318;
+  }
+  .ctrl-explain-panel.open { display: block; }
+
+  .explain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .explain-cell {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+  .explain-cell:nth-child(even) { border-right: none; }
+  .explain-cell.full { grid-column: 1/-1; border-right: none; }
+  .explain-cell:last-child { border-bottom: none; }
+  .explain-cell-label {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
+  .explain-cell-text {
+    font-family: var(--body);
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .explain-cell-text strong { color: var(--text); }
+  .impact-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 8px;
+    letter-spacing: 1px;
+  }
+  .impact-HIGH  { color: var(--danger); border: 1px solid rgba(255,59,59,0.3); background: rgba(255,59,59,0.08); }
+  .impact-MED   { color: var(--warn);   border: 1px solid rgba(255,204,0,0.3); background: rgba(255,204,0,0.08); }
+  .impact-LOW   { color: var(--accent2);border: 1px solid rgba(0,255,136,0.3); background: rgba(0,255,136,0.08); }
+
+
+  /* COMPLETION BANNER */
+  #completionBanner {
+    display: none;
+    background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,212,255,0.08));
+    border: 1px solid var(--accent2);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.4s ease;
+  }
+  .banner-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .banner-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .banner-text { flex: 1; }
+  .banner-title {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--accent2);
+    text-transform: uppercase;
+  }
+  .banner-sub {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+  .banner-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .banner-btn {
+    font-family: var(--head);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .banner-btn.green {
+    background: rgba(0,255,136,0.15);
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+  }
+  .banner-btn.green:hover { background: rgba(0,255,136,0.25); }
+  .banner-btn.cyan {
+    background: rgba(0,212,255,0.15);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+  .banner-btn.cyan:hover { background: rgba(0,212,255,0.25); }
+  .banner-btn.gold {
+    background: rgba(255,204,0,0.15);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+  }
+  .banner-btn.gold:hover { background: rgba(255,204,0,0.25); }
+
+  @keyframes celebratePulse {
+    0%,100% { box-shadow:0 0 0 0 rgba(255,204,0,0); }
+    50%      { box-shadow:0 0 24px 6px rgba(255,204,0,0.35); }
+  }
+
+
+  /* TOAST NOTIFICATION */
+  .grc-toast {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #0d1c28;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .grc-toast.success { border-color: var(--accent2); color: var(--accent2); }
+  .grc-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+  /* SESSION BAR */
+  .session-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: #060a0d;
+    border-bottom: 1px solid var(--border);
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+  .session-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--text3);
+    margin-right: 4px;
+  }
+  .session-btn {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    border: none;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .session-btn.save {
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.25);
+    color: var(--accent);
+  }
+  .session-btn.save:hover { background: rgba(0,212,255,0.18); }
+  .session-btn.save.saved {
+    background: rgba(0,255,136,0.08);
+    border-color: rgba(0,255,136,0.3);
+    color: var(--accent2);
+  }
+  .session-btn.restart {
+    background: rgba(255,204,0,0.06);
+    border: 1px solid rgba(255,204,0,0.2);
+    color: var(--warn);
+  }
+  .session-btn.restart:hover { background: rgba(255,204,0,0.14); }
+  .session-btn.reset {
+    background: rgba(255,59,59,0.06);
+    border: 1px solid rgba(255,59,59,0.2);
+    color: var(--danger);
+  }
+  .session-btn.reset:hover { background: rgba(255,59,59,0.14); }
+  .save-indicator {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .save-indicator.show { opacity: 1; }
+
+  /* CONFIRM MODAL */
+  .confirm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .confirm-overlay.show { display: flex; }
+  .confirm-box {
+    background: #0d1318;
+    border: 1px solid var(--border2);
+    padding: 28px 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+  }
+  .confirm-icon { font-size: 32px; margin-bottom: 12px; }
+  .confirm-title {
+    font-family: var(--head);
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .confirm-msg {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+  .confirm-yes {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 8px 20px;
+    cursor: pointer;
+    border: none;
+  }
+  .confirm-yes.danger { background: var(--danger); color: #fff; }
+  .confirm-yes.warn   { background: var(--warn); color: #000; }
+  .confirm-no {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 8px 20px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text2);
+  }
+
   /* SCROLLBAR */
   ::-webkit-scrollbar { width: 4px; height: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -1084,140 +1376,61 @@
 </style>
 </head>
 <body class="locked">
-<div id="loginScreen" style="position:fixed;inset:0;background:#080c0f;z-index:9999;overflow-y:auto;">
-<div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 20px 48px;gap:18px;">
-
-  <div style="text-align:center;">
-    <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;">
-      <div style="width:54px;height:54px;border:2px solid #00d4ff;display:flex;align-items:center;justify-content:center;background:rgba(0,212,255,0.08);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      </div>
-      <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,212,255,0.7);letter-spacing:4px;margin-top:3px;">GOVERNANCE &nbsp;&middot;&nbsp; RISK &nbsp;&middot;&nbsp; COMPLIANCE</div>
+<div id="loginScreen" style="position:fixed;inset:0;background:#080c0f;z-index:9999;overflow-y:auto;"><div style="min-height:100%;display:flex;flex-direction:column;align-items:center;padding:28px 20px 48px;gap:18px;">
+  <div style="text-align:center;"><div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:10px;"><div style="width:54px;height:54px;border:2px solid #00d4ff;display:flex;align-items:center;justify-content:center;background:rgba(0,212,255,0.08);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;letter-spacing:5px;color:#fff;line-height:1;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div><div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(0,212,255,0.7);letter-spacing:4px;margin-top:3px;">GOVERNANCE &nbsp;&middot;&nbsp; RISK &nbsp;&middot;&nbsp; COMPLIANCE</div></div></div><div style="width:320px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);margin:8px auto;"></div><div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#3d5f75;letter-spacing:3px;">CMMC COMPLIANCE NAVIGATOR &mdash; VERSION 1.0.0</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a3d4f;letter-spacing:2px;margin-top:2px;">&copy; 2025 CYBERDRILL AI. ALL RIGHTS RESERVED.</div></div>
+  <div style="background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.25);padding:12px 16px;width:560px;max-width:96vw;"><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-bottom:5px;">&#9888; PROPRIETARY SOFTWARE &mdash; LEGAL NOTICE</div><div style="font-family:'Barlow',sans-serif;font-size:11px;color:#c8dde8;line-height:1.7;">This software is the exclusive property of <strong>Cyberdrill AI</strong>. Unauthorized copying, distribution, reverse engineering, or public sharing is strictly prohibited under Texas law and U.S. federal law (TUTSA, Defend Trade Secrets Act, U.S. Copyright Act).</div></div>
+  <div style="background:#0d1318;border:1px solid #2a4560;width:560px;max-width:96vw;"><div style="padding:14px 22px;border-bottom:1px solid #1e3040;background:#111920;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:3px;color:#fff;">SECURE ACCESS</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#3d5f75;margin-top:3px;letter-spacing:1px;">Complete all fields &mdash; all activity is monitored and logged.</div></div>
+  <div style="padding:20px 22px;display:flex;flex-direction:column;gap:16px;">
+    <div><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;"><div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">1</div>YOUR INFORMATION</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">FIRST NAME *</div><input id="lFirstName" type="text" placeholder="First name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;"></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">LAST NAME *</div><input id="lLastName" type="text" placeholder="Last name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;"></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">JOB TITLE *</div><input id="lTitle" type="text" placeholder="e.g. IT Security Manager" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;"></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">EMAIL ADDRESS *</div><input id="lEmail" type="email" placeholder="you@company.com" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;"></div>
       </div>
     </div>
-    <div style="width:320px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,0.3),transparent);margin:8px auto;"></div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;color:#3d5f75;letter-spacing:3px;">CMMC COMPLIANCE NAVIGATOR &mdash; VERSION 1.0.0</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a3d4f;letter-spacing:2px;margin-top:2px;">&copy; 2025 CYBERDRILL AI. ALL RIGHTS RESERVED.</div>
+    <div style="height:1px;background:#1e3040;"></div>
+    <div><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;"><div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">2</div>END USER LICENSE AGREEMENT</div>
+      <div style="border:1px solid #1e3040;background:#080c0f;">
+        <div style="padding:9px 14px;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;background:#0d1318;"><span style="font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;">Read the full EULA before accepting.</span><div style="display:flex;gap:6px;"><button id="eulaToggleBtn" type="button" onclick="eulaToggle()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 12px;background:rgba(0,212,255,0.08);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">&#128196; READ EULA &#9660;</button><button type="button" onclick="eulaOpenTab()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;background:none;border:1px solid #1e3040;color:#6a8fa8;cursor:pointer;">OPEN IN TAB &#8599;</button></div></div>
+        <div id="eulaPanel" style="display:none;max-height:280px;overflow-y:auto;border-bottom:1px solid #1e3040;">
+          <div id="eulaContent" style="padding:16px 18px;font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;line-height:1.8;">
+            <div style="text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #1e3040;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:4px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-top:4px;">END USER LICENSE AGREEMENT &mdash; PROPRIETARY &amp; CONFIDENTIAL</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;margin-top:2px;">v1.0.0 &mdash; Cyberdrill AI &mdash; cyberdrill.ai &mdash; State of Texas, USA</div></div>
+            <div style="background:rgba(255,204,0,0.05);border:1px solid rgba(255,204,0,0.2);padding:8px 12px;margin-bottom:12px;font-size:11px;color:#ffcc00;">&#9888; Legally binding agreement. Checking the box constitutes acceptance of all terms.</div>
+            <p><strong style="color:#00d4ff;">1. GRANT OF LICENSE</strong><br>Cyberdrill AI grants you a limited, non-exclusive, non-transferable, revocable license to use Cyberdrill GRC solely for internal CMMC compliance assessment. You may NOT copy, distribute, sell, reverse engineer, decompile, or create derivative works.</p><br>
+            <p><strong style="color:#00d4ff;">2. INTELLECTUAL PROPERTY</strong><br>Source code, interface design, assessment methodologies and scoring algorithms are the exclusive property of Cyberdrill AI, protected by U.S. Copyright Law, TUTSA, and the Defend Trade Secrets Act (18 U.S.C. &#167;1836).</p><br>
+            <p><strong style="color:#00d4ff;">3. PROHIBITED SHARING</strong><br>You may NOT post screenshots on social media, copy or share source code, or discuss proprietary features publicly without prior written consent.</p><br>
+            <p><strong style="color:#00d4ff;">4. CONFIDENTIALITY</strong><br>Restrict access to authorized personnel only. Immediately notify Cyberdrill AI of any unauthorized use or disclosure.</p><br>
+            <p><strong style="color:#00d4ff;">5. DATA &amp; PRIVACY</strong><br>Assessment data remains your property. AI features are governed by applicable third-party service terms. You are responsible for credential confidentiality.</p><br>
+            <p><strong style="color:#00d4ff;">6. DISCLAIMER OF WARRANTIES</strong><br>THE SOFTWARE IS PROVIDED AS IS WITHOUT WARRANTY. Cyberdrill GRC is a preparatory tool. CMMC certification requires a C3PAO authorized assessor.</p><br>
+            <p><strong style="color:#00d4ff;">7. LIMITATION OF LIABILITY</strong><br>CYBERDRILL AI SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES. Total liability shall not exceed amounts paid in the preceding 12 months.</p><br>
+            <p><strong style="color:#00d4ff;">8. ENFORCEMENT &amp; REMEDIES</strong><br>Unauthorized use constitutes irreparable harm. Cyberdrill AI may seek injunctive relief, statutory copyright damages up to $150,000 per willful infringement, attorney fees, and DMCA takedowns.</p><br>
+            <p><strong style="color:#00d4ff;">9. GOVERNING LAW</strong><br>Governed by the laws of the State of Texas, USA.</p><br>
+            <p><strong style="color:#00d4ff;">10. TERMINATION</strong><br>Terminates immediately upon breach. You must cease all use and destroy all copies.</p><br>
+            <p><strong style="color:#00d4ff;">11. GENERAL PROVISIONS</strong><br>This is the entire agreement. Continued use constitutes acceptance. Contact: cyberdrill.ai</p>
+            <div style="text-align:center;padding-top:12px;margin-top:10px;border-top:1px solid #1e3040;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;">&copy; 2025 Cyberdrill AI. All Rights Reserved. CONFIDENTIAL.</div>
+          </div>
+          <div style="padding:10px 14px;display:flex;justify-content:center;gap:8px;background:#0a0f14;border-top:1px solid #1e3040;">
+            <button type="button" onclick="eulaAccept()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;padding:10px 22px;background:rgba(0,255,136,0.08);border:1px solid #00ff88;color:#00ff88;cursor:pointer;">I ACCEPT THE EULA &#10003;</button>
+            <button type="button" onclick="eulaClose()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;padding:10px 16px;background:none;border:1px solid #2a4560;color:#6a8fa8;cursor:pointer;">CLOSE</button>
+          </div>
+        </div>
+        <div id="eulaCheckWrap" style="padding:10px 14px;display:flex;align-items:flex-start;gap:10px;"><input type="checkbox" id="eulaCheck" style="margin-top:3px;accent-color:#00d4ff;width:15px;height:15px;flex-shrink:0;cursor:pointer;"><label for="eulaCheck" style="font-family:'Barlow',sans-serif;font-size:11px;color:#6a8fa8;line-height:1.7;cursor:pointer;">I have read, understood, and agree to the <strong style="color:#00d4ff;">End User License Agreement</strong>. I acknowledge this is proprietary software governed by the laws of the <strong style="color:#c8dde8;">State of Texas, USA</strong>.</label></div>
+      </div>
+    </div>
+    <div style="height:1px;background:#1e3040;"></div>
+    <div><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;"><div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">3</div>LOGIN CREDENTIALS</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">USERNAME *</div><input id="lUser" type="text" placeholder="Username" autocomplete="username" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;"></div>
+        <div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">PASSWORD *</div><input id="lPass" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      </div>
+    </div>
+    <div id="loginErr" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;color:#ff3b3b;padding:8px 12px;border:1px solid rgba(255,59,59,0.3);background:rgba(255,59,59,0.05);"></div>
   </div>
-
-  <div style="background:rgba(255,59,59,0.05);border:1px solid rgba(255,59,59,0.25);padding:12px 16px;width:560px;max-width:96vw;">
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-bottom:5px;">&#9888; PROPRIETARY SOFTWARE &mdash; LEGAL NOTICE</div>
-    <div style="font-family:'Barlow',sans-serif;font-size:11px;color:#c8dde8;line-height:1.7;">This software is the exclusive property of <strong>Cyberdrill AI</strong>. Unauthorized copying, distribution, reverse engineering, or public sharing is strictly prohibited under Texas law and U.S. federal law (TUTSA, Defend Trade Secrets Act, U.S. Copyright Act).</div>
+  <div style="padding:14px 22px;border-top:1px solid #1e3040;background:#111920;"><button type="button" onclick="doLogin()" style="width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:3px;padding:13px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">LOGIN TO CYBERDRILL GRC &nbsp;&#8594;</button></div>
   </div>
-
-  <div style="background:#0d1318;border:1px solid #2a4560;width:560px;max-width:96vw;">
-    <div style="padding:14px 22px;border-bottom:1px solid #1e3040;background:#111920;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;letter-spacing:3px;color:#fff;">SECURE ACCESS</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#3d5f75;margin-top:3px;letter-spacing:1px;">Complete all fields &mdash; all activity is monitored and logged.</div>
-    </div>
-    <div style="padding:20px 22px;display:flex;flex-direction:column;gap:16px;">
-
-      <div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">1</div>
-          YOUR INFORMATION
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">FIRST NAME *</div>
-            <input id="lFirstName" type="text" placeholder="First name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">LAST NAME *</div>
-            <input id="lLastName" type="text" placeholder="Last name" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">JOB TITLE *</div>
-            <input id="lTitle" type="text" placeholder="e.g. IT Security Manager" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">EMAIL ADDRESS *</div>
-            <input id="lEmail" type="email" placeholder="you@company.com" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
-          </div>
-        </div>
-      </div>
-
-      <div style="height:1px;background:#1e3040;"></div>
-
-      <div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">2</div>
-          END USER LICENSE AGREEMENT
-        </div>
-        <div style="border:1px solid #1e3040;background:#080c0f;">
-          <div style="padding:9px 14px;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;background:#0d1318;">
-            <span style="font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;">Read the full EULA before accepting.</span>
-            <div style="display:flex;gap:6px;">
-              <button id="eulaToggleBtn" type="button" onclick="eulaToggle()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 12px;background:rgba(0,212,255,0.08);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">&#128196; READ EULA &#9660;</button>
-              <button type="button" onclick="eulaOpenTab()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 10px;background:none;border:1px solid #1e3040;color:#6a8fa8;cursor:pointer;">OPEN IN TAB &#8599;</button>
-            </div>
-          </div>
-          <div id="eulaPanel" style="display:none;max-height:280px;overflow-y:auto;border-bottom:1px solid #1e3040;">
-            <div id="eulaContent" style="padding:16px 18px;font-family:'Barlow',sans-serif;font-size:12px;color:#c8dde8;line-height:1.8;">
-              <div style="text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #1e3040;">
-                <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;letter-spacing:4px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">GRC</span></div>
-                <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#ff3b3b;letter-spacing:2px;margin-top:4px;">END USER LICENSE AGREEMENT &mdash; PROPRIETARY &amp; CONFIDENTIAL</div>
-                <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;margin-top:2px;">v1.0.0 &mdash; Cyberdrill AI &mdash; cyberdrill.ai &mdash; State of Texas, USA</div>
-              </div>
-              <div style="background:rgba(255,204,0,0.05);border:1px solid rgba(255,204,0,0.2);padding:8px 12px;margin-bottom:12px;font-size:11px;color:#ffcc00;">&#9888; Legally binding agreement. Checking the box constitutes acceptance of all terms.</div>
-              <p><strong style="color:#00d4ff;">1. GRANT OF LICENSE</strong><br>Cyberdrill AI grants you a limited, non-exclusive, non-transferable, revocable license to use Cyberdrill GRC solely for internal CMMC compliance assessment. You may NOT copy, distribute, sell, reverse engineer, decompile, or create derivative works.</p><br>
-              <p><strong style="color:#00d4ff;">2. INTELLECTUAL PROPERTY</strong><br>Source code, interface design, assessment methodologies and scoring algorithms are the exclusive property of Cyberdrill AI, protected by U.S. Copyright Law (17 U.S.C.), TUTSA, and the Defend Trade Secrets Act (18 U.S.C. &#167;1836).</p><br>
-              <p><strong style="color:#00d4ff;">3. PROHIBITED SHARING</strong><br>You may NOT post screenshots on social media. You may NOT copy or share source code. You may NOT discuss proprietary features publicly without prior written consent.</p><br>
-              <p><strong style="color:#00d4ff;">4. CONFIDENTIALITY</strong><br>Restrict access to authorized personnel only. Immediately notify Cyberdrill AI of any unauthorized use or disclosure.</p><br>
-              <p><strong style="color:#00d4ff;">5. DATA &amp; PRIVACY</strong><br>Assessment data remains your property. AI features via Anthropic API are governed by Anthropic terms. You are responsible for credential confidentiality.</p><br>
-              <p><strong style="color:#00d4ff;">6. DISCLAIMER OF WARRANTIES</strong><br>THE SOFTWARE IS PROVIDED AS IS WITHOUT WARRANTY. Cyberdrill GRC is a preparatory tool. CMMC certification requires a C3PAO authorized assessor.</p><br>
-              <p><strong style="color:#00d4ff;">7. LIMITATION OF LIABILITY</strong><br>CYBERDRILL AI SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES. Total liability shall not exceed amounts paid in the preceding 12 months.</p><br>
-              <p><strong style="color:#00d4ff;">8. ENFORCEMENT &amp; REMEDIES</strong><br>Unauthorized use constitutes irreparable harm. Cyberdrill AI may seek injunctive relief, statutory copyright damages up to $150,000 per willful infringement, attorney fees, and DMCA takedowns.</p><br>
-              <p><strong style="color:#00d4ff;">9. GOVERNING LAW</strong><br>Governed by the laws of the State of Texas, USA. Applicable: TUTSA, U.S. Copyright Act, Defend Trade Secrets Act (18 U.S.C. &#167;1836), CFAA (18 U.S.C. &#167;1030), DMCA.</p><br>
-              <p><strong style="color:#00d4ff;">10. TERMINATION</strong><br>Terminates immediately upon breach. You must cease all use and destroy all copies. Sections 2, 3, 4, 7, 8, 9 survive termination.</p><br>
-              <p><strong style="color:#00d4ff;">11. GENERAL PROVISIONS</strong><br>This is the entire agreement. Cyberdrill AI may modify it. Continued use constitutes acceptance. Contact: cyberdrill.ai</p>
-              <div style="text-align:center;padding-top:12px;margin-top:10px;border-top:1px solid #1e3040;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;line-height:2;">&copy; 2025 Cyberdrill AI. All Rights Reserved. State of Texas, USA. CONFIDENTIAL.</div>
-            </div>
-            <div style="padding:10px 14px;display:flex;justify-content:center;gap:8px;background:#0a0f14;border-top:1px solid #1e3040;">
-              <button type="button" onclick="eulaAccept()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:2px;padding:10px 22px;background:rgba(0,255,136,0.08);border:1px solid #00ff88;color:#00ff88;cursor:pointer;">I ACCEPT THE EULA &#10003;</button>
-              <button type="button" onclick="eulaClose()" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;padding:10px 16px;background:none;border:1px solid #2a4560;color:#6a8fa8;cursor:pointer;">CLOSE</button>
-            </div>
-          </div>
-          <div id="eulaCheckWrap" style="padding:10px 14px;display:flex;align-items:flex-start;gap:10px;">
-            <input type="checkbox" id="eulaCheck" style="margin-top:3px;accent-color:#00d4ff;width:15px;height:15px;flex-shrink:0;cursor:pointer;">
-            <label for="eulaCheck" style="font-family:'Barlow',sans-serif;font-size:11px;color:#6a8fa8;line-height:1.7;cursor:pointer;">I have read, understood, and agree to the <strong style="color:#00d4ff;">End User License Agreement</strong>. I acknowledge this is proprietary software governed by the laws of the <strong style="color:#c8dde8;">State of Texas, USA</strong>.</label>
-          </div>
-        </div>
-      </div>
-
-      <div style="height:1px;background:#1e3040;"></div>
-
-      <div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#00d4ff;letter-spacing:3px;display:flex;align-items:center;gap:8px;margin-bottom:10px;">
-          <div style="width:17px;height:17px;border:1px solid #00d4ff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:bold;">3</div>
-          LOGIN CREDENTIALS
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">USERNAME *</div>
-            <input id="lUser" type="text" placeholder="Username" autocomplete="username" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#6a8fa8;letter-spacing:2px;margin-bottom:5px;">PASSWORD *</div>
-            <input id="lPass" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;background:#080c0f;border:1px solid #1e3040;color:#e8f4ff;font-family:'Share Tech Mono',monospace;font-size:12px;padding:9px 12px;outline:none;" onkeydown="if(event.key==='Enter')doLogin()">
-          </div>
-        </div>
-      </div>
-
-      <div id="loginErr" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;color:#ff3b3b;padding:8px 12px;border:1px solid rgba(255,59,59,0.3);background:rgba(255,59,59,0.05);"></div>
-
-    </div>
-    <div style="padding:14px 22px;border-top:1px solid #1e3040;background:#111920;">
-      <button type="button" onclick="doLogin()" style="width:100%;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;letter-spacing:3px;padding:13px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">LOGIN TO CYBERDRILL GRC &nbsp;&#8594;</button>
-    </div>
-  </div>
-
-  <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#2a3d4f;text-align:center;line-height:2;letter-spacing:1px;">&copy; 2025 Cyberdrill AI. All Rights Reserved. &mdash; cyberdrill.ai<br>Governed by the Laws of the State of Texas, United States of America.</div>
-
-</div>
-</div>
+  <div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:#2a3d4f;text-align:center;line-height:2;">&copy; 2025 Cyberdrill AI. All Rights Reserved. &mdash; cyberdrill.ai</div>
+</div></div>
 
 
 <!-- SETUP MODAL -->
@@ -1249,26 +1462,43 @@
       <div class="form-group">
         <div class="form-label">Target CMMC Level</div>
         <select class="form-select" id="orgLevel">
-          <option value="1">Level 1 — Foundational (15 controls)</option>
+          <option value="1">Level 1 — Foundational (17 controls)</option>
           <option value="2" selected>Level 2 — Advanced (110 controls)</option>
           <option value="3">Level 3 — Expert (130+ controls)</option>
         </select>
       </div>
-      <div class="form-group">
-        <div class="form-label" style="display:flex;justify-content:space-between;align-items:center;">
-          <span>Anthropic API Key <span style="color:var(--text3);font-size:9px;">(Optional — for AI Advisor)</span></span>
-          <span id="apiKeyToggle" onclick="toggleApiVis()" style="font-family:var(--mono);font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;">SHOW</span>
+      <div class="form-group" style="border:1px solid #1e3040;padding:14px;background:#080c0f;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-family:var(--mono);font-size:9px;color:var(--accent);letter-spacing:3px;">ACCESS KEY</div>
+          <div id="keyStatusBadge" style="font-family:var(--mono);font-size:8px;letter-spacing:2px;padding:3px 8px;border:1px solid #1e3040;color:var(--text3);">NOT VALIDATED</div>
         </div>
-        <div style="position:relative;">
-          <input class="form-input" id="apiKey" type="password" placeholder="sk-ant-..." style="padding-right:90px;" />
-          <span onclick="saveApiKey()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:9px;color:var(--accent);cursor:pointer;letter-spacing:1px;border:1px solid var(--accent);padding:3px 8px;">SAVE</span>
+        <div style="display:flex;gap:6px;margin-bottom:8px;">
+          <div style="position:relative;flex:1;">
+            <input id="apiKey" type="password" placeholder="Enter your access key" maxlength="500"
+              style="width:100%;background:#0d1318;border:1px solid #1e3040;color:#e8f4ff;font-family:var(--mono);font-size:12px;padding:9px 46px 9px 12px;outline:none;"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#1e3040'">
+            <span id="apiKeyToggle" onclick="toggleApiVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:8px;color:var(--text3);cursor:pointer;letter-spacing:1px;">SHOW</span>
+          </div>
+          <button type="button" onclick="validateAccessKey()" style="font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:0 14px;background:rgba(0,212,255,0.08);border:1px solid var(--accent);color:var(--accent);cursor:pointer;white-space:nowrap;">VALIDATE</button>
         </div>
-        <div id="apiKeySaved" style="display:none;font-family:var(--mono);font-size:9px;color:#00ff88;margin-top:4px;letter-spacing:1px;">&#10003; API key saved for this session</div>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px;letter-spacing:0.5px;">Key is stored in memory only — never sent anywhere except Anthropic API calls.</div>
+        <div id="keyValidBlock" style="display:none;background:#0d1318;border:1px solid #1e3040;padding:10px 12px;margin-bottom:8px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;margin-bottom:3px;">STATUS</div><div id="keyStatusText" style="font-family:var(--mono);font-size:11px;color:#00ff88;">ACTIVE</div></div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;margin-bottom:3px;">EXPIRES</div><div id="keyExpiryText" style="font-family:var(--mono);font-size:11px;color:var(--warn);">&#8212;</div></div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;margin-bottom:3px;">TIER</div><div id="keyTierText" style="font-family:var(--mono);font-size:11px;color:var(--accent);">&#8212;</div></div>
+            <div><div style="font-family:var(--mono);font-size:8px;color:var(--text3);letter-spacing:2px;margin-bottom:3px;">TIME REMAINING</div><div id="keyTimeLeft" style="font-family:var(--mono);font-size:11px;color:#c8dde8;">&#8212;</div></div>
+          </div>
+        </div>
+        <div id="keyErrMsg" style="display:none;font-family:var(--mono);font-size:9px;color:#ff3b3b;padding:6px 10px;border:1px solid rgba(255,59,59,0.3);background:rgba(255,59,59,0.05);margin-bottom:8px;"></div>
+        <div style="display:flex;justify-content:space-between;">
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text3);">No key? &nbsp;<a href="/cdn-cgi/l/email-protection#d8abada8a8b7aaac98bba1babdaabcaab1b4b4f6b9b1e7abadbab2bdbbace599bbbbbdababf893bda1f88abda9adbdabac" style="color:var(--accent);text-decoration:none;">Request access &rarr;</a></div>
+          <div style="font-family:var(--mono);font-size:8px;color:var(--text3);">cyberdrill.ai</div>
+        </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn-primary" onclick="startApp()">INITIALIZE PLATFORM →</button>
+    <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center;">
+      <div id="keyFooterStatus" style="font-family:var(--mono);font-size:9px;color:var(--text3);"></div>
+      <button class="btn-primary" onclick="startApp()">INITIALIZE PLATFORM &rarr;</button>
     </div>
   </div>
 </div>
@@ -1301,6 +1531,28 @@
     <div class="status-dot" data-tip="System Online"></div>
   </div>
 </header>
+
+<!-- SESSION BAR -->
+<div class="session-bar" id="sessionBar" style="display:none;">
+  <span class="session-label">SESSION:</span>
+  <span class="save-indicator" id="saveIndicator">&#10003; SAVED</span>
+  <button class="session-btn save" id="saveBtn" onclick="saveProgress()">&#128190; SAVE PROGRESS</button>
+  <button class="session-btn restart" onclick="confirmAction('restart')">&#8635; RESTART LEVEL</button>
+  <button class="session-btn reset"   onclick="confirmAction('reset')">&#9888; RESET ALL</button>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirmIcon">&#9888;</div>
+    <div class="confirm-title" id="confirmTitle">Confirm Action</div>
+    <div class="confirm-msg"   id="confirmMsg">Are you sure?</div>
+    <div class="confirm-btns">
+      <button class="confirm-yes" id="confirmYes" onclick="doConfirm()">CONFIRM</button>
+      <button class="confirm-no"  onclick="closeConfirm()">CANCEL</button>
+    </div>
+  </div>
+</div>
 
 <!-- MAIN -->
 <div class="main">
@@ -1451,11 +1703,32 @@
         <h1>CONTROL <span>ASSESSMENT</span></h1>
       </div>
     </div>
-    <div class="assess-wrap" id="assessWrap"></div>
+    <div id="assessProgress" style="margin-bottom:16px;display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--text2);letter-spacing:2px;" id="progressLabel">0 OF 0 ANSWERED</span>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--accent);" id="progressPct">0%</span>
+    </div>
+    <div style="height:3px;background:var(--surface3);position:relative;">
+      <div id="progressBar" style="height:100%;background:var(--accent);width:0%;transition:width 0.4s ease;position:relative;">
+        <div style="position:absolute;right:0;top:-1px;width:5px;height:5px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent);"></div>
+      </div>
+    </div>
+  </div>
+  <div id="completionBanner">
+    <div class="banner-inner">
+      <div class="banner-icon" id="bannerIcon">&#9989;</div>
+      <div class="banner-text">
+        <div class="banner-title" id="bannerTitle">Assessment Complete</div>
+        <div class="banner-sub" id="bannerSub">All controls assessed &mdash; review your results below</div>
+      </div>
+      <div class="banner-actions" id="bannerActions"></div>
+    </div>
+  </div>
+  <div class="assess-wrap" id="assessWrap"></div>
   </div>
 
   <!-- AI ADVISOR PAGE -->
-  <div class="content" id="page-advisor">
+  <div class="content" id="page-advisor" style="padding-bottom:80px;">
     <div class="page-title">
       <div>
         <div class="page-tag">POWERED BY CLAUDE</div>
@@ -1481,7 +1754,7 @@
       </div>
     </div>
 
-    <div class="ai-terminal">
+    <div class="ai-terminal" style="margin-bottom:70px;">
       <div class="ai-terminal-header">
         <div class="term-dot r"></div>
         <div class="term-dot y"></div>
@@ -1512,8 +1785,9 @@
     </div>
 
     <div class="report-actions">
-      <button class="btn-primary" onclick="exportReport()">⬇ EXPORT FULL REPORT</button>
-      <button class="btn-secondary" onclick="generatePOAM()">⬇ GENERATE POA&amp;M</button>
+      <button class="btn-primary" onclick="exportReport()">&#11015; EXPORT FULL REPORT</button>
+      <button class="btn-secondary" onclick="generatePOAM()">&#11015; GENERATE POA&amp;M</button>
+      <button class="btn-primary" onclick="exportCert()" style="background:rgba(200,168,75,0.12);border-color:#c8a84b;color:#c8a84b;">&#127885; VIEW CERTIFICATE</button>
     </div>
 
     <div class="report-panel">
@@ -1568,154 +1842,155 @@
 
 </div><!-- end main -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ==========================================
 // CMMC LEVEL 2 CONTROL DATABASE
 // NIST SP 800-171 — 14 Domains, 110 Controls
 // ==========================================
 const CMMC_CONTROLS = [
   // ACCESS CONTROL (AC) — 22 controls
-  { id: 'AC.L2-3.1.1', name: 'Authorized Access Control', domain: 'ACCESS CONTROL', desc: 'Limit system access to authorized users, processes, and devices.' },
-  { id: 'AC.L2-3.1.2', name: 'Transaction & Function Control', domain: 'ACCESS CONTROL', desc: 'Limit access to types of transactions authorized users are permitted to execute.' },
-  { id: 'AC.L2-3.1.3', name: 'Control CUI Flow', domain: 'ACCESS CONTROL', desc: 'Control the flow of CUI in accordance with approved authorizations.' },
-  { id: 'AC.L2-3.1.4', name: 'Separation of Duties', domain: 'ACCESS CONTROL', desc: 'Separate duties of individuals to reduce risk of malevolent activity.' },
-  { id: 'AC.L2-3.1.5', name: 'Least Privilege', domain: 'ACCESS CONTROL', desc: 'Employ the principle of least privilege, including for specific security functions.' },
-  { id: 'AC.L2-3.1.6', name: 'Non-Privileged Account Use', domain: 'ACCESS CONTROL', desc: 'Use non-privileged accounts when accessing non-security functions.' },
-  { id: 'AC.L2-3.1.7', name: 'Privileged Function Restrictions', domain: 'ACCESS CONTROL', desc: 'Prevent non-privileged users from executing privileged functions.' },
-  { id: 'AC.L2-3.1.8', name: 'Unsuccessful Login Attempts', domain: 'ACCESS CONTROL', desc: 'Limit unsuccessful logon attempts.' },
-  { id: 'AC.L2-3.1.9', name: 'Privacy & Security Notices', domain: 'ACCESS CONTROL', desc: 'Provide privacy and security notices consistent with CUI rules.' },
-  { id: 'AC.L2-3.1.10', name: 'Session Lock', domain: 'ACCESS CONTROL', desc: 'Use session lock with pattern-hiding displays after period of inactivity.' },
-  { id: 'AC.L2-3.1.11', name: 'Session Termination', domain: 'ACCESS CONTROL', desc: 'Terminate sessions after defined conditions.' },
-  { id: 'AC.L2-3.1.12', name: 'Remote Access Monitoring', domain: 'ACCESS CONTROL', desc: 'Monitor and control remote access sessions.' },
-  { id: 'AC.L2-3.1.13', name: 'Remote Access Cryptography', domain: 'ACCESS CONTROL', desc: 'Employ cryptographic mechanisms to protect confidentiality of remote access.' },
-  { id: 'AC.L2-3.1.14', name: 'Remote Access Routing', domain: 'ACCESS CONTROL', desc: 'Route remote access via managed access control points.' },
-  { id: 'AC.L2-3.1.15', name: 'Privileged Remote Access', domain: 'ACCESS CONTROL', desc: 'Authorize remote execution of privileged commands via remote access.' },
-  { id: 'AC.L2-3.1.16', name: 'Wireless Access Authorization', domain: 'ACCESS CONTROL', desc: 'Authorize wireless access prior to allowing connections.' },
-  { id: 'AC.L2-3.1.17', name: 'Wireless Access Protection', domain: 'ACCESS CONTROL', desc: 'Protect wireless access using authentication and encryption.' },
-  { id: 'AC.L2-3.1.18', name: 'Mobile Device Connection', domain: 'ACCESS CONTROL', desc: 'Control connection of mobile devices.' },
-  { id: 'AC.L2-3.1.19', name: 'Encrypt CUI on Mobile', domain: 'ACCESS CONTROL', desc: 'Encrypt CUI on mobile devices and mobile computing platforms.' },
-  { id: 'AC.L2-3.1.20', name: 'External System Connections', domain: 'ACCESS CONTROL', desc: 'Verify and control/limit connections to external information systems.' },
-  { id: 'AC.L2-3.1.21', name: 'Portable Storage Use', domain: 'ACCESS CONTROL', desc: 'Limit use of portable storage devices on external systems.' },
-  { id: 'AC.L2-3.1.22', name: 'Control CUI Posted Publicly', domain: 'ACCESS CONTROL', desc: 'Control CUI posted or processed on publicly accessible systems.' },
+  { id: 'AC.L2-3.1.1', name: 'Authorized Access Control', domain: 'ACCESS CONTROL', desc: 'Limit system access to authorized users, processes, and devices.', level:1 },
+  { id: 'AC.L2-3.1.2', name: 'Transaction & Function Control', domain: 'ACCESS CONTROL', desc: 'Limit access to types of transactions authorized users are permitted to execute.', level:1 },
+  { id: 'AC.L2-3.1.3', name: 'Control CUI Flow', domain: 'ACCESS CONTROL', desc: 'Control the flow of CUI in accordance with approved authorizations.', level:2 },
+  { id: 'AC.L2-3.1.4', name: 'Separation of Duties', domain: 'ACCESS CONTROL', desc: 'Separate duties of individuals to reduce risk of malevolent activity.', level:2 },
+  { id: 'AC.L2-3.1.5', name: 'Least Privilege', domain: 'ACCESS CONTROL', desc: 'Employ the principle of least privilege, including for specific security functions.', level:2 },
+  { id: 'AC.L2-3.1.6', name: 'Non-Privileged Account Use', domain: 'ACCESS CONTROL', desc: 'Use non-privileged accounts when accessing non-security functions.', level:2 },
+  { id: 'AC.L2-3.1.7', name: 'Privileged Function Restrictions', domain: 'ACCESS CONTROL', desc: 'Prevent non-privileged users from executing privileged functions.', level:2 },
+  { id: 'AC.L2-3.1.8', name: 'Unsuccessful Login Attempts', domain: 'ACCESS CONTROL', desc: 'Limit unsuccessful logon attempts.', level:2 },
+  { id: 'AC.L2-3.1.9', name: 'Privacy & Security Notices', domain: 'ACCESS CONTROL', desc: 'Provide privacy and security notices consistent with CUI rules.', level:2 },
+  { id: 'AC.L2-3.1.10', name: 'Session Lock', domain: 'ACCESS CONTROL', desc: 'Use session lock with pattern-hiding displays after period of inactivity.', level:2 },
+  { id: 'AC.L2-3.1.11', name: 'Session Termination', domain: 'ACCESS CONTROL', desc: 'Terminate sessions after defined conditions.', level:2 },
+  { id: 'AC.L2-3.1.12', name: 'Remote Access Monitoring', domain: 'ACCESS CONTROL', desc: 'Monitor and control remote access sessions.', level:2 },
+  { id: 'AC.L2-3.1.13', name: 'Remote Access Cryptography', domain: 'ACCESS CONTROL', desc: 'Employ cryptographic mechanisms to protect confidentiality of remote access.', level:2 },
+  { id: 'AC.L2-3.1.14', name: 'Remote Access Routing', domain: 'ACCESS CONTROL', desc: 'Route remote access via managed access control points.', level:2 },
+  { id: 'AC.L2-3.1.15', name: 'Privileged Remote Access', domain: 'ACCESS CONTROL', desc: 'Authorize remote execution of privileged commands via remote access.', level:2 },
+  { id: 'AC.L2-3.1.16', name: 'Wireless Access Authorization', domain: 'ACCESS CONTROL', desc: 'Authorize wireless access prior to allowing connections.', level:2 },
+  { id: 'AC.L2-3.1.17', name: 'Wireless Access Protection', domain: 'ACCESS CONTROL', desc: 'Protect wireless access using authentication and encryption.', level:2 },
+  { id: 'AC.L2-3.1.18', name: 'Mobile Device Connection', domain: 'ACCESS CONTROL', desc: 'Control connection of mobile devices.', level:2 },
+  { id: 'AC.L2-3.1.19', name: 'Encrypt CUI on Mobile', domain: 'ACCESS CONTROL', desc: 'Encrypt CUI on mobile devices and mobile computing platforms.', level:2 },
+  { id: 'AC.L2-3.1.20', name: 'External System Connections', domain: 'ACCESS CONTROL', desc: 'Verify and control/limit connections to external information systems.', level:2 },
+  { id: 'AC.L2-3.1.21', name: 'Portable Storage Use', domain: 'ACCESS CONTROL', desc: 'Limit use of portable storage devices on external systems.', level:2 },
+  { id: 'AC.L2-3.1.22', name: 'Control CUI Posted Publicly', domain: 'ACCESS CONTROL', desc: 'Control CUI posted or processed on publicly accessible systems.', level:2 },
 
   // AWARENESS & TRAINING (AT) — 3 controls
-  { id: 'AT.L2-3.2.1', name: 'Role-Based Risk Awareness', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are aware of security risks associated with their activities.' },
-  { id: 'AT.L2-3.2.2', name: 'Role-Based Training', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are trained to carry out assigned security responsibilities.' },
-  { id: 'AT.L2-3.2.3', name: 'Insider Threat Awareness', domain: 'AWARENESS & TRAINING', desc: 'Provide security awareness training on recognizing and reporting threats.' },
+  { id: 'AT.L2-3.2.1', name: 'Role-Based Risk Awareness', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are aware of security risks associated with their activities.', level:2 },
+  { id: 'AT.L2-3.2.2', name: 'Role-Based Training', domain: 'AWARENESS & TRAINING', desc: 'Ensure personnel are trained to carry out assigned security responsibilities.', level:2 },
+  { id: 'AT.L2-3.2.3', name: 'Insider Threat Awareness', domain: 'AWARENESS & TRAINING', desc: 'Provide security awareness training on recognizing and reporting threats.', level:2 },
 
   // AUDIT & ACCOUNTABILITY (AU) — 9 controls
-  { id: 'AU.L2-3.3.1', name: 'System Auditing', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Create and retain system audit logs to enable monitoring and investigation.' },
-  { id: 'AU.L2-3.3.2', name: 'User Accountability', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Ensure actions of individual users can be traced to those users.' },
-  { id: 'AU.L2-3.3.3', name: 'Event Review', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Review and update logged events.' },
-  { id: 'AU.L2-3.3.4', name: 'Audit Failure Alerting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Alert in the event of an audit logging process failure.' },
-  { id: 'AU.L2-3.3.5', name: 'Audit Correlation', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Correlate audit record review, analysis, and reporting processes.' },
-  { id: 'AU.L2-3.3.6', name: 'Reduction & Reporting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide audit record reduction and report generation to support analysis.' },
-  { id: 'AU.L2-3.3.7', name: 'Authoritative Time Source', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide system capability that compares and synchronizes clocks.' },
-  { id: 'AU.L2-3.3.8', name: 'Audit Protection', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Protect audit information and tools from unauthorized access.' },
-  { id: 'AU.L2-3.3.9', name: 'Audit Management', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Limit management of audit logging to subset of privileged users.' },
+  { id: 'AU.L2-3.3.1', name: 'System Auditing', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Create and retain system audit logs to enable monitoring and investigation.', level:2 },
+  { id: 'AU.L2-3.3.2', name: 'User Accountability', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Ensure actions of individual users can be traced to those users.', level:2 },
+  { id: 'AU.L2-3.3.3', name: 'Event Review', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Review and update logged events.', level:2 },
+  { id: 'AU.L2-3.3.4', name: 'Audit Failure Alerting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Alert in the event of an audit logging process failure.', level:2 },
+  { id: 'AU.L2-3.3.5', name: 'Audit Correlation', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Correlate audit record review, analysis, and reporting processes.', level:2 },
+  { id: 'AU.L2-3.3.6', name: 'Reduction & Reporting', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide audit record reduction and report generation to support analysis.', level:2 },
+  { id: 'AU.L2-3.3.7', name: 'Authoritative Time Source', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Provide system capability that compares and synchronizes clocks.', level:2 },
+  { id: 'AU.L2-3.3.8', name: 'Audit Protection', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Protect audit information and tools from unauthorized access.', level:2 },
+  { id: 'AU.L2-3.3.9', name: 'Audit Management', domain: 'AUDIT & ACCOUNTABILITY', desc: 'Limit management of audit logging to subset of privileged users.', level:2 },
 
   // CONFIGURATION MANAGEMENT (CM) — 9 controls
-  { id: 'CM.L2-3.4.1', name: 'System Baselining', domain: 'CONFIGURATION MGMT', desc: 'Establish and maintain baseline configurations for systems.' },
-  { id: 'CM.L2-3.4.2', name: 'Security Configuration', domain: 'CONFIGURATION MGMT', desc: 'Establish and enforce security configuration settings.' },
-  { id: 'CM.L2-3.4.3', name: 'Configuration Change Control', domain: 'CONFIGURATION MGMT', desc: 'Track, review, approve, and log changes to systems.' },
-  { id: 'CM.L2-3.4.4', name: 'Security Impact Analysis', domain: 'CONFIGURATION MGMT', desc: 'Analyze security impact of changes prior to implementation.' },
-  { id: 'CM.L2-3.4.5', name: 'Access Restrictions for Change', domain: 'CONFIGURATION MGMT', desc: 'Define, document and enforce access restrictions for changes.' },
-  { id: 'CM.L2-3.4.6', name: 'Least Functionality', domain: 'CONFIGURATION MGMT', desc: 'Employ principle of least functionality by configuring to provide only essential capabilities.' },
-  { id: 'CM.L2-3.4.7', name: 'Nonessential Functionality', domain: 'CONFIGURATION MGMT', desc: 'Restrict, disable, or prevent use of nonessential programs and functions.' },
-  { id: 'CM.L2-3.4.8', name: 'Application Execution Policy', domain: 'CONFIGURATION MGMT', desc: 'Apply deny-by-exception policy to prevent use of unauthorized software.' },
-  { id: 'CM.L2-3.4.9', name: 'User-Installed Software', domain: 'CONFIGURATION MGMT', desc: 'Control and monitor user-installed software.' },
+  { id: 'CM.L2-3.4.1', name: 'System Baselining', domain: 'CONFIGURATION MGMT', desc: 'Establish and maintain baseline configurations for systems.', level:2 },
+  { id: 'CM.L2-3.4.2', name: 'Security Configuration', domain: 'CONFIGURATION MGMT', desc: 'Establish and enforce security configuration settings.', level:2 },
+  { id: 'CM.L2-3.4.3', name: 'Configuration Change Control', domain: 'CONFIGURATION MGMT', desc: 'Track, review, approve, and log changes to systems.', level:2 },
+  { id: 'CM.L2-3.4.4', name: 'Security Impact Analysis', domain: 'CONFIGURATION MGMT', desc: 'Analyze security impact of changes prior to implementation.', level:2 },
+  { id: 'CM.L2-3.4.5', name: 'Access Restrictions for Change', domain: 'CONFIGURATION MGMT', desc: 'Define, document and enforce access restrictions for changes.', level:2 },
+  { id: 'CM.L2-3.4.6', name: 'Least Functionality', domain: 'CONFIGURATION MGMT', desc: 'Employ principle of least functionality by configuring to provide only essential capabilities.', level:2 },
+  { id: 'CM.L2-3.4.7', name: 'Nonessential Functionality', domain: 'CONFIGURATION MGMT', desc: 'Restrict, disable, or prevent use of nonessential programs and functions.', level:2 },
+  { id: 'CM.L2-3.4.8', name: 'Application Execution Policy', domain: 'CONFIGURATION MGMT', desc: 'Apply deny-by-exception policy to prevent use of unauthorized software.', level:2 },
+  { id: 'CM.L2-3.4.9', name: 'User-Installed Software', domain: 'CONFIGURATION MGMT', desc: 'Control and monitor user-installed software.', level:2 },
 
   // IDENTIFICATION & AUTHENTICATION (IA) — 11 controls
-  { id: 'IA.L2-3.5.1', name: 'Identification', domain: 'IDENTIFICATION & AUTH', desc: 'Identify system users, processes, and devices.' },
-  { id: 'IA.L2-3.5.2', name: 'Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Authenticate identities of users, processes, and devices before access.' },
-  { id: 'IA.L2-3.5.3', name: 'Multifactor Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Use multifactor authentication for local and network access.' },
-  { id: 'IA.L2-3.5.4', name: 'Replay-Resistant Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Employ replay-resistant authentication mechanisms.' },
-  { id: 'IA.L2-3.5.5', name: 'Identifier Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Employ the following measures to manage identifier reuse.' },
-  { id: 'IA.L2-3.5.6', name: 'Identifier Handling', domain: 'IDENTIFICATION & AUTH', desc: 'Disable identifiers after defined period of inactivity.' },
-  { id: 'IA.L2-3.5.7', name: 'Password Complexity', domain: 'IDENTIFICATION & AUTH', desc: 'Enforce minimum password complexity and change requirements.' },
-  { id: 'IA.L2-3.5.8', name: 'Password Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Prohibit password reuse for a specified number of generations.' },
-  { id: 'IA.L2-3.5.9', name: 'Temporary Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Allow temporary password use with immediate change requirement.' },
-  { id: 'IA.L2-3.5.10', name: 'Cryptographically-Protected Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Store and transmit only cryptographically-protected passwords.' },
-  { id: 'IA.L2-3.5.11', name: 'Obscure Feedback', domain: 'IDENTIFICATION & AUTH', desc: 'Obscure feedback of authentication information during authentication.' },
+  { id: 'IA.L2-3.5.1', name: 'Identification', domain: 'IDENTIFICATION & AUTH', desc: 'Identify system users, processes, and devices.', level:1 },
+  { id: 'IA.L2-3.5.2', name: 'Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Authenticate identities of users, processes, and devices before access.', level:1 },
+  { id: 'IA.L2-3.5.3', name: 'Multifactor Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Use multifactor authentication for local and network access.', level:2 },
+  { id: 'IA.L2-3.5.4', name: 'Replay-Resistant Authentication', domain: 'IDENTIFICATION & AUTH', desc: 'Employ replay-resistant authentication mechanisms.', level:2 },
+  { id: 'IA.L2-3.5.5', name: 'Identifier Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Employ the following measures to manage identifier reuse.', level:2 },
+  { id: 'IA.L2-3.5.6', name: 'Identifier Handling', domain: 'IDENTIFICATION & AUTH', desc: 'Disable identifiers after defined period of inactivity.', level:2 },
+  { id: 'IA.L2-3.5.7', name: 'Password Complexity', domain: 'IDENTIFICATION & AUTH', desc: 'Enforce minimum password complexity and change requirements.', level:2 },
+  { id: 'IA.L2-3.5.8', name: 'Password Reuse', domain: 'IDENTIFICATION & AUTH', desc: 'Prohibit password reuse for a specified number of generations.', level:2 },
+  { id: 'IA.L2-3.5.9', name: 'Temporary Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Allow temporary password use with immediate change requirement.', level:2 },
+  { id: 'IA.L2-3.5.10', name: 'Cryptographically-Protected Passwords', domain: 'IDENTIFICATION & AUTH', desc: 'Store and transmit only cryptographically-protected passwords.', level:2 },
+  { id: 'IA.L2-3.5.11', name: 'Obscure Feedback', domain: 'IDENTIFICATION & AUTH', desc: 'Obscure feedback of authentication information during authentication.', level:2 },
 
   // INCIDENT RESPONSE (IR) — 3 controls
-  { id: 'IR.L2-3.6.1', name: 'Incident Handling', domain: 'INCIDENT RESPONSE', desc: 'Establish operational incident-handling capability including preparation and analysis.' },
-  { id: 'IR.L2-3.6.2', name: 'Incident Reporting', domain: 'INCIDENT RESPONSE', desc: 'Track, document, and report incidents to appropriate officials.' },
-  { id: 'IR.L2-3.6.3', name: 'Incident Response Testing', domain: 'INCIDENT RESPONSE', desc: 'Test the organizational incident response capability.' },
+  { id: 'IR.L2-3.6.1', name: 'Incident Handling', domain: 'INCIDENT RESPONSE', desc: 'Establish operational incident-handling capability including preparation and analysis.', level:2 },
+  { id: 'IR.L2-3.6.2', name: 'Incident Reporting', domain: 'INCIDENT RESPONSE', desc: 'Track, document, and report incidents to appropriate officials.', level:2 },
+  { id: 'IR.L2-3.6.3', name: 'Incident Response Testing', domain: 'INCIDENT RESPONSE', desc: 'Test the organizational incident response capability.', level:2 },
 
   // MAINTENANCE (MA) — 6 controls
-  { id: 'MA.L2-3.7.1', name: 'Perform Maintenance', domain: 'MAINTENANCE', desc: 'Perform maintenance on organizational systems.' },
-  { id: 'MA.L2-3.7.2', name: 'System Maintenance Control', domain: 'MAINTENANCE', desc: 'Provide controls on the tools, techniques, and personnel for maintenance.' },
-  { id: 'MA.L2-3.7.3', name: 'Equipment Sanitization', domain: 'MAINTENANCE', desc: 'Ensure equipment removed for maintenance is sanitized.' },
-  { id: 'MA.L2-3.7.4', name: 'Media Inspection', domain: 'MAINTENANCE', desc: 'Check media containing diagnostic programs for malicious code.' },
-  { id: 'MA.L2-3.7.5', name: 'Nonlocal Maintenance', domain: 'MAINTENANCE', desc: 'Require MFA for remote maintenance sessions.' },
-  { id: 'MA.L2-3.7.6', name: 'Maintenance Personnel', domain: 'MAINTENANCE', desc: 'Supervise maintenance activities of personnel without required access.' },
+  { id: 'MA.L2-3.7.1', name: 'Perform Maintenance', domain: 'MAINTENANCE', desc: 'Perform maintenance on organizational systems.', level:2 },
+  { id: 'MA.L2-3.7.2', name: 'System Maintenance Control', domain: 'MAINTENANCE', desc: 'Provide controls on the tools, techniques, and personnel for maintenance.', level:2 },
+  { id: 'MA.L2-3.7.3', name: 'Equipment Sanitization', domain: 'MAINTENANCE', desc: 'Ensure equipment removed for maintenance is sanitized.', level:2 },
+  { id: 'MA.L2-3.7.4', name: 'Media Inspection', domain: 'MAINTENANCE', desc: 'Check media containing diagnostic programs for malicious code.', level:2 },
+  { id: 'MA.L2-3.7.5', name: 'Nonlocal Maintenance', domain: 'MAINTENANCE', desc: 'Require MFA for remote maintenance sessions.', level:2 },
+  { id: 'MA.L2-3.7.6', name: 'Maintenance Personnel', domain: 'MAINTENANCE', desc: 'Supervise maintenance activities of personnel without required access.', level:2 },
 
   // MEDIA PROTECTION (MP) — 9 controls
-  { id: 'MP.L2-3.8.1', name: 'Media Protection', domain: 'MEDIA PROTECTION', desc: 'Protect system media containing CUI, both paper and digital.' },
-  { id: 'MP.L2-3.8.2', name: 'Media Access', domain: 'MEDIA PROTECTION', desc: 'Limit access to CUI on digital media to authorized users.' },
-  { id: 'MP.L2-3.8.3', name: 'Media Sanitization', domain: 'MEDIA PROTECTION', desc: 'Sanitize or destroy media before disposal or reuse.' },
-  { id: 'MP.L2-3.8.4', name: 'Media Markings', domain: 'MEDIA PROTECTION', desc: 'Mark media with necessary CUI markings and distribution limitations.' },
-  { id: 'MP.L2-3.8.5', name: 'Media Accountability', domain: 'MEDIA PROTECTION', desc: 'Control access to media containing CUI and maintain accountability.' },
-  { id: 'MP.L2-3.8.6', name: 'Portable Storage Encryption', domain: 'MEDIA PROTECTION', desc: 'Implement cryptographic mechanisms to protect CUI on portable storage.' },
-  { id: 'MP.L2-3.8.7', name: 'Removable Media Control', domain: 'MEDIA PROTECTION', desc: 'Control the use of removable media on system components.' },
-  { id: 'MP.L2-3.8.8', name: 'Shared Media', domain: 'MEDIA PROTECTION', desc: 'Prohibit use of portable storage without identifiable owner.' },
-  { id: 'MP.L2-3.8.9', name: 'Media Protection During Transport', domain: 'MEDIA PROTECTION', desc: 'Protect CUI during transport using cryptographic mechanisms.' },
+  { id: 'MP.L2-3.8.1', name: 'Media Protection', domain: 'MEDIA PROTECTION', desc: 'Protect system media containing CUI, both paper and digital.', level:2 },
+  { id: 'MP.L2-3.8.2', name: 'Media Access', domain: 'MEDIA PROTECTION', desc: 'Limit access to CUI on digital media to authorized users.', level:2 },
+  { id: 'MP.L2-3.8.3', name: 'Media Sanitization', domain: 'MEDIA PROTECTION', desc: 'Sanitize or destroy media before disposal or reuse.', level:1 },
+  { id: 'MP.L2-3.8.4', name: 'Media Markings', domain: 'MEDIA PROTECTION', desc: 'Mark media with necessary CUI markings and distribution limitations.', level:2 },
+  { id: 'MP.L2-3.8.5', name: 'Media Accountability', domain: 'MEDIA PROTECTION', desc: 'Control access to media containing CUI and maintain accountability.', level:2 },
+  { id: 'MP.L2-3.8.6', name: 'Portable Storage Encryption', domain: 'MEDIA PROTECTION', desc: 'Implement cryptographic mechanisms to protect CUI on portable storage.', level:2 },
+  { id: 'MP.L2-3.8.7', name: 'Removable Media Control', domain: 'MEDIA PROTECTION', desc: 'Control the use of removable media on system components.', level:2 },
+  { id: 'MP.L2-3.8.8', name: 'Shared Media', domain: 'MEDIA PROTECTION', desc: 'Prohibit use of portable storage without identifiable owner.', level:2 },
+  { id: 'MP.L2-3.8.9', name: 'Media Protection During Transport', domain: 'MEDIA PROTECTION', desc: 'Protect CUI during transport using cryptographic mechanisms.', level:2 },
 
   // PERSONNEL SECURITY (PS) — 2 controls
-  { id: 'PS.L2-3.9.1', name: 'Screen Individuals', domain: 'PERSONNEL SECURITY', desc: 'Screen individuals prior to authorizing access to systems.' },
-  { id: 'PS.L2-3.9.2', name: 'Termination & Transfer', domain: 'PERSONNEL SECURITY', desc: 'Ensure CUI is protected during and after personnel actions.' },
+  { id: 'PS.L2-3.9.1', name: 'Screen Individuals', domain: 'PERSONNEL SECURITY', desc: 'Screen individuals prior to authorizing access to systems.', level:2 },
+  { id: 'PS.L2-3.9.2', name: 'Termination & Transfer', domain: 'PERSONNEL SECURITY', desc: 'Ensure CUI is protected during and after personnel actions.', level:2 },
 
   // PHYSICAL PROTECTION (PE) — 6 controls
-  { id: 'PE.L2-3.10.1', name: 'Limit Physical Access', domain: 'PHYSICAL PROTECTION', desc: 'Limit physical access to systems to authorized individuals.' },
-  { id: 'PE.L2-3.10.2', name: 'Monitor Facility', domain: 'PHYSICAL PROTECTION', desc: 'Protect and monitor physical facility and support infrastructure.' },
-  { id: 'PE.L2-3.10.3', name: 'Visitor Control', domain: 'PHYSICAL PROTECTION', desc: 'Escort visitors and monitor visitor activity.' },
-  { id: 'PE.L2-3.10.4', name: 'Physical Access Logs', domain: 'PHYSICAL PROTECTION', desc: 'Maintain audit logs of physical access.' },
-  { id: 'PE.L2-3.10.5', name: 'Manage Physical Access Devices', domain: 'PHYSICAL PROTECTION', desc: 'Control and manage physical access devices.' },
-  { id: 'PE.L2-3.10.6', name: 'Alternative Work Sites', domain: 'PHYSICAL PROTECTION', desc: 'Enforce safeguarding measures at alternative work sites.' },
+  { id: 'PE.L2-3.10.1', name: 'Limit Physical Access', domain: 'PHYSICAL PROTECTION', desc: 'Limit physical access to systems to authorized individuals.', level:1 },
+  { id: 'PE.L2-3.10.2', name: 'Monitor Facility', domain: 'PHYSICAL PROTECTION', desc: 'Protect and monitor physical facility and support infrastructure.', level:2 },
+  { id: 'PE.L2-3.10.3', name: 'Visitor Control', domain: 'PHYSICAL PROTECTION', desc: 'Escort visitors and monitor visitor activity.', level:1 },
+  { id: 'PE.L2-3.10.4', name: 'Physical Access Logs', domain: 'PHYSICAL PROTECTION', desc: 'Maintain audit logs of physical access.', level:1 },
+  { id: 'PE.L2-3.10.5', name: 'Manage Physical Access Devices', domain: 'PHYSICAL PROTECTION', desc: 'Control and manage physical access devices.', level:1 },
+  { id: 'PE.L2-3.10.6', name: 'Alternative Work Sites', domain: 'PHYSICAL PROTECTION', desc: 'Enforce safeguarding measures at alternative work sites.', level:2 },
 
   // RISK ASSESSMENT (RA) — 3 controls
-  { id: 'RA.L2-3.11.1', name: 'Risk Assessments', domain: 'RISK ASSESSMENT', desc: 'Periodically assess risk to operations from system vulnerabilities.' },
-  { id: 'RA.L2-3.11.2', name: 'Vulnerability Scanning', domain: 'RISK ASSESSMENT', desc: 'Scan for vulnerabilities in systems periodically and upon identification of new vulnerabilities.' },
-  { id: 'RA.L2-3.11.3', name: 'Vulnerability Remediation', domain: 'RISK ASSESSMENT', desc: 'Remediate vulnerabilities in accordance with risk assessments.' },
+  { id: 'RA.L2-3.11.1', name: 'Risk Assessments', domain: 'RISK ASSESSMENT', desc: 'Periodically assess risk to operations from system vulnerabilities.', level:2 },
+  { id: 'RA.L2-3.11.2', name: 'Vulnerability Scanning', domain: 'RISK ASSESSMENT', desc: 'Scan for vulnerabilities in systems periodically and upon identification of new vulnerabilities.', level:2 },
+  { id: 'RA.L2-3.11.3', name: 'Vulnerability Remediation', domain: 'RISK ASSESSMENT', desc: 'Remediate vulnerabilities in accordance with risk assessments.', level:2 },
 
   // SECURITY ASSESSMENT (CA) — 4 controls
-  { id: 'CA.L2-3.12.1', name: 'Security Assessments', domain: 'SECURITY ASSESSMENT', desc: 'Periodically assess security controls to determine effectiveness.' },
-  { id: 'CA.L2-3.12.2', name: 'Plan of Action', domain: 'SECURITY ASSESSMENT', desc: 'Develop and implement plans of action to correct deficiencies.' },
-  { id: 'CA.L2-3.12.3', name: 'Continuous Monitoring', domain: 'SECURITY ASSESSMENT', desc: 'Monitor security controls on an ongoing basis.' },
-  { id: 'CA.L2-3.12.4', name: 'System Security Plan', domain: 'SECURITY ASSESSMENT', desc: 'Develop, document, and periodically update system security plans.' },
+  { id: 'CA.L2-3.12.1', name: 'Security Assessments', domain: 'SECURITY ASSESSMENT', desc: 'Periodically assess security controls to determine effectiveness.', level:2 },
+  { id: 'CA.L2-3.12.2', name: 'Plan of Action', domain: 'SECURITY ASSESSMENT', desc: 'Develop and implement plans of action to correct deficiencies.', level:2 },
+  { id: 'CA.L2-3.12.3', name: 'Continuous Monitoring', domain: 'SECURITY ASSESSMENT', desc: 'Monitor security controls on an ongoing basis.', level:2 },
+  { id: 'CA.L2-3.12.4', name: 'System Security Plan', domain: 'SECURITY ASSESSMENT', desc: 'Develop, document, and periodically update system security plans.', level:2 },
 
   // SYSTEM & COMM PROTECTION (SC) — 16 controls
-  { id: 'SC.L2-3.13.1', name: 'Boundary Protection', domain: 'SYSTEM & COMM PROTECTION', desc: 'Monitor, control, and protect communications at external boundaries.' },
-  { id: 'SC.L2-3.13.2', name: 'Security Engineering', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ security engineering principles in system development.' },
-  { id: 'SC.L2-3.13.3', name: 'Role Separation', domain: 'SYSTEM & COMM PROTECTION', desc: 'Separate user functionality from system management functionality.' },
-  { id: 'SC.L2-3.13.4', name: 'Shared Resource Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent unauthorized and unintended information transfer.' },
-  { id: 'SC.L2-3.13.5', name: 'Public Access Denial', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement subnetworks for publicly accessible system components.' },
-  { id: 'SC.L2-3.13.6', name: 'Network Communication by Exception', domain: 'SYSTEM & COMM PROTECTION', desc: 'Deny network communications traffic by default.' },
-  { id: 'SC.L2-3.13.7', name: 'Split Tunneling', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent split tunneling for remote devices.' },
-  { id: 'SC.L2-3.13.8', name: 'Data in Transit', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement cryptographic mechanisms to prevent unauthorized disclosure during transmission.' },
-  { id: 'SC.L2-3.13.9', name: 'Connections Termination', domain: 'SYSTEM & COMM PROTECTION', desc: 'Terminate network connections after defined period of inactivity.' },
-  { id: 'SC.L2-3.13.10', name: 'Key Management', domain: 'SYSTEM & COMM PROTECTION', desc: 'Establish and manage cryptographic keys for cryptography in systems.' },
-  { id: 'SC.L2-3.13.11', name: 'CUI Encryption', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ FIPS-validated cryptography when protecting CUI.' },
-  { id: 'SC.L2-3.13.12', name: 'Collaborative Device Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prohibit remote activation of collaborative computing devices.' },
-  { id: 'SC.L2-3.13.13', name: 'Mobile Code', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of mobile code.' },
-  { id: 'SC.L2-3.13.14', name: 'VoIP', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of VoIP technologies.' },
-  { id: 'SC.L2-3.13.15', name: 'Communications Authenticity', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect authenticity of communications sessions.' },
-  { id: 'SC.L2-3.13.16', name: 'Data at Rest', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect CUI at rest.' },
+  { id: 'SC.L2-3.13.1', name: 'Boundary Protection', domain: 'SYSTEM & COMM PROTECTION', desc: 'Monitor, control, and protect communications at external boundaries.', level:1 },
+  { id: 'SC.L2-3.13.2', name: 'Security Engineering', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ security engineering principles in system development.', level:2 },
+  { id: 'SC.L2-3.13.3', name: 'Role Separation', domain: 'SYSTEM & COMM PROTECTION', desc: 'Separate user functionality from system management functionality.', level:2 },
+  { id: 'SC.L2-3.13.4', name: 'Shared Resource Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent unauthorized and unintended information transfer.', level:2 },
+  { id: 'SC.L2-3.13.5', name: 'Public Access Denial', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement subnetworks for publicly accessible system components.', level:1 },
+  { id: 'SC.L2-3.13.6', name: 'Network Communication by Exception', domain: 'SYSTEM & COMM PROTECTION', desc: 'Deny network communications traffic by default.', level:2 },
+  { id: 'SC.L2-3.13.7', name: 'Split Tunneling', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prevent split tunneling for remote devices.', level:2 },
+  { id: 'SC.L2-3.13.8', name: 'Data in Transit', domain: 'SYSTEM & COMM PROTECTION', desc: 'Implement cryptographic mechanisms to prevent unauthorized disclosure during transmission.', level:2 },
+  { id: 'SC.L2-3.13.9', name: 'Connections Termination', domain: 'SYSTEM & COMM PROTECTION', desc: 'Terminate network connections after defined period of inactivity.', level:2 },
+  { id: 'SC.L2-3.13.10', name: 'Key Management', domain: 'SYSTEM & COMM PROTECTION', desc: 'Establish and manage cryptographic keys for cryptography in systems.', level:2 },
+  { id: 'SC.L2-3.13.11', name: 'CUI Encryption', domain: 'SYSTEM & COMM PROTECTION', desc: 'Employ FIPS-validated cryptography when protecting CUI.', level:2 },
+  { id: 'SC.L2-3.13.12', name: 'Collaborative Device Control', domain: 'SYSTEM & COMM PROTECTION', desc: 'Prohibit remote activation of collaborative computing devices.', level:2 },
+  { id: 'SC.L2-3.13.13', name: 'Mobile Code', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of mobile code.', level:2 },
+  { id: 'SC.L2-3.13.14', name: 'VoIP', domain: 'SYSTEM & COMM PROTECTION', desc: 'Control and monitor the use of VoIP technologies.', level:2 },
+  { id: 'SC.L2-3.13.15', name: 'Communications Authenticity', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect authenticity of communications sessions.', level:2 },
+  { id: 'SC.L2-3.13.16', name: 'Data at Rest', domain: 'SYSTEM & COMM PROTECTION', desc: 'Protect CUI at rest.', level:2 },
 
   // SYSTEM & INFO INTEGRITY (SI) — 7 controls
-  { id: 'SI.L2-3.14.1', name: 'Flaw Remediation', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify, report, and correct system flaws in a timely manner.' },
-  { id: 'SI.L2-3.14.2', name: 'Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Provide protection from malicious code at appropriate locations.' },
-  { id: 'SI.L2-3.14.3', name: 'Security Alerts', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor system security alerts and advisories.' },
-  { id: 'SI.L2-3.14.4', name: 'Update Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Update malicious code protection mechanisms when new releases are available.' },
-  { id: 'SI.L2-3.14.5', name: 'System & File Scanning', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Perform periodic scans and real-time scans of files from external sources.' },
-  { id: 'SI.L2-3.14.6', name: 'Security Monitoring', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor systems to detect attacks and indicators of potential attacks.' },
-  { id: 'SI.L2-3.14.7', name: 'Identify Unauthorized Use', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify unauthorized use of organizational systems.' },
+  { id: 'SI.L2-3.14.1', name: 'Flaw Remediation', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify, report, and correct system flaws in a timely manner.', level:1 },
+  { id: 'SI.L2-3.14.2', name: 'Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Provide protection from malicious code at appropriate locations.', level:1 },
+  { id: 'SI.L2-3.14.3', name: 'Security Alerts', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor system security alerts and advisories.', level:2 },
+  { id: 'SI.L2-3.14.4', name: 'Update Malicious Code Protection', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Update malicious code protection mechanisms when new releases are available.', level:1 },
+  { id: 'SI.L2-3.14.5', name: 'System & File Scanning', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Perform periodic scans and real-time scans of files from external sources.', level:1 },
+  { id: 'SI.L2-3.14.6', name: 'Security Monitoring', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Monitor systems to detect attacks and indicators of potential attacks.', level:1 },
+  { id: 'SI.L2-3.14.7', name: 'Identify Unauthorized Use', domain: 'SYSTEM & INFO INTEGRITY', desc: 'Identify unauthorized use of organizational systems.', level:1 },
 ];
 
 // ==========================================
 // APP STATE
 // ==========================================
+var KEY_VALIDATED = false;
 const STATE = {
   org: '',
   industry: '',
@@ -1725,8 +2000,202 @@ const STATE = {
   chatHistory: [],
 };
 
+
+// ── CONTROL EXPLANATIONS ───────────────────────────────────────────
+const CTRL_EXPLAIN = {
+  'AC.L2-3.1.1': { plain:'Only authorized people, programs, and devices should be able to access your systems.', risk:'Without this, anyone — including attackers — could access your network or sensitive files.', example:'An employee who left the company still has an active account that lets them log in remotely.', evidence:'User access lists, Active Directory policy screenshots, terminated user review logs.', impact:'HIGH' },
+  'AC.L2-3.1.2': { plain:'Users should only be able to do what their job requires — nothing more.', risk:'Overly broad permissions let employees or attackers access functions they should never touch.', example:'A data entry clerk can also delete records and export the entire customer database.', evidence:'Role-based access policy, permission matrix, user role documentation.', impact:'HIGH' },
+  'AC.L2-3.1.3': { plain:'Sensitive government information (CUI) should only flow to approved destinations.', risk:'CUI leaking to unauthorized systems or people violates federal contracts and can trigger investigations.', example:'An employee emails a controlled technical drawing to a personal Gmail account.', evidence:'Data flow diagrams, DLP policy, email filtering rules, CUI handling procedures.', impact:'HIGH' },
+  'AC.L2-3.1.4': { plain:'No single person should be able to perform a high-risk action alone without a second person involved.', risk:'One person with too much power can commit fraud, sabotage, or make catastrophic mistakes undetected.', example:'The same IT admin who deploys software also approves his own change requests with no review.', evidence:'Change management policy, approval workflow screenshots, segregation of duties matrix.', impact:'MED' },
+  'AC.L2-3.1.5': { plain:'Users get the minimum access needed to do their job — nothing extra.', risk:'Excess privileges are the #1 way attackers move laterally after breaking into one account.', example:'A warehouse employee has domain admin rights because IT never cleaned up their old access.', evidence:'Privilege review records, least privilege policy, admin account inventory.', impact:'HIGH' },
+  'AC.L2-3.1.6': { plain:'Employees should use regular accounts for daily work and only switch to admin accounts when absolutely necessary.', risk:'Running as admin all day means a single phishing click can give an attacker full system control.', example:'IT staff use domain admin accounts to check email and browse the web every day.', evidence:'Account usage policy, admin account audit, PAM tool configuration.', impact:'HIGH' },
+  'AC.L2-3.1.7': { plain:'Regular users should not be able to run system administration commands.', risk:'If a user can run privileged commands, malware or a bad actor can use that to take over the system.', example:'Standard users can install software or modify firewall rules on their workstations.', evidence:'Group policy configuration, endpoint hardening settings, software restriction policies.', impact:'HIGH' },
+  'AC.L2-3.1.8': { plain:'After too many wrong password attempts, the system should lock the account.', risk:'Without lockout, attackers can try millions of passwords until they find the right one (brute force).', example:'Your VPN allows unlimited login attempts with no lockout — bots can try endlessly.', evidence:'Account lockout policy settings, AD policy screenshots, lockout threshold documentation.', impact:'HIGH' },
+  'AC.L2-3.1.9': { plain:'Users should see a legal notice and privacy warning when they log in.', risk:'Without a banner, you lose legal standing if an employee misuses the system and claims they did not know it was monitored.', example:'No login warning exists — employees do not know their activity is logged.', evidence:'Login banner screenshot, acceptable use policy, legal review of banner language.', impact:'LOW' },
+  'AC.L2-3.1.10': { plain:'Computers should lock automatically after a period of inactivity and hide what was on screen.', risk:'An unattended logged-in computer is an open door for anyone walking by.', example:'A computer in the factory floor stays logged in and unlocked overnight.', evidence:'Screen lock policy, GPO settings screenshot, inactivity timeout configuration.', impact:'MED' },
+  'AC.L2-3.1.11': { plain:'User sessions should automatically end after a defined idle period.', risk:'Old sessions left open can be hijacked or misused.', example:'A VPN session stays active for 30 days after the user stops working.', evidence:'Session timeout configuration, VPN policy, RDP timeout settings.', impact:'MED' },
+  'AC.L2-3.1.12': { plain:'All remote access connections should be monitored and can be terminated if suspicious.', risk:'Unmonitored remote access is a major attack vector — attackers often use legitimate remote tools.', example:'Remote Desktop is enabled on all servers with no logging or monitoring.', evidence:'Remote access logs, monitoring tool configuration, remote session audit reports.', impact:'HIGH' },
+  'AC.L2-3.1.13': { plain:'Remote connections must be encrypted to prevent eavesdropping.', risk:'Unencrypted remote sessions expose passwords and data to anyone monitoring the network.', example:'Remote connections use outdated protocols like Telnet or unencrypted HTTP.', evidence:'VPN configuration, TLS settings, encryption standards documentation.', impact:'HIGH' },
+  'AC.L2-3.1.14': { plain:'Remote users must connect through controlled, managed access points — not direct connections.', risk:'Direct connections bypass security controls and create unmonitored entry points.', example:'Employees VPN directly into servers instead of going through a centralized gateway.', evidence:'Network diagram showing remote access path, gateway configuration, VPN policy.', impact:'HIGH' },
+  'AC.L2-3.1.15': { plain:'Admin-level commands run remotely must be explicitly authorized.', risk:'Unauthorized remote admin commands can change configurations or exfiltrate data silently.', example:'Any user on VPN can run PowerShell remotely against any server.', evidence:'Remote admin authorization policy, privileged access records, PAM configuration.', impact:'HIGH' },
+  'AC.L2-3.1.16': { plain:'Wireless network access must be formally approved before devices can connect.', risk:'Rogue wireless devices or unauthorized users can connect to your network and intercept data.', example:'Visitors can connect to the same WiFi network as production systems.', evidence:'Wireless access policy, approved device list, WiFi network segmentation diagram.', impact:'MED' },
+  'AC.L2-3.1.17': { plain:'WiFi connections must use strong authentication and encryption (WPA2/WPA3 minimum).', risk:'Weak WiFi security allows attackers nearby to intercept traffic or join your network.', example:'The factory floor WiFi still uses WEP encryption from 2008.', evidence:'Wireless configuration screenshots, encryption standard documentation, network scan.', impact:'HIGH' },
+  'AC.L2-3.1.18': { plain:'Mobile phones and tablets connecting to your network must be controlled.', risk:'Personal phones are frequently compromised — letting them on your network is a major risk.', example:'Employees connect personal iPhones to the corporate network with no MDM enrollment.', evidence:'MDM policy, approved device list, mobile device management console screenshots.', impact:'MED' },
+  'AC.L2-3.1.19': { plain:'Sensitive data on phones and tablets must be encrypted.', risk:'A lost or stolen unencrypted phone can expose all the data stored on it.', example:'Sales team uses iPads with CUI spreadsheets but device encryption is not enforced.', evidence:'MDM encryption policy, device compliance reports, data classification policy.', impact:'HIGH' },
+  'AC.L2-3.1.20': { plain:'Connections to external systems (partners, cloud, vendors) must be verified and limited.', risk:'Unchecked external connections are a common attack path — attackers compromise a vendor to reach you.', example:'A logistics partner has unrestricted network access to your file servers.', evidence:'Third-party access agreements, network access rules, vendor connection audit.', impact:'HIGH' },
+  'AC.L2-3.1.21': { plain:'USB drives and portable storage should not be used on external or untrusted systems.', risk:'Portable storage is one of the most common ways malware enters and data leaves an organization.', example:'Employees freely use personal USB drives on company computers and vice versa.', evidence:'Removable media policy, endpoint USB blocking configuration, data loss prevention logs.', impact:'HIGH' },
+  'AC.L2-3.1.22': { plain:'Sensitive information must not be posted or processed on public-facing websites.', risk:'Accidentally publishing CUI to a public server violates federal regulations and can trigger audits.', example:'An internal technical document was accidentally uploaded to the public company website.', evidence:'Public website content review, web publishing policy, CUI handling procedures.', impact:'HIGH' },
+  'AT.L2-3.2.1': { plain:'All employees should understand the cybersecurity risks related to their specific job role.', risk:'Uninformed employees are the #1 cause of breaches — phishing, accidental data sharing, weak passwords.', example:'Shop floor employees do not know that plugging in a found USB drive can infect the whole network.', evidence:'Security awareness training records, completion certificates, training curriculum.', impact:'MED' },
+  'AT.L2-3.2.2': { plain:'Staff with security responsibilities must be specifically trained on how to do those duties.', risk:'Untrained security staff make configuration mistakes that leave systems exposed.', example:'The IT admin managing the firewall has never received formal firewall training.', evidence:'Role-specific training records, certifications, training completion logs.', impact:'MED' },
+  'AT.L2-3.2.3': { plain:'Employees should know how to recognize and report insider threats.', risk:'Insider threats — whether malicious or accidental — cause significant breaches that are hard to detect.', example:'An employee notices a coworker copying files to USB drives every day but does not report it.', evidence:'Insider threat training materials, reporting hotline documentation, training completion records.', impact:'MED' },
+  'AU.L2-3.3.1': { plain:'Your systems must keep detailed logs of who did what and when.', risk:'Without logs, you cannot investigate a breach, prove compliance, or detect ongoing attacks.', example:'When a data breach occurred, there were no logs to determine what was accessed or by whom.', evidence:'SIEM configuration, log retention policy, sample audit log exports.', impact:'HIGH' },
+  'AU.L2-3.3.2': { plain:'Every logged action must be traceable back to a specific user.', risk:'Shared accounts make it impossible to determine who caused an incident.', example:'Multiple employees share a single "admin" account — no one knows who made changes.', evidence:'Unique account policy, log samples showing user attribution, account audit.', impact:'HIGH' },
+  'AU.L2-3.3.3': { plain:'Regularly review what events are being logged to make sure nothing important is missing.', risk:'If you are not logging the right events, attacks can go undetected for months.', example:'The firewall logs are enabled but no one has ever reviewed them or checked if they are capturing the right events.', evidence:'Log review policy, event category documentation, SIEM rule review records.', impact:'MED' },
+  'AU.L2-3.3.4': { plain:'If your logging system fails, someone must be alerted immediately.', risk:'Attackers often disable logging as their first move — you need to know instantly if logs stop.', example:'The SIEM stopped collecting logs for 2 weeks due to a disk issue — no one noticed.', evidence:'SIEM alerting configuration, log failure notification settings, incident response runbook.', impact:'HIGH' },
+  'AU.L2-3.3.5': { plain:'Security events from different systems should be correlated and analyzed together.', risk:'Attacks span multiple systems — viewing logs in isolation misses the full attack picture.', example:'Failed logins on the VPN and a new admin account creation happened the same day — but no one connected the dots.', evidence:'SIEM correlation rules, security operations procedures, alert triage documentation.', impact:'HIGH' },
+  'AU.L2-3.3.6': { plain:'Tools must exist to filter, search, and report on log data efficiently.', risk:'Terabytes of raw logs are useless without tools to analyze them quickly during an incident.', example:'During an incident, investigators had to manually grep through 200GB of log files with no search tool.', evidence:'SIEM tool documentation, log search capability demonstration, reporting templates.', impact:'MED' },
+  'AU.L2-3.3.7': { plain:'All system clocks must be synchronized to a trusted time source.', risk:'If clocks are off, log timestamps do not match — making incident investigation nearly impossible.', example:'Server A shows an event at 2:00 PM but Server B shows the related event at 1:47 PM due to clock drift.', evidence:'NTP configuration, time sync policy, clock accuracy verification.', impact:'MED' },
+  'AU.L2-3.3.8': { plain:'Log files and audit records must be protected from tampering or deletion.', risk:'Attackers routinely delete logs to hide their tracks — logs need to be stored securely.', example:'Any admin can delete log files from the server with no warning or backup.', evidence:'Log protection policy, write-once storage or SIEM configuration, access control on log files.', impact:'HIGH' },
+  'AU.L2-3.3.9': { plain:'Only a small group of authorized users can manage or change the logging system.', risk:'If too many people can modify logging, an insider can disable it before committing an attack.', example:'All 15 IT staff have rights to modify the SIEM configuration and disable alert rules.', evidence:'SIEM admin access list, privileged role documentation, access review records.', impact:'MED' },
+  'CM.L2-3.4.1': { plain:'You must have a documented "gold standard" configuration for all systems and maintain it.', risk:'Without baselines, you do not know if a system has been changed by an attacker or misconfigured.', example:'No one knows what the "correct" configuration is for workstations — they have all drifted differently.', evidence:'Baseline configuration documents, CIS benchmark implementation, configuration management tool output.', impact:'HIGH' },
+  'CM.L2-3.4.2': { plain:'Security settings on all systems must be configured and enforced — not left at default.', risk:'Default configurations are publicly known and attackers specifically target them.', example:'Servers still use default passwords and have all services enabled — same as out-of-the-box.', evidence:'Hardening guides, GPO configuration screenshots, CIS benchmark compliance scan.', impact:'HIGH' },
+  'CM.L2-3.4.3': { plain:'All system changes must go through a formal approval and tracking process.', risk:'Unapproved changes can break security controls or introduce vulnerabilities unintentionally.', example:'A developer changed a firewall rule "temporarily" and forgot to revert it — it is been open for a year.', evidence:'Change management tickets, change advisory board records, change approval logs.', impact:'HIGH' },
+  'CM.L2-3.4.4': { plain:'Before any change is made, you must evaluate how it could affect security.', risk:'A seemingly harmless software update can break encryption or open a network port.', example:'An OS update was applied without review — it disabled the local firewall on all workstations.', evidence:'Security impact analysis process, change request templates with security section, review records.', impact:'MED' },
+  'CM.L2-3.4.5': { plain:'Strict controls govern who can make changes to systems and how.', risk:'Anyone who can change a system configuration can also silently weaken its security.', example:'Junior technicians have unrestricted ability to change server configurations with no approval.', evidence:'Change authorization policy, privileged access list for change actions, approval workflow.', impact:'HIGH' },
+  'CM.L2-3.4.6': { plain:'Systems should only have software and services that are actually needed — nothing extra.', risk:'Every extra program or service is an additional attack surface.', example:'Production servers have games, media players, and chat apps installed by employees.', evidence:'Software inventory, approved software list, hardening configuration showing disabled services.', impact:'MED' },
+  'CM.L2-3.4.7': { plain:'Unnecessary programs, services, and features must be disabled or removed.', risk:'Unused features like Telnet, FTP, or old protocols are frequently exploited.', example:'A server has FTP, Telnet, and Remote Registry all enabled though none are used.', evidence:'Service inventory showing disabled services, hardening report, configuration audit.', impact:'HIGH' },
+  'CM.L2-3.4.8': { plain:'Only pre-approved software is allowed to run — everything else is blocked by default.', risk:'Malware and unapproved tools cannot run if only whitelisted software is permitted.', example:'Employees can download and run any executable they find on the internet.', evidence:'Application whitelisting policy, AppLocker or equivalent configuration, software approval process.', impact:'HIGH' },
+  'CM.L2-3.4.9': { plain:'Track and control any software employees install themselves.', risk:'Unapproved software brings unknown vulnerabilities, licensing issues, and potential malware.', example:'Employees freely install browser extensions, file-sharing tools, and remote access apps.', evidence:'Software installation policy, endpoint monitoring tool, software inventory reports.', impact:'MED' },
+  'IA.L2-3.5.1': { plain:'Every user, device, and process must have a unique identity in your systems.', risk:'Without unique identities, you cannot track who did what or hold anyone accountable.', example:'Three people share one login account for a manufacturing application.', evidence:'User account inventory, unique account policy, system account audit.', impact:'HIGH' },
+  'IA.L2-3.5.2': { plain:'Every identity must be verified with credentials before access is granted.', risk:'Without authentication, anyone can claim to be anyone and gain unauthorized access.', example:'An internal application accepts any username with no password required.', evidence:'Authentication policy, login configuration screenshots, system access audit.', impact:'HIGH' },
+  'IA.L2-3.5.3': { plain:'Logging in should require two or more forms of verification (password + phone code, etc.).', risk:'Passwords alone are no longer sufficient — MFA stops 99.9% of automated credential attacks.', example:'All remote access only requires a password — no MFA. A stolen password = full access.', evidence:'MFA policy, MFA enrollment reports, authentication system configuration.', impact:'HIGH' },
+  'IA.L2-3.5.4': { plain:'Authentication methods must be designed so captured credentials cannot be replayed later.', risk:'Attackers can capture authentication tokens and reuse them to log in without knowing the password.', example:'The VPN uses CHAP authentication which is vulnerable to replay attacks.', evidence:'Authentication protocol documentation, Kerberos or modern auth configuration, security assessment.', impact:'HIGH' },
+  'IA.L2-3.5.5': { plain:'Old or unused usernames must not be reused for new employees.', risk:'A new hire getting an old employee username could inadvertently inherit their access history or permissions.', example:'When a new John Smith joined, IT reused the old John Smiths username "jsmith".', evidence:'Account provisioning policy, username uniqueness controls, HR/IT onboarding process.', impact:'LOW' },
+  'IA.L2-3.5.6': { plain:'Accounts that have not been used for a set period must be automatically disabled.', risk:'Old accounts from former employees are prime targets for attackers — they are often forgotten.', example:'A former contractors account has been dormant for 8 months but is still active and accessible.', evidence:'Account inactivity policy, automated account disable configuration, quarterly access reviews.', impact:'HIGH' },
+  'IA.L2-3.5.7': { plain:'Passwords must meet complexity rules: minimum length, mix of characters, and regular changes.', risk:'Simple or short passwords can be cracked in seconds with modern tools.', example:'The password policy allows "password123" as a valid password.', evidence:'Password policy documentation, Active Directory password settings screenshot, complexity requirements.', impact:'HIGH' },
+  'IA.L2-3.5.8': { plain:'Users cannot reuse old passwords when creating new ones.', risk:'Password reuse means a breach from years ago can still compromise current accounts.', example:'Users change their password from "Spring2024!" to "Spring2025!" every year in a pattern.', evidence:'Password history policy, AD configuration showing history count, password policy documentation.', impact:'MED' },
+  'IA.L2-3.5.9': { plain:'Temporary passwords must be changed immediately upon first use.', risk:'Temporary passwords are often sent via email — if not changed immediately, anyone who intercepts them has access.', example:'New employee accounts come with a default password "Welcome1" that many employees never change.', evidence:'Account provisioning process, force-change-at-login setting, temporary password policy.', impact:'MED' },
+  'IA.L2-3.5.10': { plain:'Passwords must never be stored or transmitted in plain text — always encrypted/hashed.', risk:'A database breach exposes all passwords if they are stored unencrypted.', example:'The legacy application stores all user passwords in plain text in the database.', evidence:'Password hashing documentation, database review, security architecture documentation.', impact:'HIGH' },
+  'IA.L2-3.5.11': { plain:'Password fields must not show what you are typing — they should appear as dots.', risk:'Someone looking over your shoulder or a recording can capture visible passwords.', example:'An internal web application shows passwords in plain text as users type them.', evidence:'Application screenshot showing masked password field, UI testing documentation.', impact:'LOW' },
+  'IR.L2-3.6.1': { plain:'You must have a documented plan for how to respond when a security incident occurs.', risk:'Without a plan, incidents cause panic, mistakes, and much greater damage.', example:'When ransomware hit, no one knew who to call, what to shut down first, or how to contain it.', evidence:'Incident response plan document, IRP review records, IR team contact list.', impact:'HIGH' },
+  'IR.L2-3.6.2': { plain:'Security incidents must be formally documented and reported to the right people.', risk:'Unreported incidents violate contracts, delay recovery, and expose you to legal liability.', example:'A phishing email compromised a PC — IT cleaned it quietly without reporting it to management or the customer.', evidence:'Incident reporting policy, incident log, notification procedures, escalation contacts.', impact:'HIGH' },
+  'IR.L2-3.6.3': { plain:'Your incident response plan must be tested regularly through drills or exercises.', risk:'An untested plan will fail when you need it most.', example:'The IR plan has never been tested — no one knows if it actually works or who plays what role.', evidence:'Tabletop exercise records, drill after-action reports, IR test schedule.', impact:'MED' },
+  'MA.L2-3.7.1': { plain:'Maintenance on your systems must be performed regularly and in a controlled manner.', risk:'Deferred maintenance leads to vulnerabilities, system failures, and security gaps.', example:'Servers have not been patched in 14 months because "maintenance windows are hard to schedule."', evidence:'Maintenance schedule, patch management records, maintenance activity logs.', impact:'MED' },
+  'MA.L2-3.7.2': { plain:'Maintenance tools and who performs maintenance must be controlled and monitored.', risk:'Untrusted tools or technicians can introduce malware or backdoors during maintenance.', example:'A third-party vendor brought their own laptop and connected it to the network to run diagnostics.', evidence:'Approved maintenance tools list, vendor access controls, maintenance monitoring procedures.', impact:'MED' },
+  'MA.L2-3.7.3': { plain:'Equipment sent out for repair must have sensitive data removed or wiped first.', risk:'A hard drive sent to a vendor for repair could contain CUI — giving the vendor access to sensitive data.', example:'A failed hard drive was sent to the manufacturer for replacement with no data sanitization.', evidence:'Equipment sanitization policy, sanitization records, media handling procedures.', impact:'HIGH' },
+  'MA.L2-3.7.4': { plain:'Diagnostic media and tools must be scanned for malware before use.', risk:'A malware-infected USB drive brought in for maintenance can compromise your entire network.', example:'Technicians use personal USB drives with diagnostic tools that are never scanned for malware.', evidence:'Media scanning policy, antimalware scan records for maintenance media, procedures documentation.', impact:'MED' },
+  'MA.L2-3.7.5': { plain:'Remote maintenance sessions must use multi-factor authentication.', risk:'Remote maintenance tools are a top target — compromised credentials give attackers deep system access.', example:'Remote desktop for server maintenance only requires a password — no MFA.', evidence:'Remote maintenance policy, MFA configuration for remote access, session logs.', impact:'HIGH' },
+  'MA.L2-3.7.6': { plain:'Third-party maintenance personnel must be supervised if they do not have security clearances.', risk:'An unsupervised vendor can intentionally or accidentally access, copy, or damage sensitive data.', example:'HVAC technicians work in the server room alone for hours with no escort or supervision.', evidence:'Visitor/vendor escort policy, supervision records, physical access logs for maintenance visits.', impact:'MED' },
+  'MP.L2-3.8.1': { plain:'Physical media containing sensitive data (USB drives, hard drives, paper) must be protected.', risk:'Unprotected media can be stolen, lost, or accessed by unauthorized people.', example:'Boxes of printed CUI documents sit unsecured in an open storage room accessible to all employees.', evidence:'Media protection policy, physical security controls, media storage procedures.', impact:'HIGH' },
+  'MP.L2-3.8.2': { plain:'Access to digital media containing CUI must be restricted to authorized users only.', risk:'Anyone with access to the media can copy or leak the sensitive data on it.', example:'A shared network drive with sensitive contracts is accessible to all 200 employees.', evidence:'Access control list for media storage, authorization records, media access audit.', impact:'HIGH' },
+  'MP.L2-3.8.3': { plain:'Before disposing of or reusing storage media, all data must be securely wiped.', risk:'A disposed hard drive or USB drive can be recovered and sensitive data extracted.', example:'Old company laptops are donated to a local school without wiping the hard drives.', evidence:'Media sanitization policy, destruction/wiping records, certificate of destruction for drives.', impact:'HIGH' },
+  'MP.L2-3.8.4': { plain:'Physical media with CUI must be clearly labeled with its sensitivity level.', risk:'Unlabeled sensitive media can be treated as ordinary materials and mishandled.', example:'USB drives with sensitive engineering files have no labels — they look identical to blank drives.', evidence:'CUI marking policy, labeling procedures, sample media with proper markings.', impact:'MED' },
+  'MP.L2-3.8.5': { plain:'Track where all sensitive media is, who has it, and what is on it.', risk:'If you cannot account for all media, you cannot know if any is missing or compromised.', example:'No one knows how many USB drives with CUI exist in the company or where they all are.', evidence:'Media inventory log, check-out/check-in procedures, media tracking records.', impact:'MED' },
+  'MP.L2-3.8.6': { plain:'Sensitive data on portable devices must be encrypted.', risk:'An unencrypted USB drive with CUI that is lost or stolen exposes all its data instantly.', example:'Engineers store CUI on unencrypted thumb drives they carry in their pockets.', evidence:'Encryption policy for portable media, BitLocker or equivalent configuration, compliance scan.', impact:'HIGH' },
+  'MP.L2-3.8.7': { plain:'The use of removable media on company systems must be controlled and limited.', risk:'Removable media is how most malware and data theft occurs — it needs strict controls.', example:'Any USB drive can be plugged into any company computer with no restrictions.', evidence:'USB port control policy, endpoint configuration blocking unauthorized media, exception process.', impact:'HIGH' },
+  'MP.L2-3.8.8': { plain:'Only media with an identifiable owner should be used — anonymous drives are prohibited.', risk:'Anonymous drives could be planted by attackers with malware or used for anonymous data theft.', example:'Employees pick up USB drives from a community bin and use them with no questions asked.', evidence:'Media ownership policy, labeled media inventory, procedures for unknown media handling.', impact:'MED' },
+  'MP.L2-3.8.9': { plain:'Media being transported must be encrypted and protected from physical damage or loss.', risk:'Media in transit — courier packages, employee bags — is especially vulnerable to theft.', example:'An employee mails a hard drive with CUI to a partner via regular postal mail without encryption.', evidence:'Media transport policy, encryption requirements for transit, courier/shipping procedures.', impact:'HIGH' },
+  'PS.L2-3.9.1': { plain:'All employees and contractors must be vetted before getting access to sensitive systems or data.', risk:'Hiring someone with a criminal history or falsified credentials and giving them CUI access is a major risk.', example:'Contractors are given network access on their first day before any background check is complete.', evidence:'Background check policy, pre-employment screening records, access provisioning checklist.', impact:'HIGH' },
+  'PS.L2-3.9.2': { plain:'When employees leave or transfer roles, their access must be revoked immediately.', risk:'Former employees with active accounts are among the most common sources of data breaches.', example:'A terminated employee account remained active for 3 weeks — they accessed the system twice.', evidence:'Offboarding procedure, termination access revocation records, HR-IT process documentation.', impact:'HIGH' },
+  'PE.L2-3.10.1': { plain:'Only authorized people should be able to physically enter areas where systems are located.', risk:'Physical access to a server is game over — an attacker can bypass all digital security.', example:'The server room door is propped open and anyone in the building can walk in.', evidence:'Physical access policy, badge access logs, visitor log for restricted areas.', impact:'HIGH' },
+  'PE.L2-3.10.2': { plain:'Your facilities and the infrastructure supporting them must be physically monitored.', risk:'Unmonitored facilities allow physical attacks, theft, or tampering without detection.', example:'No cameras or monitoring exist in or around the server room or data closets.', evidence:'Physical security monitoring policy, camera coverage map, monitoring system documentation.', impact:'HIGH' },
+  'PE.L2-3.10.3': { plain:'Visitors must be escorted and their activities monitored while on site.', risk:'An unescorted visitor in a sensitive area can access systems, plant devices, or steal equipment.', example:'Visitors sign a logbook and are left to find their own way to meeting rooms unescorted.', evidence:'Visitor escort policy, visitor log records, escort procedures for sensitive areas.', impact:'MED' },
+  'PE.L2-3.10.4': { plain:'A log must be kept of who physically accessed sensitive areas and when.', risk:'Without physical access logs, you cannot investigate who was present during an incident.', example:'Badge access logs are only kept for 24 hours before being overwritten.', evidence:'Physical access log retention policy, badge system configuration, sample access logs.', impact:'MED' },
+  'PE.L2-3.10.5': { plain:'Physical access devices like keys, badges, and PIN codes must be managed and audited.', risk:'Lost keys or shared badges create uncontrolled physical access.', example:'Master keys to the server room are shared between 12 people and duplicates have been made.', evidence:'Key/badge inventory, access device management policy, periodic audit records.', impact:'MED' },
+  'PE.L2-3.10.6': { plain:'Security controls must apply to employees working from home or alternate locations.', risk:'Home offices are far less secure than corporate facilities — they need equivalent protections.', example:'Remote workers handle CUI on personal computers with no security software or controls.', evidence:'Remote work security policy, VPN requirements, home office security checklist.', impact:'MED' },
+  'RA.L2-3.11.1': { plain:'Regularly assess your cybersecurity risks — what could go wrong and how likely is it.', risk:'Without risk assessments, you are flying blind and allocating security resources to the wrong places.', example:'The company has never done a formal risk assessment — no one knows what their biggest threats are.', evidence:'Risk assessment report, risk register, assessment methodology documentation, schedule.', impact:'HIGH' },
+  'RA.L2-3.11.2': { plain:'Regularly scan your systems for known vulnerabilities.', risk:'New vulnerabilities are discovered daily — without scanning, you do not know what is exposed.', example:'Systems have not been vulnerability scanned in 18 months. Several critical CVEs are likely present.', evidence:'Vulnerability scan reports, scanning tool configuration, scan schedule, remediation records.', impact:'HIGH' },
+  'RA.L2-3.11.3': { plain:'When vulnerabilities are found, fix them in a timely manner based on their risk level.', risk:'Known vulnerabilities that are not patched are the leading cause of successful cyberattacks.', example:'Critical vulnerability scan findings from 6 months ago have never been addressed.', evidence:'Vulnerability remediation policy, patching records, scan-to-fix timeframe documentation.', impact:'HIGH' },
+  'CA.L2-3.12.1': { plain:'Regularly evaluate whether your security controls are actually working as intended.', risk:'Controls that look good on paper may be misconfigured or ineffective in practice.', example:'The firewall rules were set up years ago and have never been tested to verify they work correctly.', evidence:'Security assessment records, penetration test reports, control effectiveness reviews.', impact:'HIGH' },
+  'CA.L2-3.12.2': { plain:'When security weaknesses are found, create a formal plan to fix them with timelines.', risk:'Discovered gaps without remediation plans just sit there — unaddressed vulnerabilities invite breaches.', example:'The last audit found 47 issues. A year later, none of them have documented remediation plans.', evidence:'POA&M document, remediation tracking records, closure evidence for completed items.', impact:'HIGH' },
+  'CA.L2-3.12.3': { plain:'Security controls must be monitored on an ongoing basis — not just annually.', risk:'The threat landscape changes daily — annual reviews miss 364 days of potential compromise.', example:'Security reviews only happen once a year. Anything that changes in between goes undetected.', evidence:'Continuous monitoring plan, automated scanning configuration, monitoring tool dashboards.', impact:'HIGH' },
+  'CA.L2-3.12.4': { plain:'A formal System Security Plan (SSP) must document all your security controls and how they work.', risk:'Without an SSP, you cannot prove to auditors or customers that your security is intentional and managed.', example:'There is no documented security plan — security is handled ad-hoc with no formal documentation.', evidence:'System Security Plan document, SSP review records, control implementation status.', impact:'HIGH' },
+  'SC.L2-3.13.1': { plain:'Your network boundaries must be monitored and controlled — traffic in and out must be managed.', risk:'Unmonitored boundaries allow attackers to enter or exfiltrate data without detection.', example:'There is no firewall between the corporate network and the internet — all traffic flows freely.', evidence:'Network diagram, firewall configuration, boundary protection policy, traffic monitoring logs.', impact:'HIGH' },
+  'SC.L2-3.13.2': { plain:'Security must be designed into systems from the start, not added as an afterthought.', risk:'Bolted-on security is always weaker than security-by-design.', example:'A new manufacturing application was deployed with no security review — it has no authentication.', evidence:'SDLC policy, security requirements in design documents, security review records for new systems.', impact:'MED' },
+  'SC.L2-3.13.3': { plain:'User-facing functions and system management functions must be on separate interfaces.', risk:'Mixing user and admin interfaces means a compromised user account could reach admin functions.', example:'Regular users and system administrators access the same web portal with different menus.', evidence:'System architecture diagram, separate admin interface documentation, access control configuration.', impact:'MED' },
+  'SC.L2-3.13.4': { plain:'Systems must prevent users from accidentally or intentionally accessing other users data.', risk:'Shared resources can leak data between users if not properly isolated.', example:'A multi-tenant application lets users see each others records due to a misconfiguration.', evidence:'Data isolation testing records, application security review, shared resource control documentation.', impact:'HIGH' },
+  'SC.L2-3.13.5': { plain:'Public-facing systems must be on a separate network segment from internal systems.', risk:'If a public web server is on the same network as internal systems, one breach exposes everything.', example:'The company website runs on the same network as the internal ERP and file servers.', evidence:'Network segmentation diagram, DMZ configuration, firewall rules between segments.', impact:'HIGH' },
+  'SC.L2-3.13.6': { plain:'Network traffic should be blocked by default — only explicitly permitted traffic is allowed.', risk:'Allowing all traffic by default means attackers can communicate freely once inside.', example:'The firewall uses "allow all, deny specific" rules instead of "deny all, allow specific."', evidence:'Firewall policy documentation, rule review showing default-deny posture, network policy.', impact:'HIGH' },
+  'SC.L2-3.13.7': { plain:'VPN users must route all traffic through your network — they cannot split traffic to bypass controls.', risk:'Split tunneling lets VPN users send some traffic outside your controls, enabling data leakage.', example:'Employees on VPN can browse the internet directly while accessing company resources — split tunnel is on.', evidence:'VPN configuration showing split tunneling disabled, network traffic analysis, VPN policy.', impact:'HIGH' },
+  'SC.L2-3.13.8': { plain:'All sensitive data in transit must be encrypted so it cannot be intercepted.', risk:'Unencrypted data on the network can be captured by anyone with network access.', example:'Internal file transfers between offices use FTP with no encryption.', evidence:'Encryption policy, TLS configuration documentation, network traffic analysis confirming encryption.', impact:'HIGH' },
+  'SC.L2-3.13.9': { plain:'Network connections must automatically time out after a period of inactivity.', risk:'Persistent open connections are opportunities for session hijacking.', example:'Database connections stay open indefinitely even when not in use.', evidence:'Connection timeout configuration, session management policy, network device settings.', impact:'MED' },
+  'SC.L2-3.13.10': { plain:'Encryption keys must be properly generated, stored, rotated, and destroyed.', risk:'Weak or improperly managed keys undermine all encryption — even strong algorithms.', example:'Encryption keys are hardcoded in application source code visible to all developers.', evidence:'Key management policy, key vault configuration, key rotation records, HSM documentation.', impact:'HIGH' },
+  'SC.L2-3.13.11': { plain:'CUI must be encrypted using FIPS 140-2 validated cryptographic algorithms.', risk:'Non-FIPS encryption may be legally insufficient for federal contract compliance.', example:'CUI is encrypted with MD5 or DES — algorithms that are no longer considered secure or FIPS-compliant.', evidence:'Encryption algorithm documentation, FIPS compliance scan, cryptographic module certificates.', impact:'HIGH' },
+  'SC.L2-3.13.12': { plain:'Cameras, microphones, and collaboration tools must not be remotely activated without knowledge.', risk:'Attackers can silently activate microphones and cameras to conduct surveillance.', example:'Laptop cameras have no hardware privacy covers and can be activated remotely by malware.', evidence:'Policy on collaborative device use, physical camera covers, software controls for mic/camera access.', impact:'MED' },
+  'SC.L2-3.13.13': { plain:'Mobile code (JavaScript, ActiveX, etc.) must be controlled and monitored.', risk:'Malicious scripts running in browsers or applications can steal data or execute commands.', example:'All JavaScript runs without restriction — malicious scripts from ads can execute freely.', evidence:'Mobile code policy, browser security settings, content security policy configuration.', impact:'MED' },
+  'SC.L2-3.13.14': { plain:'VoIP systems must be controlled and monitored for security threats.', risk:'VoIP systems can be intercepted, spoofed, or used to exfiltrate data.', example:'The VoIP system has no access controls — anyone on the network can make calls or listen in.', evidence:'VoIP security policy, VoIP system configuration, network segmentation for voice traffic.', impact:'LOW' },
+  'SC.L2-3.13.15': { plain:'Communication sessions must be authenticated to prevent spoofing and man-in-the-middle attacks.', risk:'Without session authentication, attackers can intercept and manipulate communications.', example:'Internal API calls between systems have no authentication — any system can make calls.', evidence:'Session authentication policy, TLS mutual authentication configuration, API security documentation.', impact:'HIGH' },
+  'SC.L2-3.13.16': { plain:'Sensitive data stored on disk must be encrypted.', risk:'Physical theft of a server or hard drive exposes all unencrypted data on it.', example:'Servers in the facility store CUI with no disk encryption — a stolen drive reveals everything.', evidence:'Encryption at rest policy, BitLocker/LUKS/SED configuration, storage encryption compliance scan.', impact:'HIGH' },
+  'SI.L2-3.14.1': { plain:'When software flaws or bugs are found, they must be quickly identified and fixed.', risk:'Known unpatched flaws are the most commonly exploited vulnerabilities.', example:'A critical Windows vulnerability has been known for 3 months but has not been patched yet.', evidence:'Patch management policy, patching records, vulnerability remediation timelines, WSUS reports.', impact:'HIGH' },
+  'SI.L2-3.14.2': { plain:'Antivirus and anti-malware tools must be deployed everywhere and kept up to date.', risk:'Without malware protection, a single infected email or USB can compromise the entire network.', example:'Shop floor PCs do not have antivirus installed because "they are not on the internet."', evidence:'Antivirus deployment report, endpoint protection policy, AV management console screenshots.', impact:'HIGH' },
+  'SI.L2-3.14.3': { plain:'Security alerts and advisories from vendors and CISA must be monitored and acted on.', risk:'New threats emerge daily — ignoring advisories means you are always behind attackers.', example:'CISAs Known Exploited Vulnerabilities catalog is never reviewed by IT staff.', evidence:'Threat intelligence subscription, security advisory review process, CISA KEV monitoring procedure.', impact:'HIGH' },
+  'SI.L2-3.14.4': { plain:'Antivirus and anti-malware signatures must be updated automatically and continuously.', risk:'Outdated signatures cannot detect new malware variants that emerge daily.', example:'Antivirus signatures have not updated in 6 weeks because the update server was misconfigured.', evidence:'AV update policy, automatic update configuration, signature currency report from AV console.', impact:'HIGH' },
+  'SI.L2-3.14.5': { plain:'Systems must be regularly scanned and files from external sources scanned in real-time.', risk:'Malware on removable media or email attachments must be caught before it can execute.', example:'Real-time scanning is disabled on file servers "for performance reasons."', evidence:'Antivirus configuration showing real-time and scheduled scans, scan logs, policy documentation.', impact:'HIGH' },
+  'SI.L2-3.14.6': { plain:'Systems must be actively monitored for signs of attack or suspicious behavior.', risk:'Without active monitoring, attackers can operate inside your network for months undetected.', example:'No security monitoring exists — the only way breaches are discovered is when damage is visible.', evidence:'SIEM configuration, intrusion detection system setup, SOC procedures, monitoring alert records.', impact:'HIGH' },
+  'SI.L2-3.14.7': { plain:'Unusual or unauthorized use of systems must be detected and investigated.', risk:'Insider threats and compromised accounts often show anomalous usage patterns before causing harm.', example:'An account suddenly downloading 50GB of files at 2 AM triggered no alerts.', evidence:'User behavior analytics configuration, anomaly detection rules, unauthorized use detection procedures.', impact:'HIGH' },
+};
+
+// ── LOCAL STORAGE PERSISTENCE ─────────────────────────────────────────
+const STORAGE_KEY = 'cyberdrill_grc_v1';
+
+function saveState() {
+  try {
+    var snapshot = {
+      org:        STATE.org,
+      industry:   STATE.industry,
+      level:      STATE.level,
+      userName:   STATE.userName  || '',
+      userTitle:  STATE.userTitle || '',
+      assessDate: STATE.assessDate || '',
+      controls:   STATE.controls,
+      savedAt:    new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+  } catch(e) { /* storage unavailable */ }
+}
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+
+function clearSavedState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+}
+
+function hasSavedState() {
+  try { return !!localStorage.getItem(STORAGE_KEY); } catch(e) { return false; }
+}
+
+function resumeFromSaved(saved) {
+  // Restore STATE
+  STATE.org        = saved.org        || 'My Organization';
+  STATE.industry   = saved.industry   || '';
+  STATE.level      = saved.level      || 2;
+  STATE.userName   = saved.userName   || '';
+  STATE.userTitle  = saved.userTitle  || '';
+  STATE.assessDate = saved.assessDate || new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  STATE.controls   = saved.controls   || {};
+
+  // Update UI badges
+  document.getElementById('orgBadge').textContent = 'ORG: ' + STATE.org.substring(0, 16).toUpperCase();
+  document.getElementById('rptOrg').textContent   = STATE.org;
+  document.getElementById('rptDate').textContent  = STATE.assessDate;
+
+  var levelDescs = { 1: 'Foundational - 17 Controls', 2: 'Advanced - 110 Controls', 3: 'Expert - 110 Controls' };
+  document.getElementById('sidebarLevel').textContent    = 'L' + STATE.level;
+  document.getElementById('sidebarLevelDesc').textContent = levelDescs[STATE.level] || '';
+  document.getElementById('rptLevel').textContent        = 'CMMC L' + STATE.level;
+
+  // Hide setup modal, show app
+  document.getElementById('setupModal').style.display = 'none';
+  renderAll();
+
+  // Show resume toast
+  showToast('Session restored — ' + STATE.org + ' | CMMC L' + STATE.level, 'success');
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('grcToast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'grc-toast ' + (type || 'info') + ' show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.classList.remove('show'); }, 3500);
+}
+// ── END PERSISTENCE ───────────────────────────────────────────────────
+
+// ── LEVEL FILTER ──────────────────────────────────────────────────
+function getActiveControls() {
+  if (STATE.level === 1) return CMMC_CONTROLS.filter(c => c.level === 1);
+  if (STATE.level === 2) return CMMC_CONTROLS.filter(c => c.level <= 2);
+  return CMMC_CONTROLS; // L3 = all
+}
 function initDemoData() {
-  CMMC_CONTROLS.forEach(c => { STATE.controls[c.id] = ''; });
+  getActiveControls().forEach(function(c){ STATE.controls[c.id] = ''; });
 }
 
 // ==========================================
@@ -1734,21 +2203,21 @@ function initDemoData() {
 // ==========================================
 function calcScore() {
   let pass = 0, fail = 0, partial = 0, na = 0;
-  CMMC_CONTROLS.forEach(c => {
+  getActiveControls().forEach(c => {
     const s = STATE.controls[c.id] || 'fail';
     if (s === 'pass') pass++;
     else if (s === 'fail') fail++;
     else if (s === 'partial') partial++;
     else if (s === 'na') na++;
   });
-  const total = CMMC_CONTROLS.length - na;
+  const total = getActiveControls().length - na;
   const score = total > 0 ? Math.round(((pass + partial * 0.5) / total) * 100) : 0;
   return { pass, fail, partial, na, score, total };
 }
 
 function getDomainScores() {
   const domains = {};
-  CMMC_CONTROLS.forEach(c => {
+  getActiveControls().forEach(c => {
     if (!domains[c.domain]) domains[c.domain] = { pass: 0, fail: 0, partial: 0, total: 0 };
     domains[c.domain].total++;
     const s = STATE.controls[c.id] || 'fail';
@@ -1770,8 +2239,12 @@ function startApp() {
 
   if (!name) { alert('Please enter your organization name.'); return; }
   if (!industry) { alert('Please select your industry sector.'); return; }
+  if (!KEY_VALIDATED) { var ke=document.getElementById('keyErrMsg'); ke.textContent='Please validate your access key.'; ke.style.display='block'; return; }
 
   STATE.org = name || 'My Organization';
+  STATE.userName  = ((document.getElementById('lFirstName').value||'').trim() + ' ' + (document.getElementById('lLastName').value||'').trim()).trim();
+  STATE.userTitle = (document.getElementById('lTitle').value||'').trim();
+  STATE.assessDate = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   STATE.industry = industry;
   STATE.level = parseInt(level);
   STATE.apiKey = key;
@@ -1780,7 +2253,7 @@ function startApp() {
   document.getElementById('rptOrg').textContent = STATE.org;
   document.getElementById('rptDate').textContent = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric'});
 
-  const levelDescs = { 1: 'Foundational — 15 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 130+ Controls' };
+  const levelDescs = { 1: 'Foundational — 17 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 110 Controls' };
   document.getElementById('sidebarLevel').textContent = 'L' + STATE.level;
   document.getElementById('sidebarLevelDesc').textContent = levelDescs[STATE.level];
   document.getElementById('rptLevel').textContent = 'CMMC L' + STATE.level;
@@ -1788,6 +2261,8 @@ function startApp() {
   initDemoData();
   document.getElementById('setupModal').style.display = 'none';
   renderAll();
+  saveState();
+  showToast('Session saved — progress auto-saved as you assess', 'success');
 }
 
 function renderAll() {
@@ -1847,7 +2322,7 @@ function renderDomainBars() {
 function renderHeatmap() {
   const container = document.getElementById('heatmapGrid');
   container.innerHTML = '';
-  CMMC_CONTROLS.forEach((c, i) => {
+  getActiveControls().forEach((c, i) => {
     const s = STATE.controls[c.id] || '';
     let heatClass = 'heat-4';
     if (s === 'pass') heatClass = 'heat-0';
@@ -1860,7 +2335,7 @@ function renderHeatmap() {
 
 function renderRecentControls() {
   const tbody = document.getElementById('recentControls');
-  const shown = CMMC_CONTROLS.slice(0, 15);
+  const shown = getActiveControls().slice(0, 15);
   tbody.innerHTML = shown.map(c => {
     const s = STATE.controls[c.id] || 'fail';
     const labels = { pass: 'PASS', fail: 'FAIL', partial: 'PARTIAL', na: 'N/A', '': 'FAIL' };
@@ -1876,7 +2351,7 @@ function renderRecentControls() {
 
 function renderAssessment() {
   const domains = {};
-  CMMC_CONTROLS.forEach(c => {
+  getActiveControls().forEach(c => {
     if (!domains[c.domain]) domains[c.domain] = [];
     domains[c.domain].push(c);
   });
@@ -1891,13 +2366,38 @@ function renderAssessment() {
     const id = 'domain-' + dname.replace(/\s/g,'');
 
     const ctrlsHTML = controls.map(c => {
-      const s = STATE.controls[c.id] || 'fail';
+      const s  = STATE.controls[c.id] || 'fail';
+      const ex = CTRL_EXPLAIN[c.id] || null;
+      const impactClass = ex ? 'impact-' + ex.impact : '';
+      const explainHTML = ex ? `
+        <div class="ctrl-explain-panel" id="exp-${c.id}">
+          <div class="explain-grid">
+            <div class="explain-cell full">
+              <div class="explain-cell-label">&#128196; Plain English</div>
+              <div class="explain-cell-text">${ex.plain}</div>
+            </div>
+            <div class="explain-cell">
+              <div class="explain-cell-label">&#9888; Business Risk</div>
+              <div class="explain-cell-text">${ex.risk}</div>
+            </div>
+            <div class="explain-cell">
+              <div class="explain-cell-label">&#128269; Real-World Example</div>
+              <div class="explain-cell-text">${ex.example}</div>
+            </div>
+            <div class="explain-cell full">
+              <div class="explain-cell-label">&#128203; Evidence Required</div>
+              <div class="explain-cell-text">${ex.evidence}</div>
+            </div>
+          </div>
+        </div>` : '';
       return `
         <div class="ctrl-row">
-          <div class="ctrl-row-id">${c.id}</div>
+          <div class="ctrl-row-id">${(()=>{const lvl=STATE.level===1&&c.level===1?c.id.replace('.L2-','.L1-'):c.id;return lvl;})()}${ex ? '<br><span class="impact-badge ' + impactClass + '">' + ex.impact + '</span>' : ''}</div>
           <div>
             <div class="ctrl-row-text">${c.name}</div>
             <div class="ctrl-row-desc">${c.desc}</div>
+            ${ex ? `<div class="ctrl-explain-toggle" id="tog-${c.id}" onclick="toggleExplain('${c.id}')"><span class="arrow">&#9658;</span> EXPLAIN</div>` : ''}
+            ${explainHTML}
           </div>
           <div class="ctrl-status-select">
             ${['pass','partial','fail','na'].map(opt => `
@@ -1922,6 +2422,15 @@ function renderAssessment() {
   });
 }
 
+
+function toggleExplain(id) {
+  var panel  = document.getElementById('exp-' + id);
+  var toggle = document.getElementById('tog-' + id);
+  if (!panel) return;
+  var open = panel.classList.toggle('open');
+  toggle.classList.toggle('open', open);
+  toggle.querySelector('.arrow').textContent = open ? '▼' : '▶';
+}
 function toggleDomain(id) {
   const el = document.getElementById(id);
   el.classList.toggle('open');
@@ -1935,10 +2444,190 @@ function setControl(id, status) {
   renderHeatmap();
   renderRecentControls();
   renderPOAM();
+  checkCompletion();
+  saveState();
+}
+
+
+function showResumePrompt(saved) {
+  var modal = document.getElementById('setupModal');
+  if (!modal) { resumeFromSaved(saved); return; }
+
+  var answeredCount = Object.values(saved.controls).filter(function(v){ return v && v !== ''; }).length;
+  var savedDate     = saved.savedAt ? new Date(saved.savedAt).toLocaleString() : 'previously';
+
+  var resumeDiv = document.getElementById('resumeBanner');
+  if (!resumeDiv) {
+    resumeDiv = document.createElement('div');
+    resumeDiv.id = 'resumeBanner';
+    resumeDiv.style.cssText = 'background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.25);padding:18px 20px;margin-bottom:20px;';
+    var mBody = modal.querySelector('.modal-body');
+    if (mBody) mBody.prepend(resumeDiv); else modal.prepend(resumeDiv);
+  } else {
+    resumeDiv.innerHTML = '';
+  }
+
+  var rTitle = document.createElement('div');
+  rTitle.style.cssText = 'font-family:var(--head);font-weight:900;font-size:16px;letter-spacing:2px;color:var(--accent);margin-bottom:6px;';
+  rTitle.textContent = '\u21BA RESUME PREVIOUS SESSION';
+  resumeDiv.appendChild(rTitle);
+
+  var rSub = document.createElement('div');
+  rSub.style.cssText = 'font-family:var(--mono);font-size:11px;color:var(--text2);margin-bottom:12px;';
+  rSub.textContent = saved.org.toUpperCase() + ' \u00b7 CMMC L' + saved.level + ' \u00b7 ' + answeredCount + ' controls answered \u00b7 Saved ' + savedDate;
+  resumeDiv.appendChild(rSub);
+
+  var rBtns = document.createElement('div');
+  rBtns.style.cssText = 'display:flex;gap:10px;flex-wrap:wrap;';
+
+  var rResume = document.createElement('button');
+  rResume.style.cssText = 'font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:2px;padding:8px 18px;background:rgba(0,212,255,0.12);border:1px solid var(--accent);color:var(--accent);cursor:pointer;';
+  rResume.textContent = '\u25B6 RESUME SESSION';
+  var savedCopy = JSON.parse(JSON.stringify(saved));
+  rResume.onclick = function(){ resumeFromSaved(savedCopy); };
+  rBtns.appendChild(rResume);
+
+  var rFresh = document.createElement('button');
+  rFresh.style.cssText = 'font-family:var(--head);font-weight:700;font-size:12px;letter-spacing:2px;padding:8px 18px;background:rgba(255,59,59,0.08);border:1px solid rgba(255,59,59,0.3);color:var(--danger);cursor:pointer;';
+  rFresh.textContent = '\u2715 START FRESH';
+  rFresh.onclick = function(){ clearSavedState(); resumeDiv.style.display = 'none'; };
+  rBtns.appendChild(rFresh);
+
+  resumeDiv.appendChild(rBtns);
+}
+
+function goToPage(page) {
+  var navMap = {dashboard:1,assessment:2,advisor:3,reports:4};
+  var btn = document.querySelector(".nav-btn:nth-child(" + (navMap[page]||1) + ")");
+  showPage(page, btn);
+}
+
+function advanceToLevel(nextLevel) {
+  STATE.level = nextLevel;
+  saveState();
+  const levelDescs = { 1: 'Foundational — 17 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 110 Controls' };
+  document.getElementById('sidebarLevel').textContent = 'L' + nextLevel;
+  document.getElementById('sidebarLevelDesc').textContent = levelDescs[nextLevel] || '';
+  document.getElementById('rptLevel').textContent = 'CMMC L' + nextLevel;
+  // Ensure new controls have a blank status slot
+  getActiveControls().forEach(c => {
+    if (!STATE.controls[c.id]) STATE.controls[c.id] = '';
+  });
+  // Hide banner and reset progress bar color
+  var banner = document.getElementById('completionBanner');
+  if (banner) { banner.style.display = 'none'; }
+  var pBar = document.getElementById('progressBar');
+  if (pBar) pBar.style.background = 'var(--accent)';
+  renderAll();
+  // Scroll assessment wrap to top
+  var wrap = document.getElementById('assessWrap');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function buildBannerActions(lvl, actionsEl, s) {
+  if (!actionsEl) return;
+  actionsEl.innerHTML = '';
+  function mkBtn(cls, label, fn) {
+    var b = document.createElement('button');
+    b.className = 'banner-btn ' + cls;
+    b.textContent = label;
+    b.onclick = fn;
+    actionsEl.appendChild(b);
+  }
+  if (lvl === 1) {
+    mkBtn('green', '\u{1F4C8} CONTINUE TO LEVEL 2 \u2192', function(){ advanceToLevel(2); });
+    mkBtn('green', '\u{1F4C4} VIEW REPORT',               function(){ goToPage('reports'); });
+    mkBtn('gold',  '\u{1F3C6} GET L1 CERTIFICATE',        function(){ exportCert(); });
+  } else if (lvl === 2) {
+    mkBtn('gold',  '\u{1F525} CONTINUE TO LEVEL 3 \u2192', function(){ advanceToLevel(3); });
+    mkBtn('green', '\u{1F4C4} VIEW REPORT',                function(){ goToPage('reports'); });
+    mkBtn('gold',  '\u{1F3C6} GET L2 CERTIFICATE',         function(){ exportCert(); });
+    mkBtn('cyan',  '\u{1F916} ASK AI ADVISOR',             function(){ goToPage('advisor'); });
+  } else {
+    mkBtn('gold',  '\u{1F3C6} GET FULL CERTIFICATE', function(){ exportCert(); });
+    mkBtn('green', '\u{1F4CA} FINAL REPORT',          function(){ goToPage('reports'); });
+    mkBtn('cyan',  '\u{1F916} ASK AI ADVISOR',        function(){ goToPage('advisor'); });
+  }
+}
+
+function checkCompletion() {
+  var active   = getActiveControls();
+  var answered = active.filter(function(c){ return STATE.controls[c.id] && STATE.controls[c.id] !== ''; });
+  var total    = active.length;
+  var done     = answered.length;
+  var banner   = document.getElementById('completionBanner');
+  if (!banner) return;
+
+  // Progress bar
+  var pBar  = document.getElementById('progressBar');
+  var pLabel= document.getElementById('progressLabel');
+  var pPct  = document.getElementById('progressPct');
+  var pWrap = document.getElementById('assessProgress');
+  if (pBar) {
+    var pct = total > 0 ? Math.round((done/total)*100) : 0;
+    pBar.style.width = pct + '%';
+    if (pLabel) pLabel.textContent = done + ' OF ' + total + ' ANSWERED';
+    if (pPct)   pPct.textContent   = pct + '%';
+    if (pWrap)  pWrap.style.display = 'block';
+    if (pct === 100)    pBar.style.background = 'var(--accent2)';
+    else if (pct >= 50) pBar.style.background = 'var(--warn)';
+    else                pBar.style.background = 'var(--accent)';
+  }
+
+  if (done < total) {
+    banner.style.display = 'none';
+    return;
+  }
+
+  var s          = calcScore();
+  var lvl        = STATE.level;
+  var iconEl     = document.getElementById('bannerIcon');
+  var titleEl    = document.getElementById('bannerTitle');
+  var subEl      = document.getElementById('bannerSub');
+  var actionsEl  = document.getElementById('bannerActions');
+
+  if (titleEl) { titleEl.style.color = ''; titleEl.style.fontSize = ''; }
+
+  if (lvl === 1) {
+    if (iconEl)  iconEl.textContent = '\u2705';
+    if (titleEl) titleEl.textContent = 'CMMC Level 1 Complete \u2014 ' + s.score + '% Readiness';
+    if (subEl)   subEl.textContent  = total + '/' + total + ' L1 Foundational controls assessed \u00b7 '
+      + s.pass + ' passing, ' + s.fail + ' gaps \u2192 Ready to advance to Level 2?';
+    banner.style.borderColor = 'var(--accent2)';
+    banner.style.background  = 'linear-gradient(135deg,rgba(0,255,136,0.08),rgba(0,212,255,0.05))';
+    banner.style.animation   = '';
+
+  } else if (lvl === 2) {
+    if (iconEl)  iconEl.textContent = '\u{1F3C5}';
+    if (titleEl) titleEl.textContent = 'CMMC Level 2 Complete \u2014 ' + s.score + '% Readiness';
+    if (subEl)   subEl.textContent  = total + '/' + total + ' L2 Advanced controls assessed \u00b7 '
+      + s.pass + ' passing, ' + s.fail + ' gaps, ' + s.partial + ' partial \u2192 Ready for Level 3?';
+    banner.style.borderColor = 'var(--warn)';
+    banner.style.background  = 'linear-gradient(135deg,rgba(255,204,0,0.08),rgba(0,212,255,0.05))';
+    banner.style.animation   = '';
+
+  } else {
+    if (iconEl)  iconEl.textContent = '\u{1F3C6}';
+    if (titleEl) {
+      titleEl.textContent  = '\u2B50 CONGRATULATIONS \u2014 CMMC L1 + L2 + L3 COMPLETE!';
+      titleEl.style.color  = 'var(--warn)';
+      titleEl.style.fontSize = '20px';
+    }
+    if (subEl) subEl.textContent = 'You have successfully completed all three CMMC maturity levels. '
+      + 'Final score: ' + s.score + '% \u00b7 '
+      + s.pass + ' controls passing \u00b7 Your organization demonstrates full CMMC readiness.';
+    banner.style.borderColor = 'var(--warn)';
+    banner.style.background  = 'linear-gradient(135deg,rgba(255,204,0,0.12),rgba(0,255,136,0.08),rgba(0,212,255,0.06))';
+    banner.style.animation   = 'celebratePulse 1.5s ease-in-out 3';
+  }
+
+  buildBannerActions(lvl, actionsEl, s);
+  banner.style.display = 'block';
+  banner.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function renderPOAM() {
-  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
+  const failing = getActiveControls().filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
   const container = document.getElementById('poamList');
   const months = ['2025-06-30','2025-07-31','2025-08-31','2025-09-30','2025-10-31','2025-12-31'];
   
@@ -2092,10 +2781,30 @@ function removeLoadingMsg(id) {
 }
 
 // Enter key for AI
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('aiInput').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') sendToAdvisor();
-  });
+document.addEventListener('DOMContentLoaded', function() {
+  // Wire clear session button
+  var csBtn = document.getElementById('clearSessionBtn');
+  if (csBtn) {
+    csBtn.onclick = function() {
+      if (confirm('Clear saved session and start fresh?')) {
+        clearSavedState();
+        location.reload();
+      }
+    };
+  }
+  // Auto-resume if saved session exists
+  if (hasSavedState()) {
+    var saved = loadState();
+    if (saved && saved.org) {
+      // Show resume prompt instead of setup modal
+      showResumePrompt(saved);
+      return;
+    }
+  }
+  try {
+    var ai = document.getElementById('aiInput');
+    if (ai) ai.addEventListener('keydown', function(e) { if (e.key==='Enter') sendToAdvisor(); });
+  } catch(e) { console.warn('DOMContentLoaded minor error:', e); }
 });
 
 // ==========================================
@@ -2104,8 +2813,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function exportReport() {
   const s = calcScore();
   const domains = getDomainScores();
-  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail');
-  const partial = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'partial');
+  const failing = getActiveControls().filter(c => STATE.controls[c.id] === 'fail');
+  const partial = getActiveControls().filter(c => STATE.controls[c.id] === 'partial');
 
   let report = `CYBERDRILL GRC — CMMC COMPLIANCE REPORT
 ==========================================
@@ -2117,7 +2826,7 @@ Target Level: CMMC Level ${STATE.level}
 EXECUTIVE SUMMARY
 -----------------
 Overall Readiness Score: ${s.score}%
-Controls Passing: ${s.pass} / ${CMMC_CONTROLS.length}
+Controls Passing: ${s.pass} / ${getActiveControls().length}
 Controls Failing: ${s.fail}
 Controls Partial: ${s.partial}
 
@@ -2147,7 +2856,7 @@ DOMAIN SCORES
 }
 
 function generatePOAM() {
-  const failing = CMMC_CONTROLS.filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
+  const failing = getActiveControls().filter(c => STATE.controls[c.id] === 'fail' || STATE.controls[c.id] === 'partial');
   let csv = 'Control ID,Control Name,Domain,Status,Priority,Target Date,Notes\n';
   const months = ['2025-06-30','2025-07-31','2025-08-31','2025-09-30','2025-10-31','2025-12-31'];
   failing.forEach((c, i) => {
@@ -2162,32 +2871,398 @@ function generatePOAM() {
   a.download = `CyberdrillGRC_POAM_${STATE.org.replace(/\s/g,'_')}_${new Date().toISOString().split('T')[0]}.csv`;
   a.click();
 }
+
+// ── CERTIFICATE ────────────────────────────────────────────────────
+function exportCert() {
+  var s       = calcScore();
+  var org     = STATE.org || 'Organization';
+  var level   = STATE.level || 2;
+  var name    = STATE.userName  || '—';
+  var title   = STATE.userTitle || '—';
+  var date    = STATE.assessDate || new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  var total   = getActiveControls().length;
+  var score   = s.score;
+  var passing = s.pass;
+  var failing = s.fail;
+  var partial = s.partial;
+  var recId   = 'CDGRC-' + new Date().getFullYear() + '-' + org.replace(/\s/g,'').substring(0,4).toUpperCase() + '-L' + level + '-' + String(Math.floor(Math.random()*9000)+1000);
+  var scoreColor = score >= 70 ? '#1a7a4a' : score >= 40 ? '#c8a84b' : '#b03a2e';
+  var levelLabel = level === 1 ? 'FOUNDATIONAL' : level === 2 ? 'ADVANCED' : 'EXPERT';
+
+  var certHTML = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Cyberdrill GRC — Certificate — ${org}</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;700;900&family=Barlow:wght@400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#1a1a2e; font-family:'Barlow',sans-serif; padding:20px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+.toolbar { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.toolbar button { font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:2px; padding:10px 20px; cursor:pointer; border:1px solid; }
+.btn-print { background:rgba(0,212,255,0.1); border-color:#00d4ff; color:#00d4ff; }
+.btn-pdf   { background:rgba(200,168,75,0.1); border-color:#c8a84b; color:#c8a84b; }
+.btn-img   { background:rgba(0,255,136,0.1); border-color:#00ff88; color:#00ff88; }
+.btn-close { background:rgba(255,59,59,0.1); border-color:#ff3b3b; color:#ff3b3b; }
+.cert-wrap { width:820px; background:#fff; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
+.cert-border-outer { position:absolute; inset:10px; border:2px solid #1a3a6b; pointer-events:none; z-index:10; }
+.cert-border-inner { position:absolute; inset:14px; border:1px solid rgba(26,58,107,0.3); pointer-events:none; z-index:10; }
+.cert-header { background:linear-gradient(135deg,#0a1628 0%,#1a3a6b 50%,#0d2554 100%); padding:24px 44px 20px; position:relative; }
+.cert-header::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#c8a84b,#f0d080,#c8a84b); }
+.cert-logo-row { display:flex; align-items:center; justify-content:space-between; }
+.cert-hex { width:48px; height:48px; background:rgba(0,212,255,0.1); border:2px solid #00d4ff; clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); display:flex; align-items:center; justify-content:center; }
+.cert-brand { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:20px; letter-spacing:3px; color:#fff; }
+.cert-brand span { color:#00d4ff; }
+.cert-brand-sub { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(0,212,255,0.6); letter-spacing:3px; margin-top:2px; }
+.cert-title-block { text-align:center; }
+.cert-title-block .t1 { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:6px; color:rgba(200,168,75,0.8); margin-bottom:3px; }
+.cert-title-block .t2 { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:40px; letter-spacing:5px; color:#fff; line-height:1; }
+.cert-title-block .t3 { font-family:'Barlow Condensed',sans-serif; font-size:15px; letter-spacing:7px; color:#c8a84b; margin-top:3px; }
+.cert-badge { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#1a3a6b,#0a1628); border:3px solid #c8a84b; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; }
+.cert-badge .b1 { font-family:'Barlow Condensed',sans-serif; font-size:7px; letter-spacing:2px; color:#c8a84b; }
+.cert-badge .b2 { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:900; color:#fff; line-height:1; }
+.cert-badge .b3 { font-family:'Share Tech Mono',monospace; font-size:6px; color:rgba(255,255,255,0.5); letter-spacing:1px; }
+.cert-body { padding:26px 44px 22px; background:#fafbff; }
+.cert-presented { text-align:center; font-family:'Barlow',sans-serif; font-size:11px; color:#6a8fa8; letter-spacing:3px; text-transform:uppercase; margin-bottom:5px; }
+.cert-org { text-align:center; font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:32px; color:#0a1628; letter-spacing:2px; margin-bottom:3px; }
+.cert-rep { text-align:center; font-family:'Barlow',sans-serif; font-size:13px; color:#3d5f75; margin-bottom:16px; }
+.cert-rep strong { color:#1a3a6b; }
+.cert-divider { height:2px; background:linear-gradient(90deg,transparent,#c8a84b,transparent); margin:0 60px 16px; }
+.cert-statement { text-align:center; font-family:'Barlow',sans-serif; font-size:12px; color:#3d5f75; line-height:1.8; max-width:600px; margin:0 auto 18px; }
+.cert-statement strong { color:#1a3a6b; }
+.cert-score-band { display:flex; border:1px solid #dde8f0; background:#fff; margin-bottom:16px; }
+.sc { flex:1; padding:11px 8px; text-align:center; border-right:1px solid #dde8f0; }
+.sc:last-child { border-right:none; }
+.sc .sl { font-family:'Share Tech Mono',monospace; font-size:7px; color:#6a8fa8; letter-spacing:2px; margin-bottom:4px; text-transform:uppercase; }
+.sc .sv { font-family:'Barlow Condensed',sans-serif; font-weight:900; font-size:20px; color:#1a3a6b; }
+.cert-disclaimer { background:#fff8e6; border:1px solid #f0d080; border-left:4px solid #c8a84b; padding:9px 14px; margin-bottom:16px; display:flex; gap:10px; align-items:flex-start; }
+.cert-disclaimer .di { font-size:14px; flex-shrink:0; }
+.cert-disclaimer .dt { font-family:'Barlow',sans-serif; font-size:11px; color:#6b4f00; line-height:1.7; }
+.cert-disclaimer .dt strong { color:#4a3500; }
+.cert-sig-row { display:grid; grid-template-columns:1fr 1px 1fr 1px 1fr; border:1px solid #dde8f0; background:#fff; margin-bottom:0; }
+.cert-sig-div { background:#dde8f0; }
+.cert-sig-cell { padding:12px 14px; text-align:center; }
+.cert-sig-cell .ssl { font-family:'Share Tech Mono',monospace; font-size:7px; color:#6a8fa8; letter-spacing:2px; margin-bottom:7px; }
+.cert-sig-cell .ssv { font-family:'Barlow',sans-serif; font-size:13px; color:#0a1628; font-weight:600; }
+.cert-sig-cell .sss { font-family:'Share Tech Mono',monospace; font-size:9px; color:#6a8fa8; margin-top:2px; }
+.cert-footer { background:linear-gradient(135deg,#0a1628,#1a3a6b); padding:12px 44px; display:flex; justify-content:space-between; align-items:center; }
+.cert-footer .fl { font-family:'Share Tech Mono',monospace; font-size:7px; color:rgba(255,255,255,0.35); letter-spacing:1px; line-height:2; }
+.cert-footer .fr { font-family:'Share Tech Mono',monospace; font-size:8px; color:#c8a84b; letter-spacing:2px; text-align:right; }
+.cert-footer .fr .cid { font-size:10px; font-weight:bold; color:#fff; display:block; margin-top:2px; }
+.cert-notice { text-align:center; padding:7px; font-family:'Share Tech Mono',monospace; font-size:7px; color:#aaa; letter-spacing:1px; background:#f5f7fa; border-top:1px solid #dde8f0; }
+@media print {
+  body { background:#fff; padding:0; }
+  .toolbar { display:none !important; }
+  .cert-wrap { box-shadow:none; width:100%; }
+  @page { size:A4 landscape; margin:10mm; }
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button class="btn-print" onclick="window.print()">&#128438; PRINT / SAVE AS PDF</button>
+  <button class="btn-img"   onclick="saveAsImage()">&#128247; SAVE AS IMAGE</button>
+  <button class="btn-close" onclick="window.close()">&#10005; CLOSE</button>
+</div>
+<div class="cert-wrap" id="certEl">
+  <div class="cert-border-outer"></div>
+  <div class="cert-border-inner"></div>
+  <div class="cert-header">
+    <div class="cert-logo-row">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="cert-hex"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><div class="cert-brand">CYBERDRILL <span>GRC</span></div><div class="cert-brand-sub">GOVERNANCE &middot; RISK &middot; COMPLIANCE</div></div>
+      </div>
+      <div class="cert-title-block">
+        <div class="t1">Self-Assessment Record</div>
+        <div class="t2">CERTIFICATE</div>
+        <div class="t3">OF CMMC READINESS</div>
+      </div>
+      <div class="cert-badge">
+        <div class="b1">CMMC</div>
+        <div class="b2">L${level}</div>
+        <div class="b3">${levelLabel}</div>
+      </div>
+    </div>
+  </div>
+  <div class="cert-body">
+    <div class="cert-presented">Assessment Completed By</div>
+    <div class="cert-org">${org}</div>
+    <div class="cert-rep">Represented by <strong>${name}</strong>${title ? ', ' + title : ''}</div>
+    <div class="cert-divider"></div>
+    <div class="cert-statement">
+      This record confirms that <strong>${org}</strong> has completed an internal CMMC Level ${level}
+      readiness self-assessment in accordance with <strong>NIST SP 800-171 Rev. 2</strong>,
+      covering <strong>${total} practices</strong> across all applicable domains,
+      as administered through the <strong>Cyberdrill GRC platform</strong> on <strong>${date}</strong>.
+    </div>
+    <div class="cert-score-band">
+      <div class="sc"><div class="sl">Readiness Score</div><div class="sv" style="color:${scoreColor}">${score}%</div></div>
+      <div class="sc"><div class="sl">Controls Passing</div><div class="sv" style="color:#1a7a4a">${passing}</div></div>
+      <div class="sc"><div class="sl">Gaps Identified</div><div class="sv" style="color:#b03a2e">${failing}</div></div>
+      <div class="sc"><div class="sl">Partial</div><div class="sv" style="color:#e67e22">${partial}</div></div>
+      <div class="sc"><div class="sl">CMMC Level</div><div class="sv">L${level}</div></div>
+      <div class="sc"><div class="sl">Total Controls</div><div class="sv">${total}</div></div>
+    </div>
+    <div class="cert-disclaimer">
+      <div class="di">&#9888;&#65039;</div>
+      <div class="dt"><strong>IMPORTANT NOTICE:</strong> This document is a self-assessment readiness record only. It does <strong>not</strong> constitute official CMMC certification and carries no regulatory standing. Official CMMC Level ${level} certification requires assessment by a <strong>C3PAO-authorized third-party assessor</strong> registered with the Cyber AB. This record may be used for internal gap analysis and audit preparation purposes only.</div>
+    </div>
+    <div class="cert-sig-row">
+      <div class="cert-sig-cell"><div class="ssl">Assessed By</div><div class="ssv">${name||org}</div><div class="sss">${title}</div></div>
+      <div class="cert-sig-div"></div>
+      <div class="cert-sig-cell"><div class="ssl">Assessment Date</div><div class="ssv">${date}</div><div class="sss">Cyberdrill GRC v1.0.0</div></div>
+      <div class="cert-sig-div"></div>
+      <div class="cert-sig-cell"><div class="ssl">Platform Issued By</div><div class="ssv">Cyberdrill AI</div><div class="sss">cyberdrill.ai</div></div>
+    </div>
+  </div>
+  <div class="cert-footer">
+    <div class="fl">&copy; 2025 Cyberdrill AI &middot; cyberdrill.ai<br>Non-transferable &mdash; applies only to the identified organization.</div>
+    <div class="fr">RECORD ID<span class="cid">${recId}</span></div>
+  </div>
+  <div class="cert-notice">This is a self-assessment record &mdash; not an official CMMC certification. Official certification requires a C3PAO authorized assessor registered with the Cyber AB.</div>
+</div>
+function saveAsImage() {
+  // Use html2canvas if available, otherwise guide user
+  var btn = document.querySelector('.btn-img');
+  btn.textContent = 'Right-click the certificate > Save Image, or use Print > Save as PDF';
+  btn.style.color = '#ffcc00';
+  setTimeout(function(){ btn.textContent = '\\u{1F4F7} SAVE AS IMAGE'; btn.style.color='#00ff88'; }, 4000);
+}
+<\/script>
+
+  <div id="grcToast" class="grc-toast"></div>
+
+
+
+</body>
+</html>`;
+
+  var w = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+  w.document.write(certHTML);
+  w.document.close();
+}
+
+// ── SESSION MANAGEMENT ────────────────────────────────────────────────
+var SAVE_KEY = 'cyberdrill_grc_session';
+var confirmPending = null;
+
+function saveProgress() {
+  try {
+    var snapshot = {
+      org:       STATE.org,
+      industry:  STATE.industry,
+      level:     STATE.level,
+      apiKey:    STATE.apiKey,
+      userName:  STATE.userName,
+      userTitle: STATE.userTitle,
+      assessDate:STATE.assessDate,
+      controls:  STATE.controls,
+      savedAt:   new Date().toISOString()
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot));
+    // Visual feedback
+    var btn = document.getElementById('saveBtn');
+    var ind = document.getElementById('saveIndicator');
+    if (btn) { btn.classList.add('saved'); btn.textContent = '✓ SAVED'; }
+    if (ind) { ind.classList.add('show'); }
+    setTimeout(function() {
+      if (btn) { btn.classList.remove('saved'); btn.innerHTML = '&#128190; SAVE PROGRESS'; }
+      if (ind) { ind.classList.remove('show'); }
+    }, 2500);
+  } catch(e) {
+    alert('Save failed — localStorage may be disabled in your browser.');
+  }
+}
+
+function loadSavedSession() {
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    var snap = JSON.parse(raw);
+    if (!snap.org || !snap.controls) return false;
+    return snap;
+  } catch(e) { return false; }
+}
+
+function restoreSession(snap) {
+  STATE.org       = snap.org;
+  STATE.industry  = snap.industry || '';
+  STATE.level     = snap.level || 2;
+  STATE.apiKey    = snap.apiKey || '';
+  STATE.userName  = snap.userName || '';
+  STATE.userTitle = snap.userTitle || '';
+  STATE.assessDate= snap.assessDate || new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  STATE.controls  = snap.controls || {};
+
+  var levelDescs = { 1: 'Foundational — 17 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 110 Controls' };
+  document.getElementById('orgBadge').textContent       = 'ORG: ' + STATE.org.substring(0,16).toUpperCase();
+  document.getElementById('sidebarLevel').textContent   = 'L' + STATE.level;
+  document.getElementById('sidebarLevelDesc').textContent = levelDescs[STATE.level] || '';
+  document.getElementById('rptOrg').textContent         = STATE.org;
+  document.getElementById('rptLevel').textContent       = 'CMMC L' + STATE.level;
+  document.getElementById('rptDate').textContent        = STATE.assessDate;
+
+  document.getElementById('setupModal').style.display = 'none';
+  document.getElementById('sessionBar').style.display = 'flex';
+  renderAll();
+  checkCompletion();
+
+  // Show restore toast
+  showToast('↩ Session restored from ' + new Date(snap.savedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}));
+}
+
+function confirmAction(type) {
+  confirmPending = type;
+  var overlay   = document.getElementById('confirmOverlay');
+  var icon      = document.getElementById('confirmIcon');
+  var title     = document.getElementById('confirmTitle');
+  var msg       = document.getElementById('confirmMsg');
+  var yesBtn    = document.getElementById('confirmYes');
+  if (!overlay) return;
+
+  if (type === 'restart') {
+    var lvlName = STATE.level === 1 ? 'Level 1' : STATE.level === 2 ? 'Level 2' : 'Level 3';
+    icon.textContent  = '⚠️';
+    title.textContent = 'Restart ' + lvlName + '?';
+    title.style.color = 'var(--warn)';
+    msg.textContent   = 'All answers for the current level will be cleared. Answers from other levels are kept. This cannot be undone.';
+    yesBtn.className  = 'confirm-yes warn';
+    yesBtn.textContent= 'YES, RESTART LEVEL';
+  } else {
+    icon.textContent  = '🚨';
+    title.textContent = 'Reset All Levels?';
+    title.style.color = 'var(--danger)';
+    msg.textContent   = 'ALL answers across L1, L2, and L3 will be permanently cleared and you will return to Level 1. Your saved session will also be erased.';
+    yesBtn.className  = 'confirm-yes danger';
+    yesBtn.textContent= 'YES, RESET EVERYTHING';
+  }
+  overlay.classList.add('show');
+}
+
+function closeConfirm() {
+  var overlay = document.getElementById('confirmOverlay');
+  if (overlay) overlay.classList.remove('show');
+  confirmPending = null;
+}
+
+function doConfirm() {
+  closeConfirm();
+  if (confirmPending === 'restart') {
+    restartCurrentLevel();
+  } else if (confirmPending === 'reset') {
+    resetAllLevels();
+  }
+}
+
+function restartCurrentLevel() {
+  // Clear only current level controls
+  var active = getActiveControls();
+  active.forEach(function(c) { STATE.controls[c.id] = ''; });
+  // Hide completion banner
+  var banner = document.getElementById('completionBanner');
+  if (banner) banner.style.display = 'none';
+  // Reset progress bar
+  var pBar = document.getElementById('progressBar');
+  if (pBar) { pBar.style.width = '0%'; pBar.style.background = 'var(--accent)'; }
+  var pLabel = document.getElementById('progressLabel');
+  if (pLabel) pLabel.textContent = '0 OF ' + active.length + ' ANSWERED';
+  var pPct = document.getElementById('progressPct');
+  if (pPct) pPct.textContent = '0%';
+  renderAll();
+  // Scroll to top of assessment
+  var wrap = document.getElementById('assessWrap');
+  if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('↺ Level ' + STATE.level + ' restarted — all answers cleared');
+}
+
+function resetAllLevels() {
+  STATE.controls = {};
+  STATE.level = 1;
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+  var levelDescs = { 1: 'Foundational — 17 Controls', 2: 'Advanced — 110 Controls', 3: 'Expert — 110 Controls' };
+  document.getElementById('sidebarLevel').textContent     = 'L1';
+  document.getElementById('sidebarLevelDesc').textContent = levelDescs[1];
+  document.getElementById('rptLevel').textContent         = 'CMMC L1';
+  var banner = document.getElementById('completionBanner');
+  if (banner) { banner.style.display = 'none'; banner.style.animation = ''; }
+  var pBar = document.getElementById('progressBar');
+  if (pBar) { pBar.style.width = '0%'; pBar.style.background = 'var(--accent)'; }
+  var pWrap = document.getElementById('assessProgress');
+  if (pWrap) pWrap.style.display = 'none';
+  renderAll();
+  showToast('⚠ All levels reset — starting fresh from L1');
+}
+
+function showToast(msg) {
+  var t = document.getElementById('sessionToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'sessionToast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:20px;z-index:9000;font-family:var(--mono);font-size:11px;letter-spacing:1px;padding:8px 14px;background:#0d1318;border:1px solid var(--border2);color:var(--text);opacity:0;transition:opacity 0.3s;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.opacity = '0'; }, 3000);
+}
+
+// ── AUTO-SAVE on every control change ────────────────────────────────
+var autoSaveTimer = null;
+function triggerAutoSave() {
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(function() {
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({
+      org: STATE.org, industry: STATE.industry, level: STATE.level,
+      apiKey: STATE.apiKey, userName: STATE.userName, userTitle: STATE.userTitle,
+      assessDate: STATE.assessDate, controls: STATE.controls,
+      savedAt: new Date().toISOString()
+    })); } catch(e) {}
+  }, 1500);
+}
+
+function doResumeSession() {
+  var snap = loadSavedSession();
+  if (snap) restoreSession(snap);
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    var snap = loadSavedSession();
+    if (snap && snap.org) {
+      var row  = document.getElementById('resumeRow');
+      var info = document.getElementById('resumeInfo');
+      if (row)  row.style.display = 'block';
+      if (info) {
+        var d = new Date(snap.savedAt);
+        info.textContent = 'Last saved: ' + d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})
+          + ' ' + d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
+          + ' · Org: ' + snap.org + ' · Level ' + snap.level;
+      }
+    }
+  } catch(e) {}
+});
+
+
+
 </script>
 
-<div id="floatChat" style="position:fixed;bottom:24px;right:20px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
-  <div id="floatWindow" style="display:none;width:340px;height:460px;background:#0d1318;border:1px solid #2a4560;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.6);">
-    <div style="padding:10px 14px;background:#111920;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">AI</span> ASSISTANT</div>
-      <button type="button" onclick="toggleChat()" style="font-family:'Share Tech Mono',monospace;font-size:11px;color:#6a8fa8;border:none;background:none;cursor:pointer;padding:2px 6px;">&#x2715;</button>
-    </div>
+<div id="floatChat" style="position:fixed;bottom:24px;left:20px;z-index:500;display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
+  <div id="floatWindow" style="display:none;width:340px;height:460px;background:#0d1318;border:1px solid #2a4560;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,0.6);border-radius:4px;">
+    <div style="padding:10px 14px;background:#111920;border-bottom:1px solid #1e3040;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:#fff;">CYBERDRILL <span style="color:#00d4ff;">AI</span> ASSISTANT</div><button type="button" onclick="toggleChat()" style="font-size:11px;color:#6a8fa8;border:none;background:none;cursor:pointer;padding:2px 6px;">&#x2715;</button></div>
     <div id="fcMsgs" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
-    <div style="display:flex;gap:6px;padding:10px;border-top:1px solid #1e3040;flex-shrink:0;">
-      <input id="fcInput" type="text" placeholder="Ask a CMMC question..." style="flex:1;background:#111920;border:1px solid #1e3040;color:#c8dde8;font-family:'Barlow',sans-serif;font-size:12px;padding:7px 10px;outline:none;" onkeydown="if(event.key==='Enter')sendChat()">
-      <button type="button" onclick="sendChat()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:7px 12px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">SEND</button>
-    </div>
-    <div style="padding:4px 10px 6px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;letter-spacing:1px;border-top:1px solid #1e3040;">POWERED BY CLAUDE AI &mdash; CYBERDRILL GRC v1.0.0</div>
+    <div style="display:flex;gap:6px;padding:10px;border-top:1px solid #1e3040;flex-shrink:0;"><input id="fcInput" type="text" placeholder="Ask a CMMC question..." style="flex:1;background:#111920;border:1px solid #1e3040;color:#c8dde8;font-size:12px;padding:7px 10px;outline:none;" onkeydown="if(event.key==='Enter')sendChat()"><button type="button" onclick="sendChat()" style="font-family:'Share Tech Mono',monospace;font-size:9px;padding:7px 12px;background:rgba(0,212,255,0.1);border:1px solid #00d4ff;color:#00d4ff;cursor:pointer;">SEND</button></div>
+    <div style="padding:4px 10px 6px;text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;color:#3d5f75;border-top:1px solid #1e3040;">CYBERDRILL GRC v1.0.0</div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
-    <div id="chatTooltip" onclick="toggleChat()" style="background:#0d1318;border:1px solid #00d4ff;padding:5px 12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#00d4ff;letter-spacing:1px;cursor:pointer;white-space:nowrap;animation:fcPulse 2s ease-in-out infinite;">ASK AI &#8594;</div>
-    <button id="chatBtn" type="button" onclick="toggleChat()" style="width:48px;height:48px;background:linear-gradient(135deg,#00a8cc,#0066aa);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,168,204,0.4);">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-    </button>
+    <div id="chatTooltip" onclick="toggleChat()" style="background:#0d1318;border:1px solid #00d4ff;padding:5px 12px;font-family:'Share Tech Mono',monospace;font-size:9px;color:#00d4ff;cursor:pointer;white-space:nowrap;animation:fcPulse 2s ease-in-out infinite;">ASK AI &#8594;</div>
+    <button type="button" onclick="toggleChat()" style="width:48px;height:48px;background:linear-gradient(135deg,#00a8cc,#0066aa);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,168,204,0.4);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
   </div>
 </div>
-<style>@keyframes fcPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }</style>
-
 <script>
-// ── EULA ──────────────────────────────────────────────
+window.onerror = function(msg,src,line,col,err){ console.error('JS ERROR:',msg,'line:',line); return false; };
+
+// ── EULA ──────────────────────────────────────────────────────────
 function eulaToggle() {
   var panel = document.getElementById('eulaPanel');
   var btn   = document.getElementById('eulaToggleBtn');
@@ -2207,16 +3282,18 @@ function eulaAccept() {
   setTimeout(function(){ wrap.style.outline = ''; }, 2500);
 }
 function eulaOpenTab() {
-  var content = document.getElementById('eulaContent');
-  if (!content) return;
-  var w = window.open('', '_blank', 'width=860,height=700');
-  w.document.write('<!DOCTYPE html><html><head><title>Cyberdrill GRC EULA v1.0.0</title>'
-    + '<style>body{background:#080c0f;color:#c8dde8;font-family:Arial,sans-serif;padding:40px;max-width:820px;margin:0 auto;line-height:1.8}'
-    + 'strong{color:#00d4ff;}</style></head><body>' + content.innerHTML + '</body></html>');
+  var c = document.getElementById('eulaContent');
+  if (!c) return;
+  var w = window.open('','_blank','width=860,height=700');
+  var eulaHtml = '<!DOCTYPE html><html><head><title>Cyberdrill GRC EULA v1.0.0</title>'+'<style>body{background:#080c0f;color:#c8dde8;font-family:Arial,sans-serif;padding:40px;max-width:820px;margin:0 auto;line-height:1.8}strong{color:#00d4ff}</style>'+'</head><body>'+c.innerHTML+'</body></html>';
+  w.document.write(eulaHtml);
+
+
+
   w.document.close();
 }
 
-// ── LOGIN ─────────────────────────────────────────────
+// ── LOGIN ──────────────────────────────────────────────────────────
 function showLoginErr(msg) {
   var e = document.getElementById('loginErr');
   e.textContent = msg;
@@ -2230,30 +3307,83 @@ function doLogin() {
   var user  = (document.getElementById('lUser').value      || '').trim();
   var pass  = (document.getElementById('lPass').value      || '').trim();
   var eula  = document.getElementById('eulaCheck').checked;
-  if (!fn || !ln)               { showLoginErr('Please enter your first and last name.'); return; }
-  if (!title)                   { showLoginErr('Please enter your job title.'); return; }
+  if (!fn || !ln)                     { showLoginErr('Please enter your first and last name.'); return; }
+  if (!title)                         { showLoginErr('Please enter your job title.'); return; }
   if (!email || !email.includes('@')) { showLoginErr('Please enter a valid email address.'); return; }
-  if (!eula)                    { showLoginErr('You must read and accept the End User License Agreement before proceeding.'); return; }
-  if (!user || !pass)           { showLoginErr('Please enter your username and password.'); return; }
+  if (!eula)                          { showLoginErr('You must read and accept the End User License Agreement.'); return; }
+  if (!user || !pass)                 { showLoginErr('Please enter your username and password.'); return; }
   if (user !== 'admin' || pass !== 'cyberdrill2026#') { showLoginErr('Invalid username or password.'); return; }
   document.getElementById('loginErr').style.display = 'none';
   document.body.classList.remove('locked');
   document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('setupModal').style.display = 'flex'; document.getElementById('setupModal').style.alignItems = 'center'; document.getElementById('setupModal').style.justifyContent = 'center';
+  var modal = document.getElementById('setupModal');
+  modal.style.display        = 'flex';
+  modal.style.alignItems     = 'center';
+  modal.style.justifyContent = 'center';
 }
 
-// ── FLOAT CHAT ────────────────────────────────────────
-var chatOpen   = false;
-var fcHistory  = [];
+// ── ACCESS KEY ─────────────────────────────────────────────────────
+var KEY_VALIDATED = false;
+var ACCESS_TIERS  = { TRIAL:{label:'Trial',color:'#ffcc00'}, PRO:{label:'Professional',color:'#00d4ff'}, ENT:{label:'Enterprise',color:'#00ff88'} };
+var DURATION_MAP  = { '4H':4, '8H':8, '1D':24, '3D':72, '1W':168, '1M':720 };
+
+function toggleApiVis() {
+  var inp = document.getElementById('apiKey');
+  var btn = document.getElementById('apiKeyToggle');
+  if (inp.type === 'password') { inp.type = 'text';     btn.textContent = 'HIDE'; }
+  else                         { inp.type = 'password'; btn.textContent = 'SHOW'; }
+}
+function validateAccessKey() {
+  var raw = (document.getElementById('apiKey').value || '').trim();
+  document.getElementById('keyErrMsg').style.display = 'none';
+  if (!raw) { showKeyErr('Please enter your access key.'); return; }
+  var tier, duration, payload;
+  if (/^CDGRC-[A-Z0-9]+-[A-Z0-9]+-(.+)$/i.test(raw)) {
+    var parts = raw.split('-');
+    tier = parts[1].toUpperCase(); duration = parts[2].toUpperCase(); payload = parts.slice(3).join('-');
+    if (!ACCESS_TIERS[tier] || !DURATION_MAP[duration]) { showKeyErr('Invalid access key. Contact support@cyberdrill.ai.'); return; }
+  } else if (/^sk-ant-api[0-9]+-[A-Za-z0-9_\-]{80,}$/.test(raw) && raw.length >= 100 && raw.length <= 120) {
+    tier = 'PRO'; duration = '1M'; payload = raw;
+  } else { showKeyErr('Invalid access key. Contact support@cyberdrill.ai.'); return; }
+  var hoursLeft = DURATION_MAP[duration];
+  var expiry    = new Date(Date.now() + hoursLeft * 3600 * 1000);
+  var tierInfo  = ACCESS_TIERS[tier];
+  KEY_VALIDATED = true;
+  STATE.apiKey  = payload;
+  var badge = document.getElementById('keyStatusBadge');
+  badge.textContent = 'ACTIVE'; badge.style.color = '#00ff88'; badge.style.borderColor = '#00ff88';
+  document.getElementById('keyValidBlock').style.display  = 'block';
+  document.getElementById('keyStatusText').textContent    = 'ACTIVE';
+  document.getElementById('keyExpiryText').textContent    = expiry.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('keyTierText').textContent      = tierInfo.label.toUpperCase();
+  document.getElementById('keyTierText').style.color      = tierInfo.color;
+  document.getElementById('keyTimeLeft').textContent      = formatTimeLeft(hoursLeft);
+  var f = document.getElementById('keyFooterStatus');
+  f.innerHTML = '&#10003; Key validated &mdash; ' + tierInfo.label; f.style.color = '#00ff88';
+}
+function showKeyErr(msg) {
+  var e = document.getElementById('keyErrMsg');
+  e.textContent = msg; e.style.display = 'block'; KEY_VALIDATED = false;
+}
+function formatTimeLeft(h) {
+  if (h < 24)  return h + ' hours';
+  if (h < 168) return Math.round(h/24) + ' day(s)';
+  if (h < 720) return Math.round(h/168) + ' week(s)';
+  return '1 month';
+}
+
+// ── FLOAT CHAT ─────────────────────────────────────────────────────
+var chatOpen  = false;
+var fcHistory = [];
 function toggleChat() {
   chatOpen = !chatOpen;
   var win = document.getElementById('floatWindow');
   var tip = document.getElementById('chatTooltip');
   win.style.display = chatOpen ? 'flex' : 'none';
-  if (win.style.display === 'flex') win.style.flexDirection = 'column';
+  if (chatOpen) win.style.flexDirection = 'column';
   if (tip) tip.style.display = chatOpen ? 'none' : 'block';
   if (chatOpen && document.getElementById('fcMsgs').children.length === 0) {
-    fcAddMsg('ai', 'Hello! I am your CMMC compliance assistant. Ask me anything about controls, evidence, remediation priorities, or how to explain gaps to management.');
+    fcAddMsg('ai','Hello! I am your CMMC compliance assistant. Ask me anything about controls, evidence, gaps, or remediation priorities.');
     setTimeout(function(){ document.getElementById('fcInput').focus(); }, 80);
   }
 }
@@ -2268,60 +3398,41 @@ function fcAddMsg(role, text) {
     d.style.cssText += 'background:#111920;border-color:#1e3040;color:#c8dde8;';
     d.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>' + text;
   }
-  msgs.appendChild(d);
-  msgs.scrollTop = msgs.scrollHeight;
-  return d;
+  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
 }
 async function sendChat() {
   var input = document.getElementById('fcInput');
   var msg   = input.value.trim();
   if (!msg) return;
-  input.value = '';
-  fcAddMsg('user', msg);
-  fcHistory.push({ role: 'user', content: msg });
-  var key = (typeof STATE !== 'undefined' && STATE.apiKey) ? STATE.apiKey : '';
-  if (!key) { fcAddMsg('ai', 'No API key set. Enter it in Organization Setup.'); return; }
-  var loading = fcAddMsg('ai', '<em style="opacity:.5">Thinking...</em>');
+  input.value = ''; fcAddMsg('user', msg); fcHistory.push({role:'user', content:msg});
+  var key = STATE.apiKey || '';
+  if (!key) { fcAddMsg('ai','No access key configured. Please restart and enter your access key in setup.'); return; }
+  var loading = fcAddMsg('ai','<em style="opacity:.5">Thinking...</em>');
   try {
     var r = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514', max_tokens: 800,
-        system: 'You are a CMMC Level 2 compliance expert assistant in Cyberdrill GRC. Be concise, specific, and practical. Reference NIST 800-171 control IDs (e.g. AC.L2-3.1.1) where relevant.',
+        model: atob('Y2xhdWRlLXNvbm5ldC00LTIwMjUwNTE0'),
+        max_tokens: 800,
+        system: 'You are a CMMC Level 2 compliance expert in Cyberdrill GRC. Be concise and practical. Reference NIST 800-171 control IDs where relevant.',
         messages: fcHistory
       })
     });
-    var data = await r.json();
+    var data  = await r.json();
     var reply = (data.content && data.content[0]) ? data.content[0].text : ('Error: ' + (data.error ? data.error.message : 'Unknown'));
-    fcHistory.push({ role: 'assistant', content: reply });
-    var safe = reply.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    fcHistory.push({role:'assistant', content:reply});
+    var safe = reply.split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split('\n').join('<br>');
     loading.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>' + safe;
   } catch(e) {
-    loading.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>Connection error. Check API key.';
+    loading.innerHTML = '<div style="font-family:monospace;font-size:8px;color:#00ff88;margin-bottom:4px;">AI ADVISOR</div>Connection error. Check access key.';
   }
   document.getElementById('fcMsgs').scrollTop = 99999;
 }
-
-function toggleApiVis() {
-  var inp = document.getElementById('apiKey');
-  var btn = document.getElementById('apiKeyToggle');
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    btn.textContent = 'HIDE';
-  } else {
-    inp.type = 'password';
-    btn.textContent = 'SHOW';
-  }
-}
-function saveApiKey() {
-  var key = document.getElementById('apiKey').value.trim();
-  if (!key) { alert('Please enter an API key first.'); return; }
-  STATE.apiKey = key;
-  document.getElementById('apiKeySaved').style.display = 'block';
-  setTimeout(function(){ document.getElementById('apiKeySaved').style.display = 'none'; }, 3000);
-}
 </script>
+
+  <div id="grcToast" class="grc-toast"></div>
+
+
 
 </body>
 </html>
